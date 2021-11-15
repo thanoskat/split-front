@@ -1,0 +1,38 @@
+import './App.css';
+import Nav from './Nav'
+import About from './About'
+import Users from './Users'
+import User from './User'
+import Login from './Login'
+import VerifyLink from './VerifyLink'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import PrivateRoute from './PrivateRoute'
+import { AuthenticationContextProvider } from './AuthenticationContext'
+
+function App() {
+  return (
+    <AuthenticationContextProvider>
+      <BrowserRouter>
+        <div className="App">
+          <Nav/>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/about" component={About}/>
+            <Route path="/v/:token" component={VerifyLink}/>
+            <PrivateRoute exact path="/users" component={Users}/>
+            <PrivateRoute path="/user/:id" component={User}/>
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </AuthenticationContextProvider>
+  );
+}
+
+const Home = () => (
+  <div>
+    <h1>Home Page</h1>
+  </div>
+)
+
+export default App;
