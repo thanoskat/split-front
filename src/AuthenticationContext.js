@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 export const AuthenticationContext = React.createContext()
 
+//keeps global variables to be accessible
 export function AuthenticationContextProvider({ children }) {
 
   const [accessToken, setAccessToken] = useState(window.localStorage.getItem('accessToken'))
