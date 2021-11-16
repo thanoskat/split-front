@@ -4,10 +4,12 @@ import About from './About'
 import Users from './Users'
 import User from './User'
 import Login from './Login'
+import SignUp from './SignUp'
 import VerifyLink from './VerifyLink'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import { AuthenticationContextProvider } from './AuthenticationContext'
+import 'semantic-ui-css/semantic.min.css'
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
             <Route path="/login" component={Login}/>
             <Route path="/about" component={About}/>
             <Route path="/v/:token" component={VerifyLink}/>
+            <Route path="/signup" component={SignUp}/>
             <PrivateRoute exact path="/users" component={Users}/>
             <PrivateRoute path="/user/:id" component={User}/>
           </Switch>
