@@ -5,6 +5,9 @@ import { AuthenticationContext } from '../AuthenticationContext'
 const baseURL = 'http://localhost:4000'
 
 const useAxios = () => {
+
+  //goes to header and gets access token so we don't have to bother with 
+  //writting this piece of code every time it is required.
   const { signOut, refreshAccessToken } = useContext(AuthenticationContext)
   const accessToken = window.localStorage.getItem('accessToken')
 
@@ -13,10 +16,10 @@ const useAxios = () => {
     headers: {Authorization: `Bearer ${accessToken}`}
   })
 
-  axiosInstance.interceptors.request.use(async request => {
+  axiosInstance.interceptors.request.use(async request => {  
     return request
   })
-
+//if access token expires it requests for a new one
   axiosInstance.interceptors.response.use(async response => {
     return response
   },
@@ -25,15 +28,15 @@ const useAxios = () => {
     if(error.response) {
       if(error.response.status === 401 && !originalRequest.retry) {
         try {
-          const refreshResponse = await axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})
+          const refreshResponse = await axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})  //Tries to get access token
           console.dir("REFRESHRESPONSE: ", refreshResponse)
           const { accessToken } = refreshResponse.data
-          console.log("REFRESHING ACCESS TOKEN WITH: ", accessToken)
+          console.log("REFRESHING ACCESS TOKEN WITH: ", accessToken) 
           refreshAccessToken(accessToken)
           originalRequest.headers['Authorization'] = `Bearer ${accessToken}`
           try {
             originalRequest.retry = true
-            return axiosInstance(originalRequest);
+            return axiosInstance(originalRequest);    //Tries to submit request that was initially denied
           }
           catch(retryError) {
             console.dir("RETRYERROR: ", retryError)
