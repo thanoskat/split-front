@@ -53,6 +53,10 @@ function Nav() {
       <Grid.Column>
         <Button onClick={onLogoutClick}>Sign out</Button>
       </Grid.Column>
+      <Grid.Column>
+        <Button as={Link} to='/profile'>Profile</Button>
+      </Grid.Column>
+      
     </Grid>
   </Segment>
   );
