@@ -8,7 +8,7 @@ import {Form, Button} from 'semantic-ui-react'
 
 function Profile(){
 
-  const [user, setUser] = useState({})
+  const [groupInfo, setGroupInfo] = useState([{}])
   const [groupName, setGroupName] = useState("")
 
   const api = useAxios()
@@ -21,8 +21,8 @@ function Profile(){
   const fetchUser = async () => {
     try{
       const response = await api.get('/getusers/profile')  
-      console.log(response.data)
-      setUser(response.data)
+      console.log(response.data.groups)
+      setGroupInfo(response.data.groups)
     }
     catch(error){
       console.dir("GETUSERSERROR: ", error)
@@ -41,7 +41,7 @@ function Profile(){
   }
 
     return(
-
+      <div>
     <Form 
       onSubmit={e=>onSubmitFunction(e)}
       style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
@@ -55,6 +55,21 @@ function Profile(){
   <Button primary>Create Group</Button>
   
 </Form>
+
+          <h1>
+           {groupInfo.map(group=>(
+            <h2>group ID : {group._id} </h2>
+            
+          ))}
+          {groupInfo.map(group=>(
+            <h2>group title : {group.title} </h2>
+            
+          ))}
+          </h1>
+
+      </div>
+
+
     )
 
 
