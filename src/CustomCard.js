@@ -1,13 +1,35 @@
 import './App.css';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Icon, Image} from 'semantic-ui-react'
+import { Card, Icon, Image, Accordion,List} from 'semantic-ui-react'
 
 
 const CustomCard = (props) =>{
+  const panels = [
+    {
+      key: 'show-groups',
+      title: {
+        content: 'Show Groups',
+        icon: 'users',
+      },
+      content: {
+        icon: 'search',
+        content: (
+          <List verticalAlign="bottom" >
+            {props.groupInfo.map(group=>(
+            <List.Item > {group.title}  </List.Item>
+
+          ))}
+          </List>
+        ),
+      },
+    },
+  ]
 
 
-return(<Card>
+return(
+
+<Card>
     <Image src='' wrapped ui={false} />
     <Card.Content>
       <Card.Header>Signed in as: 
@@ -37,12 +59,16 @@ return(<Card>
       </Card.Description>
       
     </Card.Content>
+
     <Card.Content extra>
       <a>
         <Icon disabled name='users' />
          Member of {props.length} Groups
       </a>
+      <Accordion defaultActiveIndex={0} panels={panels} />
+      
     </Card.Content>
+
   </Card>)
 
 }
