@@ -7,7 +7,7 @@ import { AuthenticationContext } from './AuthenticationContext'
 function Users() {
 
   const { accessToken } = useContext(AuthenticationContext)
-  const [users, setUsers] = useState([])
+  const [groups, setGroups] = useState([])
   const api = useAxios()
 
   useEffect(() => {
@@ -16,8 +16,9 @@ function Users() {
 
   const fetchUsers = async () => {
     try{
-      const response = await api.get('/groups/groupsinuserID')
-      setUsers(response.data)
+      const response = await api.get('/groups/mygroups')
+      console.log(response.data)
+      setGroups(response.data)
     }
     catch(error){
       console.dir("GETUSERSERROR: ", error)
@@ -26,10 +27,10 @@ function Users() {
 
   return (
     <div>
-      {users.map(user => (
+      {groups.map(group => (
         // Warning: Each child in a list should have a unique "key" prop
-        <h1 key={user._id}>
-          <Link to={`/user/${user._id}`}>{user.nickname}</Link>
+        <h1 key={group._id}>
+          <Link to={`/groups/group/${group._id}`}>{group.title}</Link>
         </h1>
       ))}
     </div>
