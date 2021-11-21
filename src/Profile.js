@@ -1,6 +1,5 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
 
 function Profile(){
@@ -15,7 +14,7 @@ function Profile(){
 
   const fetchUser = async () => {
     try{
-      const response = await api.get('/getusers/profile')  
+      const response = await api.get('/getusers/profile')
       console.log(response.data)
       setUser(response.data)
     }
@@ -28,7 +27,7 @@ function Profile(){
     return(
         <div>
       {user._id}
-             
+
         </div>
     )
 
