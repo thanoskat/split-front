@@ -1,12 +1,10 @@
 import './App.css';
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
-import { AuthenticationContext } from './AuthenticationContext'
 
-function Users() {
+function MyGroups() {
 
-  const { accessToken } = useContext(AuthenticationContext)
   const [groups, setGroups] = useState([])
   const api = useAxios()
 
@@ -30,11 +28,11 @@ function Users() {
       {groups.map(group => (
         // Warning: Each child in a list should have a unique "key" prop
         <h1 key={group._id}>
-          <Link to={`/groups/group/${group._id}`}>{group.title}</Link>
+          <Link to={`/group/${group._id}`}>{group.title}</Link>
         </h1>
       ))}
     </div>
   );
 }
 
-export default Users;
+export default MyGroups;
