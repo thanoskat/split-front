@@ -1,10 +1,12 @@
 import './App.css';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
+import { AuthenticationContext } from './AuthenticationContext'
 
 function Users() {
 
+  const { accessToken } = useContext(AuthenticationContext)
   const [users, setUsers] = useState([])
   const api = useAxios()
 
