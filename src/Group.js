@@ -8,22 +8,29 @@ const Group = ({ match }) => {
     fetchUser()
   },[])
 
+  const [creator, setCreator] = useState('')
   const [title, setTitle] = useState('')
   const [members, setMembers] = useState([])
   const api = useAxios()
 
   const fetchUser = async () => {
-    console.log(`/groups/group/${match.params.groupid}`)
-    const response = await api.get(`/groups/group/${match.params.groupid}`)
-    const group = response.data
-    setTitle(group.title)
-    setMembers(group.members)
-    console.log(group)
+    try {
+      const response = await api.get(`/groups/group/${match.params.groupid}`)
+      const group = response.data
+      setCreator(group.creator)
+      setTitle(group.title)
+      setMembers(group.members)
+      console.log(group)
+    }
+    catch(error) {
+      console.dir(error)
+    }
   }
 
   return (
     <div>
       <h1>title: {title}</h1>
+      <h1>creator: {creator}</h1>
       <h1>
         MEMBERS:
       </h1>
