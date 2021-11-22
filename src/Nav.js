@@ -6,10 +6,15 @@ import { Button, Grid, Segment } from 'semantic-ui-react'
 
 function Nav() {
   const api = useAxios()
-  const { signOut } = useContext(AuthenticationContext)
+  const { signOut, sessionID } = useContext(AuthenticationContext)
 
-  const onLogoutClick = () => {
-    api.post('/auth/signout', { sessionID: window.localStorage.getItem('sessionID') })
+  const onLogoutClick = async () => {
+    try{
+      await api.post('/auth/signout', { sessionID: sessionID })
+    }
+    catch(error) {
+      console.dir(error)
+    }
     signOut()
   }
 

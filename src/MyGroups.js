@@ -9,13 +9,12 @@ function MyGroups() {
   const api = useAxios()
 
   useEffect(() => {
-    fetchUsers()
+    fetchGroups()
   }, [])
 
-  const fetchUsers = async () => {
+  const fetchGroups = async () => {
     try{
       const response = await api.get('/groups/mygroups')
-      console.log(response.data)
       setGroups(response.data)
     }
     catch(error){
