@@ -59,49 +59,49 @@ function Profile(){
   }
 
 
-const onSubmitAddUserToGroup = async (e)=>{
-  const IDs={
-    userID:UserIDtoBeAdded,
-    groupID:GroupIDtoAddUser
+  const onSubmitAddUserToGroup = async (e)=>{
+    const IDs={
+      userID:UserIDtoBeAdded,
+      groupID:GroupIDtoAddUser
+    }
+
+    await api.post('groups/addUserToGroup', IDs)
+    e.target.reset()
   }
 
-  await api.post('groups/addUserToGroup', IDs)
-  e.target.reset()
-}
-
   return(
-  <div>
-    <Form
-      onSubmit={e=>onSubmitFunction(e)}
-      style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
-      <CustomCard
-        nickname={userInfo.nickname}
-        email = {userInfo.email}
-        _id={userInfo._id}
-        length={groupInfo.length}
-        groupInfo={groupInfo}/>
-      <Group widths='equal'>
-        <Input
-          onChange={(event)=>setGroupName(event.target.value)}
-          fluid
-          placeholder='Name of Group'/>
-      </Group>
-      <Button primary>Create Group</Button>
-    </Form>
-    <Form
-      onSubmit={e=>onSubmitAddUserToGroup(e)}
-      style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
-      <Group widths='equal'>
-        <Input
-          onChange={event=>SetUserIDtoBeAdded(event.target.value)}
-          fluid
-          placeholder='Id of User to be added'/>
-        <Input
-            onChange={event=>SetGroupIDtoAddUser(event.target.value)}
+    <div>
+      <Form
+        onSubmit={e=>onSubmitFunction(e)}
+        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+        <CustomCard
+          nickname={userInfo.nickname}
+          email = {userInfo.email}
+          _id={userInfo._id}
+          length={groupInfo.length}
+          groupInfo={groupInfo}/>
+        <Group widths='equal'>
+          <Input
+            onChange={(event)=>setGroupName(event.target.value)}
             fluid
-            placeholder='Group user will be added to '/>
-      </Group>
-      <Button primary>Add User to Group</Button>
+            placeholder='Name of Group'/>
+        </Group>
+        <Button primary>Create Group</Button>
+      </Form>
+      <Form
+        onSubmit={e=>onSubmitAddUserToGroup(e)}
+        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+        <Group widths='equal'>
+          <Input
+            onChange={event=>SetUserIDtoBeAdded(event.target.value)}
+            fluid
+            placeholder='Id of User to be added'/>
+          <Input
+              onChange={event=>SetGroupIDtoAddUser(event.target.value)}
+              fluid
+              placeholder='Group user will be added to '/>
+        </Group>
+        <Button primary>Add User to Group</Button>
       </Form>
       <h1>
         {groupInfo.map(group=>(<h2>group ID : {group._id} </h2>))}
