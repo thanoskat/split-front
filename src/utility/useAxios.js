@@ -33,7 +33,7 @@ const useAxios = () => {
       if(error.response.status === 401 && !originalRequest.retry) {
         try {
           const refreshResponse = await axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})  //Tries to get access token
-          console.dir("REFRESHRESPONSE: ", refreshResponse)
+          // console.dir("REFRESHRESPONSE: ", refreshResponse)
           const { accessToken } = refreshResponse.data
           console.log("REFRESHING ACCESS TOKEN WITH: ", accessToken)
           refreshAccessToken(accessToken)
@@ -49,7 +49,7 @@ const useAxios = () => {
           }
         }
         catch(error) {
-          console.dir("REFRESHERROR", error)
+          // console.dir("REFRESHERROR", error)
           signOut()
         }
       }

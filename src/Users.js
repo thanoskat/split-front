@@ -10,6 +10,7 @@ function Users() {
 
   useEffect(() => {
     fetchUsers()
+    // eslint-disable-next-line
   }, [])
 
   const fetchUsers = async () => {

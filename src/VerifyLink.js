@@ -23,6 +23,7 @@ const VerifyLink = ({ match }) => {
 
   useEffect(() => {
     verifyLinkToken()
+    // eslint-disable-next-line
   },[])
 
   return (

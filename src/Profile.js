@@ -24,6 +24,7 @@ function Profile(){
   useEffect(() => {
     fetchUser()
     fetchUsers()
+    // eslint-disable-next-line
   }, [])
 
   const fetchUsers = async () => {
@@ -103,11 +104,11 @@ function Profile(){
         </Group>
         <Button primary>Add User to Group</Button>
       </Form>
-      <h1>
+      <div>
         {groupInfo.map(group=>(<h2>group ID : {group._id} </h2>))}
         {groupInfo.map(group=>(<h2>group title : {group.title} </h2>))}
         {users.map(user=>(<h2>users : {user._id} </h2>))}
-      </h1>
+      </div>
     </div>
   )
 }

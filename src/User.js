@@ -8,6 +8,7 @@ const User = ({ match }) => {
   const api = useAxios()
   useEffect(() => {
     fetchUser()
+    // eslint-disable-next-line
   },[])
 
   const [user, setUser] = useState({})
