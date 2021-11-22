@@ -5,10 +5,6 @@ import { Segment, Header, Grid, List, Button, Dropdown } from 'semantic-ui-react
 
 const Group = ({ match }) => {
 
-  useEffect(() => {
-    fetchGroup()
-    fetchAllUsers()
-  },[])
 
   const [creator, setCreator] = useState('')
   const [title, setTitle] = useState('')
@@ -16,6 +12,11 @@ const Group = ({ match }) => {
   const [allUsers, setAllUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState('')
   const api = useAxios()
+
+  useEffect(() => {
+    fetchGroup()
+    fetchAllUsers()
+  },[])
 
   const fetchGroup = async () => {
     try {
@@ -33,10 +34,6 @@ const Group = ({ match }) => {
   const fetchAllUsers = async () => {
     try{
       const response = await api.get('/getusers')
-      // response.data.map(user => {
-      //   console.log(user.nickname)
-      // })
-      console.log(response.data.length)
       const userArray = []
       response.data.map((user) => {
         userArray.push({key: user._id, value: user._id, text: user.nickname})
