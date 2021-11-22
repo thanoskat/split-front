@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { Form, Checkbox, Button, Grid, Label, Input, Segment } from 'semantic-ui-react'
+import { Form, Checkbox, Button, Grid, Input, Segment } from 'semantic-ui-react'
 import axios from 'axios'
 
 const SignUp = () => {
 
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
-  const [text, setText] = useState('')
   const [emailError, setEmailError] = useState(false)
   const [nicknameError, setNicknameError] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -49,29 +48,29 @@ const SignUp = () => {
 
   return(
     <Grid centered>
-    <Segment>
-      <Form onSubmit={formSubmit} loading={loading}>
-        <Form.Field
-          fluid
-          control={Input}
-          label='Email'
-          placeholder='Email'
-          onChange={e => setEmail(e.target.value)}
-          error={emailError}>
-        </Form.Field>
-        <Form.Field
-          fluid
-          control={Input}
-          label='Nickname'
-          placeholder='Nickname'
-          onChange={e => setNickname(e.target.value)}
-          error={nicknameError}>
-        </Form.Field>
-        <Form.Field>
-          <Checkbox label='I agree to the Terms and Conditions'/>
-        </Form.Field>
-        <Button type='submit'>Submit</Button>
-      </Form>
+      <Segment>
+        <Form onSubmit={formSubmit} loading={loading}>
+          <Form.Field
+            fluid
+            control={Input}
+            label='Email'
+            placeholder='Email'
+            onChange={e => setEmail(e.target.value)}
+            error={emailError}>
+          </Form.Field>
+          <Form.Field
+            fluid
+            control={Input}
+            label='Nickname'
+            placeholder='Nickname'
+            onChange={e => setNickname(e.target.value)}
+            error={nicknameError}>
+          </Form.Field>
+          <Form.Field>
+            <Checkbox label='I agree to the Terms and Conditions'/>
+          </Form.Field>
+          <Button type='submit'>Submit</Button>
+        </Form>
       </Segment>
     </Grid>
   )

@@ -1,6 +1,5 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
 import {Form, Button} from 'semantic-ui-react'
 import CustomCard from './CustomCard';
@@ -160,8 +159,6 @@ const onSubmitAddUserToGroup = async (e)=>{
           
           </h1>
       </div>
-
-
     )
 
 

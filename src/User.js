@@ -1,8 +1,11 @@
 import './App.css';
 import { useState, useEffect } from 'react'
+import useAxios from './utility/useAxios'
+import { Card, Grid, Segment } from 'semantic-ui-react'
 
 const User = ({ match }) => {
 
+  const api = useAxios()
   useEffect(() => {
     fetchUser()
   },[])
@@ -10,18 +13,31 @@ const User = ({ match }) => {
   const [user, setUser] = useState({})
 
   const fetchUser = async () => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${match.params.id}`)
-    const user = await response.json()
-    setUser(user)
+    try{
+      const response = await api.get(`/userinfo/${match.params.id}`)
+      const user = response.data
+      console.dir(user)
+      setUser(user)
+    }
+    catch(error) {
+      console.dir(error)
+    }
   }
 
   return (
-    <div>
-      <h1>name: {user.name}</h1>
-      <h1>username: {user.username}</h1>
-      <h1>email: {user.email}</h1>
-      <h1>phone: {user.phone}</h1>
-    </div>
+    <Grid centered>
+      <Segment>
+        <Card>
+          <Card.Content>
+            <Card.Header>Nickname: {user.nickname}</Card.Header>
+            <Card.Meta>Email: {user.email}</Card.Meta>
+            <Card.Description>
+              {user._id}
+            </Card.Description>
+          </Card.Content>
+        </Card>
+      </Segment>
+    </Grid>
   );
 }
 

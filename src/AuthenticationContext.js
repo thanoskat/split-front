@@ -4,12 +4,14 @@ export const AuthenticationContext = React.createContext()
 //keeps global variables to be accessible
 export function AuthenticationContextProvider({ children }) {
 
-  const [accessToken, setAccessToken] = useState(window.localStorage.getItem('accessToken'))
+  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
+  const [sessionID, setSessionID] = useState(localStorage.getItem('sessionID'))
 
-  const signIn = (token, sessionID) => {
+  const signIn = (token, aSessionID) => {
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
-    localStorage.setItem('sessionID', sessionID)
+    setSessionID(aSessionID)
+    localStorage.setItem('sessionID', aSessionID)
   }
 
   const refreshAccessToken = (token) => {
@@ -20,12 +22,14 @@ export function AuthenticationContextProvider({ children }) {
   const signOut = () => {
     setAccessToken('')
     localStorage.setItem('accessToken', '')
+    setSessionID('')
     localStorage.setItem('sessionID', '')
   }
 
   return(
     <AuthenticationContext.Provider value={
       { accessToken: accessToken,
+        sessionID: sessionID,
         signIn: signIn,
         signOut: signOut,
         refreshAccessToken: refreshAccessToken
