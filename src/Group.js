@@ -1,7 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react'
 import useAxios from './utility/useAxios'
-import { Segment, Header, Grid, List, Button, Dropdown } from 'semantic-ui-react'
+import { Segment, Grid, List, Button, Dropdown } from 'semantic-ui-react'
 
 const Group = ({ match }) => {
 
@@ -12,11 +12,6 @@ const Group = ({ match }) => {
   const [allUsers, setAllUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState('')
   const api = useAxios()
-
-  useEffect(() => {
-    fetchGroup()
-    fetchAllUsers()
-  },[])
 
   const fetchGroup = async () => {
     try {
@@ -35,15 +30,26 @@ const Group = ({ match }) => {
     try{
       const response = await api.get('/getusers')
       const userArray = []
-      response.data.map((user) => {
-        userArray.push({key: user._id, value: user._id, text: user.nickname})
-      })
+      response.data.map((user) => (userArray.push({key: user._id, value: user._id, text: user.nickname})))
       setAllUsers(userArray)
+
+      //// TODO Clear before append
+      // response.data.map((user) => {
+      //   setAllUsers((array) => [...array, { key: user._id, value: user._id, text: user.nickname }])
+      // })
     }
     catch(error) {
       console.dir(error)
     }
   }
+
+  // No dependacies = Run after every render
+  // Empty [] dependancies = Run only after first render
+  useEffect(() => {
+    fetchGroup()
+    fetchAllUsers()
+    console.log('useEffect ran')
+  }, [])
 
   const dropDownChange = (e, { value }) => {
     setSelectedUserId(value)
@@ -51,8 +57,10 @@ const Group = ({ match }) => {
 
   const addSelectedUserToGroup = async () => {
     try {
-      console.log(selectedUserId, match.params.groupid)
       const res = await api.post('/groups/addUserToGroup', {userID: selectedUserId, groupID: match.params.groupid})
+      if(res.status === 200) {
+        await fetchGroup()
+      }
     }
     catch(error) {
       console.dir(error)
@@ -61,8 +69,10 @@ const Group = ({ match }) => {
 
   const removeUserFromGroup = async () => {
     try{
-      console.log(selectedUserId, match.params.groupid)
       const res = await api.post('/groups/removeuserfromgroup', {userID: selectedUserId, groupID: match.params.groupid})
+      if(res.status === 200) {
+        await fetchGroup()
+      }
     }
     catch(error) {
       console.dir(error)
