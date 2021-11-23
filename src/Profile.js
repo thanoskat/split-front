@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import useAxios from './utility/useAxios'
 import {Form, Button} from 'semantic-ui-react'
 import CustomCard from './CustomCard';
+import { appendToMemberExpression } from '@babel/types';
 
 
 
@@ -12,6 +13,7 @@ function Profile(){
   const [groupName, setGroupName] = useState("")
   const [userInfo, setUserInfo] = useState({})
   const [users, setUsers] = useState([])
+
 
 
   const [UserIDtoBeAdded,SetUserIDtoBeAdded ]=useState("")
@@ -39,14 +41,15 @@ function Profile(){
 
   const fetchUser = async () => {
     try{
-      const response = await api.get('/getusers/profile')
-      console.log(response.data.groups)
-      console.log(response.data)
-      setGroupInfo(response.data.groups)
-      setUserInfo(response.data)
+      const response = await api.get('/getusers/profile');
+      //  console.log(response.data.groups)
+      //  console.log(response.data)
+      setGroupInfo(response.data.groups);
+      setUserInfo(response.data);
+    
     }
     catch(error){
-      console.dir("GETUSERSERROR: ", error)
+      console.dir("GETUSERSERROR: ", error);
     }
   }
 
