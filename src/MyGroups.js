@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useDebugValue } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
-import {Grid,Segment,List,Input, Button} from "semantic-ui-react"
+import {Grid,Segment,List,Input, Button,Form} from "semantic-ui-react"
 import { continueStatement } from '@babel/types';
 
 function MyGroups() {
@@ -30,7 +30,7 @@ function MyGroups() {
     }
   }
 
-  const onSubmitRequest= async (groupID)=>{
+  const onSubmitRequest= async (groupID,event)=>{
     // e.preventDefault()
    
     const GroupRequestObj={
@@ -43,6 +43,7 @@ function MyGroups() {
     
     // console.log(groupIDrequestReceiver)
     // console.log(GroupIDtoJoin)
+    event.target.reset()
     
     }
 
@@ -77,12 +78,23 @@ function MyGroups() {
                 {ownedGroups.map(group=>(
                     <h3  key={group._id} >{group.title}
                     <br></br>
-                    <Input 
+                    {/* <Input 
                     // action={{ icon: 'add' }} 
                     placeholder='Add User by ID' 
                     size ="small"
                     onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}/>
-                    <Button onClick={()=>onSubmitRequest(group._id)}/>
+                    <Button onClick={(event)=>onSubmitRequest(group._id,event)}/> */}
+
+                    <Form style={{ width:"300px" }} onSubmit={(event)=>onSubmitRequest(group._id,event)}>
+                      <Form.Field
+                        fluid
+                        control={Input}
+                        // label=''
+                        placeholder='ID of user to be added'
+                        onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}>
+                      </Form.Field>
+                      <Button type='submit'>Submit</Button>
+                  </Form>
                     </h3>
                     ))}
             </Segment>
