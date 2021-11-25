@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import useAxios from './utility/useAxios'
 import {Form, Button} from 'semantic-ui-react'
 import CustomCard from './CustomCard';
+import NotficationLabel from './Notification';
 import { appendToMemberExpression } from '@babel/types';
 
 
@@ -77,6 +78,7 @@ function Profile(){
       <Form
         onSubmit={e=>onSubmitFunction(e)}
         style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+          <NotficationLabel/>
         <CustomCard
           nickname={userInfo.nickname}
           email = {userInfo.email}
