@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useDebugValue } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
-import {Grid,Segment,List,Input, Button} from "semantic-ui-react"
+import {Grid,Segment,List,Input} from "semantic-ui-react"
 import { continueStatement } from '@babel/types';
 
 function MyGroups() {
@@ -10,7 +10,7 @@ function MyGroups() {
   const [groups, setGroups] = useState([])
   const [ownedGroups, setOwnedGroups]=useState([{}])
   const [groupIDrequestReceiver, setGroupIDrequestReceiver]=useState("")
-  
+  const [GroupIDtoJoin, setGroupIDtoJoin]=useState("")
   const api = useAxios()
 
   useEffect(() => {
@@ -30,13 +30,19 @@ function MyGroups() {
     }
   }
 
-  const onSubmitRequest= async (groupID)=>{
+  const onSubmitRequest= async (e)=>{
+    e.preventDefault()
+   
     const GroupRequestObj={
        recipient:groupIDrequestReceiver,
-       groupToJoin:groupID
-    }  
-    console.log(groupID)
+       groupToJoin:GroupIDtoJoin
+    }
+    e.target.reset()
+    console.log(GroupIDtoJoin)
     await api.post('groups/creategrouprequest',GroupRequestObj)
+    
+    // console.log(groupIDrequestReceiver)
+    // console.log(GroupIDtoJoin)
     
     }
 
@@ -65,21 +71,21 @@ function MyGroups() {
                 </Segment>
               </Column>
           <Column>
-          
+          <form onSubmit={e=>onSubmitRequest(e)}>
             <Segment >
              <Header as='h1'>Groups I have created:</Header>
                 {ownedGroups.map(group=>(
                     <h3  key={group._id} >{group.title}
                     <br></br>
                     <Input 
+                    action={{ icon: 'add' }} 
                     placeholder='Add User by ID' 
                     size ="small"
-                    onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}/>
-                    <Button onClick={()=>onSubmitRequest(group._id)}/>
+                    onChange={(event)=>{setGroupIDrequestReceiver(event.target.value); setGroupIDtoJoin(group._id)}}/>
                     </h3>
                     ))}
             </Segment>
-         
+          </form>
          </Column>   
         </Row>
       </Grid>
