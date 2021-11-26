@@ -33,6 +33,7 @@ function Profile(){
     try{
       const response = await api.get('/getusers')
       setUsers(response.data)
+    
     }
     catch(error){
       console.dir("GETUSERSERROR: ", error)

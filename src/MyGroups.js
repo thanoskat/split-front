@@ -21,7 +21,7 @@ function MyGroups() {
     try{
       const response = await api.get('/groups/mygroups')
       const ownedGroups = await api.get("/groups/groupsbycreator")
-     setOwnedGroups(ownedGroups.data) //ownedGroups._id
+      setOwnedGroups(ownedGroups.data) //ownedGroups._id
       console.log(ownedGroups.data)
       setGroups(response.data)
     }
@@ -78,13 +78,6 @@ function MyGroups() {
                 {ownedGroups.map(group=>(
                     <h3  key={group._id} >{group.title}
                     <br></br>
-                    {/* <Input 
-                    // action={{ icon: 'add' }} 
-                    placeholder='Add User by ID' 
-                    size ="small"
-                    onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}/>
-                    <Button onClick={(event)=>onSubmitRequest(group._id,event)}/> */}
-
                     <Form style={{ width:"300px" }} onSubmit={(event)=>onSubmitRequest(group._id,event)}>
                       <Form.Field
                         fluid
