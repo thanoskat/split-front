@@ -76,16 +76,17 @@ function Profile(){
 
   return(
     <div>
-      <Form
-        onSubmit={e=>onSubmitFunction(e)}
-        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
-          <NotficationLabel/>
+        <NotficationLabel/>
         <CustomCard
           nickname={userInfo.nickname}
           email = {userInfo.email}
           _id={userInfo._id}
           length={groupInfo.length}
-          groupInfo={groupInfo}/>
+          groupInfo={groupInfo}
+          />
+      <Form
+        onSubmit={e=>onSubmitFunction(e)}
+        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
         <Group widths='equal'>
           <Input
             onChange={(event)=>setGroupName(event.target.value)}
