@@ -41,8 +41,15 @@ const api = useAxios()
         action = "declined";
       }
      return( 
-     
-         <Segment>{`Request to join ${groupToJoin} ${action}`}</Segment>
+        <div>
+         <Segment >{`Request to join ${groupToJoin} ${action}`}
+          <Button.Group>
+            <Button primary>Accept</Button>
+            <Button secondary>Decline</Button>
+          </Button.Group>
+         </Segment>
+         
+        </div>
    )
  }
 
