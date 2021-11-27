@@ -44,8 +44,14 @@ const api = useAxios()
         <div>
          <Segment >{`Request to join ${groupToJoin} ${action}`}
           <Button.Group>
-            <Button primary>Accept</Button>
+           <Grid>
+              <Grid.Column width={7}>
+                  <Button primary>Accept</Button> 
+                </Grid.Column>
+                <Grid.Column width={7}>
             <Button secondary>Decline</Button>
+            </Grid.Column>
+           </Grid>
           </Button.Group>
          </Segment>
          
@@ -115,8 +121,8 @@ const api = useAxios()
                             />
                       </Grid.Column>
                    </Grid>
-      </Popup>
-      </div>
+            </Popup>
+         </div>
       
     )
 }
