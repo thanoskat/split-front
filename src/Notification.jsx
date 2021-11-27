@@ -1,4 +1,4 @@
-import {Icon, Label, Menu, Header,Grid} from 'semantic-ui-react'
+import {Icon, Label, Menu, Header,Grid,Segment,Popup, Button} from 'semantic-ui-react'
 import { useState, useEffect } from 'react'
 import useAxios from './utility/useAxios'
 
@@ -40,41 +40,44 @@ const api = useAxios()
       } else {
         action = "declined";
       }
-     return( <Menu vertical>
-        <Menu.Item >
-        <Header as='h4'>Requests</Header>
-        <p>{`${groupToJoin} is ${action}`}</p>
-        </Menu.Item>
-
-    </Menu>)
+     return( 
+     
+         <Segment>{`Request to join ${groupToJoin} ${action}`}</Segment>
+   )
  }
 
     return(
         <div>
-            <h1>{request.map(req=><h3>{req._id}</h3>)}</h1> 
-     <Grid columns={1} centered>
-         <Grid.Row >
-            
-                <Menu compact >
-                    <Menu.Item as='a' onClick={()=> setOpen(!open)}>
-                        
-                    <Icon name='bell' /> Group requests
-                    
+            {/* <h1>{request.map(req=><h3>{req._id}</h3>)}</h1>  */}
+     <Grid columns={3} centered container>
+         <Grid.Row >      
+                <Popup  trigger= { <Menu compact>
+                    <Menu.Item as="a" onClick={()=> setOpen(!open)}>
+                    <Icon name='bell'  /> ...
                     {pendingRequestsNo?(<Label color='red' floating >
                     {pendingRequestsNo}
                     </Label>):("")}
-                    
                     </Menu.Item>
-                </Menu>
+                </Menu>}
+                content='Your Group Requests'
+                on='hover'
+                />                   
       </Grid.Row>
-      {open &&(
+      {open && pendingRequestsNo? (
       <Grid.Row >
-        {request.map((n) => displayNotification(n))}        
+          <Grid.Column>
+            {request.map((n) => 
+                <Segment.Group raised>
+                {displayNotification(n)}
+                </Segment.Group>)}   
+        </Grid.Column>     
       </Grid.Row>
-      )}
+      ):("")
+      }
     </Grid>
-      
+    
       </div>
+      
     )
 }
 

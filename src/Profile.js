@@ -76,7 +76,7 @@ function Profile(){
 
   return(
     <div>
-        <NotficationLabel/>
+         <NotficationLabel/>
         <CustomCard
           nickname={userInfo.nickname}
           email = {userInfo.email}
@@ -84,6 +84,7 @@ function Profile(){
           length={groupInfo.length}
           groupInfo={groupInfo}
           />
+          
       <Form
         onSubmit={e=>onSubmitFunction(e)}
         style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
