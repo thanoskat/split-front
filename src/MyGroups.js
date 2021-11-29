@@ -86,7 +86,7 @@ function MyGroups() {
                         placeholder='ID of user to be added'
                         onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}>
                       </Form.Field>
-                      <Button type='submit'>Submit</Button>
+                      <Button type='submit'>Send request</Button>
                   </Form>
                     </h3>
                     ))}

@@ -6,7 +6,6 @@ const NotficationLabel=()=>{
 
 const [pendingRequestsNo, setPendingRequestsNo] = useState()
 const [request, setRequest]=useState([{}])
-const [open, setOpen] = useState(false);
 const api = useAxios()
 
  useEffect(()=>{
@@ -17,21 +16,43 @@ const api = useAxios()
      try{
         const requests = await api.get('groups/getgrouprequests')
         // setgroupRequestInfo(requests.data)
-       const pendingStatusCounter = requests.data.requests.filter(obj => obj.status==0).length
+       const pendingStatusCounter = requests.data.requests.filter(obj => obj.status===0).length
        setPendingRequestsNo(pendingStatusCounter)
        setRequest(requests.data.requests)
        console.log(requests.data.requests)
      }
         catch(error){
         console.dir("REQUESTERROR: ", error)
+        }
     }
-    }
- const handleRead = () => {
-    setOpen(false);
-    setPendingRequestsNo();
-  };
+//  const handleRead = () => {
+//     setPendingRequestsNo();
+//   };
 
- const displayNotification=({status, groupToJoin})=>{
+  const OnClickAccept =async (_id,groupToJoin)=>{
+    try{
+       const info={status:1,_id,groupID:groupToJoin }
+       await api.post('groups/addUserToGroup2',info)
+       console.log(_id)
+    }catch(err){
+       console.dir("ClickAcceptError: ",err)
+    }
+    
+  }
+
+  const OnClickDecline = async (_id,groupToJoin)=>{
+    try{
+      const info={status:2,_id}
+      await api.post('groups/updatestatus',info)
+      console.log(_id)
+   }catch(err){
+      console.dir("ClickAcceptError: ",err)
+   }
+  }
+
+
+
+ const displayNotification=({_id,status,groupToJoin})=>{
         let action;
     if (status === 0) {
         action = "pending";
@@ -46,10 +67,10 @@ const api = useAxios()
           <Button.Group>
            <Grid>
               <Grid.Column width={7}>
-                  <Button primary>Accept</Button> 
-                </Grid.Column>
-                <Grid.Column width={7}>
-            <Button secondary>Decline</Button>
+                  <Button primary onClick={()=>OnClickAccept(_id,groupToJoin)}>Accept</Button> 
+              </Grid.Column>
+            <Grid.Column width={7}>
+                <Button secondary onClick={()=>OnClickDecline(_id,groupToJoin)}>Decline</Button>
             </Grid.Column>
            </Grid>
           </Button.Group>
@@ -90,7 +111,7 @@ const api = useAxios()
     </Grid> */}
     
     <Popup  trigger= { <Menu compact>
-                        <Menu.Item as="a" onClick={()=> setOpen(!open)}>
+                        <Menu.Item as="a">
                           <Icon name='bell'  />
                           {pendingRequestsNo?(
                           <Label color='red' floating >
