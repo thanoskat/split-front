@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import { AuthenticationContext } from './AuthenticationContext'
 import useAxios from './utility/useAxios'
-import { Button, Grid, Segment } from 'semantic-ui-react'
+import { Button, Grid, Segment, Label, Icon, Menu } from 'semantic-ui-react'
 
 function Nav() {
   const api = useAxios()
@@ -38,7 +38,7 @@ function Nav() {
   //   // eslint-disable-next-line
   // }, [])
 
-  const { Column } = Grid
+  const { Column, Row } = Grid
 
   return (
   // https://react.semantic-ui.com/augmentation/
@@ -86,6 +86,25 @@ function Nav() {
       </Column>
       <Column>
         <Button as={Link} to='/mygroups'>My Groups</Button>
+      </Column>
+      <Column>
+        <Menu compact>
+          <Menu.Item as='a'>
+            <Icon name='bell'/>
+            <Label color='red' floating>
+              22
+            </Label>
+          </Menu.Item>
+        </Menu>
+      </Column>
+      <Column>
+        <Button>
+          <Button.Content>
+            <Icon name='bell'/>
+            <Label color='red' floating>
+            </Label>
+          </Button.Content>
+        </Button>
       </Column>
       <Column>
         {userNickName}{'\n'}{userId}
