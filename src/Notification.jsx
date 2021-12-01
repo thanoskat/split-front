@@ -19,7 +19,7 @@ const api = useAxios()
        const pendingStatusCounter = requests.data.requests.filter(obj => obj.status===0).length
        setPendingRequestsNo(pendingStatusCounter)
        setRequest(requests.data.requests)
-       console.log(requests.data.requests)
+       console.log(requests.data)
      }
         catch(error){
         console.dir("REQUESTERROR: ", error)
@@ -33,24 +33,30 @@ const api = useAxios()
     try{
        const info={status:1,_id,groupID:groupToJoin }
        await api.post('groups/addUserToGroup2',info)
-       console.log(_id)
+       
     }catch(err){
        console.dir("ClickAcceptError: ",err)
     }
-    
+   
   }
 
-  const OnClickDecline = async (_id,groupToJoin)=>{
+  const OnClickDecline = async (_id)=>{
     try{
-      const info={status:2,_id}
-      await api.post('groups/updatestatus',info)
-      console.log(_id)
+      const info={_id}
+      await api.post('groups/deleterequest',info)
+      
+      
    }catch(err){
       console.dir("ClickAcceptError: ",err)
    }
+  
   }
 
-
+  const x=true
+//   const useForceUpdate=()=>{
+//     const [value, setValue] = useState(0); // integer state
+//     return () => setValue(value => value + 1); // update the state to force render
+// }
 
  const displayNotification=({_id,status,groupToJoin})=>{
         let action;
@@ -110,7 +116,7 @@ const api = useAxios()
       }
     </Grid> */}
     
-    <Popup  trigger= { <Menu compact>
+   {pendingRequestsNo?(<Popup  trigger= { <Menu compact>
                         <Menu.Item as="a">
                           <Icon name='bell'  />
                           {pendingRequestsNo?(
@@ -120,6 +126,7 @@ const api = useAxios()
                         </Menu.Item>
                      </Menu>}
                      on='click'
+                     
                     >
                    <Grid>
                       <Grid.Column>
@@ -135,17 +142,52 @@ const api = useAxios()
                                 </Grid.Row>
                                 ):("")
                                 }
-                              disabled
                               position='top center'
                               size='tiny'
                               inverted
+                              disabled
                             />
                       </Grid.Column>
                    </Grid>
-            </Popup>
+    </Popup>):(<Popup  trigger= { <Menu compact> 
+                        <Menu.Item as="a">
+                          <Icon name='bell'  />
+                          {pendingRequestsNo?(
+                          <Label color='red' floating >
+                            {pendingRequestsNo}
+                         </Label>):("")}
+                        </Menu.Item>
+                     </Menu>}
+                     on='click'
+                     disabled
+                    >
+                   <Grid>
+                      <Grid.Column>
+                          <Popup                
+                              trigger={pendingRequestsNo? (
+                                <Grid.Row >
+                                    <Grid.Column>
+                                      {request.map((n) => 
+                                          <Segment.Group raised >
+                                            {displayNotification(n)}
+                                          </Segment.Group>)}   
+                                  </Grid.Column>     
+                                </Grid.Row>
+                                ):("")
+                                }
+                              position='top center'
+                              size='tiny'
+                              inverted
+                              disabled
+                            />
+                      </Grid.Column>
+                   </Grid>
+              </Popup>)}                              
+ 
          </div>
       
     )
+
 }
 
 export default NotficationLabel
