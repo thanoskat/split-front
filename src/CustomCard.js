@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Icon, Image, Accordion,List} from 'semantic-ui-react'
-
+import NotficationLabel from './Notification';
 
 const CustomCard = (props) =>{
   const panels = [
@@ -55,7 +55,7 @@ return(
       </Card.Header>
       
       <Card.Description>
-        //
+     
       </Card.Description>
       
     </Card.Content>

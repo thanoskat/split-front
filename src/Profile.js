@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import useAxios from './utility/useAxios'
 import {Form, Button} from 'semantic-ui-react'
 import CustomCard from './CustomCard';
+import NotficationLabel from './Notification';
+import { appendToMemberExpression } from '@babel/types';
 
 
 
@@ -12,6 +14,7 @@ function Profile(){
   const [groupName, setGroupName] = useState("")
   const [userInfo, setUserInfo] = useState({})
   const [users, setUsers] = useState([])
+
 
 
   const [UserIDtoBeAdded,SetUserIDtoBeAdded ]=useState("")
@@ -30,6 +33,7 @@ function Profile(){
     try{
       const response = await api.get('/getusers')
       setUsers(response.data)
+    
     }
     catch(error){
       console.dir("GETUSERSERROR: ", error)
@@ -39,14 +43,15 @@ function Profile(){
 
   const fetchUser = async () => {
     try{
-      const response = await api.get('/getusers/profile')
-      console.log(response.data.groups)
-      console.log(response.data)
-      setGroupInfo(response.data.groups)
-      setUserInfo(response.data)
+      const response = await api.get('/getusers/profile');
+      //  console.log(response.data.groups)
+      //  console.log(response.data)
+      setGroupInfo(response.data.groups);
+      setUserInfo(response.data);
+    
     }
     catch(error){
-      console.dir("GETUSERSERROR: ", error)
+      console.dir("GETUSERSERROR: ", error);
     }
   }
 
@@ -69,17 +74,21 @@ function Profile(){
     e.target.reset()
   }
 
+  
   return(
     <div>
-      <Form
-        onSubmit={e=>onSubmitFunction(e)}
-        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+         <NotficationLabel/>
         <CustomCard
           nickname={userInfo.nickname}
           email = {userInfo.email}
           _id={userInfo._id}
           length={groupInfo.length}
-          groupInfo={groupInfo}/>
+          groupInfo={groupInfo}
+          />
+          
+      <Form
+        onSubmit={e=>onSubmitFunction(e)}
+        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
         <Group widths='equal'>
           <Input
             onChange={(event)=>setGroupName(event.target.value)}
