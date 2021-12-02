@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useDebugValue } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
 import { Button, Form, Input, Segment, Grid } from 'semantic-ui-react'
@@ -7,18 +7,21 @@ import { Button, Form, Input, Segment, Grid } from 'semantic-ui-react'
 function MyGroups() {
 
   const [groups, setGroups] = useState([])
-  const [newGroupTitle, setNewGroupTitle] = useState('')
-  const [message, setMessage] = useState('')
+  const [ownedGroups, setOwnedGroups]=useState([{}])
+  const [groupIDrequestReceiver, setGroupIDrequestReceiver]=useState("")
+  const [GroupIDtoJoin, setGroupIDtoJoin]=useState("")
   const api = useAxios()
 
   useEffect(() => {
-    fetchGroups()
-    // eslint-disable-next-line
+    fetchData()
   }, [])
 
-  const fetchGroups = async () => {
+  const fetchData = async () => {
     try{
       const response = await api.get('/groups/mygroups')
+      const ownedGroups = await api.get("/groups/groupsbycreator")
+      setOwnedGroups(ownedGroups.data) //ownedGroups._id
+      console.log(ownedGroups.data)
       setGroups(response.data)
     }
     catch(error){
@@ -26,58 +29,72 @@ function MyGroups() {
     }
   }
 
-  const deleteGroup = async (groupId) => {
-    try {
-      const response = await api.post('/groups/deletegroup', { groupId: groupId })
-      if(response.status === 200) {
-        await fetchGroups()
-      }
+  const onSubmitRequest= async (groupID,event)=>{
+    // e.preventDefault()
+   
+    const GroupRequestObj={
+       recipient:groupIDrequestReceiver,
+       groupToJoin:groupID
     }
-    catch(error) {
-      console.dir(error)
+    // e.target.reset()
+    console.log(groupID)
+    await api.post('groups/creategrouprequest',GroupRequestObj)
+    
+    // console.log(groupIDrequestReceiver)
+    // console.log(GroupIDtoJoin)
+    event.target.reset()
+    
     }
-  }
 
-  const formSubmit = async () => {
-    try {
-      const response = await api.post('/groups/creategroup', { title: newGroupTitle })
-      if(response.status === 200) {
-        // setMessage(`Group with title ${newGroupTitle} successfully created !`)
-        await fetchGroups()
-      }
-    }
-    catch(error) {
-      console.dir(error)
-      setMessage('Error creating group')
-    }
-  }
+  const { Row, Column } = Grid
+  const { Item, Content, Header, Description, Icon } = List
+  
+  // {groups.map(group => (
+  //   // Warning: Each child in a list should have a unique "key" prop
+  //   <h1 key={group._id}>
+  //     <Link to={`/group/${group._id}`}>{group.title}</Link>
+  //   </h1>
+  // ))}
 
   return (
-    <div>
-      {groups.map(group => (
-        // Warning: Each child in a list should have a unique "key" prop
-        <h1 key={group._id}>
-          <Link to={`/group/${group._id}`}>{group.title}</Link>
-          <Button onClick={() => deleteGroup(group._id)}>Delete</Button>
-        </h1>
-      ))}
-      <Grid centered>
-        <Segment>
-          <Form style={{ width:"300px" }} onSubmit={formSubmit}>
-            <Form.Field
-              fluid
-              control={Input}
-              label='Create a new group !'
-              placeholder='Group title'
-              onChange={e => setNewGroupTitle(e.target.value)}>
-            </Form.Field>
-            <Button type='submit'>Create</Button>
-          </Form>
-          <h4>{message}</h4>
-        </Segment>
+    
+<div>
+      <Grid columns={2} divided >
+          <Row>
+              <Column>
+                <Segment>
+                  <Header as='h1' >Groups I am member of:</Header> 
+                    {groups.map(group => (
+                      <h3>
+                      <Link to={`/group/${group._id}`} key={group._id}>{group.title}</Link>
+                      </h3>))}
+                </Segment>
+              </Column>
+          <Column>
+          
+            <Segment >
+             <Header as='h1'>Groups I have created:</Header>
+                {ownedGroups.map(group=>(
+                    <h3  key={group._id} >{group.title}
+                    <br></br>
+                    <Form style={{ width:"300px" }} onSubmit={(event)=>onSubmitRequest(group._id,event)}>
+                      <Form.Field
+                        fluid
+                        control={Input}
+                        // label=''
+                        placeholder='ID of user to be added'
+                        onChange={(event)=>{setGroupIDrequestReceiver(event.target.value)}}>
+                      </Form.Field>
+                      <Button type='submit'>Send request</Button>
+                  </Form>
+                    </h3>
+                    ))}
+            </Segment>
+          
+         </Column>   
+        </Row>
       </Grid>
-    </div>
-  );
-}
+    </div>);
+    }
 
 export default MyGroups;
