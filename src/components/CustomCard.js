@@ -12,11 +12,12 @@ const CustomCard = (props) =>{
       content: {
         icon: 'search',
         content: (
-          <List verticalAlign="bottom" >
-            {props.groupInfo.map(group=>(
-            <List.Item > {group.title}  </List.Item>
-
-          ))}
+          <List verticalAlign="bottom">
+            {props.groupInfo.map(group=>
+            (<List.Item key={group.title}>
+              {group.title}
+            </List.Item>)
+          )}
           </List>
         ),
       },

@@ -50,6 +50,7 @@ const useAxios = () => {
         }
         catch(error) {
           // console.dir("REFRESHERROR", error)
+          console.log("useAxios RefreshError")
           signOut()
         }
       }

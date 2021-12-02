@@ -8,19 +8,21 @@ export function AuthenticationContextProvider({ children }) {
   const [sessionID, setSessionID] = useState(localStorage.getItem('sessionID'))
 
   const signIn = (token, aSessionID) => {
+    console.log("Auth context signIn")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
     console.log('setSessionID', aSessionID)
-    setSessionID(aSessionID)
     localStorage.setItem('sessionID', aSessionID)
   }
 
   const refreshAccessToken = (token) => {
+    console.log("Auth context refreshAccessToken")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
   }
 
   const signOut = () => {
+    console.log("Auth context signOut")
     setAccessToken('')
     localStorage.setItem('accessToken', '')
     setSessionID('')
