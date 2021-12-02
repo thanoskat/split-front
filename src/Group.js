@@ -48,7 +48,7 @@ const Group = ({ match }) => {
   useEffect(() => {
     fetchGroup()
     fetchAllUsers()
-    console.log('useEffect ran')
+    // eslint-disable-next-line
   }, [])
 
   const dropDownChange = (e, { value }) => {
@@ -121,7 +121,7 @@ const Group = ({ match }) => {
               </Item>
             </List>
           </Segment>
-      </Column>
+        </Column>
       </Row>
     </Grid>
   );

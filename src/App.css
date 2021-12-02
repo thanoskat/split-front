@@ -18,3 +18,15 @@ nav{
   align-items: center;
   list-style: none
 }
+
+.active-button{
+  color: black;
+  background-color: orange;
+  overflow: 'hidden'
+}
+
+.no-active-button{
+  color: orange;
+  background-color: black;
+  overflow: 'hidden'
+}

@@ -34,13 +34,6 @@ const Login = () => {
         <h4>{message}</h4>
       </Segment>
     </Grid>
-    // <form>
-    //   <input type="text" name="email" value={email} onChange={updateEmail}/>
-    //   <button onClick={handleSubmit}>Submit</button>
-    //   <div>
-    //     {message}
-    //   </div>
-    // </form>
   );
 }
 
