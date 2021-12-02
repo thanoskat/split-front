@@ -30,10 +30,10 @@ const NotficationLabel = () => {
   //     setPendingRequestsNo();
   //   };
 
-  const OnClickAccept =async (_id,groupToJoin)=>{
+  const OnClickAccept =async (_id)=>{
     try {
-      const info={status:1,_id,groupID:groupToJoin }
-      await api.post('groups/addUserToGroup2',info)
+      const info={status:1,_id }
+      await api.post('groups/requesthandler',info)
 
     } catch(error) {
       console.dir("ClickAcceptError: ", error)
@@ -42,8 +42,8 @@ const NotficationLabel = () => {
 
   const OnClickDecline = async (_id)=>{
     try {
-      const info={_id}
-      await api.post('groups/deleterequest',info)
+      const info={status:2,_id}
+      await api.post('groups/requesthandler',info)
     }
     catch(error) {
       console.dir("ClickDeclineError: ", error)
@@ -78,10 +78,10 @@ const NotficationLabel = () => {
         <Button.Group>
           <Grid>
             <Column width={7}>
-              <Button primary onClick={()=>OnClickAccept(_id,groupToJoin)}>Accept</Button>
+              <Button primary onClick={()=>OnClickAccept(_id)}>Accept</Button>
             </Column>
             <Column width={7}>
-              <Button secondary onClick={()=>OnClickDecline(_id,groupToJoin)}>Decline</Button>
+              <Button secondary onClick={()=>OnClickDecline(_id)}>Decline</Button>
             </Column>
           </Grid>
         </Button.Group>
