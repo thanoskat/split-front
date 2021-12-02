@@ -1,4 +1,4 @@
-import {Icon, Label, Menu, Header, Grid, Segment, Popup, Button} from 'semantic-ui-react'
+import {Icon, Label, Menu, Grid, Segment, Popup, Button} from 'semantic-ui-react'
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 const { Column } = Grid
@@ -20,7 +20,7 @@ const Notification = () => {
       const pendingStatusCounter = requests.data.requests.filter(obj => obj.status===0).length
       setPendingRequestsNo(pendingStatusCounter)
       setRequest(requests.data.requests)
-      console.log(requests.data)
+      // console.log(requests.data)
     }
     catch(error) {
       console.dir("REQUESTERROR: ", error)
@@ -105,7 +105,7 @@ const Notification = () => {
       position='bottom right'>
       <Grid>
         <Column style={{overflow: 'auto', maxHeight: 500 }}>
-          {request.map((req) =><>{notificationSegment(req)}</>)}
+          {request.map((req) => (<>{notificationSegment(req)}</>))}
         </Column>
       </Grid>
     </Popup>

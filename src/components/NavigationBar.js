@@ -2,11 +2,12 @@ import { NavLink } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import useAxios from '../utility/useAxios'
-import { Button, Dropdown, Segment, Label, Icon, Menu } from 'semantic-ui-react'
+import { Dropdown, Segment, Label, Icon, Menu } from 'semantic-ui-react'
 
-function Nav() {
+function NavigationBar() {
   const api = useAxios()
   const { signOut, sessionID } = useContext(AuthenticationContext)
+  console.log(`Nav authContext sessionID ${sessionID}`)
   const [userNickName, setUserNickName] = useState('')
   const [userId, setUserId] = useState('')
 
@@ -21,18 +22,8 @@ function Nav() {
     }
   }
 
-  async function getUserInfo() {
-    try {
-      const res = await api.get('/auth/getuserinfo')
-      setUserId(res.data.id)
-      setUserNickName(res.data.nickname)
-    }
-    catch(error) {
-      console.dir(error)
-    }
-  }
-
   const onLogoutClick = async () => {
+    console.log("onLogoutClick")
     try {
       await api.post('/auth/signout', { sessionID: sessionID })
     }
@@ -44,6 +35,7 @@ function Nav() {
   }
 
   useEffect(() => {
+    console.log("Nav useEffect ran")
     async function getUserInfo() {
       try {
         const res = await api.get('/auth/getuserinfo')
@@ -54,12 +46,12 @@ function Nav() {
         console.dir(error)
       }
     }
-    getUserInfo()
+    if(sessionID) {getUserInfo()}
     // eslint-disable-next-line
   }, [])
 
   const userNavigationButton = () => {
-    console.log(sessionID)
+    console.log(`userNavigationButton check if sessionID ${sessionID}`)
     if(sessionID) {
       return(
         <Dropdown text={userNickName} className='link item'>
@@ -107,11 +99,11 @@ function Nav() {
           // active={activeItem === 'Users'}
           // onClick={handleItemClick}
           />
-        <Menu.Item
+        {/* <Menu.Item
           as={NavLink}
           exact
           to="/login"
-          name="sign in"/>
+          name="sign in"/> */}
         <Menu.Item
           as={NavLink}
           exact
@@ -146,4 +138,4 @@ function Nav() {
   );
 }
 
-export default Nav;
+export default NavigationBar;
