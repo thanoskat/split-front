@@ -10,6 +10,7 @@ export function AuthenticationContextProvider({ children }) {
   const signIn = (token, aSessionID) => {
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
+    console.log('setSessionID', aSessionID)
     setSessionID(aSessionID)
     localStorage.setItem('sessionID', aSessionID)
   }
