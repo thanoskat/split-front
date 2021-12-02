@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useDebugValue } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from './utility/useAxios'
-import { Button, Form, Input, Segment, Grid } from 'semantic-ui-react'
+import { List, Button, Form, Input, Segment, Grid } from 'semantic-ui-react'
 
 function MyGroups() {
 
@@ -31,7 +31,7 @@ function MyGroups() {
 
   const onSubmitRequest= async (groupID,event)=>{
     // e.preventDefault()
-   
+
     const GroupRequestObj={
        recipient:groupIDrequestReceiver,
        groupToJoin:groupID
@@ -39,16 +39,16 @@ function MyGroups() {
     // e.target.reset()
     console.log(groupID)
     await api.post('groups/creategrouprequest',GroupRequestObj)
-    
+
     // console.log(groupIDrequestReceiver)
     // console.log(GroupIDtoJoin)
     event.target.reset()
-    
+
     }
 
   const { Row, Column } = Grid
   const { Item, Content, Header, Description, Icon } = List
-  
+
   // {groups.map(group => (
   //   // Warning: Each child in a list should have a unique "key" prop
   //   <h1 key={group._id}>
@@ -57,13 +57,13 @@ function MyGroups() {
   // ))}
 
   return (
-    
+
 <div>
       <Grid columns={2} divided >
           <Row>
               <Column>
                 <Segment>
-                  <Header as='h1' >Groups I am member of:</Header> 
+                  <Header as='h1' >Groups I am member of:</Header>
                     {groups.map(group => (
                       <h3>
                       <Link to={`/group/${group._id}`} key={group._id}>{group.title}</Link>
@@ -71,7 +71,7 @@ function MyGroups() {
                 </Segment>
               </Column>
           <Column>
-          
+
             <Segment >
              <Header as='h1'>Groups I have created:</Header>
                 {ownedGroups.map(group=>(
@@ -90,8 +90,8 @@ function MyGroups() {
                     </h3>
                     ))}
             </Segment>
-          
-         </Column>   
+
+         </Column>
         </Row>
       </Grid>
     </div>);
