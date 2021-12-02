@@ -1,6 +1,5 @@
-import './App.css';
 import { useState, useEffect } from 'react'
-import useAxios from './utility/useAxios'
+import useAxios from '../utility/useAxios'
 import { Card, Grid, Segment } from 'semantic-ui-react'
 
 const User = ({ match }) => {

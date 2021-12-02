@@ -1,17 +1,7 @@
 import './App.css';
-import Nav from './Nav'
-import About from './About'
-import Users from './Users'
-import User from './User'
-import Login from './Login'
-import SignUp from './SignUp'
-import VerifyLink from './VerifyLink'
-import Profile from './Profile';
-import MyGroups from './MyGroups'
-import Group from './Group'
+import { Nav, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
+import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import PrivateRoute from './PrivateRoute'
-import { AuthenticationContextProvider } from './AuthenticationContext'
 import 'semantic-ui-css/semantic.min.css'
 
 function App() {

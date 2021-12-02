@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useContext } from 'react'
-import { AuthenticationContext } from '../AuthenticationContext'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 const baseURL = 'http://localhost:4000'
 

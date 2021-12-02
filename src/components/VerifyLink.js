@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import { AuthenticationContext } from './AuthenticationContext'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import { useHistory } from "react-router-dom";
 
 const VerifyLink = ({ match }) => {

@@ -1,9 +1,9 @@
 import {Icon, Label, Menu, Header, Grid, Segment, Popup, Button} from 'semantic-ui-react'
 import { useState, useEffect } from 'react'
-import useAxios from './utility/useAxios'
+import useAxios from '../utility/useAxios'
 const { Column } = Grid
 
-const NotficationLabel = () => {
+const Notification = () => {
 
   const [pendingRequestsNo, setPendingRequestsNo] = useState()
   const [request, setRequest]=useState([{}])
@@ -112,4 +112,4 @@ const NotficationLabel = () => {
   )
 }
 
-export default NotficationLabel
+export default Notification

@@ -1,6 +1,5 @@
-import './App.css';
 import { Card, Icon, Image, Accordion,List} from 'semantic-ui-react'
-import NotficationLabel from './Notification';
+import Notfication from './Notification';
 
 const CustomCard = (props) =>{
   const panels = [

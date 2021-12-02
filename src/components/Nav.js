@@ -1,8 +1,7 @@
-import './Nav.css'
 import { NavLink } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
-import { AuthenticationContext } from './AuthenticationContext'
-import useAxios from './utility/useAxios'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import useAxios from '../utility/useAxios'
 import { Button, Dropdown, Segment, Label, Icon, Menu } from 'semantic-ui-react'
 
 function Nav() {

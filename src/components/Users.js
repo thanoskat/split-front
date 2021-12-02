@@ -1,7 +1,6 @@
-import './App.css';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import useAxios from './utility/useAxios'
+import useAxios from '../utility/useAxios'
 
 function Users() {
 
