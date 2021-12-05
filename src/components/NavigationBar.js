@@ -20,7 +20,7 @@ function NavigationBar() {
   }
 
   const userNavigationButton = () => {
-    if(sessionData.id) {
+    if(sessionData && sessionData.id) {
       return(
         <Dropdown text={sessionData.userNickname} className='link item'>
           <Dropdown.Menu>
