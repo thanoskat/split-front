@@ -11,6 +11,7 @@ const Notification = () => {
 
   useEffect(()=>{
     fetchRequests()
+    // eslint-disable-next-line
   },[])
 
   const fetchRequests = async () => {
@@ -105,7 +106,7 @@ const Notification = () => {
       position='bottom right'>
       <Grid>
         <Column style={{overflow: 'auto', maxHeight: 500 }}>
-          {request.map((req) => (<>{notificationSegment(req)}</>))}
+          {request.map((req, index) => (<div key={index}>{notificationSegment(req)}</div>))}
         </Column>
       </Grid>
     </Popup>

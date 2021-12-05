@@ -101,9 +101,9 @@ function Profile(){
         <Button primary>Add User to Group</Button>
       </Form>
       <div>
-        {groupInfo.map(group=>(<h2>group ID : {group._id} </h2>))}
-        {groupInfo.map(group=>(<h2>group title : {group.title} </h2>))}
-        {users.map(user=>(<h2>users : {user._id} </h2>))}
+        {groupInfo.map((group, index)=>(<h2 key={index}>group ID : {group._id} </h2>))}
+        {groupInfo.map((group, index)=>(<h2 key={index}>group title : {group.title} </h2>))}
+        {users.map((user, index)=>(<h2 key={index}>users : {user._id} </h2>))}
       </div>
     </div>
   )

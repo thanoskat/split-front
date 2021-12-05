@@ -10,13 +10,14 @@ const VerifyLink = ({ match }) => {
   const [data, setData] = useState('')
 
   const verifyLinkToken = async () => {
-    try{
+    try {
       const response = await axios.get(`http://localhost:4000/auth/v/${match.params.token}`, { withCredentials: true })
-      signIn(response.data.accessToken, response.data.sessionID)
-      setData(response.data.accessToken)
-      history.push('/profile');
+      signIn(response.data.accessToken, response.data.sessionData)
+      setData('Redirecting !!')
+      // history.push('/profile');
     }
-    catch(error){
+    catch(error) {
+      console.dir(error)
       setData(error.message)
     }
   }

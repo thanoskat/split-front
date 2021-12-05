@@ -1,4 +1,4 @@
-import { useState, useEffect, useDebugValue } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import { List, Button, Form, Input, Segment, Grid } from 'semantic-ui-react'
@@ -8,11 +8,11 @@ function MyGroups() {
   const [groups, setGroups] = useState([])
   const [ownedGroups, setOwnedGroups]=useState([{}])
   const [groupIDrequestReceiver, setGroupIDrequestReceiver]=useState("")
-  const [GroupIDtoJoin, setGroupIDtoJoin]=useState("")
   const api = useAxios()
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line
   }, [])
 
   const fetchData = async () => {
@@ -46,7 +46,7 @@ function MyGroups() {
     }
 
   const { Row, Column } = Grid
-  const { Item, Content, Header, Description, Icon } = List
+  const { Header } = List
 
   // {groups.map(group => (
   //   // Warning: Each child in a list should have a unique "key" prop
@@ -78,7 +78,7 @@ function MyGroups() {
                     <br></br>
                     <Form style={{ width:"300px" }} onSubmit={(event)=>onSubmitRequest(group._id,event)}>
                       <Form.Field
-                        fluid
+                        fluid='true'
                         control={Input}
                         // label=''
                         placeholder='ID of user to be added'
