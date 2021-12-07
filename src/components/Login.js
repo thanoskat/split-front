@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { Form, Button, Input, Grid, Segment } from 'semantic-ui-react'
+import { Form, Button, Input, Grid, Modal } from 'semantic-ui-react'
 
 const Login = () => {
 
@@ -20,19 +20,20 @@ const Login = () => {
 
   return (
     <Grid centered>
-      <Segment>
         <Form style={{ width:"300px" }} onSubmit={formSubmit}>
           <Form.Field
             fluid
             control={Input}
-            label='Email'
             placeholder='Email'
             onChange={e => setEmail(e.target.value)}>
           </Form.Field>
-          <Button type='submit'>Submit</Button>
+           <Modal
+            trigger={<Button type='submit' color="blue">Log In</Button>}
+            header='Log In'
+            content={message}
+            actions={[{ key: 'done', content: 'Done', positive: true }]}
+    />
         </Form>
-        <h4>{message}</h4>
-      </Segment>
     </Grid>
   );
 }

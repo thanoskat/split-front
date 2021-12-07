@@ -1,5 +1,5 @@
 import './App.css';
-import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
+import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute,HomePage } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
@@ -9,9 +9,8 @@ function App() {
     <AuthenticationContextProvider>
       <BrowserRouter>
         <div className="App">
-          <NavigationBar/>
           <Switch>
-            <Route exact path="/" component={Home}/>
+            <Route exact path="/" component={HomePage}/>
             <Route path="/login" component={Login}/>
             <Route path="/about" component={About}/>
             <Route path="/v/:token" component={VerifyLink}/>
@@ -28,10 +27,5 @@ function App() {
   );
 }
 
-const Home = () => (
-  <div>
-    <h1>Home Page</h1>
-  </div>
-)
 
 export default App;

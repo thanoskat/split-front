@@ -1,0 +1,48 @@
+#homepage {
+    background: none transparent;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    margin: 150px;
+}
+
+#homepagedivider{
+    display: table;
+    white-space: nowrap;
+    height: auto;
+    margin: '';
+    line-height: 1;
+    text-align: center;
+    margin: 25px;
+}
+
+.ui.grid>* {
+    padding-left: 1rem !important;
+    padding-right: 0rem !important;
+}
+
+/* #Cbutton{
+   
+    transition: opacity .1s ease,background-color .1s ease,color .1s ease,box-shadow .1s ease,background .1s ease;
+    transition-property: opacity, background-color, color, box-shadow, background;
+    transition-duration: 0.1s, 0.1s, 0.1s, 0.1s, 0.1s;
+    transition-timing-function:cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715);
+    transition-delay: 0s, 0s, 0s, 0s, 0s;
+   
+    
+}
+
+
+.cube{
+    width: 100px;
+    height: 100px;
+    background: red;
+    transition: width 1s, height 1s, background;
+    transition-timing-function:  ease-in
+}
+
+.cube:hover {
+    width: 300px;
+    height: 300px;
+
+  } */
