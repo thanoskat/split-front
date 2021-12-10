@@ -5,9 +5,9 @@
   }
 
  .containerbox{
+    background-color:rgb(255, 255, 255);
     padding: 50px;
-    margin: 20px;
-    width: 350px;
+    width: 25rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     height: 22rem;
     justify-self: center;
@@ -15,9 +15,10 @@
  } 
 
 .grid{
+  background-color:rgb(241, 245, 245);
   height:100vh;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) ;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)) ;
   /* grid-template-areas:"Box1 loginobject"; */
 }
  
