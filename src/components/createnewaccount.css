@@ -13,7 +13,9 @@
     margin-bottom: 0;}
 
 
-.ui.modal {
-    width: 400px !important;
-    margin: 0 !important;
+
+
+#signupmodal{
+    width: 20rem;
+ 
 }

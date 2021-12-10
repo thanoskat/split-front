@@ -1,9 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+ .containerbox{
+    padding: 50px;
+    margin: 20px;
+    width: 350px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    height: 22rem;
+    justify-self: center;
+    align-self: center;
+ } 
+
+.grid{
+  height:100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) ;
+  /* grid-template-areas:"Box1 loginobject"; */
+}
+ 
+.loginobject{ /*parent of segment for login object*/
+    /* grid-area: loginobject; */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 15rem;
+    align-self: center;
+    padding-bottom: 0rem; 
+}
+
+    .Box1{
+    background: lawngreen;
+    /* grid-area: Box1; */
+    }
+    
 #homepage {
     background: none transparent;
     box-shadow: none;
     border: none;
-    border-radius: 0;
-    margin: 150px;
+    margin: 0rem;
+    margin-top: 0rem;   
 }
 
 #homepagedivider{
@@ -13,36 +51,7 @@
     margin: '';
     line-height: 1;
     text-align: center;
-    margin: 25px;
-}
-
-.ui.grid>* {
-    padding-left: 1rem !important;
-    padding-right: 0rem !important;
-}
-
-/* #Cbutton{
-   
-    transition: opacity .1s ease,background-color .1s ease,color .1s ease,box-shadow .1s ease,background .1s ease;
-    transition-property: opacity, background-color, color, box-shadow, background;
-    transition-duration: 0.1s, 0.1s, 0.1s, 0.1s, 0.1s;
-    transition-timing-function:cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715),cubic-bezier(0.47, 0, 0.745, 0.715);
-    transition-delay: 0s, 0s, 0s, 0s, 0s;
-   
-    
+    margin-top: 25px;
 }
 
 
-.cube{
-    width: 100px;
-    height: 100px;
-    background: red;
-    transition: width 1s, height 1s, background;
-    transition-timing-function:  ease-in
-}
-
-.cube:hover {
-    width: 300px;
-    height: 300px;
-
-  } */

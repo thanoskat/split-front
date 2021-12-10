@@ -3,6 +3,7 @@ import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, 
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
+import Profile2 from './components/Profile2';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Switch>
+            <Route path="/profile2" component={Profile2}/>
             <Route exact path="/" component={HomePage}/>
             <Route path="/login" component={Login}/>
             <Route path="/about" component={About}/>
