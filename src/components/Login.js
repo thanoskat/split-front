@@ -35,7 +35,6 @@ const Login = () => {
           actions={[{ key: 'done', content: 'Done', positive: true }]}
         />
       </Form>
-    
   );
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Divider, Segment } from 'semantic-ui-react'
 import { Login, Createnewaccount } from '.'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import './homepage.css'
 
 
@@ -23,8 +23,8 @@ function HomePage() {
                Box 1
             </div>
             <div className='containerbox'>
-               <div className='loginobject'>
-                  <Segment padded basic textAlign='center' id="homepage">
+               <div className='login-create'>
+                  <Segment padded basic textAlign='center' id="segment">
                      <Login />
                      <Divider id="homepagedivider" horizontal>Or</Divider>
                      <Createnewaccount />

@@ -1,28 +1,30 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+html,body{
+    overflow: hidden ;
+}
 
- .containerbox{
-    background-color:rgb(255, 255, 255);
-    padding: 50px;
-    width: 25rem;
+.grid{
+  height:100vh;
+  display: grid;
+  background: rgb(233, 232, 232);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) ;
+  /* grid-template-areas:"Box1 loginobject"; */
+}
+ 
+.containerbox{
+    border-style: solid;
+    border-radius: 5px;
+    border-color:rgb(255, 255, 255); ;
+    background: rgb(255, 255, 255);
+    padding: 25px;
+    margin: 20px;
+    width: 24rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    height: 22rem;
+    height: 17rem;
     justify-self: center;
     align-self: center;
  } 
 
-.grid{
-  background-color:rgb(241, 245, 245);
-  height:100vh;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)) ;
-  /* grid-template-areas:"Box1 loginobject"; */
-}
- 
-.loginobject{ /*parent of segment for login object*/
+.login-create{ /*parent of segment for login object*/
     /* grid-area: loginobject; */
     display: flex;
     justify-content: center;
@@ -37,7 +39,7 @@
     /* grid-area: Box1; */
     }
     
-#homepage {
+#segment {
     background: none transparent;
     box-shadow: none;
     border: none;
@@ -54,5 +56,3 @@
     text-align: center;
     margin-top: 25px;
 }
-
-
