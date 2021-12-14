@@ -14,7 +14,9 @@ const useAxios = () => {
   // Writting this piece of code every time it is required.
   const axiosInstance = axios.create({
     baseURL,
-    headers: {Authorization: `Bearer ${accessToken}`}
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
   })
 
   // Intercepts at request
@@ -49,8 +51,8 @@ const useAxios = () => {
           }
         }
         catch(error) {
-          // console.dir("REFRESHERROR", error)
           console.log("useAxios RefreshError")
+          console.dir(error)
           signOut()
         }
       }

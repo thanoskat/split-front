@@ -1,32 +1,18 @@
+/* Remove the code bellow to debug */
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
+
+html,body
+{
+  /* scrollbar-width: none !important;
+  min-width: 0px !important; */
+}
+
 .App {
   text-align: center;
-}
-
-nav{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 10vh;
-  background: rgb(73, 79, 82);
-  color: white
-}
-
-.nav-links{
-  width: 35%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  list-style: none
-}
-
-.active-button{
-  color: black;
-  background-color: orange;
-  overflow: 'hidden'
-}
-
-.no-active-button{
-  color: orange;
-  background-color: black;
-  overflow: 'hidden'
+  /* min-width: 530px; */
+  scrollbar-width: none;
 }

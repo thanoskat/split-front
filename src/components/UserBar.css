@@ -1,0 +1,108 @@
+.userbar-flex-container {
+  padding: 1rem;
+  scrollbar-width: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #000000;
+  padding: 4px 4px 4px 4px;
+}
+
+.userbar-left-items {
+  display: flex;
+  flex-direction: row;
+}
+
+.userbar-right-items {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.logoicon {
+  color: #f4f4f4;
+  font-size: 2.3rem !important;
+  margin: 0 0 0 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  align-self: center;
+}
+
+.nickname-arrow  {
+  margin: 0 0 0 0 !important;
+}
+
+.nickname-button {
+  /* Text in center  */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-style: none;
+  border-width: 2px;
+  border-color: #8f8f91;
+  padding: 5px 5px 5px 5px;
+  width: fit-content;
+  white-space: nowrap;
+  background-color: #000000;
+  color: #f4f4f4;
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin: 4px 4px 4px 4px;
+  cursor: default;
+}
+
+.nickname-dropdown {
+  overflow: auto;
+  z-index: 50;
+  /* display: none; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 3rem;
+  right: 0;
+  position: absolute;
+  color: #8f8f91;
+  background-color: #101011;
+  border-color: #101011;
+  border-style: solid;
+  border-radius: 5px;
+  /* font-family: 'Lato', sans-serif; */
+  /* font-size: 1.1rem; */
+  width: fit-content;
+}
+
+.nickname-dropdown-item {
+  text-align: start;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: default;
+  width: 100%;
+}
+
+.nickname-dropdown-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: flex-start;
+  padding: 4px 4px 4px 4px
+}
+
+.nickname-dropdown-section:hover {
+  color: #f4f4f4;
+  background-color: #161618
+}
+
+.nickname-dropdown-divider {
+  border-style: solid;
+  border-width: 1px;
+  width: 100%;
+  border-color: #161618
+}

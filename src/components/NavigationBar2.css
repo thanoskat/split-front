@@ -1,0 +1,25 @@
+.main-flex-container {
+  /* padding: 1rem; */
+  scrollbar-width: none;
+  overflow: auto;
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  background-color: #000000;
+  /* height: 60px; */
+}
+
+.my-menu {
+  overflow: auto;
+  scrollbar-width: none;
+
+  padding: 4px 4px 4px 4px;
+
+  /* Button text in center */
+  display: inline-flex;
+  /* align-items: center;
+  justify-content: center; */
+
+  /* Button in flexbox in center */
+  align-self: center;
+}

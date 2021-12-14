@@ -1,5 +1,5 @@
 import './App.css';
-import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
+import { UserBar, NavigationBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
@@ -9,7 +9,9 @@ function App() {
     <AuthenticationContextProvider>
       <BrowserRouter>
         <div className="App">
-          <NavigationBar/>
+          {/* <NavigationBar/> */}
+          <UserBar/>
+          <NavigationBar2/>
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/login" component={Login}/>

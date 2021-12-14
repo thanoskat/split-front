@@ -19,8 +19,8 @@ function About() {
   }
 
   return (
-    <div>
-      <h1>{text}</h1>
+    <div style={{backgroundColor: 'black'}}>
+      <h1  style={{color: 'white'}}>{text}</h1>
     </div>
   );
 }

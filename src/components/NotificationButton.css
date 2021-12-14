@@ -1,0 +1,45 @@
+.notification-button {
+  white-space: nowrap;
+  width: fit-content;
+  margin: 4px 4px 4px 4px;
+  padding: 5px 5px 5px 5px !important;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  align-self: center;
+  background-color: #000000;
+  border-radius: 8px;
+  color: #8f8f91;
+  cursor: default;
+}
+
+.notification-button:hover {
+  color: #f4f4f4;
+}
+
+.notification-button-active {
+  color: #f4f4f4;
+  /* background-color: #161618; */
+}
+
+
+.bell {
+  position: relative;
+  margin: 0 0 0 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 1.5rem !important;
+}
+
+.red-dot {
+  padding: 4px 4px 4px 4px !important;
+  margin: 0 0 0 0 !important;
+  font-size: 0.5rem !important;
+  /* padding: 0px 0px 0px 0px; */
+  position: absolute;
+  bottom: 2.2rem;
+  left: 1.2rem;
+  color: #db2828c0;
+}

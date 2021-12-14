@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import {Form, Button} from 'semantic-ui-react'
 import { CustomCard, Notification } from '.'
+import './profile.css'
 
 function Profile(){
 
@@ -65,7 +66,7 @@ function Profile(){
   }
 
   return(
-    <div>
+    <div class='profile'>
       <Notification/>
       <CustomCard
         nickname={userInfo.nickname}

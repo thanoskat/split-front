@@ -1,5 +1,8 @@
 export { default as About } from './About'
 export { default as NavigationBar } from './NavigationBar'
+export { default as NavigationBar2 } from './NavigationBar2'
+export { default as NavigationButton } from './NavigationButton'
+export { default as UserBar } from './UserBar'
 export { default as Users } from './Users'
 export { default as User } from './User'
 export { default as Login } from './Login'
