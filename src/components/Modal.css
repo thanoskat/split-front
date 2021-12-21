@@ -1,0 +1,864 @@
+.gINUWt .StickyHeader-j6xmf1-0 {
+    top: -1rem;
+    margin-top: -1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    order: -1;
+}
+
+
+.gINUWt > * {
+    flex: 0 0 auto;
+}
+
+.gFCZXC {
+    position: sticky;
+}
+
+.FIIgO {
+    top: 0px;
+    z-index: 1;
+}
+
+.vixhQ {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 1rem 0px;
+    font: inherit;
+}
+
+.ihJdfb {
+    grid-template-areas:
+        "title actions"
+        "subtitle subtitle"
+        "description description";
+    grid-template-columns: minmax(0px, auto) 1fr;
+    grid-template-rows: repeat(2, auto);
+    display: grid;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+
+.gJfOjM {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-stretch: inherit;
+    height: unset;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+}
+
+.eilpVG {
+    grid-area: title / title / title / title;
+    justify-self: start;
+}
+
+.RZblR {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    min-width: 0px;
+    max-width: 100%;
+    display: flex;
+    grid-area: title / title / title / title;
+}
+
+.klCPFt {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bwXuoe {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-stretch: inherit;
+    font-family: "Basier Circle", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    text-transform: none;
+    letter-spacing: 0.005em;
+}
+
+.gINUWt > * {
+    flex: 0 0 auto;
+}
+
+.hbMIKG {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    color: rgb(25, 28, 31);
+}
+
+.mFAMe > :last-child {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.mFAMe > :first-child {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.mFAMe.mFAMe > * {
+    border-radius: 0px;
+    background-color: rgb(255, 255, 255);
+    transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.hcKKhU:active:enabled, .hcKKhU[aria-pressed="true"], .hcKKhU[aria-current="page"], .hcKKhU:not(.hcKKhU)[aria-selected="true"] {
+    box-shadow: var(--cell-shadow-collapsed),var(--cell-shadow-base),var(--cell-shadow-active);
+}
+
+
+.hcKKhU {
+    --cell-bg: #fff;
+    --cell-shadow-base: inset 0 0 0 0.25rem var(--cell-bg);
+    --cell-shadow-hover: inset 0 0 0 9999px #f7f7f7;
+    --cell-shadow-active: inset 0 0 0 9999px rgba(6,102,235,0.05);
+    --cell-shadow-focus: inset 0 0 0 2px #82b2f5;
+    --cell-shadow-collapsed: inset 0 0 0 0 rgba(255,255,255,0);
+    appearance: none;
+    border: 0px;
+    width: 100%;
+    -webkit-box-align: center;
+    align-items: center;
+    text-align: left;
+    font: inherit;
+    outline: none;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    background-color: var(--cell-bg);
+    border-radius: 12px;
+    color: rgb(25, 28, 31);
+    padding: 1rem;
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+}
+
+.iOfUAM {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    display: flex;
+}
+
+button {
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    color: inherit;
+    background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button, input, select {
+    outline: none;
+    box-sizing: border-box;
+}
+[type=button], [type=reset], [type=submit], button {
+    -webkit-appearance: button;
+}
+button, select {
+    text-transform: none;
+}
+button, input {
+    overflow: visible;
+}
+button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.bpwVKf {
+    margin-top: 0.125rem;
+    margin-bottom: 0.125rem;
+    margin-right: 1rem;
+    order: 2;
+    align-self: flex-start;
+}
+
+.iwaWlF {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.hkWDdI {
+    --button-shadow-focus: 0 0 0 2px #fff,0 0 0 4px #82b2f5;
+    appearance: none;
+    border: none;
+    background: none;
+    outline: none;
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+    text-transform: uppercase;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+.eDETqD {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-stretch: inherit;
+    color: rgb(255, 255, 255);
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+}
+
+.hkWDdI::before {
+    content: "";
+    isolation: isolate;
+    opacity: 0;
+    transition: opacity 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s;
+    background-color: rgba(25, 28, 31, 0.3);
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+.ZHtF {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+.eOKgcp {
+    background-image: none;
+    background-blend-mode: overlay;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.ZmdBk {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    background-color: rgb(6, 102, 235);
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.jHhsyi {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+.jRYOCl {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 40px;
+    height: 40px;
+}
+
+.hkWDdI .Avatar__AvatarBadge-sc-3hln3v-2 {
+    --avatar-badge-offset: -0.25rem;
+}
+
+.gKbcED {
+    isolation: isolate;
+    place-self: end;
+    margin: var(--avatar-badge-offset);
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.ErxTu {
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    border-radius: 9999px;
+}
+
+.gmrvMk {
+    margin: 0px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-stretch: inherit;
+    color: rgb(255, 255, 255);
+    background-color: rgb(6, 102, 235);
+    box-sizing: content-box;
+    border-style: solid;
+    border-color: rgb(255, 255, 255);
+    border-width: 0.125rem;
+    padding: 0px;
+    height: 16px;
+    min-width: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.66667;
+    letter-spacing: -0.00833333em;
+    display: inline-flex;
+}
+
+.kWwQru {
+    display: block;
+    width: 12px;
+    height: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.cErLcV {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    align-self: stretch;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    order: 3;
+    overflow: hidden;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.dNxGEr {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    display: block;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.dNxGEr {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    display: block;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.fpnygX {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.57143;
+    letter-spacing: -0.00714286em;
+    display: block;
+    margin-bottom: auto;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.fLdaxI {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    color: rgb(117, 128, 138);
+}
+
+.bPpuLq {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: normal;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    order: 4;
+    overflow: hidden;
+    text-align: right;
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.fOpNgt {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    max-width: 75%;
+}
+
+.jNLywe {
+    display: block;
+    margin-bottom: auto;
+    margin-left: auto;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.gINUWt > * {
+    flex: 0 0 auto;
+}
+
+.dZTgJy {
+    box-sizing: border-box;
+    margin: 0px 0px 1rem;
+    padding: 0px;
+    font: inherit;
+}
+
+.gINUWt > * {
+    flex: 0 0 auto;
+}
+
+.hbMIKG {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    color: rgb(25, 28, 31);
+}
+
+.bpwVKf {
+    margin-top: 0.125rem;
+    margin-bottom: 0.125rem;
+    margin-right: 1rem;
+    order: 2;
+    align-self: flex-start;
+}
+
+
+.iwaWlF {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.hkWDdI {
+    --button-shadow-focus: 0 0 0 2px #fff,0 0 0 4px #82b2f5;
+    appearance: none;
+    border: none;
+    background: none;
+    outline: none;
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+    text-transform: uppercase;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+.bRMdcs {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-stretch: inherit;
+    color: rgb(6, 102, 235);
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+}
+
+.hkWDdI::before {
+    content: "";
+    isolation: isolate;
+    opacity: 0;
+    transition: opacity 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s;
+    background-color: rgba(25, 28, 31, 0.3);
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+
+.ZHtF {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+.eOKgcp {
+    background-image: none;
+    background-blend-mode: overlay;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.gGjsGX {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    background-color: rgba(6, 102, 235, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+.cpClFE {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(https://assets.revolut.com/assets/flags/GB.svg);
+    box-shadow: rgb(122 122 122 / 15%) 0px 0px 0px 1px inset;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.ZHtF {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+.eRIito::before, .eRIito::after, .eRIito > * {
+    grid-area: rui-z-stack-item / rui-z-stack-item / rui-z-stack-item / rui-z-stack-item;
+}
+
+.eRIito {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "rui-z-stack-item";
+    place-items: center;
+}
+
+.jRYOCl {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    width: 40px;
+    height: 40px;
+}
+
+.cErLcV {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    align-self: stretch;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    order: 3;
+    overflow: hidden;
+}
+
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.dNxGEr {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    display: block;
+}
+
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.jcfGxh {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: nowrap;
+}
+
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}
+
+.fpnygX {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.57143;
+    letter-spacing: -0.00714286em;
+    display: block;
+    margin-bottom: auto;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.fLdaxI {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    color: rgb(117, 128, 138);
+}
+
+.bPpuLq {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, Arimo, sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: normal;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    order: 4;
+    overflow: hidden;
+    text-align: right;
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.fOpNgt {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    max-width: 75%;
+}
+
+.jNLywe {
+    display: block;
+    margin-bottom: auto;
+    margin-left: auto;
+}
+
+.iiOLjX {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: normal;
+    white-space: normal;
+}
+
+.kzYlwA {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+}

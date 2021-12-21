@@ -2,6 +2,7 @@ import React from 'react'
 import './mainpage.css'
 import './importedCSS.css'
 import { NavigationBar } from '.'
+import {Modal} from '.'
 
 function MainPage() {
     const groupname = "group name"
@@ -30,11 +31,11 @@ function MainPage() {
                         </div>
                         <div className='option-buttons'>
                             <button className='option-button'>
-                                <span className="user-add"></span>
+                            <i class='user plus icon'></i>
                                  Invite user
                                  </button>
                             <button className='option-button'> 
-                            <span className="user-remove"></span>
+                            <i class='user times icon'></i>
                             Leave group
                             </button>
                             <button className='option-button'>
@@ -66,11 +67,11 @@ function MainPage() {
                         </button>
                        
                     </div>
-                    <i class='chevron circle up icon'>
+                    <i class='plus circle icon'>
                         
                     </i>
                     <div>
-                        ...
+                        <Modal/>
                     </div>
                 </div>
             </div>

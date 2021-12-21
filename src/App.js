@@ -1,8 +1,8 @@
 import './App.css';
-import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute,HomePage,MainPage } from './components'
+import { NavigationBar, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute,HomePage,MainPage,ModalFrame } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import 'semantic-ui-css/semantic.min.css'
+// import 'semantic-ui-css/semantic.min.css'
 
 
 
@@ -12,6 +12,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Switch>
+            <Route path="/modal" component={ModalFrame}/>
             <Route path="/main" component={MainPage}/>
             <Route exact path="/" component={HomePage}/>
             <Route path="/login" component={Login}/>
