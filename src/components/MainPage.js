@@ -54,6 +54,7 @@ function MainPage() {
                         <button className="transaction-button">
                             <div className='image'>
                                 <div className="image-background">
+                                    
                                 </div>
                             </div>
                             <span className='item-content'>

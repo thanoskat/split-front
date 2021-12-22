@@ -183,3 +183,30 @@
     border-radius: 9999px;
 }
 
+@media screen and (min-width: 720px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        grid-area: main/main/main/main;
+        min-width: 0px;
+        padding: 0.5rem 1rem;
+        background-color: aquamarine;
+        border: solid;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 1rem;
+        line-height: 1.375;
+        letter-spacing: -0.00625em;    
+        border-radius: 15px;
+        position: relative;
+        bottom:0;
+        width: 65%;
+        height: 5rem;
+        max-height: 50vh;
+        overflow: auto;
+        justify-content: center;
+        align-self: center;
+        transform: translateY(200px);
+        transition:all 0.3s ease-in-out ;
+    }
+  
+  }

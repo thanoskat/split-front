@@ -14,7 +14,6 @@ export { default as CustomCard } from './CustomCard'
 export {default as HomePage} from './HomePage'
 export {default as Createnewaccount} from './Createnewaccount'
 export {default as MainPage} from './MainPage'
-export {default as Modal} from './Modal'
 export {default as ModalFrame} from './ModalFrame'
 
 
