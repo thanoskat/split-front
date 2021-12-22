@@ -79,7 +79,8 @@
 .total{
     display: flex;
     flex-direction: row-reverse;
-    padding:1rem;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
     color: rgb(91 104 116);
     font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-overflow: ellipsis;
@@ -200,7 +201,6 @@
         position: relative;
         bottom:0;
         width: 65%;
-        height: 5rem;
         max-height: 50vh;
         overflow: auto;
         justify-content: center;
