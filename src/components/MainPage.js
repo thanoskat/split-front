@@ -1,14 +1,14 @@
-import React from 'react'
 import './mainpage.css'
-import './importedCSS.css'
-import { NavigationBar } from '.'
-import {Modal} from '.'
+import "./importedCSS.css"
+import { ModalFrame } from '.'
+import { useState } from "react";
 
 function MainPage() {
-    const groupname = "group name"
+
+    const [show, setShow] = useState(false);
+    const [groupName, setGroupName] = useState("");
+
     return (
-
-
         <div className="main-page">
             <div className='box1'>
                 box1
@@ -17,12 +17,12 @@ function MainPage() {
                     <div className='widget-header'>
 
                         <div className='group-selection-button'>
-                            <button type="button" class="selection-button group-name-button  ">
-                                <span class="group-title">
-                                    {groupname}
+                            <button type="button" className="selection-button group-name-button  ">
+                                <span className="group-title">
+                                    {groupName}
                                 </span>
-                                <span class="button-position">
-                                    <div class="button-layout">
+                                <span className="button-position">
+                                    <div className="button-layout">
                                         button
                                     </div>
                                 </span>
@@ -31,60 +31,67 @@ function MainPage() {
                         </div>
                         <div className='option-buttons'>
                             <button className='option-button'>
-                            <i class='user plus icon'></i>
-                                 Invite user
-                                 </button>
-                            <button className='option-button'> 
-                            <i class='user times icon'></i>
-                            Leave group
+                                <i className='user plus icon'></i>
+                                Invite user
                             </button>
                             <button className='option-button'>
-                            <span className="summary"></span>
-                                 Summary
-                                 </button>
+                                <i className='user times icon'></i>
+                                Leave group
+                            </button>
+                            <button className='option-button'>
+                                <span className="summary"></span>
+                                Summary
+                            </button>
                         </div>
                     </div>
 
                     <div className='widget-subheader'>
-                        <span class="transactions-header">
+                        <span className="transactions-header">
                             Transactions
                         </span>
                     </div>
                     <div className='transaction-block'>
-                        <button class="transaction-button">
+                        <button className="transaction-button">
                             <div className='image'>
-                                <div class="image-background">
+                                <div className="image-background">
                                 </div>
                             </div>
                             <span className='item-content'>
                                 <span className="text-item-content">
-                                    To Kristi 
+                                    To Kristi
                                 </span>
                             </span>
                             <span className='amount'>
                                 10$
                             </span>
                         </button>
-                       
+
                     </div>
-                    <i class='plus circle icon'>
-                        
-                    </i>
                     <div>
-                        <Modal/>
+
+
+                        <button className='Xmple' onClick={() => setShow(true)}>
+                            Open Modal
+                            <i className='plus circle icon'>
+                            </i>
+                        </button>
+                        <ModalFrame onClose={() => setShow(false)} show={show} setGroupName={setGroupName} />
+                    </div>
+                    <div>
+
                     </div>
                 </div>
             </div>
-            <div class="box2">
+            <div className="box2">
                 box2
             </div>
-            <div class="box3">
+            <div className="box3">
                 box3
             </div>
-            <div class="box4">
+            <div className="box4">
                 box4
             </div>
-            <div class="box5">
+            <div className="box5">
                 box5
             </div>
         </div>

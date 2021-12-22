@@ -1,3 +1,24 @@
+.modal{
+    position: fixed;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0px;
+    background-color: rgb(0, 0, 0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity:0;
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events:visible;
+}
+
+
 .main{
     display: flex;
     flex-direction: column;
@@ -11,7 +32,19 @@
     line-height: 1.375;
     letter-spacing: -0.00625em;    
     border-radius: 15px;
+    position: fixed;
+    bottom:0;
+    width: 100%;
+    max-height: 50vh;
+    overflow: auto;
+    transform: translateY(200px);
+    transition:all 0.3s ease-in-out ;
 }
+
+.modal.show .main{
+    transform:translateY(0);
+}
+
 
 .box-widget{
     --input-bg: #f7f7f7;
@@ -46,8 +79,7 @@
 .total{
     display: flex;
     flex-direction: row-reverse;
-    padding-left: 1rem;
-    padding-right: 0.5rem;
+    padding:1rem;
     color: rgb(91 104 116);
     font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-overflow: ellipsis;
@@ -102,7 +134,7 @@
     cursor: pointer;
     justify-content: center;
     align-items: center;
-    box-shadow: inset 0 0 0 9999px rgba(6, 104, 241, 0.05) ; ;
+    box-shadow: inset 0 0 0 9999px rgba(145, 255, 0, 0.603) ; ;
     appearance: none;
     border: 0px;
     width: 100%;
