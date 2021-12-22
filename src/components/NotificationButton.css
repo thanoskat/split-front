@@ -1,7 +1,7 @@
 .notification-button {
   white-space: nowrap;
   width: fit-content;
-  margin: 4px 4px 4px 4px;
+  margin: 0px 2px 0px 2px;
   padding: 5px 5px 5px 5px !important;
   justify-content: center;
   display: flex;
@@ -13,6 +13,7 @@
   border-radius: 8px;
   color: #8f8f91;
   cursor: default;
+  text-decoration: none;
 }
 
 .notification-button:hover {
@@ -23,7 +24,6 @@
   color: #f4f4f4;
   /* background-color: #161618; */
 }
-
 
 .bell {
   position: relative;
@@ -36,10 +36,10 @@
 .red-dot {
   padding: 4px 4px 4px 4px !important;
   margin: 0 0 0 0 !important;
-  font-size: 0.5rem !important;
+  font-size: 0.45rem !important;
   /* padding: 0px 0px 0px 0px; */
   position: absolute;
-  bottom: 2.2rem;
+  bottom: 1.3rem;
   left: 1.2rem;
   color: #db2828c0;
 }
