@@ -66,7 +66,7 @@ function Profile(){
   }
 
   return(
-    <div class='profile'>
+    <div className='profile'>
       <Notification/>
       <CustomCard
         nickname={userInfo.nickname}

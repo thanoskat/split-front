@@ -10,7 +10,9 @@ html,body
   font-size: 14px;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */
+  background-color: #000000;
 }
+
 
 .App {
   text-align: center;

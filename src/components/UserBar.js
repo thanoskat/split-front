@@ -2,15 +2,12 @@ import './UserBar.css'
 import { useContext, useState, useRef, useEffect } from 'react'
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import useAxios from '../utility/useAxios'
-import { Dropdown, Segment, Label, Icon, Menu } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom'
 import { NavigationButton } from '.'
 
 const UserBar = () => {
   const api = useAxios()
   const { signOut, sessionData } = useContext(AuthenticationContext)
   const [nicknameDropdownDisplay, setNicknameDropdownDisplay] = useState('none')
-  const [notificationDropdownDisplay, setNotificationDropdownDisplay] = useState('none')
   const nicknameDropdownRef = useRef(null);
   const nicknameButtonRef = useRef(null);
 
@@ -38,15 +35,6 @@ const UserBar = () => {
     signOut()
   }
 
-  const bellClick = async () => {
-    if(notificationDropdownDisplay === 'none') {
-      setNotificationDropdownDisplay('flex')
-    }
-    else {
-      setNotificationDropdownDisplay('none')
-    }
-  }
-
   const nicknameClick = () => {
     if(nicknameDropdownDisplay === 'none') {
       setNicknameDropdownDisplay('flex')
@@ -59,30 +47,30 @@ const UserBar = () => {
   const authenticationMenu = () => {
     if(sessionData && sessionData.id) {
       return(<>
-        <div class='nickname-dropdown' style={{display: nicknameDropdownDisplay}} ref={nicknameDropdownRef}>
-          <div class='nickname-dropdown-section'>
-            <div class='nickname-dropdown-item'>User ID</div>
-            <div class='nickname-dropdown-item'>{sessionData.userId}</div>
+        <div className='nickname-dropdown' style={{display: nicknameDropdownDisplay}} ref={nicknameDropdownRef}>
+          <div className='nickname-dropdown-section'>
+            <div className='nickname-dropdown-item'>User ID</div>
+            <div className='nickname-dropdown-item'>{sessionData.userId}</div>
           </div>
-          <div class='nickname-dropdown-divider'/>
-          <div class='nickname-dropdown-section'>
-            <div class='nickname-dropdown-item'>email</div>
-            <div class='nickname-dropdown-item'>{sessionData.userEmail}</div>
+          <div className='nickname-dropdown-divider'/>
+          <div className='nickname-dropdown-section'>
+            <div className='nickname-dropdown-item'>email</div>
+            <div className='nickname-dropdown-item'>{sessionData.userEmail}</div>
           </div>
-          <div class='nickname-dropdown-divider'/>
-          <div class='nickname-dropdown-section'>
-            <div class='nickname-dropdown-item'>Session ID</div>
-            <div class='nickname-dropdown-item'>{sessionData.id}</div>
+          <div className='nickname-dropdown-divider'/>
+          <div className='nickname-dropdown-section'>
+            <div className='nickname-dropdown-item'>Session ID</div>
+            <div className='nickname-dropdown-item'>{sessionData.id}</div>
           </div>
-          <div class='nickname-dropdown-divider'/>
-          <div class='nickname-dropdown-section'>
-            <div onClick={logoutClick} class='nickname-dropdown-item'>Sign out</div>
+          <div className='nickname-dropdown-divider'/>
+          <div className='nickname-dropdown-section'>
+            <div onClick={logoutClick} className='nickname-dropdown-item'>Sign out</div>
           </div>
         </div>
-        <button class='nickname-button' onClick={nicknameClick} ref={nicknameButtonRef}>
+        <button className='nickname-button' onClick={nicknameClick} ref={nicknameButtonRef}>
           <div>
             {sessionData.userNickname}
-            <i class='nickname-arrow angle down icon'></i>
+            <i className='nickname-arrow angle down icon'></i>
           </div>
         </button>
       </>)
@@ -98,12 +86,12 @@ const UserBar = () => {
   }
 
   return (
-    <div class='userbar-flex-container'>
-      <div class='userbar-left-items'>
-        <div class='nickname-button'>LOGO?</div>
+    <div className='userbar-flex-container'>
+      <div className='userbar-left-items'>
+        <div className='nickname-button'>LOGO?</div>
         <img style={{width: '44x', height: '40px'}} src="logo192.png"/>
       </div>
-      <div class='userbar-right-items'>
+      <div className='userbar-right-items'>
         {authenticationMenu()}
       </div>
     </div>

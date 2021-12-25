@@ -8,16 +8,18 @@ function Users() {
   const api = useAxios()
 
   useEffect(() => {
+    console.log('useEffect() ran')
     fetchUsers()
     // eslint-disable-next-line
   }, [])
 
   const fetchUsers = async () => {
-    try{
+    try {
+      console.log('fetchUsers() ran')
       const response = await api.get('/getusers')
       setUsers(response.data)
     }
-    catch(error){
+    catch(error) {
       console.dir("GETUSERSERROR: ", error)
     }
   }

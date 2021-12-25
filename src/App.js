@@ -1,5 +1,5 @@
 import './App.css';
-import { UserBar, NavigationBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
+import { Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 // import 'semantic-ui-css/semantic.min.css'
@@ -24,6 +24,7 @@ function App() {
             <PrivateRoute exact path="/users" component={Users}/>
             <PrivateRoute exact path="/profile" component={Profile}/>
             <PrivateRoute path="/user/:id" component={User}/>
+            <PrivateRoute path="/notifications" component={Notifications}/>
           </Switch>
         </div>
       </BrowserRouter>
