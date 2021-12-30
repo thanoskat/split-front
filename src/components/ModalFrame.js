@@ -1,22 +1,27 @@
 import React from 'react'
 import "./modalframe.css"
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
-export default function ModalFrame({show, onClose, setGroupName }) {
+export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID }) {
 
     const [activeIndex, setActiveIndex] = useState(0);
+    const [groupData, setGroupData] = useState([{}]);
 
-    const handleOnClick = index => {
+    const handleOnClick = (index, group) => {
         setActiveIndex(index);
+        setGroupData(group);
+        setGroupID(group._id);
         onClose();
-       
+
     };
+  // No dependecies = Run after every render
+  // Empty [] dependencies = Run only after first render
+    useEffect(() => {
+        setGroupName(groupData.title)
+    }, [groupData.title])
 
-    useEffect(()=>{
-     setGroupName (activeIndex)
-    },[activeIndex])
 
-    
     // if(!show){
     //     return null;
     // }
@@ -27,8 +32,8 @@ export default function ModalFrame({show, onClose, setGroupName }) {
 
     return (
         <div>
-            <div className={`modal ${show ? "show":""}`} onClick={onClose}>
-                <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e=>e.stopPropagation()}>
+            <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
+                <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
                     <div className="box-widget">
 
                         <div className="header">
@@ -46,43 +51,29 @@ export default function ModalFrame({show, onClose, setGroupName }) {
                         <div className="groups-content">
                             <div className="content-box">
                                 <div className="individual-button-content">
-                                    <button area-pressed="true" onClick={() => handleOnClick(1)} className={activeIndex === 1 ? "active" : "group-button"}>
-                                        <div className="group-avatar">
-                                            <div className="image-background">
-                                            </div>
-                                        </div>
-                                        <span className="group-header ">
-                                            Group 1
-                                        </span>
-                                        <span className="group-total">
-                                            $156
-                                        </span>
-                                    </button>
-                                    <button onClick={() => handleOnClick(2)} className={activeIndex === 2 ? "active" : "group-button"}>
-                                        <div className="group-avatar">
-                                            <div className="image-background">
-                                            </div>
-                                        </div>
-                                        <span className="group-header">
-                                            Group 2
-                                        </span>
-                                        <span className="group-total">
-                                            $1000
-                                        </span>
-                                    </button>
-                                    <button onClick={() => handleOnClick(3)} className={activeIndex === 3 ? "active" : "group-button"}>
-                                        <div className="group-avatar">
-                                            <div className="image-background">
-                                            </div>
-                                        </div>
-                                        <span className="group-header">
-                                            Group 3
-                                        </span>
-                                        <span className="group-total">
-                                            $65
-                                        </span>
-                                    </button>
-                    
+                                    {groupInfo.map((group, index) => (
+                                        <Link className='aTag' to={`/main/${group._id}`}>
+                                            <button area-pressed="true"
+
+                                                key={index}
+                                                onClick={() => handleOnClick(index, group)}
+                                                className={activeIndex === index ? "active" : "group-button"}>
+
+                                                <div className="group-avatar">
+                                                    <div className="image-background">
+                                                    </div>
+                                                </div>
+                                                <span className="group-header ">
+                                                    {group.title}
+
+                                                </span>
+                                                <span className="group-total">
+                                                    $156
+                                                </span>
+
+                                            </button>
+                                        </Link>
+                                    ))}
                                 </div>
                             </div>
                         </div>

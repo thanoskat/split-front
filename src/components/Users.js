@@ -26,9 +26,9 @@ function Users() {
     <div>
       {users.map(user => (
         // Warning: Each child in a list should have a unique "key" prop
-        <h1 key={user._id}>
-          <Link to={`/user/${user._id}`}>{user.nickname}</Link>
-        </h1>
+        <button key={user._id}>
+          <Link to={`/users/${user._id}`}>{user.nickname}</Link>
+        </button>
       ))}
     </div>
   );

@@ -4,7 +4,7 @@
 }
 
 ::-webkit-scrollbar {
-  height: 0px!important;
+  height: 0px;
 }
  
 html, body {
@@ -93,6 +93,9 @@ cursor: pointer;
 background-color:rgb(78, 176, 233);
 }
 
+.y{
+  align-self: center;
+}
 .option-button-icon{
   font-weight: 900;
   box-sizing: border-box;
