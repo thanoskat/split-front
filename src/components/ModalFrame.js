@@ -1,7 +1,7 @@
 import React from 'react'
 import "./modalframe.css"
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter as Router } from 'react-router-dom';
 
 export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID }) {
 
@@ -10,16 +10,19 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
 
     const handleOnClick = (index, group) => {
         setActiveIndex(index);
+        
         setGroupData(group);
         setGroupID(group._id);
         onClose();
-
     };
-  // No dependecies = Run after every render
-  // Empty [] dependencies = Run only after first render
+    // No dependecies = Run after every render
+    // Empty [] dependencies = Run only after first render
+
     useEffect(() => {
         setGroupName(groupData.title)
     }, [groupData.title])
+
+
 
 
     // if(!show){
@@ -31,56 +34,58 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
     //and only executes in other areas left (which is the outside)
 
     return (
-        <div>
-            <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
-                <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
-                    <div className="box-widget">
+        <Router>
+            <div>
+                <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
+                    <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
+                        <div className="box-widget">
 
-                        <div className="header">
-                            <div className="header-content">
-                                Groups
-                            </div>
-                        </div>
-
-                        <div className="divider">
-                            divider
-                        </div>
-                        <div className="total">
-                            Total
-                        </div>
-                        <div className="groups-content">
-                            <div className="content-box">
-                                <div className="individual-button-content">
-                                    {groupInfo.map((group, index) => (
-                                        <Link className='aTag' to={`/main/${group._id}`}>
-                                            <button area-pressed="true"
-
-                                                key={index}
-                                                onClick={() => handleOnClick(index, group)}
-                                                className={activeIndex === index ? "active" : "group-button"}>
-
-                                                <div className="group-avatar">
-                                                    <div className="image-background">
-                                                    </div>
-                                                </div>
-                                                <span className="group-header ">
-                                                    {group.title}
-
-                                                </span>
-                                                <span className="group-total">
-                                                    $156
-                                                </span>
-
-                                            </button>
-                                        </Link>
-                                    ))}
+                            <div className="header">
+                                <div className="header-content">
+                                    Groups
                                 </div>
                             </div>
-                        </div>
 
+                            <div className="divider">
+                                divider
+                            </div>
+                            <div className="total">
+                                Total
+                            </div>
+                            <div className="groups-content">
+                                <div className="content-box">
+                                    <div className="individual-button-content">
+                                        {groupInfo.map((group, index) => (
+                                            <Link className='aTag' to={`/main/${group._id}`}>
+                                                <button area-pressed="true"
+
+                                                    key={index}
+                                                    onClick={() => handleOnClick(index, group)}
+                                                    className={activeIndex === index ? "active" : "group-button"}>
+
+                                                    <div className="group-avatar">
+                                                        <div className="image-background">
+                                                        </div>
+                                                    </div>
+                                                    <span className="group-header ">
+                                                        {group.title}
+
+                                                    </span>
+                                                    <span className="group-total">
+                                                        $156
+                                                    </span>
+
+                                                </button>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Router>
     )
 }

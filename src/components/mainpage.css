@@ -361,8 +361,8 @@ background-color:rgb(78, 176, 233);
   .main-page{
     grid-template-rows: 1fr auto auto;
     grid-template-areas:
-        "box1 . box2 . box4"
-        "box1 . box3 . box4"
+        "box2 . box1 . box4"
+        "box2 . box3 . box4"
         ". . box5 . .";
     grid-template-columns: 6.5rem 1fr 31.25rem 1fr minmax(6.5rem, auto)
 }}

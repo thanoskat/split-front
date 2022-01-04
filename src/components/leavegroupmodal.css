@@ -17,6 +17,7 @@
 
 .leavegroup-title{
     align-self: center;
+    margin: 0;
  
 }
 
@@ -64,9 +65,6 @@
   cursor: pointer;
 }
 
-.leavegroup-title{
-    margin: 0;
-}
 
 .leavegroup-body{
     padding:10px;
@@ -87,7 +85,3 @@
 .leavegroup-exit-button:hover{
     opacity: 1;
 }
-/* .x{
-    padding: 0px !important;;
-    
-} */
