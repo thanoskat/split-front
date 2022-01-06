@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form, Checkbox, Button, Grid, Input, Segment } from 'semantic-ui-react'
+import { Form, Checkbox, Button,Input } from 'semantic-ui-react'
 import axios from 'axios'
 
 const SignUp = () => {
@@ -47,8 +47,7 @@ const SignUp = () => {
   }
 
   return(
-    <Grid centered>
-      <Segment>
+    
         <Form onSubmit={formSubmit} loading={loading}>
           <Form.Field
             fluid
@@ -69,10 +68,10 @@ const SignUp = () => {
           <Form.Field>
             <Checkbox label='I agree to the Terms and Conditions'/>
           </Form.Field>
-          <Button type='submit'>Submit</Button>
+          <Button type='submit' color="green">Sign Up</Button>
         </Form>
-      </Segment>
-    </Grid>
+     
+ 
   )
 }
 

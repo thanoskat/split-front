@@ -1,4 +1,4 @@
-import {Icon, Label, Menu, Grid, Segment, Popup, Button} from 'semantic-ui-react'
+import { Icon, Label, Menu, Grid, Segment, Popup, Button } from 'semantic-ui-react'
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 const { Column } = Grid
@@ -6,24 +6,24 @@ const { Column } = Grid
 const Notification = () => {
 
   const [pendingRequestsNo, setPendingRequestsNo] = useState()
-  const [request, setRequest]=useState([{}])
+  const [request, setRequest] = useState([{}])
   const api = useAxios()
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchRequests()
     // eslint-disable-next-line
-  },[])
+  }, [])
 
   const fetchRequests = async () => {
-    try{
+    try {
       const requests = await api.get('groups/getgrouprequests')
       // setgroupRequestInfo(requests.data)
-      const pendingStatusCounter = requests.data.requests.filter(obj => obj.status===0).length
+      const pendingStatusCounter = requests.data.requests.filter(obj => obj.status === 0).length
       setPendingRequestsNo(pendingStatusCounter)
       setRequest(requests.data.requests)
       // console.log(requests.data)
     }
-    catch(error) {
+    catch (error) {
       console.dir("REQUESTERROR: ", error)
     }
   }
@@ -31,40 +31,40 @@ const Notification = () => {
   //     setPendingRequestsNo();
   //   };
 
-  const OnClickAccept =async (_id)=>{
+  const OnClickAccept = async (_id) => {
     try {
-      const info={status:1,_id }
-      await api.post('groups/requesthandler',info)
+      const info = { status: 1, _id }
+      await api.post('groups/requesthandler', info)
 
-    } catch(error) {
+    } catch (error) {
       console.dir("ClickAcceptError: ", error)
     }
   }
 
-  const OnClickDecline = async (_id)=>{
+  const OnClickDecline = async (_id) => {
     try {
-      const info={status:2,_id}
-      await api.post('groups/requesthandler',info)
+      const info = { status: 2, _id }
+      await api.post('groups/requesthandler', info)
     }
-    catch(error) {
+    catch (error) {
       console.dir("ClickDeclineError: ", error)
     }
   }
 
   const notificationRedNumber = () => {
-    if(pendingRequestsNo){
-      return(
+    if (pendingRequestsNo) {
+      return (
         <Label color='red' floating>
           {pendingRequestsNo}
         </Label>
       )
     }
     else {
-      return(<></>)
+      return (<></>)
     }
   }
 
-  const notificationSegment=({_id,status,groupToJoin})=>{
+  const notificationSegment = ({ _id, status, groupToJoin }) => {
     let action;
     if (status === 0) {
       action = "pending";
@@ -73,16 +73,16 @@ const Notification = () => {
     } else {
       action = "declined";
     }
-    return(
+    return (
       <Segment raised>
         {`Request to join ${groupToJoin} ${action}`}
         <Button.Group>
           <Grid>
             <Column width={7}>
-              <Button primary onClick={()=>OnClickAccept(_id)}>Accept</Button>
+              <Button primary onClick={() => OnClickAccept(_id)}>Accept</Button>
             </Column>
             <Column width={7}>
-              <Button secondary onClick={()=>OnClickDecline(_id)}>Decline</Button>
+              <Button secondary onClick={() => OnClickDecline(_id)}>Decline</Button>
             </Column>
           </Grid>
         </Button.Group>
@@ -90,22 +90,22 @@ const Notification = () => {
     )
   }
 
-  return(
+  return (
     <Popup
       trigger=
       {
         <Menu compact>
           <Menu.Item as="a">
-          <Icon name='bell'/>
+            <Icon name='bell' />
             {notificationRedNumber()}
           </Menu.Item>
         </Menu>
       }
       on='click'
-      disabled={pendingRequestsNo?false:true}
+      disabled={pendingRequestsNo ? false : true}
       position='bottom right'>
       <Grid>
-        <Column style={{overflow: 'auto', maxHeight: 500 }}>
+        <Column style={{ overflow: 'auto', maxHeight: 500 }}>
           {request.map((req, index) => (<div key={index}>{notificationSegment(req)}</div>))}
         </Column>
       </Grid>

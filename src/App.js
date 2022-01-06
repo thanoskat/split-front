@@ -5,16 +5,20 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 // import 'semantic-ui-css/semantic.min.css'
 import './semantic-icons.css'
 
+
+
 function App() {
   return (
     <AuthenticationContextProvider>
       <BrowserRouter>
+        <NavigationBar />
         <div className="App">
           {/* <NavigationBar/> */}
           <UserBar/>
           <NavigationBar2/>
           <Switch>
-            <Route exact path="/" component={Home}/>
+            <Route path="/main" component={MainPage} />
+            <Route exact path="/" component={HomePage}/>
             <Route path="/login" component={Login}/>
             <Route path="/about" component={About}/>
             <Route path="/v/:token" component={VerifyLink}/>
@@ -32,10 +36,5 @@ function App() {
   );
 }
 
-const Home = () => (
-  <div>
-    <h1>Home Page</h1>
-  </div>
-)
 
 export default App;

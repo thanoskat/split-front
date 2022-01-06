@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
-import {Form, Button} from 'semantic-ui-react'
+import { Form, Button } from 'semantic-ui-react'
 import { CustomCard, Notification } from '.'
 import './profile.css'
 
-function Profile(){
+function Profile() {
 
   const [groupInfo, setGroupInfo] = useState([{}])
   const [groupName, setGroupName] = useState("")
   const [userInfo, setUserInfo] = useState({})
   const [users, setUsers] = useState([])
-  const [UserIDtoBeAdded,SetUserIDtoBeAdded ]=useState("")
-  const [GroupIDtoAddUser,SetGroupIDtoAddUser]=useState("")
+  const [UserIDtoBeAdded, SetUserIDtoBeAdded] = useState("")
+  const [GroupIDtoAddUser, SetGroupIDtoAddUser] = useState("")
 
   const api = useAxios()
-  const {Group, Input}=Form;
+  const { Group, Input } = Form;
 
   useEffect(() => {
     fetchUser()
@@ -23,18 +23,18 @@ function Profile(){
   }, [])
 
   const fetchUsers = async () => {
-    try{
+    try {
       const response = await api.get('/getusers')
       setUsers(response.data)
 
     }
-    catch(error){
+    catch (error) {
       console.dir("GETUSERSERROR: ", error)
     }
   }
 
   const fetchUser = async () => {
-    try{
+    try {
       const response = await api.get('/getusers/profile');
       //  console.log(response.data.groups)
       //  console.log(response.data)
@@ -42,23 +42,23 @@ function Profile(){
       setUserInfo(response.data);
 
     }
-    catch(error){
+    catch (error) {
       console.dir("GETUSERSERROR: ", error);
     }
   }
 
-  const  onSubmitFunction = async (e)=>{
-    const groupObj={
-      title:groupName
+  const onSubmitFunction = async (e) => {
+    const groupObj = {
+      title: groupName
     }
     await api.post('/groups/creategroup', groupObj)
     e.target.reset()
   }
 
-  const onSubmitAddUserToGroup = async (e)=>{
-    const IDs={
-      userID:UserIDtoBeAdded,
-      groupID:GroupIDtoAddUser
+  const onSubmitAddUserToGroup = async (e) => {
+    const IDs = {
+      userID: UserIDtoBeAdded,
+      groupID: GroupIDtoAddUser
     }
 
     await api.post('groups/addUserToGroup', IDs)
@@ -70,41 +70,41 @@ function Profile(){
       <Notification/>
       <CustomCard
         nickname={userInfo.nickname}
-        email = {userInfo.email}
+        email={userInfo.email}
         _id={userInfo._id}
         length={groupInfo.length}
         groupInfo={groupInfo}
-        />
+      />
       <Form
-        onSubmit={e=>onSubmitFunction(e)}
-        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+        onSubmit={e => onSubmitFunction(e)}
+        style={{ paddingLeft: '100px', paddingRight: '100px', paddingTop: '10px' }}>
         <Group widths='equal'>
           <Input
-            onChange={(event)=>setGroupName(event.target.value)}
+            onChange={(event) => setGroupName(event.target.value)}
             fluid
-            placeholder='Name of Group'/>
+            placeholder='Name of Group' />
         </Group>
         <Button primary>Create Group</Button>
       </Form>
       <Form
-        onSubmit={e=>onSubmitAddUserToGroup(e)}
-        style={{paddingLeft: '100px', paddingRight: '100px',paddingTop:'10px'}}>
+        onSubmit={e => onSubmitAddUserToGroup(e)}
+        style={{ paddingLeft: '100px', paddingRight: '100px', paddingTop: '10px' }}>
         <Group widths='equal'>
           <Input
-            onChange={event=>SetUserIDtoBeAdded(event.target.value)}
+            onChange={event => SetUserIDtoBeAdded(event.target.value)}
             fluid
-            placeholder='Id of User to be added'/>
+            placeholder='Id of User to be added' />
           <Input
-              onChange={event=>SetGroupIDtoAddUser(event.target.value)}
-              fluid
-              placeholder='Group user will be added to '/>
+            onChange={event => SetGroupIDtoAddUser(event.target.value)}
+            fluid
+            placeholder='Group user will be added to ' />
         </Group>
         <Button primary>Add User to Group</Button>
       </Form>
       <div>
-        {groupInfo.map((group, index)=>(<h2 key={index}>group ID : {group._id} </h2>))}
-        {groupInfo.map((group, index)=>(<h2 key={index}>group title : {group.title} </h2>))}
-        {users.map((user, index)=>(<h2 key={index}>users : {user._id} </h2>))}
+        {groupInfo.map((group, index) => (<h2 key={index}>group ID : {group._id} </h2>))}
+        {groupInfo.map((group, index) => (<h2 key={index}>group title : {group.title} </h2>))}
+        {users.map((user, index) => (<h2 key={index}>users : {user._id} </h2>))}
       </div>
     </div>
   )
