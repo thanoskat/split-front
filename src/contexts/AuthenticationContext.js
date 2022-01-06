@@ -5,38 +5,52 @@ export const AuthenticationContext = React.createContext()
 export function AuthenticationContextProvider({ children }) {
 
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
-  const [sessionID, setSessionID] = useState(localStorage.getItem('sessionID'))
+  const [sessionData, setSessionData] = useState({
+    id: localStorage.getItem('sessionId'),
+    userEmail: localStorage.getItem('userEmail'),
+    userId: localStorage.getItem('userId'),
+    userNickname: localStorage.getItem('userNickname')
+  })
 
-  const signIn = (token, aSessionID) => {
-    console.log("Auth context signIn")
+  const signIn = (token, sessionData) => {
+    console.log("Auth context signIn()")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
-    console.log('setSessionID', aSessionID)
-    localStorage.setItem('sessionID', aSessionID)
+    setSessionData(sessionData)
+    localStorage.setItem('sessionId', sessionData.id)
+    localStorage.setItem('userId', sessionData.userId)
+    localStorage.setItem('userEmail', sessionData.userEmail)
+    localStorage.setItem('userNickname', sessionData.userNickname)
   }
 
   const refreshAccessToken = (token) => {
-    console.log("Auth context refreshAccessToken")
+    console.log("Auth context refreshAccessToken()")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
   }
 
   const signOut = () => {
-    console.log("Auth context signOut")
+    console.log("Auth context signOut()")
     setAccessToken('')
     localStorage.setItem('accessToken', '')
-    setSessionID('')
-    localStorage.setItem('sessionID', '')
+    setSessionData('')
+    localStorage.setItem('sessionId', '')
+    localStorage.setItem('userEmail', '')
+    localStorage.setItem('userId', '')
+    localStorage.setItem('userNickname', '')
   }
 
   return(
-    <AuthenticationContext.Provider value={
-      { accessToken: accessToken,
-        sessionID: sessionID,
+    <AuthenticationContext.Provider
+      value=
+      {{
+        accessToken: accessToken,
         signIn: signIn,
         signOut: signOut,
-        refreshAccessToken: refreshAccessToken
-      } }>
+        refreshAccessToken: refreshAccessToken,
+        sessionData: sessionData,
+        setSessionData: setSessionData
+      }}>
       {children}
     </AuthenticationContext.Provider>
   )

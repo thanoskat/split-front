@@ -1,5 +1,4 @@
 import { Card, Icon, Image, Accordion,List} from 'semantic-ui-react'
-import Notfication from './Notification';
 
 const CustomCard = (props) =>{
   const panels = [
@@ -13,11 +12,13 @@ const CustomCard = (props) =>{
         icon: 'search',
         content: (
           <List verticalAlign="bottom">
-            {props.groupInfo.map(group=>
-            (<List.Item key={group.title}>
-              {group.title}
-            </List.Item>)
-          )}
+            {props.groupInfo.map((group, index)=>
+              (
+                <List.Item key={index}>
+                  {group.title}
+                </List.Item>
+              ))
+            }
           </List>
         ),
       },

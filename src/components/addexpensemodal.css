@@ -1,0 +1,139 @@
+.addexp-modal{
+    position: fixed;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0px;
+    background-color: rgb(0, 0, 0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addexp-title{
+    align-self: center;
+}
+
+.addexp-content{
+    width:25rem;
+    background-color: #fff;
+    border-radius: 5px;
+    
+}
+
+.addexp-header{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem;
+}
+
+.addexp-decision-buttons{
+    display: flex;
+    flex-direction: row-reverse;
+    
+    height: 5rem;
+    padding: 1rem;
+    padding-right: 1rem
+}
+
+.addexp-decison-button{
+    margin: 0.2rem;
+    font-weight: 500;
+    font-size: 1.02rem;
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-radius: 10px;
+    border:none;
+    background-color: rgb(186, 216, 233);
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-bottom: 8px;
+    color:rgb(6, 102, 235);
+    transition: background-color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, opacity 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .addexp-title{
+      margin: 0;
+  }
+  
+  .addexp-body{
+      display: grid;
+      grid-auto-flow: row;
+      grid-row-gap:0.5rem;
+      justify-content: center;
+      padding:2rem;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+  }
+  
+
+  .addexp-exit-button{
+    background-color:wheat;
+    border:none;
+    border-radius:50%;
+    width:2rem;
+    height: 2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.addexp-exit-button:hover{
+    opacity: 1;
+}
+
+.amnt, .descr {
+    width: 18rem;
+    padding-top: 0.9rem;
+    height: 4rem;
+    outline:0;
+    border-width: 0 0 2px;
+
+}
+
+.input-amount-section,.descr-amount-section{
+    order:1;
+}
+
+input:focus {
+    border-color: rgb(26, 151, 26)
+  }
+
+  .currency-selector,.dummy{
+      width: 35px;
+      height: 35px;
+      margin-top: 20px
+  }
+
+  .addexp-amount,.addexp-description{  
+    display: grid;
+    -webkit-box-align: center;
+    grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
+    column-gap: 0.8rem;
+    grid-auto-columns: auto;
+    grid-auto-columns: max-content;
+    padding: 0.5rem;
+  }
+
+  select {
+      
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 9px 5px 8px 13px;
+    font-size: 16px;
+    border: 1px solid rgb(197, 8, 8);
+    -webkit-appearance: none;
+    appearance: none;
+   
+  }
+  
+  
+  /* CAUTION: Internet Explorer hackery ahead */
+  
+  
+  select::-ms-expand {
+      display: none; /* Remove default arrow in Internet Explorer 10 and 11 */
+  }

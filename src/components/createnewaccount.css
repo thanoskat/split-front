@@ -1,0 +1,21 @@
+    .paragraph{
+    color: #606770;
+    font-family: SFProText-Regular, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+
+.header{color: #1c1e21;
+    font-family: SFProDisplay-Bold, Helvetica, Arial, sans-serif;
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 0;}
+
+
+
+
+#signupmodal{
+    width: 20rem;
+ 
+}

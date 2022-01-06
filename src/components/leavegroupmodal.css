@@ -1,0 +1,87 @@
+
+
+.leavegroupmodal{
+    position: fixed;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0px;
+    background-color: rgb(0, 0, 0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* opacity:0;
+    transition: all 0.3s ease-in-out;
+    pointer-events: none; */
+}
+
+.leavegroup-title{
+    align-self: center;
+    margin: 0;
+ 
+}
+
+
+.leavegroup-content{
+    width:25rem;
+    background-color: #fff;
+    border-radius: 5px;
+    
+}
+
+.leavegroup-header{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem;
+}
+
+.leavegroup-decision-buttons{
+    display: flex;
+    flex-direction: row-reverse;
+    
+    height: 5rem;
+    padding: 1rem;
+    padding-right: 1rem
+}
+
+
+
+.leavegroup-decison-button{
+  margin: 0.2rem;
+  font-weight: 500;
+  font-size: 1.02rem;
+  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border-radius: 10px;
+  border:none;
+  background-color: rgb(186, 216, 233);
+  padding-top: 8px;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 8px;
+  color:rgb(6, 102, 235);
+  transition: background-color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, opacity 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+  text-align: center;
+  cursor: pointer;
+}
+
+
+.leavegroup-body{
+    padding:10px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.leavegroup-exit-button{
+    background-color:wheat;
+    border:none;
+    border-radius:50%;
+    width:2rem;
+    height: 2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.leavegroup-exit-button:hover{
+    opacity: 1;
+}

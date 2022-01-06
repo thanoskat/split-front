@@ -1,0 +1,252 @@
+.modal{
+    position: fixed;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0px;
+    background-color: rgb(0, 0, 0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity:0;
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events:visible;
+}
+
+
+.main{
+    display: flex;
+    flex-direction: column;
+    grid-area: main/main/main/main;
+    min-width: 0px;
+    padding: 0.5rem 1rem;
+    background-color: aquamarine;
+    border: solid;
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;    
+    border-radius: 15px;
+    position: fixed;
+    bottom:0;
+    width: 100%;
+    max-height: 50vh;
+    overflow: auto;
+    transform: translateY(200px);
+    transition:all 0.3s ease-in-out ;
+    
+}
+
+.modal.show .main{
+    transform:translateY(0);
+}
+
+
+.box-widget{
+    --input-bg: #f7f7f7;
+    --input-hover-color: #f1f2f4;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    background-color: rgb(255, 255, 255);
+    color: rgb(25, 28, 31);
+    border-radius: 13px;
+    background-color:brown;
+    /* position: relative; */
+   
+   
+}
+
+.header{
+
+    background-color: rgb(95, 99, 160);
+    padding: 1rem 0px;
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: -0.00625em;
+    
+}
+
+/* .sticky{
+    position: sticky;
+    top: 0;
+} */
+
+.header-content{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.total{
+    display: flex;
+    flex-direction: row-reverse;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    color: rgb(91 104 116);
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-overflow: ellipsis;
+    
+    
+}
+
+
+ /* .individual-button-content{
+    display: flex;
+    flex-direction: column;
+    margin:0px;
+  
+}  */
+
+/* .individual-button-content >:first-child{
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}  */
+
+  /* .individual-button-content.individual-button-content>*{
+    border-radius: -45px;
+    background-color: rgb(243, 180, 227);
+    transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s;
+}   */
+
+ .aTag{
+    display: flex;
+    flex-direction: column;
+    margin:0px;
+}
+
+.aTag>:first-child{
+    /* border-top-left-radius: 12px;
+    border-top-right-radius: 12px; */
+    border-radius: 10px;
+}
+
+.aTag.aTag>*{
+    border-radius: -45px;
+    background-color: rgb(243, 180, 227);
+    transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s;
+}
+
+a:-webkit-any-link {
+    color: none;
+    cursor: pointer;
+    text-decoration: none;
+} 
+
+.group-button:active:enabled, .group-button[aria-pressed="true"], .group-button[aria-current="page"], .group-button:not(.group-button)[aria-selected="true"] {
+    box-shadow:inset 0 0 0 0 rgba(255,255,255,0),#fff,inset 0 0 0 9999px rgba(6,102,235,0.05) ;
+}
+
+
+
+
+.group-button{
+    display: flex;
+    padding: 1rem;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    box-shadow:inset 0 0 0 0.25rem var(#fff) ; 
+    appearance: none;
+    border: 0px;
+    width: 100%;
+    -webkit-box-align: center;
+}
+
+.group-button:hover{
+    box-shadow: inset 0 0 0 9999px #f7f7f7;
+}
+
+.active{
+    /* box-shadow:inset 0 0 0 9999px rgba(6, 104, 241, 0.05) ; */
+    
+    display: flex;
+    padding: 1rem;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 0 9999px rgba(255, 230, 0, 0.603) ; ;
+    appearance: none;
+    border: 0px;
+    width: 100%;
+    -webkit-box-align: center;
+}
+
+/* .group-button:target{
+    box-shadow:inset 0 0 0 9999px rgb(0 0 0 / 48%) ;
+} */
+.group-button:focus{
+   box-shadow:  inset 0 0 0 2px #82b2f5;
+}
+
+
+
+/* .group-button:collapsed{
+    box-shadow: inset 0 0 0 0 rgba(255,255,255,0);
+} */
+
+
+.group-avatar{
+    flex:0;
+}
+
+.group-header{
+    display: flex;
+    flex:1 1 auto;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 0.5rem;
+
+}
+
+.image-background {
+    background-image: none;
+    background-blend-mode: overlay;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font: inherit;
+    background-color: rgba(6, 102, 235, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+}
+
+@media screen and (min-width: 720px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        grid-area: main/main/main/main;
+        min-width: 0px;
+        padding: 0.5rem 1rem;
+        background-color: aquamarine;
+        border: solid;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 1rem;
+        line-height: 1.375;
+        letter-spacing: -0.00625em;    
+        border-radius: 15px;
+        position: relative;
+        bottom:0;
+        width: 65%;
+        max-height: 50vh;
+        overflow: auto;
+        justify-content: center;
+        align-self: center;
+        transform: translateY(200px);
+        transition:all 0.3s ease-in-out ;
+        right: 1.1rem;
+        justify-content: flex-start
+       
+    }
+ 
+  }

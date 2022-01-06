@@ -20,16 +20,16 @@ const Group = ({ match }) => {
       setTitle(group.title)
       setMembers(group.members)
     }
-    catch(error) {
+    catch (error) {
       console.dir(error)
     }
   }
 
   const fetchAllUsers = async () => {
-    try{
+    try {
       const response = await api.get('/getusers')
       const userArray = []
-      response.data.map((user) => (userArray.push({key: user._id, value: user._id, text: user.nickname})))
+      response.data.map((user) => (userArray.push({ key: user._id, value: user._id, text: user.nickname })))
       setAllUsers(userArray)
 
       //// TODO Clear before append
@@ -37,7 +37,7 @@ const Group = ({ match }) => {
       //   setAllUsers((array) => [...array, { key: user._id, value: user._id, text: user.nickname }])
       // })
     }
-    catch(error) {
+    catch (error) {
       console.dir(error)
     }
   }
@@ -56,24 +56,24 @@ const Group = ({ match }) => {
 
   const addSelectedUserToGroup = async () => {
     try {
-      const res = await api.post('/groups/addUserToGroup', {userID: selectedUserId, groupID: match.params.groupid})
-      if(res.status === 200) {
+      const res = await api.post('/groups/addUserToGroup', { userID: selectedUserId, groupID: match.params.groupid })
+      if (res.status === 200) {
         await fetchGroup()
       }
     }
-    catch(error) {
+    catch (error) {
       console.dir(error)
     }
   }
 
   const removeUserFromGroup = async () => {
-    try{
-      const res = await api.post('/groups/removeuserfromgroup', {userID: selectedUserId, groupID: match.params.groupid})
-      if(res.status === 200) {
+    try {
+      const res = await api.post('/groups/removeuserfromgroup', { userID: selectedUserId, groupID: match.params.groupid })
+      if (res.status === 200) {
         await fetchGroup()
       }
     }
-    catch(error) {
+    catch (error) {
       console.dir(error)
     }
   }
@@ -112,7 +112,7 @@ const Group = ({ match }) => {
                     </Column>
                     <Column>
                       <Segment>
-                        <Dropdown onChange={dropDownChange} fluid placeholder='Select a user' options={allUsers}/>
+                        <Dropdown onChange={dropDownChange} fluid placeholder='Select a user' options={allUsers} />
                       </Segment>
                     </Column>
                   </Row>
