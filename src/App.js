@@ -1,5 +1,5 @@
 import './App.css';
-import { Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute } from './components'
+import { Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, Group, PrivateRoute, MainPage, HomePage } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 // import 'semantic-ui-css/semantic.min.css'
@@ -11,7 +11,6 @@ function App() {
   return (
     <AuthenticationContextProvider>
       <BrowserRouter>
-        <NavigationBar />
         <div className="App">
           {/* <NavigationBar/> */}
           <UserBar/>
