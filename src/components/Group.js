@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
-import { Segment, Grid, List, Button, Dropdown } from 'semantic-ui-react'
 
 const Group = ({ match }) => {
 

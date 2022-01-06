@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
-import { Card, Grid, Segment } from 'semantic-ui-react'
 
 const User = ({ match }) => {
 
@@ -25,19 +24,21 @@ const User = ({ match }) => {
   }
 
   return (
-    <Grid centered>
-      <Segment>
-        <Card>
-          <Card.Content>
-            <Card.Header>Nickname: {user.nickname}</Card.Header>
-            <Card.Meta>Email: {user.email}</Card.Meta>
-            <Card.Description>
-              {user._id}
-            </Card.Description>
-          </Card.Content>
-        </Card>
-      </Segment>
-    </Grid>
+    <div>
+    </div>
+    // <Grid centered>
+    //   <Segment>
+    //     <Card>
+    //       <Card.Content>
+    //         <Card.Header>Nickname: {user.nickname}</Card.Header>
+    //         <Card.Meta>Email: {user.email}</Card.Meta>
+    //         <Card.Description>
+    //           {user._id}
+    //         </Card.Description>
+    //       </Card.Content>
+    //     </Card>
+    //   </Segment>
+    // </Grid>
   );
 }
 

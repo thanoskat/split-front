@@ -1,5 +1,4 @@
 import './mainpage.css'
-import "./importedCSS.css"
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal } from '.'
 import { useState, useEffect } from "react";
@@ -41,7 +40,7 @@ function MainPage() {
         try {
             const response = await api.get('/getusers/profile');
             //console.log(response.data.groups)
-            //console.log(response.data)           
+            //console.log(response.data)
             setGroupInfo(response.data.groups);
             setUserInfo(response.data);
             setGroupName(response.data.groups[0].title) //this is to show the first group in the screen on first render instead of empty.

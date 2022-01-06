@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
-import { Form, Button } from 'semantic-ui-react'
-import { CustomCard, Notification } from '.'
 import './profile.css'
 
 function Profile() {
@@ -14,7 +12,7 @@ function Profile() {
   const [GroupIDtoAddUser, SetGroupIDtoAddUser] = useState("")
 
   const api = useAxios()
-  const { Group, Input } = Form;
+  // const { Group, Input } = Form;
 
   useEffect(() => {
     fetchUser()
@@ -67,15 +65,7 @@ function Profile() {
 
   return(
     <div className='profile'>
-      <Notification/>
-      <CustomCard
-        nickname={userInfo.nickname}
-        email={userInfo.email}
-        _id={userInfo._id}
-        length={groupInfo.length}
-        groupInfo={groupInfo}
-      />
-      <Form
+      {/* <Form
         onSubmit={e => onSubmitFunction(e)}
         style={{ paddingLeft: '100px', paddingRight: '100px', paddingTop: '10px' }}>
         <Group widths='equal'>
@@ -100,7 +90,7 @@ function Profile() {
             placeholder='Group user will be added to ' />
         </Group>
         <Button primary>Add User to Group</Button>
-      </Form>
+      </Form> */}
       <div>
         {groupInfo.map((group, index) => (<h2 key={index}>group ID : {group._id} </h2>))}
         {groupInfo.map((group, index) => (<h2 key={index}>group title : {group.title} </h2>))}

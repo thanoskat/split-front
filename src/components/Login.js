@@ -2,7 +2,6 @@ import './login.css'
 import { useState } from 'react'
 import axios from 'axios'
 import { Container } from './'
-// import { Form, Button, Input, Modal } from 'semantic-ui-react'
 
 const Login = () => {
 
