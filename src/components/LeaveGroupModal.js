@@ -5,7 +5,7 @@ import useAxios from "../utility/useAxios"
 import { useHistory } from "react-router-dom";
 
 
-export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, userInfoID, groupID, groupName, setGroupName }) {
+export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, userInfoID, groupID, groupName, setGroupName, setGroupInfo,setRefreshIndex}) {
 
     const api = useAxios()
     const history = useHistory();
@@ -17,6 +17,8 @@ export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, use
             if (res.status === 200) {
                 onCloseLeaveGroup()
                 setGroupName(res2.data.groups[0].title) //update title in modal button to first group when leaving another group
+                setGroupInfo(res2.data.groups)
+                setRefreshIndex(0)
                 history.push(`/main/${res2.data.groups[0]._id}`); //redirect to first group when leaving another group
 
             }

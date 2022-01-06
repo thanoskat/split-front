@@ -11,11 +11,13 @@ function MainPage() {
 
     const [show, setShow] = useState(false);
     const [showLeaveGroup, setShowLeaveGroup] = useState(false);
-    const [showExp, setShowExp]=useState(false);
+    const [showExp, setShowExp] = useState(false);
     const [groupName, setGroupName] = useState("");
-    const [groupInfo, setGroupInfo] = useState([{}]);
+    const [groupInfo, setGroupInfo] = useState([]);
     const [groupID, setGroupID] = useState("");
     const [userInfo, setUserInfo] = useState({});//not being used atm
+    const [refreshIndex, setRefreshIndex] = useState(0);
+
 
     const api = useAxios()
     const history = useHistory();
@@ -38,8 +40,8 @@ function MainPage() {
 
         try {
             const response = await api.get('/getusers/profile');
-            // console.log(response.data.groups[0])
-            // console.log(response.data)           
+            //console.log(response.data.groups)
+            //console.log(response.data)           
             setGroupInfo(response.data.groups);
             setUserInfo(response.data);
             setGroupName(response.data.groups[0].title) //this is to show the first group in the screen on first render instead of empty.
@@ -54,7 +56,7 @@ function MainPage() {
     const fetchUsersInGroup = async () => { //this is a test function
         try {
             const res = await api.get(`groups/usersingroupID/${groupID}`)
-            console.log(res)
+            //console.log(res)
         } catch (error) {
             console.dir("GETGROUPSERROR: ", error);
         }
@@ -85,6 +87,7 @@ function MainPage() {
                                 setGroupName={setGroupName}
                                 groupInfo={groupInfo}
                                 setGroupID={setGroupID}
+                                refreshIndex={refreshIndex}
 
                             />
                         </div>
@@ -127,9 +130,11 @@ function MainPage() {
                             </span>
                         </button>
                     </div>
-                    <AddExpenseModal 
+                    <AddExpenseModal
                         showExp={showExp}
-                        onCloseExp={()=>setShowExp(false)}/>
+                        onCloseExp={() => setShowExp(false)}
+                        userInfoID={userInfo._id}
+                         />
                 </div>
                 <LeaveGroupModal
                     showLeaveGroup={showLeaveGroup}
@@ -138,12 +143,16 @@ function MainPage() {
                     groupID={groupID}
                     groupName={groupName}
                     setGroupName={setGroupName}
+                    setGroupInfo={setGroupInfo}
+                    setRefreshIndex={setRefreshIndex}
+
+
                 />
             </div>
 
             <div className="box2">
                 box2
-                
+
             </div>
             <div className="box3">
                 box3

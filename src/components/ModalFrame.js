@@ -3,14 +3,14 @@ import "./modalframe.css"
 import { useState, useEffect } from "react";
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 
-export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID }) {
+export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID, refreshIndex }) {
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const [groupData, setGroupData] = useState([{}]);
+    const [groupData, setGroupData] = useState([]);
+
 
     const handleOnClick = (index, group) => {
         setActiveIndex(index);
-        
         setGroupData(group);
         setGroupID(group._id);
         onClose();
@@ -20,10 +20,12 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
 
     useEffect(() => {
         setGroupName(groupData.title)
+
     }, [groupData.title])
 
-
-
+    useEffect(() => {
+        setActiveIndex(refreshIndex)
+    }, [refreshIndex])
 
     // if(!show){
     //     return null;
@@ -39,24 +41,25 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
                 <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
                     <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
                         <div className="box-widget">
-
-                            <div className="header">
-                                <div className="header-content">
-                                    Groups
+                            
+                                <div className="header">
+                                    <div className="header-content">
+                                        Groups
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="divider">
-                                divider
-                            </div>
-                            <div className="total">
-                                Total
-                            </div>
+                                <div className="divider">
+                                    divider
+                                </div>
+                                <div className="total">
+                                    Total
+                                </div>
+                            
                             <div className="groups-content">
                                 <div className="content-box">
                                     <div className="individual-button-content">
                                         {groupInfo.map((group, index) => (
-                                            <Link className='aTag' to={`/main/${group._id}`}>
+                                            <Link key={index} className='aTag' to={`/main/${group._id}`}>
                                                 <button area-pressed="true"
 
                                                     key={index}

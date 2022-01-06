@@ -60,7 +60,11 @@
   }
   
   .addexp-body{
-      padding:10px;
+      display: grid;
+      grid-auto-flow: row;
+      grid-row-gap:0.5rem;
+      justify-content: center;
+      padding:2rem;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
   }
@@ -79,3 +83,17 @@
 .addexp-exit-button:hover{
     opacity: 1;
 }
+
+.amnt, .descr {
+    width: 18rem;
+    padding-top: 0.9rem;
+    height: 2.5rem;
+    outline:0;
+    border-width: 0 0 2px;
+    
+}
+
+input:focus {
+    border-color: rgb(26, 151, 26)
+  }
+  
