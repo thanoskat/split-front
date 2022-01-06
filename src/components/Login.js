@@ -1,7 +1,8 @@
+import './login.css'
 import { useState } from 'react'
 import axios from 'axios'
-import { Form, Button, Input, Modal } from 'semantic-ui-react'
-import './login.css';
+import { Container } from './'
+// import { Form, Button, Input, Modal } from 'semantic-ui-react'
 
 const Login = () => {
 
@@ -23,21 +24,13 @@ const Login = () => {
   }
 
   return (
-    
-      <Form style={{ width: "300px" }} onSubmit={formSubmit}>
-        <Form.Field
-          fluid
-          control={Input}
-          placeholder='Email'
-          onChange={e => setEmail(e.target.value)}>
-        </Form.Field>
-        <Modal id="loginpopup"
-          trigger={<Button type='submit' color="blue">Log In</Button>}
-          header='Log In'
-          content={message}
-          actions={[{ key: 'done', content: 'Done', positive: true }]}
-        />
-      </Form>
+    <Container>
+      <div className='login-box'>
+        <input placeholder="Email" value={email} onInput={e => setEmail(e.target.value)}/>
+        <button onClick={formSubmit}>Submit</button>
+        <a href={message}>Click me!</a>
+      </div>
+    </Container>
   );
 }
 

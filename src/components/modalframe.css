@@ -30,7 +30,7 @@
     font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1rem;
     line-height: 1.375;
-    letter-spacing: -0.00625em;    
+    letter-spacing: -0.00625em;
     border-radius: 15px;
     position: fixed;
     bottom:0;
@@ -39,7 +39,7 @@
     overflow: auto;
     transform: translateY(200px);
     transition:all 0.3s ease-in-out ;
-    
+
 }
 
 .modal.show .main{
@@ -59,8 +59,8 @@
     border-radius: 13px;
     background-color:brown;
     /* position: relative; */
-   
-   
+
+
 }
 
 .header{
@@ -72,7 +72,7 @@
     font-size: 1rem;
     line-height: 1.375;
     letter-spacing: -0.00625em;
-    
+
 }
 
 /* .sticky{
@@ -93,8 +93,8 @@
     color: rgb(91 104 116);
     font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-overflow: ellipsis;
-    
-    
+
+
 }
 
 
@@ -102,7 +102,7 @@
     display: flex;
     flex-direction: column;
     margin:0px;
-  
+
 }  */
 
 /* .individual-button-content >:first-child{
@@ -138,7 +138,7 @@ a:-webkit-any-link {
     color: none;
     cursor: pointer;
     text-decoration: none;
-} 
+}
 
 .group-button:active:enabled, .group-button[aria-pressed="true"], .group-button[aria-current="page"], .group-button:not(.group-button)[aria-selected="true"] {
     box-shadow:inset 0 0 0 0 rgba(255,255,255,0),#fff,inset 0 0 0 9999px rgba(6,102,235,0.05) ;
@@ -153,7 +153,7 @@ a:-webkit-any-link {
     cursor: pointer;
     justify-content: center;
     align-items: center;
-    box-shadow:inset 0 0 0 0.25rem var(#fff) ; 
+    box-shadow:inset 0 0 0 0.25rem var(#fff) ;
     appearance: none;
     border: 0px;
     width: 100%;
@@ -164,9 +164,9 @@ a:-webkit-any-link {
     box-shadow: inset 0 0 0 9999px #f7f7f7;
 }
 
-.active{
+.modal-button-active{
     /* box-shadow:inset 0 0 0 9999px rgba(6, 104, 241, 0.05) ; */
-    
+
     display: flex;
     padding: 1rem;
     cursor: pointer;
@@ -233,7 +233,7 @@ a:-webkit-any-link {
         font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 1rem;
         line-height: 1.375;
-        letter-spacing: -0.00625em;    
+        letter-spacing: -0.00625em;
         border-radius: 15px;
         position: relative;
         bottom:0;
@@ -246,7 +246,7 @@ a:-webkit-any-link {
         transition:all 0.3s ease-in-out ;
         right: 1.1rem;
         justify-content: flex-start
-       
+
     }
- 
+
   }

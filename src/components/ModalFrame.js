@@ -32,7 +32,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
     // }
 
     //modal is the whole thing (with grey area in the background)
-    //so it stops propagating only inside the content 
+    //so it stops propagating only inside the content
     //and only executes in other areas left (which is the outside)
 
     return (
@@ -41,7 +41,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
                 <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
                     <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
                         <div className="box-widget">
-                            
+
                                 <div className="header">
                                     <div className="header-content">
                                         Groups
@@ -54,7 +54,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
                                 <div className="total">
                                     Total
                                 </div>
-                            
+
                             <div className="groups-content">
                                 <div className="content-box">
                                     <div className="individual-button-content">
@@ -64,7 +64,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
 
                                                     key={index}
                                                     onClick={() => handleOnClick(index, group)}
-                                                    className={activeIndex === index ? "active" : "group-button"}>
+                                                    className={activeIndex === index ? "modal-button-active" : "group-button"}>
 
                                                     <div className="group-avatar">
                                                         <div className="image-background">

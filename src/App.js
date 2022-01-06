@@ -5,8 +5,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 // import 'semantic-ui-css/semantic.min.css'
 import './semantic-icons.css'
 
-
-
 function App() {
   return (
     <AuthenticationContextProvider>

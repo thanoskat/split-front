@@ -1,14 +1,6 @@
-#loginpopup{
-    width: 20rem;
-    align-self: center;
-    
-}
-
-
-.ui.modal {
-    width: 22rem !important;
-    font-family: SFProDisplay-Bold, Helvetica, Arial, sans-serif !important;
-    font-size: 15px!important;
-    line-height: 15px!important;
-    margin-bottom: 0px!important;
+.login-box {
+  align-self: center;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
 }

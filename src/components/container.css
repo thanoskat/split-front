@@ -1,4 +1,7 @@
 .container-component {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   color: #f4f4f4;
   background-color: #161618;
   border-radius: 5px;
