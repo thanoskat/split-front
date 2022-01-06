@@ -50,15 +50,34 @@ export default function AddExpenseModal({ showExp, onCloseExp, userInfoID }) {
                     </button>
                 </div>
                 <div className="addexp-body">
+
                     <div className="addexp-amount">
-                        <input className="amnt" placeholder="Amount..."
-                            onChange={event => { setAmount(event.target.value) }} />
+                        <div className="input-amount-section">
+                            <input className="amnt" placeholder="Amount..."
+                                onChange={event => { setAmount(event.target.value) }} />
+                        </div>
+
+                        <div className="currency-selector">
+                            <select>
+                                <option>$</option>
+                                <option>£</option>
+                                <option>€</option>
+                                <option>¥</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div className="addexp-description">
-                        <input className="descr" placeholder="Description..."
-                            onChange={event => { setDescription(event.target.value) }} />
+                        <div className="descr-amount-section">
+                            <input className="descr" placeholder="Description..."
+                                onChange={event => { setDescription(event.target.value) }} />
+                        </div>
+                        <div className="dummy">
+                            <i className="pencil alternate icon"></i>
+                        </div>
                     </div>
-                    
+
+
                 </div>
                 <div className="addexp-decision-buttons">
                     <button className="addexp-decison-button" type="submit" onClick={addExp} >Add Expense</button>
