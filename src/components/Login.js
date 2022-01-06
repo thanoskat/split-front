@@ -12,7 +12,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4000/auth/sendlink', { email: email })
-      setMessage(res.data)
+      console.log(res.data.link)
+      if(res && res.data){
+        setMessage(res.data.link)
+      }
     }
     catch (error) {
       setMessage(error.message)

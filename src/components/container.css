@@ -1,0 +1,9 @@
+.container-component {
+  color: #f4f4f4;
+  background-color: #161618;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: auto;
+  margin: 4px 4px 4px 4px;
+  padding: 4px 4px 4px 4px;
+}

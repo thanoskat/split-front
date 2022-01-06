@@ -1,0 +1,42 @@
+.nav-button {
+  /* Text in button in center */
+  /* display: inline-flex;
+  align-items: center;
+  justify-content: center; */
+
+  /* Button in flexbox in center */
+  align-self: center;
+
+  /* Width fits the text inside with some space */
+  text-decoration: none;
+  padding: 5px 18px 5px 18px;
+  width: fit-content;
+
+  white-space: nowrap;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin: 0px 2px 0px 2px;
+  cursor: default;
+}
+
+.nav-button-inactive {
+  background-color: #000000;
+  color: #8f8f91;
+}
+
+.nav-button-active:hover {
+  color: #f4f4f4;
+  background-color: #161618
+}
+
+.nav-button-inactive:hover {
+  color: #8f8f91;
+  background-color: #101011
+}
+
+.nav-button-active {
+  background-color: #161618;
+  color: #f4f4f4;
+}

@@ -1,3 +1,4 @@
+import './NavigationBar.css';
 import { NavLink } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -40,12 +41,12 @@ function NavigationBar() {
     }
     else {
       return(<>
-        <Menu.Item
+        <Menu.Item id='menuItem'
           as={NavLink}
           exact
           to="/signup"
           name="sign up"/>
-        <Menu.Item
+        <Menu.Item id='menuItem'
           as={NavLink}
           exact
           to="/login"
@@ -55,34 +56,40 @@ function NavigationBar() {
   }
 
   return(
-    <Segment basic inverted>
-      <Menu inverted pointing secondary >
-        <Menu.Item
-          as={NavLink}
-          exact
-          to="/about"
-          name="about"/>
-        <Menu.Item
-          as={NavLink}
-          exact
-          to="/users"
-          name="Users"/>
-        <Menu.Item
-          as={NavLink}
-          exact
-          to="/mygroups"
-          name="My groups"/>
-        <Menu.Item
-          as={NavLink}
-          exact
-          to="/profile"
-          name="profile"/>
-        <Menu.Menu position='right'>
-          <Menu.Item icon as='a'>
-            <Icon name='bell'/>
-            <Label size='mini' color='red' floating>
-              22
-            </Label>
+    <Segment basic inverted id='mainMenuSegment'>
+      <Menu inverted pointing secondary id='mainMenu'>
+        <Menu.Menu id='left.menu'>
+          <Menu.Item id='menuItem'
+            as={NavLink}
+            exact
+            to="/about"
+            name="about"/>
+          <Menu.Item id='menuItem'
+            as={NavLink}
+            exact
+            to="/users"
+            name="Users"/>
+          <Menu.Item id='menuItem'
+            as={NavLink}
+            exact
+            to="/mygroups"
+            name="My groups"/>
+          <Menu.Item id='menuItem'
+            as={NavLink}
+            exact
+            to="/profile"
+            name="profile"/>
+        </Menu.Menu>
+        <Menu.Menu position='right' id='rightMenu'>
+          <Menu.Item id='menuItem'
+            icon as='a'>
+            <Icon
+              name='bell'/>
+            <Label id='dot'
+            empty
+            size='mini'
+            color='red'
+            circular/>
           </Menu.Item>
           {userNavigationButton()}
         </Menu.Menu>

@@ -1,5 +1,8 @@
 export { default as About } from './About'
 export { default as NavigationBar } from './NavigationBar'
+export { default as NavigationBar2 } from './NavigationBar2'
+export { default as NavigationButton } from './NavigationButton'
+export { default as UserBar } from './UserBar'
 export { default as Users } from './Users'
 export { default as User } from './User'
 export { default as Login } from './Login'
@@ -11,12 +14,11 @@ export { default as Group } from './Group'
 export { default as PrivateRoute } from './PrivateRoute'
 export { default as Notification } from './Notification'
 export { default as CustomCard } from './CustomCard'
+export { default as Notifications } from './Notifications'
+export { default as Container } from './Container'
 export {default as HomePage} from './HomePage'
 export {default as Createnewaccount} from './Createnewaccount'
 export {default as MainPage} from './MainPage'
 export {default as ModalFrame} from './ModalFrame'
 export {default as LeaveGroupModal} from './LeaveGroupModal'
 export {default as AddExpenseModal} from './AddExpenseModal'
-
-
-
