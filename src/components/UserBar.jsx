@@ -1,4 +1,4 @@
-import './UserBar.css'
+import '../style/UserBar.css'
 import { useContext, useState, useRef, useEffect } from 'react'
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import useAxios from '../utility/useAxios'

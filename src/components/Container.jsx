@@ -1,4 +1,4 @@
-import './container.css'
+import '../style/Container.css'
 
 const Container = ({ children, className }) => {
 

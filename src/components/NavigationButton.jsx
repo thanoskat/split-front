@@ -1,4 +1,4 @@
-import './NavigationButton.css'
+import '../style/NavigationButton.css'
 import { NavLink } from 'react-router-dom'
 
 const NavigationButton = ({ to, text, children }) => {

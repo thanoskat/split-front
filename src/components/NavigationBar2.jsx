@@ -1,4 +1,4 @@
-import './NavigationBar2.css';
+import '../style/NavigationBar2.css';
 import { NavigationButton } from '.'
 import NotificationButton from './NotificationButton'
 

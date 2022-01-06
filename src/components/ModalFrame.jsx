@@ -1,5 +1,5 @@
 import React from 'react'
-import "./modalframe.css"
+import "../style/ModalFrame.css"
 import { useState, useEffect } from "react";
 import { Link, BrowserRouter as Router } from 'react-router-dom';
 

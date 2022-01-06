@@ -1,4 +1,4 @@
-import './mainpage.css'
+import '../style/MainPage.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal } from '.'
 import { useState, useEffect } from "react";

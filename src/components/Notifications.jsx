@@ -1,4 +1,4 @@
-import './Notifications.css'
+import '../style/Notifications.css'
 import { Container } from './'
 import { useEffect, useState } from 'react'
 import useAxios from '../utility/useAxios'

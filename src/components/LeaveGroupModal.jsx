@@ -1,4 +1,4 @@
-import "./leavegroupmodal.css";
+import "../style/LeaveGroupModal.css";
 import React from 'react';
 import useAxios from "../utility/useAxios"
 import { useHistory } from "react-router-dom";

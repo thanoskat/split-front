@@ -1,4 +1,4 @@
-import './NotificationButton.css'
+import '../style/NotificationButton.css'
 import { NavLink } from 'react-router-dom'
 
 const NotificationButton = () => {
