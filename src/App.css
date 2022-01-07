@@ -1,13 +1,13 @@
-
 /* Remove the code bellow to debug */
+
 /* * {
   background: #000 !important;
   color: #0f0 !important;
   outline: solid #f00 1px !important;
 } */
 
-html,body
-{
+html, body, select {
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */

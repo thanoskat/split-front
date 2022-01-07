@@ -47,7 +47,6 @@
   white-space: nowrap;
   background-color: #000000;
   color: #f4f4f4;
-  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
   border-radius: 8px;
@@ -71,8 +70,6 @@
   border-color: #101011;
   border-style: solid;
   border-radius: 5px;
-  /* font-family: 'Lato', sans-serif; */
-  /* font-size: 1.1rem; */
   width: fit-content;
 }
 

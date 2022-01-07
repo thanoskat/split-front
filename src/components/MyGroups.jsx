@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Container, NavigationButton, ListItem } from './'
 import useAxios from '../utility/useAxios'
+import '../style/MyGroups.css'
 
 function MyGroups() {
 
@@ -52,10 +54,14 @@ function MyGroups() {
   // ))}
 
   return (
-    <div>
-
+    <div className='my-groups-page'>
+      <Container>
+        {groups.map(group => (
+          <ListItem to={`/group/${group._id}`} key={group._id} title={group.title} description='Description!'></ListItem>
+        ))}
+      </Container>
     </div>
-    );
+  );
 }
 
 export default MyGroups;

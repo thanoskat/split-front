@@ -1,12 +1,14 @@
 .container-component {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   flex-direction: column;
   color: #f4f4f4;
   background-color: #161618;
   border-radius: 5px;
   box-sizing: border-box;
-  width: auto;
-  margin: 4px 4px 4px 4px;
-  padding: 4px 4px 4px 4px;
+  margin: 0px 40px 0px 40px;
+  padding: 20px 40px 20px 40px;
+  min-width: fit-content;
+  max-width: 75%;
 }
