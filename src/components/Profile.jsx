@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import '../style/Profile.css'
+import { Container } from "."
 
 function Profile() {
 
@@ -16,24 +17,26 @@ function Profile() {
 
   useEffect(() => {
     fetchUser()
-    fetchUsers()
+    // fetchUsers()
     // eslint-disable-next-line
   }, [])
 
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get('/getusers')
-      setUsers(response.data)
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await api.get('/getusers')
+  //     setUsers(response.data)
 
-    }
-    catch (error) {
-      console.dir("GETUSERSERROR: ", error)
-    }
-  }
+  //   }
+  //   catch (error) {
+  //     console.dir("GETUSERSERROR: ", error)
+  //   }
+  // }
 
   const fetchUser = async () => {
     try {
       const response = await api.get('/getusers/profile');
+      const response2 = await api.get('/getusers')
+      setUsers(response2.data)
       //  console.log(response.data.groups)
       //  console.log(response.data)
       setGroupInfo(response.data.groups);
@@ -60,10 +63,10 @@ function Profile() {
     }
 
     await api.post('groups/addUserToGroup', IDs)
-    e.target.reset()
+    //e.target.reset()
   }
 
-  return(
+  return (
     <div className='profile'>
       {/* <Form
         onSubmit={e => onSubmitFunction(e)}
@@ -75,22 +78,24 @@ function Profile() {
             placeholder='Name of Group' />
         </Group>
         <Button primary>Create Group</Button>
-      </Form>
-      <Form
-        onSubmit={e => onSubmitAddUserToGroup(e)}
-        style={{ paddingLeft: '100px', paddingRight: '100px', paddingTop: '10px' }}>
-        <Group widths='equal'>
-          <Input
-            onChange={event => SetUserIDtoBeAdded(event.target.value)}
-            fluid
-            placeholder='Id of User to be added' />
-          <Input
-            onChange={event => SetGroupIDtoAddUser(event.target.value)}
-            fluid
-            placeholder='Group user will be added to ' />
-        </Group>
-        <Button primary>Add User to Group</Button>
       </Form> */}
+      <form
+        onSubmit={e => onSubmitAddUserToGroup(e)}
+      >
+
+        <input
+          onChange={event => SetUserIDtoBeAdded(event.target.value)}
+        
+
+          placeholder='619a53ad949ad8e993b05331' />
+        <input
+          onChange={event => SetGroupIDtoAddUser(event.target.value)}
+  
+
+          placeholder='61a81c5036da66c2084099bd ' />
+
+        <button type="submit">Add User to Group</button>
+      </form>
       <div>
         {groupInfo.map((group, index) => (<h2 key={index}>group ID : {group._id} </h2>))}
         {groupInfo.map((group, index) => (<h2 key={index}>group title : {group.title} </h2>))}

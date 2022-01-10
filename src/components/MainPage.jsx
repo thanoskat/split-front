@@ -1,6 +1,6 @@
 import '../style/MainPage.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, Modal } from '.'
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -16,6 +16,8 @@ function MainPage() {
     const [groupID, setGroupID] = useState("");
     const [userInfo, setUserInfo] = useState({});//not being used atm
     const [refreshIndex, setRefreshIndex] = useState(0);
+
+    const [showModal, setShowModal] = useState(false);
 
 
     const api = useAxios()
@@ -61,6 +63,20 @@ function MainPage() {
         }
     }
 
+    // const onClickFunctions={
+    //     f1: ()=>{
+    //         console.log("frst")
+    //     }
+    //    ,
+    //     f2: ()=>{
+    //         console.log("2nd")
+    //     }
+    //     ,
+    //     f3: ()=>{
+    //         console.log("3rd")
+    //     }
+    // }
+
     return (
         <div className="main-page">
             <div className='box1'>
@@ -100,7 +116,7 @@ function MainPage() {
                                 Leave group
                             </button>
 
-                            <button className='option-button'>
+                            <button className='option-button' onClick={() => setShowModal(true)}>
                                 <span className="summary y"></span>
                                 Summary
                             </button>
@@ -133,7 +149,7 @@ function MainPage() {
                         showExp={showExp}
                         onCloseExp={() => setShowExp(false)}
                         userInfoID={userInfo._id}
-                         />
+                    />
                 </div>
                 <LeaveGroupModal
                     showLeaveGroup={showLeaveGroup}
@@ -147,6 +163,24 @@ function MainPage() {
 
 
                 />
+                <Modal
+                    showModal={showModal}
+                    onCloseModal={() => setShowModal(false)}
+                    onClickFunctions={{
+                        f1: () => {
+                            console.log("frst")
+                        }
+                        ,
+                        f2: () => {
+                            console.log("2nd")
+                        }
+                        ,
+                        f3: () => {
+                            console.log("3rd")
+                        }
+                    }}>
+
+                </Modal>
             </div>
 
             <div className="box2">

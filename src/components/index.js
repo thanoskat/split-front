@@ -16,3 +16,5 @@ export {default as MainPage} from './MainPage'
 export {default as ModalFrame} from './ModalFrame'
 export {default as LeaveGroupModal} from './LeaveGroupModal'
 export {default as AddExpenseModal} from './AddExpenseModal'
+export {default as Modal} from './Modal'
+

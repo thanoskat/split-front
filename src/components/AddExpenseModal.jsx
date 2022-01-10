@@ -16,9 +16,14 @@ export default function AddExpenseModal({ showExp, onCloseExp, userInfoID }) {
     //hence the fetchGroupID function
 
     const fetchGroupID = async () => {
-        const response = await api.get('/getusers/profile');
-        setGroupID(response.data.groups[0]._id)
-        console.log(response.data.groups[0]._id)
+        try {
+            const response = await api.get('/getusers/profile');
+            setGroupID(response.data.groups[0]._id)
+            console.log(response.data.groups[0]._id)
+        } catch (error) {
+            console.dir("No group error", error)
+        }
+
     }
 
     useEffect(() => {
