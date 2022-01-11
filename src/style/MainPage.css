@@ -352,7 +352,7 @@ background-color:rgb(78, 176, 233);
     "box2 .box1 . ."
     "box4 box4 box4 box4 box4"
     "box5 box5 box5 box5 box5";
-    grid-template-columns: 5.5rem 1fr 31.25rem 1fr minmax(5.5rem, auto);
+    grid-template-columns: 5.5rem 1fr 36.25rem 1fr minmax(5.5rem, auto);
 }
 
 }

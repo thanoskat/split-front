@@ -1,42 +1,30 @@
 import React from 'react'
 import "../style/Modal.css";
 
-export default function Modal({ children, onCloseModal, showModal, onClickFunctions }) {
+export default function Modal({ children, onClose, show, handleOnClick, className, ActionButtonMessage, HeaderMessage}) {
 
-    const functs = () => {
-        Object.values(onClickFunctions).map(value => {
-            if (typeof value === 'function') {
-                value.call();
-            }
-        })
-    };
-
-    const handleOnClick = () => {
-        functs();
-        onCloseModal();
-    };
-
-    if (!showModal) {
+  
+    if (!show) {
         return null
     }
 
     return (
-        <div className="Modal" onClick={onCloseModal}>
-            <div className="Modal-content" onClick={e => e.stopPropagation()}>
-                <div className="Modal-header">
-                    <h4 className="Modal-title">Header</h4>
-                    <button className="Modal-exit-button" onClick={onCloseModal}>
+        <div className={`Modal ${className}`} onClick={onClose}>
+            <div className={`Modal-content ${className}`} onClick={e => e.stopPropagation()}>
+                <div className={`Modal-header ${className}`}>
+                    <h4 className={`Modal-title ${className}`}>{HeaderMessage}</h4>
+                    <button className={`Modal-exit-button ${className}`} onClick={onClose}>
                         <i className="times icon x"></i>
                     </button>
 
                 </div>
-                <div className="Modal-body">
+                <div className={`Modal-body ${className}`}>
                     {children}
                     Modal Body where children will be rendered
                 </div>
-                <div className="Modal-decision-buttons">
-                    <button className="Modal-decison-button" onClick={handleOnClick}>on Click action </button>
-                    <button className="Modal-decison-button" onClick={onCloseModal}>Cancel</button>
+                <div className={`Modal-decision-buttons ${className}`}>
+                    <button className= {`Modal-decison-button ${className}`} onClick={handleOnClick}>{ActionButtonMessage} </button>
+                    <button className= {`Modal-decison-button ${className}`} onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

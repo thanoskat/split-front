@@ -1,6 +1,7 @@
 import '../style/MainPage.css'
+import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, Modal } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, Modal, CreateGroupModal } from '.'
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -11,14 +12,12 @@ function MainPage() {
     const [show, setShow] = useState(false);
     const [showLeaveGroup, setShowLeaveGroup] = useState(false);
     const [showExp, setShowExp] = useState(false);
+    const [showCreate, setShowCreate] = useState(false);
     const [groupName, setGroupName] = useState("");
     const [groupInfo, setGroupInfo] = useState([]);
     const [groupID, setGroupID] = useState("");
     const [userInfo, setUserInfo] = useState({});//not being used atm
     const [refreshIndex, setRefreshIndex] = useState(0);
-
-    const [showModal, setShowModal] = useState(false);
-
 
     const api = useAxios()
     const history = useHistory();
@@ -30,11 +29,7 @@ function MainPage() {
 
     useEffect(() => {
         fetchUsersInGroup()
-
-
     }, [groupID])
-
-
 
     //this function fetches data about the user from back-end
     const fetchUser = async () => {
@@ -52,7 +47,6 @@ function MainPage() {
             console.dir("GETUSERSERROR: ", error);
         }
     }
-
 
     const fetchUsersInGroup = async () => { //this is a test function
         try {
@@ -76,6 +70,16 @@ function MainPage() {
     //         console.log("3rd")
     //     }
     // }
+
+
+
+    // const actions= () => {
+    //     setShowModalxyz(false)
+    //     console.log("1")
+    //     console.log("2")
+    //     console.log("3")
+
+    // };
 
     return (
         <div className="main-page">
@@ -116,9 +120,9 @@ function MainPage() {
                                 Leave group
                             </button>
 
-                            <button className='option-button' onClick={() => setShowModal(true)}>
-                                <span className="summary y"></span>
-                                Summary
+                            <button className='option-button' onClick={() => setShowCreate(true)}>
+                                <i className="group icon y"></i>
+                                Create New Group
                             </button>
                         </div>
                     </div>
@@ -160,27 +164,10 @@ function MainPage() {
                     setGroupName={setGroupName}
                     setGroupInfo={setGroupInfo}
                     setRefreshIndex={setRefreshIndex}
-
-
                 />
-                <Modal
-                    showModal={showModal}
-                    onCloseModal={() => setShowModal(false)}
-                    onClickFunctions={{
-                        f1: () => {
-                            console.log("frst")
-                        }
-                        ,
-                        f2: () => {
-                            console.log("2nd")
-                        }
-                        ,
-                        f3: () => {
-                            console.log("3rd")
-                        }
-                    }}>
-
-                </Modal>
+                <CreateGroupModal
+                    showCreate={showCreate}
+                    setShowCreate={setShowCreate} />
             </div>
 
             <div className="box2">

@@ -17,4 +17,5 @@ export {default as ModalFrame} from './ModalFrame'
 export {default as LeaveGroupModal} from './LeaveGroupModal'
 export {default as AddExpenseModal} from './AddExpenseModal'
 export {default as Modal} from './Modal'
+export {default as CreateGroupModal} from './CreateGroupModal'
 
