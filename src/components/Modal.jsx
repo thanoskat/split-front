@@ -20,7 +20,7 @@ export default function Modal({ children, onClose, show, handleOnClick, classNam
                 </div>
                 <div className={`Modal-body ${className}`}>
                     {children}
-                    Modal Body where children will be rendered
+                   
                 </div>
                 <div className={`Modal-decision-buttons ${className}`}>
                     <button className= {`Modal-decison-button ${className}`} onClick={handleOnClick}>{ActionButtonMessage} </button>
