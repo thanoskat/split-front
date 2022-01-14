@@ -1,6 +1,6 @@
 import React from 'react'
 import '../style/CreateGroupModal.css'
-import { Modal } from "."
+import { Modal, Dropdown, NewDropdown } from "."
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 
@@ -18,9 +18,9 @@ export default function CreateGroupModal({ showCreate, setShowCreate }) {
 
     const [groupName, setGroupName] = useState("")
     const [Users, setUsers] = useState([]);
+    const [value, setValue] = useState(null);
 
     const api = useAxios()
-
 
     useEffect(() => {
         fetchUsers();
@@ -37,6 +37,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate }) {
     const fetchUsers = async () => {
         try {
             const users = await api.get('/getusers')
+            console.log(users.data)
             setUsers(users.data);
         } catch (err) {
             console.dir("Create Group Fetch Users error", err)
@@ -45,9 +46,17 @@ export default function CreateGroupModal({ showCreate, setShowCreate }) {
 
     //!!!!!!!!!!keep an eye on the onClose and the show names as they
     //!!!!!!!!!!can have conficts with the ModalFrame names.
-    //https://www.youtube.com/watch?v=mZvKPtH9Fzo
     return (
         <div className='CreateGroup'>
+            {/* <Dropdown
+                    options={Users}
+                    placeholder={"Invite friends"}
+                    value={value}
+                    setValue={setValue}
+                    labelToMap="nickname"
+                    id="_id"
+                />  */}
+
             <Modal
                 className="Create-Group-Modal"
                 onClose={() => setShowCreate(false)}
@@ -61,19 +70,21 @@ export default function CreateGroupModal({ showCreate, setShowCreate }) {
                         onChange={(event) => setGroupName(event.target.value)} />
                     <span className='floating-label'>Group name</span>
                 </div>
-                <div className='Add-Friend-Section'>
-                    <input className='Add-Input-Field' required type="text" />
-                    <span className='floating-label'>Invite friends</span>
-                </div>
-                <div>
-                   {Users.map((index,key)=>{
-                       return(
-                           <div className='user' key={key}>{index.nickname}</div>
-                       )
 
-                   })}
-                </div>
+
+
             </Modal>
+            <div>
+              
+                <NewDropdown 
+                options={Users}
+                propmt="select"
+                value={value}
+                setValue={setValue}
+                label="nickname"
+                id="_id"
+                 />
+            </div>
         </div>
     )
 }

@@ -73,6 +73,7 @@
 }
 
 .Modal-exit-button{
+    display:flex;
     background-color:wheat;
     border:none;
     border-radius:50%;
@@ -81,6 +82,13 @@
     cursor: pointer;
     opacity: 0.6;
     transition: 0.3s;
+    position: relative;
+}
+
+.x{
+    position:absolute;
+    align-self:center;
+    justify-self: center;
 }
 .Modal-exit-button:hover{
     opacity: 1;
