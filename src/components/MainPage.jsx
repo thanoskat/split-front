@@ -21,7 +21,14 @@ function MainPage() {
 
     const api = useAxios()
     const history = useHistory();
-    const groupTable=[]
+    const groupTable = []
+
+    const utility = {
+        uniq: () => {
+            const uniq = Array.from(new Set(groupTable)) //loops through an array and deletes duplicate values keeping only unique
+            console.log("uniq", uniq)
+        }
+    }
 
     useEffect(() => {
         fetchUser()
@@ -89,7 +96,6 @@ function MainPage() {
                 <div className='homewidget'>
                     home widget
                     <div className='widget-header'>
-
                         <div className='group-selection-button'>
                             <button type="button" className="selection-button group-name-button " onClick={() => setShow(true)}>
                                 <span className="group-title">
@@ -108,7 +114,6 @@ function MainPage() {
                                 groupInfo={groupInfo}
                                 setGroupID={setGroupID}
                                 refreshIndex={refreshIndex}
-
                             />
                         </div>
                         <div className='option-buttons'>
@@ -127,7 +132,6 @@ function MainPage() {
                             </button>
                         </div>
                     </div>
-
                     <div className='widget-subheader'>
                         <span className="transactions-header">
                             Transactions
@@ -137,7 +141,6 @@ function MainPage() {
                         <button className="transaction-button">
                             <div className='image'>
                                 <div className="image-background">
-
                                 </div>
                             </div>
                             <span className='item-content'>
@@ -169,7 +172,8 @@ function MainPage() {
                 <CreateGroupModal
                     showCreate={showCreate}
                     setShowCreate={setShowCreate}
-                    groupTable={groupTable} />
+                    groupTable={groupTable}
+                    utilities={utility} />
             </div>
 
             <div className="box2">

@@ -14,7 +14,7 @@ HeaderMessage={"Header"}>
 
 </Modal> */}
 
-export default function CreateGroupModal({ showCreate, setShowCreate, groupTable }) {
+export default function CreateGroupModal({ showCreate, setShowCreate, groupTable,utilities }) {
 
     const [groupName, setGroupName] = useState("")
     const [Users, setUsers] = useState([]);
@@ -187,6 +187,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, groupTable
     // ]
     const api = useAxios()
 
+   
     useEffect(() => {
         fetchUsers();
     }, [])
@@ -243,6 +244,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, groupTable
                     mapTo="nickname"
                     id="_id"
                     groupTable={groupTable}
+                    utilities={utilities}
                 />
             </Modal>
            

@@ -3,7 +3,7 @@ import '../style/Dropdown.css'
 import { useState, useRef, useEffect } from 'react'
 
 
-export default function Dropdown({ placeholder, options, value, setValue, mapTo, id,groupTable }) {
+export default function Dropdown({ placeholder, options, value, setValue, mapTo, id,groupTable,utilities }) {
 
   // onChange={val=>setValue(val)}
 
@@ -11,7 +11,9 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
   const [query, setQuery] = useState("")
 
   const ref = useRef(null)
-  
+  const uniq=[]
+
+  const filteredOption=options;
 
   useEffect(() => {
     // Add a listener for mouse click
@@ -35,44 +37,92 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
     return "";
   }
 
-  return (
-    <div className='dropdown' >
-      <div className="control"
-        onClick={() => setOpen(prev => !prev)}>
-        <div className="Add-Friend-Section"  >
-          <input required type="text" className="Add-Input-Field"
-            ref={ref}
-            value={displayValue()}
-            onChange={e => {
-              setQuery(e.target.value)
-              setValue(null)
-            }
-            }
-            onClick={() => setOpen(prev => !prev)}
-          />
-          <span className='floating-label' >{placeholder}</span>
-        </div>
-      </div>
-      <div className={`options ${open ? 'open' : null}`}>
-        {
-          filter(options).map(option =>
-            <div
-              key={option[id]}
-              className={`option ${value === option ? "selected" : null}`}
-              onClick={() => {
-           
-                setQuery("")
-                setValue(option)
-                setOpen(false)
-                groupTable.push(option)
-                console.log(groupTable)
-              }}
-            >{option[mapTo]}
-            </div>
-          )
-        }
-
+return (
+  <div className='dropdown' >
+    <div className="control"
+      onClick={() => setOpen(prev => !prev)}>
+      <div className="Add-Friend-Section"  >
+        <input required type="text" className="Add-Input-Field"
+          ref={ref}
+          value={displayValue()}
+          onChange={e => {
+            setQuery(e.target.value)
+            setValue(null)
+          }
+          }
+          onClick={() => setOpen(prev => !prev)}
+        />
+        <span className='floating-label' >{placeholder}</span>
       </div>
     </div>
-  )
+    <div className={`options ${open ? 'open' : null}`}>
+      {
+        filter(options).map(option =>
+          <div
+            key={option[id]}
+            className={`option ${value === option ? "selected" : null}`}
+            onClick={() => {
+              setQuery("")
+              setValue(option)
+              setOpen(false)
+              groupTable.push(option)
+              // options.filter(item => item !== option)
+              // console.log(options)
+              uniq.push(Array.from(new Set(groupTable)))
+              // console.log(groupTable)
+              console.log("uniq", uniq)
+            }}>
+            {option[mapTo]}
+          </div>
+        )
+      }
+    </div>
+  </div>
+)
 }
+
+
+
+
+// return (
+//   <div className='dropdown' >
+//     <div className="control"
+//       onClick={() => setOpen(prev => !prev)}>
+//       <div className="Add-Friend-Section"  >
+//         <input required type="text" className="Add-Input-Field"
+//           ref={ref}
+//           value={displayValue()}
+//           onChange={e => {
+//             setQuery(e.target.value)
+//             setValue(null)
+//           }
+//           }
+//           onClick={() => setOpen(prev => !prev)}
+//         />
+//         <span className='floating-label' >{placeholder}</span>
+//       </div>
+//     </div>
+//     <div className={`options ${open ? 'open' : null}`}>
+//       {
+//         filter(options).map(option =>
+//           <div
+//             key={option[id]}
+//             className={`option ${value === option ? "selected" : null}`}
+//             onClick={() => {
+//               setQuery("")
+//               setValue(option)
+//               setOpen(false)
+//               groupTable.push(option)
+//               // options.filter(item => item !== option)
+//               // console.log(options)
+//               uniq.push(Array.from(new Set(groupTable)))
+//               // console.log(groupTable)
+//               console.log("uniq", uniq)
+//             }}>
+//             {option[mapTo]}
+//           </div>
+//         )
+//       }
+//     </div>
+//   </div>
+// )
