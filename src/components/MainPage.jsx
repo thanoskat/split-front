@@ -21,6 +21,7 @@ function MainPage() {
 
     const api = useAxios()
     const history = useHistory();
+    const groupTable=[]
 
     useEffect(() => {
         fetchUser()
@@ -167,7 +168,8 @@ function MainPage() {
                 />
                 <CreateGroupModal
                     showCreate={showCreate}
-                    setShowCreate={setShowCreate} />
+                    setShowCreate={setShowCreate}
+                    groupTable={groupTable} />
             </div>
 
             <div className="box2">

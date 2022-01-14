@@ -1,7 +1,7 @@
 import React from 'react'
 import '../style/NewDropdown.css'
 import { useState, useEffect, useRef } from 'react'
-import useAxios from '../utility/useAxios'
+
 
 
 
@@ -11,7 +11,7 @@ export default function NewDropdown({ options, prompt, value, setValue, id, labe
     const [open, setOpen] = useState(false)
     const [query, setQuery] = useState("")
     const ref = useRef(null)
-
+    const groupTable=[]
 
     function filter(options) {
         return options.filter(option =>
@@ -27,25 +27,28 @@ export default function NewDropdown({ options, prompt, value, setValue, id, labe
     useEffect(() => {
         document.addEventListener("click", close);
         return () => document.removeEventListener("click", close)
-    }, [])
+    }, [ref])
 
     const close = (e) => {
+        // console.dir([ref.current, e.target])
         setOpen(e && e.target === ref.current)
 
     }
     return (
-        <div className='dropdown'>
+        <div className='dropdownn'>
             <div className="control" onClick={() => setOpen(prev => !prev)}>
                 <div className="selected-value" >
-                    <input type="text"
+                    <input
+                        required
                         ref={ref}
+                        type="text"
                         value={displayValue()}
-                        placeholder={value ? value[label] : prompt}
+                        placeholder={prompt}
                         onChange={e => {
                             setQuery(e.target.value)
                             setValue(null)
                         }}
-                        onClick={()=>setOpen(prev=>!prev)}
+                        onClick={() => setOpen(prev => !prev)}
                     />
                 </div>
                 <div className={`arrow ${open ? "open" : null}`}></div>
@@ -53,12 +56,12 @@ export default function NewDropdown({ options, prompt, value, setValue, id, labe
             <div className={`options ${open ? "open" : null}`}>
                 {
                     filter(options).map(option =>
-                        <div key={option[id]} className={`option ${value === option ? "selected" : null
-                            }`}
+                        <div key={option[id]} className={`option ${value === option ? "selected" : null }`}
                             onClick={() => {
                                 setQuery("")
                                 setValue(option)
                                 setOpen(false)
+                                groupTable.push(option)
                             }}
                         >{option[label]}</div>
                     )
