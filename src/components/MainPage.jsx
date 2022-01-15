@@ -21,17 +21,21 @@ function MainPage() {
 
     const api = useAxios()
     const history = useHistory();
-    const groupTable = []
+    // const uniq = []
+    // const utility = {
+    //     uniq: () => {
+    //         const uniq = Array.from(new Set(groupTable)) //loops through an array and deletes duplicate values keeping only unique
+    //         console.log("uniq", uniq)
+    //     }
+    // }
 
-    const utility = {
-        uniq: () => {
-            const uniq = Array.from(new Set(groupTable)) //loops through an array and deletes duplicate values keeping only unique
-            console.log("uniq", uniq)
-        }
+    const utilities={
+        tobeRemovedOption:[],
+        tobeRetrievedOption:[]
     }
 
     useEffect(() => {
-        fetchUser()
+        fetchUsers()
     }, [])
 
 
@@ -40,7 +44,7 @@ function MainPage() {
     }, [groupID])
 
     //this function fetches data about the user from back-end
-    const fetchUser = async () => {
+    const fetchUsers = async () => {
 
         try {
             const response = await api.get('/getusers/profile');
@@ -172,8 +176,8 @@ function MainPage() {
                 <CreateGroupModal
                     showCreate={showCreate}
                     setShowCreate={setShowCreate}
-                    groupTable={groupTable}
-                    utilities={utility} />
+                    utilities={utilities}
+                    />
             </div>
 
             <div className="box2">
