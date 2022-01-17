@@ -17,7 +17,7 @@ HeaderMessage={"Header"}>
 export default function CreateGroupModal({ showCreate, setShowCreate,utilities }) {
 
     const [groupName, setGroupName] = useState("")
-    const [Users, setUsers] = useState([]);
+    // const [Users, setUsers] = useState([]);
     const [value, setValue] = useState(null);
     
     // const Users=[
@@ -189,9 +189,9 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
 
    
    
-    useEffect(() => {
-        fetchUsers();
-    }, [])
+    // useEffect(() => {
+    //     fetchUsers();
+    // }, [])
 
     const onSubmitFunction = async (e) => {
         const groupObj = {
@@ -201,15 +201,15 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
         e.target.reset()
     }
 
-    const fetchUsers = async () => {
-        try {
-            const users = await api.get('/getusers')
+    // const fetchUsers = async () => {
+    //     try {
+    //         const users = await api.get('/getusers')
            
-            setUsers(users.data);
-        } catch (err) {
-            console.dir("Create Group Fetch Users error", err)
-        }
-    }
+    //         setUsers(users.data);
+    //     } catch (err) {
+    //         console.dir("Create Group Fetch Users error", err)
+    //     }
+    // }
 
     //!!!!!!!!!!keep an eye on the onClose and the show names as they
     //!!!!!!!!!!can have conficts with the ModalFrame names.
@@ -238,7 +238,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
                     <span className='floating-label'>Group name</span>
                 </div>       
                 <Dropdown
-                    options={Users}
+                    options={utilities.tobeRemovedOption}
                     placeholder={"Invite friends"}
                     value={value}
                     setValue={setValue}

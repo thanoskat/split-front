@@ -9,10 +9,9 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
 
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
+  const [dummyState, setDummyState]=useState(false)
 
   const ref = useRef(null)
-
-   utilities.tobeRemovedOption = options;
 
   useEffect(() => {
     // Add a listener for mouse click
@@ -32,7 +31,7 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
 
   function displayValue() {
     if (query.length > 0) return query;
-    if (value) return value[mapTo];
+    // if (value) return value[mapTo]; //not required as we don't want to show name on search bar after click
     return "";
   }
 
@@ -61,12 +60,13 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
               key={option[id]}
               className={`option ${value === option ? "selected" : null}`}
               onClick={() => {
+
                 setQuery("")
                 setValue(option)
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-                console.log("tobeRemovedOption",  utilities.tobeRemovedOption)
+                console.log("tobeRemovedOption", utilities.tobeRemovedOption)
                 console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
               }}>
               {option[mapTo]}
@@ -75,7 +75,23 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
         }
       </div>
       <div>
-        {utilities.tobeRetrievedOption.map(u => <h3>{u[mapTo]}</h3> )}
+        {
+          utilities.tobeRetrievedOption.map((u, indx) =>
+            <div key={u._id} className='name'>
+              <div key={u._id} onClick={
+                () => {
+                  utilities.tobeRemovedOption.push(u)
+                  utilities.tobeRetrievedOption.splice(indx, 1);
+                  console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
+                  console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
+                  setDummyState(prev=>!prev)
+                  
+                }}>
+                x
+              </div>
+              {u[mapTo]}
+            </div>
+          )}
       </div>
     </div>
   )
