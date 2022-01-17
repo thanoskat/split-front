@@ -26,7 +26,8 @@
 
 .dropdown .options.open {
   display: block;
-  border: solid;
+  border: 2px solid rgb(137, 151, 155);
+  border-radius: 4px;
 }
 
 .dropdown .option {
@@ -39,7 +40,7 @@
 
 .dropdown .option.selected,
 .dropdown .option:hover {
-  background-color: #88cbe7;
+  background-color: #cbebf8;
   color: #333;
 }
 
@@ -58,4 +59,34 @@
 	left: 10px;
 	font-size: 11px;
 	opacity: 0.8;
+}
+
+
+.nickname-box.item{
+    border-radius: 4px;
+   
+    border: 2px solid rgb(137, 151, 155);
+    margin-top: 3px;
+  }
+
+.nickname-box.invite-friends{
+ margin-right: 13.5rem;
+ font-size: 11px;
+}
+
+.nickname-box.nickname-section{
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 10px;
+  gap:10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.nickname-box.nickname-exit-button{
+  order:1;
+  
+}
+.nickname-box.nickname-name{
+  order:0
 }

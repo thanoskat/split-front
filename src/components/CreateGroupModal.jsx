@@ -1,7 +1,7 @@
 import React from 'react'
 import '../style/CreateGroupModal.css'
-import { Modal, Dropdown, NewDropdown } from "."
-import { useState, useEffect } from 'react'
+import { Modal, Dropdown} from "."
+import { useState} from 'react'
 import useAxios from '../utility/useAxios'
 
 {/* <Modal
@@ -245,7 +245,6 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities 
                     mapTo="nickname"
                     id="_id"
                     utilities={utilities}
-                  
                 />
             </Modal>
 

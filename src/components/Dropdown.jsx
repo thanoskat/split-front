@@ -3,13 +3,14 @@ import '../style/Dropdown.css'
 import { useState, useRef, useEffect } from 'react'
 
 
-export default function Dropdown({  placeholder, options, value, setValue, mapTo, id, utilities }) {
+export default function Dropdown({ placeholder, options, value, setValue, mapTo, id, utilities }) {
 
   // onChange={val=>setValue(val)}
 
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
-  const [dummyState, setDummyState]=useState(false)
+  const [dummyState, setDummyState] = useState(false)
+  const [item, setItem] = useState(false)
 
   const ref = useRef(null)
 
@@ -51,9 +52,10 @@ export default function Dropdown({  placeholder, options, value, setValue, mapTo
             onClick={() => setOpen(prev => !prev)}
           />
           <span className='floating-label' >{placeholder}</span>
+
         </div>
       </div>
-      <div className={`options ${open ? 'open' : null}`}>
+      <div className={`options ${open && utilities.tobeRemovedOption.length!==0 ?  'open'  : null}`}>
         {
           filter(options).map((option, index) =>
             <div
@@ -67,33 +69,39 @@ export default function Dropdown({  placeholder, options, value, setValue, mapTo
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-                console.log("tobeRemovedOption", utilities.tobeRemovedOption)
+               
+                console.log("tobeRemovedOption", utilities.tobeRemovedOption.length)
                 console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
+                setItem(true)
               }}>
               {option[mapTo]}
             </div>
           )
         }
       </div>
-      <div>
+      <div className={`nickname-box ${item ? 'item' : null}`}>
+        {item ? <span className='nickname-box invite-friends'>Send invitation to:</span> : <></>}
         {
           utilities.tobeRetrievedOption.map((u, indx) =>
-            <div key={u.email} className='name'>
-              <div key={indx} onClick={
+            <div key={u.email} className='nickname-box nickname-section'>
+              <div className="nickname-box nickname-exit-button" key={indx} onClick={
                 () => {
                   utilities.tobeRemovedOption.push(u)
-                  utilities.tobeRemovedOption.sort((a,b)=>a.nickname.localeCompare(b.nickname))
+                  utilities.tobeRemovedOption.sort((a, b) => a.nickname.localeCompare(b.nickname))
                   utilities.tobeRetrievedOption.splice(indx, 1);
-                  console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
-                  console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
-                  setDummyState(prev=>!prev)
-                  
-                  
-                  //issues when removing a friend from gropu on first render
+                  // console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
+                  // console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
+                  setDummyState(prev => !prev)
+                  if (utilities.tobeRetrievedOption.length == 0) {
+                    setItem(false)
+                  }
                 }}>
-                x
+               <i className="times icon x"></i>
               </div>
-              {u[mapTo]}
+              <div className="nickname-box nickname-name">
+                {u[mapTo]}
+              </div>
+
             </div>
           )}
       </div>
