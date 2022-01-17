@@ -20,6 +20,7 @@ function MainPage() {
   const [refreshIndex, setRefreshIndex] = useState(0);
   const [Users, setUsers] = useState([]);
 
+
   const api = useAxios()
   const history = useHistory();
   // const uniq = []
@@ -49,6 +50,7 @@ function MainPage() {
   const utilities = {
     tobeRemovedOption: cloner(),
     tobeRetrievedOption: [],
+  
 
   }
 

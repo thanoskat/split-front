@@ -1,5 +1,6 @@
 import React from 'react'
 import "../style/Modal.css";
+import { useState } from 'react';
 
 export default function Modal({ children, onClose, show, handleOnClick, className, ActionButtonMessage, HeaderMessage}) {
 

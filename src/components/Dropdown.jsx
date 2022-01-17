@@ -3,7 +3,7 @@ import '../style/Dropdown.css'
 import { useState, useRef, useEffect } from 'react'
 
 
-export default function Dropdown({ placeholder, options, value, setValue, mapTo, id, utilities }) {
+export default function Dropdown({  placeholder, options, value, setValue, mapTo, id, utilities }) {
 
   // onChange={val=>setValue(val)}
 
@@ -58,7 +58,8 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
           filter(options).map((option, index) =>
             <div
               key={option[id]}
-              className={`option ${value === option ? "selected" : null}`}
+              // className={`option ${value === option ? "selected" : null}`}
+              className={`option `}
               onClick={() => {
 
                 setQuery("")
@@ -77,15 +78,18 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
       <div>
         {
           utilities.tobeRetrievedOption.map((u, indx) =>
-            <div key={u._id} className='name'>
-              <div key={u._id} onClick={
+            <div key={u.email} className='name'>
+              <div key={indx} onClick={
                 () => {
                   utilities.tobeRemovedOption.push(u)
+                  utilities.tobeRemovedOption.sort((a,b)=>a.nickname.localeCompare(b.nickname))
                   utilities.tobeRetrievedOption.splice(indx, 1);
                   console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
                   console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
                   setDummyState(prev=>!prev)
                   
+                  
+                  //issues when removing a friend from gropu on first render
                 }}>
                 x
               </div>

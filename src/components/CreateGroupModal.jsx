@@ -14,7 +14,7 @@ HeaderMessage={"Header"}>
 
 </Modal> */}
 
-export default function CreateGroupModal({ showCreate, setShowCreate,utilities }) {
+export default function CreateGroupModal({ showCreate, setShowCreate, utilities }) {
 
     const [groupName, setGroupName] = useState("")
     // const [Users, setUsers] = useState([]);
@@ -187,8 +187,8 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
     // ]
     const api = useAxios()
 
-   
-   
+
+
     // useEffect(() => {
     //     fetchUsers();
     // }, [])
@@ -204,7 +204,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
     // const fetchUsers = async () => {
     //     try {
     //         const users = await api.get('/getusers')
-           
+
     //         setUsers(users.data);
     //     } catch (err) {
     //         console.dir("Create Group Fetch Users error", err)
@@ -236,7 +236,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
                     <input className='Create-Input-Field' required type="text"
                         onChange={(event) => setGroupName(event.target.value)} />
                     <span className='floating-label'>Group name</span>
-                </div>       
+                </div>
                 <Dropdown
                     options={utilities.tobeRemovedOption}
                     placeholder={"Invite friends"}
@@ -245,9 +245,10 @@ export default function CreateGroupModal({ showCreate, setShowCreate,utilities }
                     mapTo="nickname"
                     id="_id"
                     utilities={utilities}
+                  
                 />
             </Modal>
-           
+
         </div>
     )
 }
