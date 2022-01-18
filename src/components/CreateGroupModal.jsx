@@ -1,7 +1,7 @@
 import React from 'react'
 import '../style/CreateGroupModal.css'
-import { Modal, Dropdown} from "."
-import { useState} from 'react'
+import { Modal, Dropdown } from "."
+import { useState } from 'react'
 import useAxios from '../utility/useAxios'
 
 {/* <Modal
@@ -19,7 +19,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities 
     const [groupName, setGroupName] = useState("")
     // const [Users, setUsers] = useState([]);
     const [value, setValue] = useState(null);
-    
+
     // const Users=[
     //     {
     //         "expenses": [],
@@ -187,29 +187,24 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities 
     // ]
     const api = useAxios()
 
-
-
-    // useEffect(() => {
-    //     fetchUsers();
-    // }, [])
-
-    const onSubmitFunction = async (e) => {
-        const groupObj = {
-            title: groupName
-        }
-        await api.post('/groups/creategroup', groupObj)
-        e.target.reset()
+    const onSubmitFunction = async () => {
+        // let newGroupID; // interestingly const doesn't work here
+        // try{
+        //    newGroupID = await api.post('/groups/creategroup', groupName)
+        // }catch(err1){
+        //     console.dir("CREATE GROUP ERROR: ", err1);
+        // }
+        // const createGroupObj = {
+        //     // recipient: groupIDrequestReceiver, need to bring IDs as shown in console.log @206
+        //     groupToJoin: newGroupID
+        // }
+        // try {
+        //     await api.post('groups/creategrouprequest', createGroupObj)
+        // } catch (err2) {
+        //     console.dir("CREATE REQUEST ERROR: ", err2);
+        // }
+        console.log(utilities.tobeRetrievedOption[0])
     }
-
-    // const fetchUsers = async () => {
-    //     try {
-    //         const users = await api.get('/getusers')
-
-    //         setUsers(users.data);
-    //     } catch (err) {
-    //         console.dir("Create Group Fetch Users error", err)
-    //     }
-    // }
 
     //!!!!!!!!!!keep an eye on the onClose and the show names as they
     //!!!!!!!!!!can have conficts with the ModalFrame names.
@@ -236,10 +231,11 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities 
                     <input className='Create-Input-Field' required type="text"
                         onChange={(event) => setGroupName(event.target.value)} />
                     <span className='floating-label'>Group name</span>
+
                 </div>
                 <Dropdown
                     options={utilities.tobeRemovedOption}
-                    placeholder={"Invite friends"}
+                    placeholder={"Invite friends (Optional)"}
                     value={value}
                     setValue={setValue}
                     mapTo="nickname"

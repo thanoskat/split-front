@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import '../style/Profile.css'
-import { Container, Dropdown } from "."
+import { Container} from "."
 
 function Profile() {
 
@@ -11,7 +11,7 @@ function Profile() {
   const [users, setUsers] = useState([])
   const [UserIDtoBeAdded, SetUserIDtoBeAdded] = useState("")
   const [GroupIDtoAddUser, SetGroupIDtoAddUser] = useState("")
-  const [value, setValue] = useState(null)
+ 
 
   const api = useAxios()
   // const { Group, Input } = Form;
@@ -101,12 +101,7 @@ function Profile() {
         {groupInfo.map((group, index) => (<h2 key={index}>group ID : {group._id} </h2>))}
         {groupInfo.map((group, index) => (<h2 key={index}>group title : {group.title} </h2>))}
         {users.map((user, index) => (<h2 key={index}>users : {user._id} </h2>))}
-        <Dropdown
-          options={users}
-          placeholder={"select"}
-          value={value}
-          onChange={val => setValue(val)}
-        />
+       
       </div>
     </div>
   )
