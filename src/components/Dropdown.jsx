@@ -47,12 +47,11 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
             onChange={e => {
               setQuery(e.target.value)
               setValue(null)
-            }
+             } 
             }
             onClick={() => setOpen(prev => !prev)}
           />
           <span className='floating-label' >{placeholder}</span>
-
         </div>
       </div>
       <div className={`options ${open && utilities.tobeRemovedOption.length!==0 ?  'open'  : null}`}>
@@ -63,15 +62,13 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
               // className={`option ${value === option ? "selected" : null}`}
               className={`option `}
               onClick={() => {
-
                 setQuery("")
                 setValue(option)
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-               
                 console.log("tobeRemovedOption", utilities.tobeRemovedOption.length)
-                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
+                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption.length)
                 setItem(true)
               }}>
               {option[mapTo]}

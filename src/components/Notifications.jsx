@@ -11,8 +11,9 @@ const Notifications = () => {
 
   const getRequests = async () => {
     try {
-      const requests = await api.get('groups/getgrouprequests')
-      setRequests(requests.data)
+      const req = await api.get('groups/getgrouprequests')
+      setRequests(req.data)
+      
     }
     catch(error) {
       console.dir("REQUESTERROR: ", error)

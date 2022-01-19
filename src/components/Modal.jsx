@@ -1,8 +1,7 @@
 import React from 'react'
 import "../style/Modal.css";
-import { useState } from 'react';
 
-export default function Modal({ children, onClose, show, handleOnClick, className, ActionButtonMessage, HeaderMessage}) {
+export default function Modal({ children, onClose, show, handleOnClick, className, ActionButtonMessage, HeaderMessage,ShowCancel,isActive}) {
 
   
     if (!show) {
@@ -24,8 +23,8 @@ export default function Modal({ children, onClose, show, handleOnClick, classNam
                    
                 </div>
                 <div className={`Modal-decision-buttons ${className}`}>
-                    <button className= {`Modal-decison-button ${className}`} onClick={handleOnClick}>{ActionButtonMessage} </button>
-                    <button className= {`Modal-decison-button ${className}`} onClick={onClose}>Cancel</button>
+                    <button className= {`Modal-decison-button ${className} ${isActive? "Active":null}`} onClick={handleOnClick}>{ActionButtonMessage} </button>
+                    {ShowCancel?<button className= {`Modal-decison-button ${className}`} onClick={onClose}>Cancel</button>:<></>}
                 </div>
             </div>
         </div>

@@ -66,3 +66,35 @@
 	font-size: 11px;
 	opacity: 0.8;
 }
+
+.Modal-decision-buttons.Create-Group-Modal{
+display: flex;
+justify-content: center;
+align-content: center;
+}
+
+.Modal-decison-button.Create-Group-Modal{
+    padding-right: 120px;
+    padding-left: 120px;
+    background-color:rgb(121, 121, 121);
+    color:rgb(192, 188, 188)
+   
+}
+
+.Modal-decison-button.Create-Group-Modal:hover{
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+.Modal-decison-button.Create-Group-Modal.Active{
+    padding-right: 120px;
+    padding-left: 120px;
+    background-color: rgb(186, 216, 233);
+    color:rgb(0, 92, 134);
+    
+}
+
+.Modal-decison-button.Create-Group-Modal.Active:hover{
+    opacity: 0.75;
+    cursor: pointer;
+}

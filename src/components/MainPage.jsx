@@ -2,9 +2,9 @@ import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
-
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 
 function MainPage() {
@@ -19,6 +19,7 @@ function MainPage() {
   const [userInfo, setUserInfo] = useState({});//not being used atm
   const [refreshIndex, setRefreshIndex] = useState(0);
   const [Users, setUsers] = useState([]);
+  const { sessionData } = useContext(AuthenticationContext)
 
 
   const api = useAxios()
@@ -30,28 +31,26 @@ function MainPage() {
   //         console.log("uniq", uniq)
   //     }
   // }
+  //sessionData.userId
 
- 
 
-//https://javascript.info/object-copy
+  //https://javascript.info/object-copy
   useEffect(() => {
     fetchUsers()
-
   }, [])
 
   const cloner = () => {
     let clone = []
     for (let i = 0; i < Users.length; i++) {
+      if (Users[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
       clone.push(Object.assign({}, Users[i]))
     }
     return clone;
   }
-  
+
   const utilities = {
     tobeRemovedOption: cloner(),
     tobeRetrievedOption: [],
-  
-
   }
 
   // useEffect(() => {
