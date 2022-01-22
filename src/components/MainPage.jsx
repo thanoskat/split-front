@@ -3,12 +3,13 @@ import '../style/summary.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
 import { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 
 function MainPage() {
 
+ 
   const [show, setShow] = useState(false);
   const [showLeaveGroup, setShowLeaveGroup] = useState(false);
   const [showExp, setShowExp] = useState(false);
@@ -22,23 +23,38 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
 
 
+
   const api = useAxios()
   const history = useHistory();
-  // const uniq = []
-  // const utility = {
-  //     uniq: () => {
-  //         const uniq = Array.from(new Set(groupTable)) //loops through an array and deletes duplicate values keeping only unique
-  //         console.log("uniq", uniq)
-  //     }
-  // }
-  //sessionData.userId
-
+  const location = useLocation()
 
   //https://javascript.info/object-copy
-  useEffect(() => {
-    fetchUsers()
-  }, [])
+  //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
 
+  useEffect(async () => {
+
+    try {
+      const response = await api.get('/getusers/profile');
+      const users = await api.get('/getusers')
+      const pathIndex=parseInt(location.search.substring(location.search.indexOf("?") + 1))
+      //console.log(response.data.groups[0].title)
+      setUsers(users.data);
+      setGroupInfo(response.data.groups);
+      setUserInfo(response.data);
+      if(isNaN(pathIndex)){
+        setGroupName(response.data.groups[0].title)//this is to show the first group in the screen on first render instead of empty.
+      }else{
+        setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
+      }
+      // console.log('handle route change here', location)
+      // console.log("pathIndex",parseInt(location.search.substring(location.search.indexOf("?") + 1)))
+    } catch (err) {
+      console.dir(err);
+    }
+
+  }, [location])
+
+ 
   const cloner = () => {
     let clone = []
     for (let i = 0; i < Users.length; i++) {
@@ -53,61 +69,8 @@ function MainPage() {
     tobeRetrievedOption: [],
   }
 
-  // useEffect(() => {
-  //     fetchUsersInGroup()
-  // }, [groupID])
-
   //this function fetches data about the user from back-end
-  const fetchUsers = async () => {
-
-    try {
-      const response = await api.get('/getusers/profile');
-      const users = await api.get('/getusers')
-      //console.log(response.data.groups)
-      //console.log(response.data)
-      setGroupInfo(response.data.groups);
-      setUserInfo(response.data);
-      setUsers(users.data);
-      setGroupName(response.data.groups[0].title) //this is to show the first group in the screen on first render instead of empty.
-      history.push(`/main/${response.data.groups[0]._id}`);//re-routes to first group when page refreshes
-    }
-    catch (error) {
-      console.dir("GETUSERSERROR: ", error);
-    }
-  }
-
-  // const fetchUsersInGroup = async () => { //this is a test function
-  //     try {
-  //         const res = await api.get(`groups/usersingroupID/${groupID}`)
-  //         //console.log(res)
-  //     } catch (error) {
-  //         console.dir("GETGROUPSERROR: ", error);
-  //     }
-  // }
-
-  // const onClickFunctions={
-  //     f1: ()=>{
-  //         console.log("frst")
-  //     }
-  //    ,
-  //     f2: ()=>{
-  //         console.log("2nd")
-  //     }
-  //     ,
-  //     f3: ()=>{
-  //         console.log("3rd")
-  //     }
-  // }
-
-
-
-  // const actions= () => {
-  //     setShowModalxyz(false)
-  //     console.log("1")
-  //     console.log("2")
-  //     console.log("3")
-
-  // };
+  
 
   return (
     <div className="main-page">
@@ -134,6 +97,7 @@ function MainPage() {
                 groupInfo={groupInfo}
                 setGroupID={setGroupID}
                 refreshIndex={refreshIndex}
+
               />
             </div>
             <div className='option-buttons'>

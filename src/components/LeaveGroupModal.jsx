@@ -18,7 +18,8 @@ export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, use
                 setGroupName(res2.data.groups[0].title) //update title in modal button to first group when leaving another group
                 setGroupInfo(res2.data.groups)
                 setRefreshIndex(0)
-                history.push(`/main/${res2.data.groups[0]._id}`); //redirect to first group when leaving another group
+                history.push(`/main/${res2.data.groups[0]._id}?${0}`); //redirect to first group when leaving another group
+                //!!!what happens when no group is left (e.g if user leaves all groups)
 
             }
         }
