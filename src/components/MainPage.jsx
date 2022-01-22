@@ -145,6 +145,7 @@ function MainPage() {
             showExp={showExp}
             onCloseExp={() => setShowExp(false)}
             userInfoID={userInfo._id}
+            activeIndex={activeIndex}
           />
         </div>
         <LeaveGroupModal
