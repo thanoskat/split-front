@@ -18,7 +18,8 @@ function MainPage() {
   const [groupInfo, setGroupInfo] = useState([]);
   const [groupID, setGroupID] = useState("");
   const [userInfo, setUserInfo] = useState({});//not being used atm
-  const [refreshIndex, setRefreshIndex] = useState(0);
+  // const [refreshIndex, setRefreshIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   const [Users, setUsers] = useState([]);
   const { sessionData } = useContext(AuthenticationContext)
 
@@ -46,8 +47,9 @@ function MainPage() {
       }else{
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
       }
+      setActiveIndex(pathIndex)
       // console.log('handle route change here', location)
-      // console.log("pathIndex",parseInt(location.search.substring(location.search.indexOf("?") + 1)))
+     console.log("pathIndex",parseInt(location.search.substring(location.search.indexOf("?") + 1)))
     } catch (err) {
       console.dir(err);
     }
@@ -96,7 +98,9 @@ function MainPage() {
                 setGroupName={setGroupName}
                 groupInfo={groupInfo}
                 setGroupID={setGroupID}
-                refreshIndex={refreshIndex}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+                
 
               />
             </div>
@@ -151,7 +155,7 @@ function MainPage() {
           groupName={groupName}
           setGroupName={setGroupName}
           setGroupInfo={setGroupInfo}
-          setRefreshIndex={setRefreshIndex}
+         
         />
         <CreateGroupModal
           showCreate={showCreate}

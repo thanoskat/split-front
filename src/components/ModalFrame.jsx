@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { Link} from 'react-router-dom';
 
 
-export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID, refreshIndex}) {
+export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID, activeIndex, setActiveIndex}) {
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  
   const [groupData, setGroupData] = useState([]);
 
 
@@ -25,10 +25,10 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
 
   }, [groupData.title])
 
-  useEffect(() => {
-    setActiveIndex(refreshIndex)
+  // useEffect(() => {
+  //   setActiveIndex(refreshIndex)
 
-  }, [refreshIndex])
+  // }, [refreshIndex])
 
   // if(!show){
   //     return null;
