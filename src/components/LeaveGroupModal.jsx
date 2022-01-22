@@ -13,7 +13,7 @@ export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, use
         try {
             const res = await api.post('/groups/removeuserfromgroup', { userID: userInfoID, groupID: groupID })
             const res2 = await api.get('/getusers/profile');
-            if (res.status === 200) {
+            if (res.status && res2.status === 200) {
                 onCloseLeaveGroup()
                 setGroupName(res2.data.groups[0].title) //update title in modal button to first group when leaving another group
                 setGroupInfo(res2.data.groups)
@@ -23,7 +23,7 @@ export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, use
             }
         }
         catch (error) {
-            console.dir(error)
+            console.dir("Leave group error",error)
         }
     }
 

@@ -9,7 +9,6 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
   
   const [groupData, setGroupData] = useState([]);
 
-
   const handleOnClick = (index, group) => {
     setActiveIndex(index);
     setGroupData(group);
@@ -19,10 +18,9 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
   // No dependecies = Run after every render
   // Empty [] dependencies = Run only after first render
 
-
   useEffect(() => {
     setGroupName(groupData.title)
-
+    
   }, [groupData.title])
 
   // useEffect(() => {
@@ -65,7 +63,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
                             key={index}
                             onClick={() => handleOnClick(index, group)}
                             className={activeIndex === index ? "modal-button-active" : "group-button"}>
-
+                              
                             <div className="group-avatar">
                               <div className="image-background">
                               </div>

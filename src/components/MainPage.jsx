@@ -3,7 +3,7 @@ import '../style/summary.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
 import { useState, useEffect, useContext } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 
@@ -17,16 +17,12 @@ function MainPage() {
   const [groupName, setGroupName] = useState("");
   const [groupInfo, setGroupInfo] = useState([]);
   const [groupID, setGroupID] = useState("");
-  const [userInfo, setUserInfo] = useState({});//not being used atm
-  // const [refreshIndex, setRefreshIndex] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [userInfo, setUserInfo] = useState({});
+  const [activeIndex, setActiveIndex] = useState(0);
   const [Users, setUsers] = useState([]);
   const { sessionData } = useContext(AuthenticationContext)
-
-
-
+  
   const api = useAxios()
-  const history = useHistory();
   const location = useLocation()
 
   //https://javascript.info/object-copy
@@ -38,18 +34,24 @@ function MainPage() {
       const response = await api.get('/getusers/profile');
       const users = await api.get('/getusers')
       const pathIndex=parseInt(location.search.substring(location.search.indexOf("?") + 1))
-      //console.log(response.data.groups[0].title)
+      console.log("pathIndex",pathIndex)
+      console.log("activeIndex",activeIndex)
+     
+      //console.log(response.data.groups[0]._id)
       setUsers(users.data);
       setGroupInfo(response.data.groups);
       setUserInfo(response.data);
+     
       if(isNaN(pathIndex)){
         setGroupName(response.data.groups[0].title)//this is to show the first group in the screen on first render instead of empty.
+        setGroupID(response.data.groups[0]._id);//this is to fill the first groupID with the default first option when nothing else has been chosen
+       
       }else{
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
+        setActiveIndex(pathIndex) //highlight selected option
       }
-      setActiveIndex(pathIndex)
+      
       // console.log('handle route change here', location)
-     console.log("pathIndex",parseInt(location.search.substring(location.search.indexOf("?") + 1)))
     } catch (err) {
       console.dir(err);
     }
