@@ -27,19 +27,18 @@
 
 .bell {
   position: relative;
-  margin: 0 0 0 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  font-size: 1.5rem !important;
+  /* width: 100% !important;
+  height: 100% !important; */
+  font-size: 1.5rem;
 }
 
 .red-dot {
-  padding: 4px 4px 4px 4px !important;
-  margin: 0 0 0 0 !important;
-  font-size: 0.45rem !important;
+  /* padding: 4px 4px 4px 4px; */
+  /* margin: 0 0 0 0; */
+  font-size: 0.45rem;
   /* padding: 0px 0px 0px 0px; */
   position: absolute;
-  bottom: 1.3rem;
-  left: 1.2rem;
+  bottom: 1.5rem;
+  left: 1.5rem;
   color: #db2828c0;
 }

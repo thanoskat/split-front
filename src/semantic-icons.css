@@ -10,14 +10,14 @@
 }
 
 i.icon {
-  display: inline-block;
+  /* display: inline-block;
   opacity: 1;
   margin: 0 .25rem 0 0;
   width: 1.18em;
-  height: 1em;
+  height: 1em; */
   font-family: Icons;
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400;
   text-decoration: inherit;
   text-align: center;
   speak: none;
@@ -25,9 +25,9 @@ i.icon {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-backface-visibility: hidden;
-  backface-visibility: hidden
+  backface-visibility: hidden */
 }
-
+/*
 i.icon:before {
   background: 0 0!important
 }
@@ -461,7 +461,7 @@ i.icons .bottom.right.corner.icon {
 
 i.icons .inverted.corner.icon {
   text-shadow: -1px -1px 0 #1b1c1d, 1px -1px 0 #1b1c1d, -1px 1px 0 #1b1c1d, 1px 1px 0 #1b1c1d
-}
+} */
 
 i.icon.linkedin.in:before {
   content: "\f0e1"
