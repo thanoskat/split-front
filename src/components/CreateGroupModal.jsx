@@ -14,9 +14,10 @@ HeaderMessage={"Header"}>
 
 </Modal> */}
 
-export default function CreateGroupModal({ showCreate, setShowCreate, utilities }) {
+//This is a component that is using the Modal component. It is not a modal itself.
+export default function CreateGroupModal({ showCreate, setShowCreate, utilities,setRefresh}) {
 
-  const [groupName, setGroupName] = useState("")
+  const [groupName, setGroupName] = useState("") //Given group name from user
   // const [Users, setUsers] = useState([]);
   const [value, setValue] = useState(null);
 
@@ -194,6 +195,9 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities 
       newGroupID = await api.post('/groups/creategroup', { title: groupName }) //creates group and returns its ID
       setShowCreate(false)
       setGroupName("")
+      setRefresh(prev=>!prev)
+     
+      
     } catch (err1) {
       console.dir("CREATE GROUP ERROR: ", err1);
     }

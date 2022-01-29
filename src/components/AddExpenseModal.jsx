@@ -3,7 +3,7 @@ import React from 'react'
 import useAxios from "../utility/useAxios"
 import { useState, useEffect } from "react/cjs/react.development";
 
-export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeIndex}) {
+export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeIndex,setRefreshExpense}) {
 
     const [description, setDescription] = useState("")
     const [amount, setAmount] = useState("");
@@ -42,6 +42,7 @@ export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeI
     }, [activeIndex])
 
     const addExp = async () => {
+        setRefreshExpense(prev=>!prev)
         onCloseExp()
         try {
             const addExpense = await api.post('/expense/addexpense', { userID: userInfoID, groupID: groupID, amount, description })
