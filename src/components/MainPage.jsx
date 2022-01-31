@@ -22,7 +22,7 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
   const [refreshExpense, setRefreshExpense] = useState(false);
-  const [transactions, setTransactions]=useState()
+  const [transactions, setTransactions] = useState()
 
   const api = useAxios()
   const location = useLocation()
@@ -101,17 +101,18 @@ function MainPage() {
       const response = await api.get('/getusers/profile');
       const temporaryID = (response.data.groups[0]._id)
       try {
-        const transactions = await api.get(`/expense/getgroupexpenses/${temporaryID}`) //gets don't have body so need to send data like this
-        console.log(transactions)
-        // setTransactions(filteredTransaction)
+        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${temporaryID}`) //gets don't have body so need to send data like this
+        console.log("trans",  pulledtransactions.data)
+        setTransactions( pulledtransactions.data)
       } catch (err) {
         console.dir("transaction calc error", err)
       }
     } else {
       try {
-        const transactions = await api.get(`/expense/getgroupexpenses/${groupID}`)
-        console.log(transactions)
-       
+        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${groupID}`)
+        console.log("trans",  pulledtransactions.data)
+        setTransactions( pulledtransactions.data)
+
       } catch (err) {
         console.dir("transaction calc error", err)
       }
@@ -170,20 +171,22 @@ function MainPage() {
             </span>
           </div>
           <div className='transaction-block'>
-            <button className="transaction-button">
-              <div className='image'>
-                <div className="image-background">
+            {transactions?.map((transaction, index) => (
+              <button className="transaction-button" key={index}>
+                <div className='image'>
+                  <div className="image-background">
+                  </div>
                 </div>
-              </div>
-              <span className='item-content'>
-                <span className="text-item-content">
-                  To Kristi
+                <span className='item-content'>
+                  <span className="text-item-content">
+                    {transaction.debtor==sessionData.userId? `To ${transaction.owned}` : `from ${transaction.debtor}`}
+                  </span>
                 </span>
-              </span>
-              <span className='amount'>
-                10$
-              </span>
-            </button>
+                <span className='amount'>
+                {Math.round(transaction.amount * 100) / 100} $
+                </span>
+              </button>))}
+
           </div>
           <AddExpenseModal
             showExp={showExp}
