@@ -48,9 +48,17 @@ function MainPage() {
         setGroupName(response.data.groups[0].title)//this is to show the first group in the screen on first render instead of empty.
         setGroupID(response.data.groups[0]._id);//this is to fill the first groupID with the default first option when nothing else has been chosen
 
+        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
+        console.log("trans", pulledtransactions.data)
+        setTransactions(pulledtransactions.data)
+
       } else {
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex) //highlight selected option
+
+        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`)
+        console.log("trans", pulledtransactions.data)
+        setTransactions(pulledtransactions.data)
       }
 
       // console.log('handle route change here', location)
@@ -83,41 +91,6 @@ function MainPage() {
   const utilities = {
     tobeRemovedOption: cloner(),
     tobeRetrievedOption: [],
-  }
-
-  useEffect(() => {
-    transactionCalc()
-  }, [location])
-
-  //{debtor: '619fbbb7f62bf0d97607bee3', owned: '619a5327949ad8e993b0531e', amount: 65}
-  // const isDebtorOrOwned=(value)=>{
-  //   if (value.debtor===sessionData.userId || value.owned===sessionData.userId ){
-  //     return value;
-  //   } 
-  // }
-
-  const transactionCalc = async () => {
-    if (!groupID) { //if no groupID just get the first one on the list. This will usually be the case on the first render. After change this will be filled (see row 136 in Modal) and we can use from state itseldf
-      const response = await api.get('/getusers/profile');
-      const temporaryID = (response.data.groups[0]._id)
-      try {
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${temporaryID}`) //gets don't have body so need to send data like this
-        console.log("trans",  pulledtransactions.data)
-        setTransactions( pulledtransactions.data)
-      } catch (err) {
-        console.dir("transaction calc error", err)
-      }
-    } else {
-      try {
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${groupID}`)
-        console.log("trans",  pulledtransactions.data)
-        setTransactions( pulledtransactions.data)
-
-      } catch (err) {
-        console.dir("transaction calc error", err)
-      }
-    }
-
   }
 
 
@@ -175,18 +148,18 @@ function MainPage() {
               <button className="transaction-button" key={index}>
                 <div className='image'>
                   <div className="image-background">
+                    <i className={transaction.debtor === sessionData.userId ?`arrow right icon l`:`arrow left icon l`}></i>
                   </div>
                 </div>
                 <span className='item-content'>
                   <span className="text-item-content">
-                    {transaction.debtor==sessionData.userId? `To ${transaction.owned}` : `from ${transaction.debtor}`}
+                    {transaction.debtor === sessionData.userId ? `To ${transaction.owned}` : `from ${transaction.debtor}`}
                   </span>
                 </span>
                 <span className='amount'>
-                {Math.round(transaction.amount * 100) / 100} $
+                  {Math.round(transaction.amount * 100) / 100} $
                 </span>
               </button>))}
-
           </div>
           <AddExpenseModal
             showExp={showExp}

@@ -233,20 +233,26 @@ background-color:rgb(78, 176, 233);
 }
 
 
-.image-background{
+.main-page .image-background{
+  display: flex;
+  justify-content: center;
   background-image: none;
-    background-blend-mode: overlay;
-
-    box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
-    font: inherit;
-    background-color: rgba(6, 102, 235, 0.1);
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px
-
+  background-blend-mode: overlay;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font: inherit;
+  background-color: rgba(6, 102, 235, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px
 }
+
+.l{
+  align-self: center;
+  justify-self: center;
+}
+
 .group-title{
   display: block;
     max-width: 100%;
