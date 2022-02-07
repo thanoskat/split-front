@@ -15,7 +15,7 @@ HeaderMessage={"Header"}>
 </Modal> */}
 
 //This is a component that is using the Modal component. It is not a modal itself.
-export default function CreateGroupModal({ showCreate, setShowCreate, utilities,setRefresh}) {
+export default function CreateGroupModal({ showCreate, setShowCreate, utilities, setRefresh }) {
 
   const [groupName, setGroupName] = useState("") //Given group name from user
   // const [Users, setUsers] = useState([]);
@@ -192,12 +192,12 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
     if (groupName == "") return null; //do nothing if there is no group name
     let newGroupID;// interestingly const doesn't work here
     try {
-      newGroupID = await api.post('/groups/creategroup', { title: groupName }) //creates group and returns its ID
+      newGroupID = await api.post('/groups/creategroup', { title: groupName}) //creates group and returns its ID
       setShowCreate(false)
       setGroupName("")
-      setRefresh(prev=>!prev)
-     
-      
+      setRefresh(prev => !prev)
+
+
     } catch (err1) {
       console.dir("CREATE GROUP ERROR: ", err1);
     }
@@ -218,9 +218,9 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
     //     console.log("maper",maper)
   }
 
-  const isActive=()=>{
-    if (groupName=="") return false;
-    if (groupName!=="") return true;
+  const isActive = () => {
+    if (groupName == "") return false;
+    if (groupName !== "") return true;
   }
   //!!!!!!!!!!keep an eye on the onClose and the show names as they
   //!!!!!!!!!!can have conficts with the ModalFrame names.
@@ -256,7 +256,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
           setValue={setValue}
           mapTo="nickname"
           id="_id"
-          utilities={utilities}/>
+          utilities={utilities} />
       </Modal>
     </div>
   )

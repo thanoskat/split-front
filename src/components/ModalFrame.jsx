@@ -73,7 +73,7 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
 
                             </span>
                             <span className="group-total">
-                              $156
+                            {group.total}
                             </span>
                           </button>
                         </Link>

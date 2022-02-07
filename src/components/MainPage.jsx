@@ -71,6 +71,10 @@ function MainPage() {
   //this useEffect updates the list of groups when a new group is created.
   useEffect(async () => {
     try {
+      //This is specific to the Users schema when 
+      //feeding info for groupname and total
+      //although they are sourced from
+      //the group Schema with populate.
       const response = await api.get('/getusers/profile');
       setGroupInfo(response.data.groups)
     } catch (err) {
@@ -148,7 +152,7 @@ function MainPage() {
               <button className="transaction-button" key={index}>
                 <div className='image'>
                   <div className="image-background">
-                    <i className={transaction.debtor === sessionData.userId ?`arrow right icon l`:`arrow left icon l`}></i>
+                    <i className={transaction.debtor === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
                   </div>
                 </div>
                 <span className='item-content'>

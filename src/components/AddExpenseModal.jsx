@@ -45,7 +45,8 @@ export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeI
         setRefreshExpense(prev=>!prev)
         onCloseExp()
         try {
-            const addExpense = await api.post('/expense/addexpense', { userID: userInfoID, groupID: groupID, amount, description })
+            //const addExpense = await api.post('/expense/addexpense', { userID: userInfoID, groupID: groupID, amount, description })
+            const addExpense = await api.post ('/expense/addexpense2',{ spenderID: userInfoID, groupID: groupID, amount, description })
             return addExpense.status === 200
 
         } catch (error) {

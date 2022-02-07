@@ -88,12 +88,12 @@ function Profile() {
           onChange={event => SetUserIDtoBeAdded(event.target.value)}
 
 
-          placeholder='619a53ad949ad8e993b05331' />
+          placeholder='User ID' />
         <input
           onChange={event => SetGroupIDtoAddUser(event.target.value)}
 
 
-          placeholder='61a81c5036da66c2084099bd ' />
+          placeholder='group ID address ' />
 
         <button type="submit">Add User to Group</button>
       </form>
