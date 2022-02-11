@@ -7,38 +7,21 @@ const Notifications = () => {
 
   const [requests, setRequests] = useState([])
   const [refresh, setRefresh] = useState(false)
-  const [milisecs, setMilisecs] = useState()
   const api = useAxios()
 
 
   const getRequests = async () => {
     try {
       const requests = await api.get('groups/getgrouprequests')
-
-      // requests.data.map(x => new Date(x.date).getTime()) //time requests were built in milisecs
-      console.log(requests)
-      // console.log("date", milisecs)
-      //setMilisecs(requests.data);
+      // console.log(requests.data)
       setRequests(requests.data)
-      //console.log(milisecs)
-      console.log(getTimeSince(requests))
-      console.log(requests)
     }
     catch (error) {
       console.dir("REQUESTERROR: ", error)
     }
   }
 
-  const getTimeSince = (arr) => {
-    const currDate = new Date()
-    const currDatems = currDate.getTime()
-    //const arrms = arr.data.map(x => new Date(x.date).getTime())
-    //const arrms = arr.map(x =>x.data.map(x=>new Date(x.date).getTime()))
-    //const res = arrms.map(milisec => (currDatems - milisec) / 1000 / 60 / 60)
-    arr.data.map(x => new Date(x.date).getTime())
-    return arr /// 1000 / 60 / 60 / 24
-  }
-
+  
   useEffect(() => {
     console.log('useEffect() ran')
     getRequests()
@@ -80,7 +63,7 @@ const Notifications = () => {
               <strong>{request.requester.nickname}</strong>&nbsp; invited you to join &nbsp;<strong>{request.groupToJoin.title}</strong>
             </div>
             <div className="notification-time">
-              8 seconds ago
+            {request.date.timeago}&nbsp;{request.date.format}&nbsp;ago
             </div>
           </div>
           <div className='nav-button' onClick={() => OnClickAccept(request._id)}>Accept</div>
