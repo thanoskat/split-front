@@ -42,31 +42,30 @@ function MainPage() {
       //console.log(response.data.groups[0]._id)
       setUsers(users.data);
       //setGroupInfo(response.data.groups);
+      //console.log(response.data)
       setUserInfo(response.data);
 
       if (isNaN(pathIndex)) {
         setGroupName(response.data.groups[0].title)//this is to show the first group in the screen on first render instead of empty.
         setGroupID(response.data.groups[0]._id);//this is to fill the first groupID with the default first option when nothing else has been chosen
-
         const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        console.log("trans", pulledtransactions.data)
+        //console.log("trans", pulledtransactions.data)
         setTransactions(pulledtransactions.data)
-
       } else {
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex) //highlight selected option
-
         const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`)
-        console.log("trans", pulledtransactions.data)
+        //console.log("trans", pulledtransactions.data)
         setTransactions(pulledtransactions.data)
       }
-
       // console.log('handle route change here', location)
     } catch (err) {
       console.dir(err);
     }
 
   }, [location])
+
+ 
 
   //this useEffect updates the list of groups when a new group is created.
   useEffect(async () => {
@@ -152,12 +151,12 @@ function MainPage() {
               <button className="transaction-button" key={index}>
                 <div className='image'>
                   <div className="image-background">
-                    <i className={transaction.debtor === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
+                    <i className={transaction.debtorID === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
                   </div>
                 </div>
                 <span className='item-content'>
                   <span className="text-item-content">
-                    {transaction.debtor === sessionData.userId ? `To ${transaction.owned}` : `from ${transaction.debtor}`}
+                    {transaction.debtorID === sessionData.userId ? `To ${transaction.ownedName}` : `from ${transaction.debtorName}`}
                   </span>
                 </span>
                 <span className='amount'>
