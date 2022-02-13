@@ -117,10 +117,21 @@ const Group = ({ match }) => {
       return(
         group.transactions.map(transaction => (
           <ListItem key={transaction._id} title={transaction._id} description={`${transaction.amount} from ${transaction.sender} to ${transaction.receiver}`}></ListItem>
-      )))
+        ))
+      )
     }
     else {
       return(<></>)
+    }
+  }
+
+  const pendingTransactions = () => {
+    if(group.pendingTransactions) {
+      return(
+        group.pendingTransactions.map(pendingTransaction => (
+          <ListItem key={pendingTransaction._id} title={pendingTransaction._id} description={`${pendingTransaction.amount} from ${pendingTransaction.sender} to ${pendingTransaction.receiver}`}></ListItem>
+        ))
+      )
     }
   }
 
@@ -151,9 +162,12 @@ const Group = ({ match }) => {
       <div>Creator: {group.creator}</div>
       <div>Title: {group.title}</div>
       <div>Members:</div>
+      <div>Total amount spent: {group.totalSpent}</div>
       {members()}
       <div>Transactions:</div>
       {transactions()}
+      <div>Pending transactions:</div>
+      {pendingTransactions()}
       <div>New Transaction:</div>
       <input placeholder="Sender" value={inputSender} onInput={e => setInputSender(e.target.value)}/>
       <input placeholder="Receiver" value={inputReceiver} onInput={e => setInputReceiver(e.target.value)}/>
