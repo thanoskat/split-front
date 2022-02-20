@@ -3,7 +3,7 @@ import '../style/Dropdown.css'
 import { useState, useRef, useEffect } from 'react'
 
 
-export default function Dropdown({ placeholder, options, value, setValue, mapTo, id, utilities }) {
+export default function Dropdown({ placeholder, options, mouse, setValue, mapTo, id, utilities, displaynamesbox }) {
 
   // onChange={val=>setValue(val)}
 
@@ -16,9 +16,9 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
 
   useEffect(() => {
     // Add a listener for mouse click
-    document.addEventListener("mouseup", close);
+    document.addEventListener(mouse, close);
     // Remove listener when done with it
-    return (() => { document.removeEventListener("mouseup", close) })
+    return (() => { document.removeEventListener(mouse, close) })
   }, [ref]);
 
   function close(event) {
@@ -47,14 +47,14 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
             onChange={e => {
               setQuery(e.target.value)
               setValue(null)
-             } 
+            }
             }
             onClick={() => setOpen(prev => !prev)}
           />
           <span className='floating-label' >{placeholder}</span>
         </div>
       </div>
-      <div className={`options ${open && utilities.tobeRemovedOption.length!==0 ?  'open'  : null}`}>
+      <div className={`options ${open && utilities.tobeRemovedOption.length !== 0 ? 'open' : null}`}>
         {
           filter(options).map((option, index) =>
             <div
@@ -67,8 +67,8 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-                console.log("tobeRemovedOption", utilities.tobeRemovedOption.length)
-                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption.length)
+                console.log("tobeRemovedOption", utilities.tobeRemovedOption)
+                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
                 setItem(true)
               }}>
               {option[mapTo]}
@@ -76,32 +76,36 @@ export default function Dropdown({ placeholder, options, value, setValue, mapTo,
           )
         }
       </div>
-      <div className={`nickname-box ${item ? 'item' : null}`}>
-        {item ? <span className='nickname-box invite-friends'>Send invitation to:</span> : <></>}
-        {
-          utilities.tobeRetrievedOption.map((u, indx) =>
-            <div key={u.email} className='nickname-box nickname-section'>
-              <div className="nickname-box nickname-exit-button" key={indx} onClick={
-                () => {
-                  utilities.tobeRemovedOption.push(u)
-                  utilities.tobeRemovedOption.sort((a, b) => a.nickname.localeCompare(b.nickname))
-                  utilities.tobeRetrievedOption.splice(indx, 1);
-                  // console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
-                  // console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
-                  setDummyState(prev => !prev)
-                  if (utilities.tobeRetrievedOption.length == 0) {
-                    setItem(false)
-                  }
-                }}>
-               <i className="times icon x"></i>
-              </div>
-              <div className="nickname-box nickname-name">
-                {u[mapTo]}
-              </div>
+      {displaynamesbox ?
 
-            </div>
-          )}
-      </div>
+        <div className={`nickname-box ${item ? 'item' : null}`}>
+          {item ? <span className='nickname-box invite-friends'>Send invitation to:</span> : <></>}
+          {
+            utilities.tobeRetrievedOption.map((u, indx) =>
+              <div key={u.email} className='nickname-box nickname-section'>
+                <div className="nickname-box nickname-exit-button" key={indx} onClick={
+                  () => {
+                    utilities.tobeRemovedOption.push(u)
+                    utilities.tobeRemovedOption.sort((a, b) => a.nickname.localeCompare(b.nickname))
+                    utilities.tobeRetrievedOption.splice(indx, 1);
+                    // console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
+                    // console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
+                    setDummyState(prev => !prev)
+                    if (utilities.tobeRetrievedOption.length == 0) {
+                      setItem(false)
+                    }
+                  }}>
+                  <i className="times icon x"></i>
+                </div>
+                <div className="nickname-box nickname-name">
+                  {u[mapTo]}
+                </div>
+
+              </div>
+            )}
+        </div>
+        : <></>
+      }
     </div>
   )
 }

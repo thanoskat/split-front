@@ -2,7 +2,7 @@ import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
-import { useState, useEffect, useContext, useDebugValue } from "react";
+import { useState, useEffect, useContext} from "react";
 import { useLocation } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
@@ -95,7 +95,7 @@ function MainPage() {
     tobeRemovedOption: cloner(),
     tobeRetrievedOption: [],
   }
-
+  const arr=[]
 
   return (
     <div className="main-page">
@@ -187,6 +187,7 @@ function MainPage() {
           setShowCreate={setShowCreate}
           utilities={utilities}
           setRefresh={setRefresh}
+        
 
 
         />

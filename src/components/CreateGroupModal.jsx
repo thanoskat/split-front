@@ -224,16 +224,9 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
   }
   //!!!!!!!!!!keep an eye on the onClose and the show names as they
   //!!!!!!!!!!can have conficts with the ModalFrame names.
+  
   return (
     <div className='CreateGroup'>
-      {/* <Dropdown
-              options={Users}
-              placeholder={"Invite friends"}
-              value={value}
-              setValue={setValue}
-              labelToMap="nickname"
-              id="_id"
-          />  */}
       <Modal
         className="Create-Group-Modal"
         onClose={() => setShowCreate(false)}
@@ -256,7 +249,10 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
           setValue={setValue}
           mapTo="nickname"
           id="_id"
-          utilities={utilities} />
+          utilities={utilities}
+          displaynamesbox={1}
+          mouse={"mouseup"}
+          />
       </Modal>
     </div>
   )

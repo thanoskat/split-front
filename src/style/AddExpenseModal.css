@@ -107,9 +107,12 @@
     order:1;
 }
 
-input:focus {
-    border-color: rgb(26, 151, 26)
+.descr:focus {
+    border-color: rgb(76, 89, 204)
   }
+.amnt:focus {
+    border-color: rgb(76, 89, 204)
+}
 
   .currency-selector,.dummy{
       width: 35px;
