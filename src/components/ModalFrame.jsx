@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Link} from 'react-router-dom';
 
 
-export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID, activeIndex, setActiveIndex}) {
+
+export default function ModalFrame({ show, onClose, setGroupName, list, setGroupID, activeIndex, setActiveIndex}) {
 
   
   const [groupData, setGroupData] = useState([]);
@@ -44,36 +45,33 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
               <div className="box-widget">
                 <div className="header">
                   <div className="header-content">
-                    Groups
+                    <strong>Groups</strong>
                   </div>
                 </div>
                 <div className="divider">
                   divider
                 </div>
                 <div className="total">
-                  Total
+                  <strong>Total</strong>
                 </div>
                 <div className="groups-content">
                   <div className="content-box">
                     <div className="individual-button-content">
-                      {groupInfo.map((group, index) => (
+                      {list.map((group, index) => (
                         <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
                           <button area-pressed="true"
-
                             key={index}
                             onClick={() => handleOnClick(index, group)}
                             className={activeIndex === index ? "modal-button-active" : "group-button"}>
-                              
                             <div className="group-avatar">
                               <div className="image-background">
                               </div>
                             </div>
                             <span className="group-header ">
-                              {group.title}
-
+                              <strong>{group.title}</strong>
                             </span>
                             <span className="group-total">
-                            {group.total}
+                            <strong>{group.total}</strong>
                             </span>
                           </button>
                         </Link>
@@ -85,7 +83,5 @@ export default function ModalFrame({ show, onClose, setGroupName, groupInfo, set
             </div>
           </div>
         </div>
-      
-    
   )
 }

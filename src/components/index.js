@@ -20,5 +20,7 @@ export { default as Modal } from './Modal'
 export { default as CreateGroupModal } from './CreateGroupModal'
 export { default as Dropdown } from './Dropdown'
 export { default as NewDropdown } from './NewDropdown'
+export { default as MyGroupsCreateGroup } from './MyGroupsCreateGroup'
+export { default as Button } from './Button'
 
 

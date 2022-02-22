@@ -1,10 +1,9 @@
 import './App.css';
-import { Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage } from './components'
+import { Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './semantic-icons.css'
-import { useState } from 'react';
 
 function App() {
 
@@ -13,7 +12,6 @@ function App() {
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            {/* <NavigationBar/> */}
             <UserBar />
             <NavigationBar2 />
             <Switch>
@@ -29,6 +27,8 @@ function App() {
               <PrivateRoute path="/user/:id" component={User} />
               <PrivateRoute path="/notifications" component={Notifications} />
               <PrivateRoute path="/main" component={MainPage} />
+              <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
+
             </Switch>
           </div>
         </BrowserRouter>

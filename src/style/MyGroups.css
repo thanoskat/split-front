@@ -98,7 +98,10 @@
   border-radius: 10px;
   background: #666768; 
 }
-
+.createnewgroupsection{
+  margin-top: 1.75rem;
+  
+}
 .createnewgroupbutton{
   width:240px;
   height: 30px;
@@ -112,8 +115,10 @@
 }
 
 .createnewgroupbutton:hover{
+
   background-color:rgb(61,77,99);
   transition: 0.5s;
+  
 }
 
 .separator{
