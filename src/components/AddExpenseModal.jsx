@@ -3,7 +3,7 @@ import React from 'react'
 import useAxios from "../utility/useAxios"
 import { useState, useEffect } from "react/cjs/react.development";
 
-export default function AddExpenseModal({ showExp, onCloseExp, userInfoID }) {
+export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeIndex,setRefreshExpense}) {
 
     const [description, setDescription] = useState("")
     const [amount, setAmount] = useState("");
@@ -14,21 +14,39 @@ export default function AddExpenseModal({ showExp, onCloseExp, userInfoID }) {
     //fetching first group by default. Without this function, on a single refresh of the app the Add Expense would not work because
     //it would not be able to pass the group ID to the child without clicking. We want this to happen automatically
     //hence the fetchGroupID function
-
-    const fetchGroupID = async () => {
-        const response = await api.get('/getusers/profile');
-        setGroupID(response.data.groups[0]._id)
-        console.log(response.data.groups[0]._id)
+   
+    //It now can run without the first if statement but doesn't hurt to have it
+    const fetchGroupID = async (activeIndex) => {
+        console.log("active Index addexp",activeIndex)
+        if(isNaN(activeIndex)){
+            try {
+                const response = await api.get('/getusers/profile');
+                setGroupID(response.data.groups[0]._id)
+                // console.log(response.data.groups[0]._id)
+            } catch (error) {
+                console.dir("No group error", error)
+            }
+        }else{
+            try {
+                const response = await api.get('/getusers/profile');
+                setGroupID(response.data.groups[activeIndex]._id)
+                // console.log(response.data.groups[0]._id)
+            } catch (error) {
+                console.dir("No group error", error)
+            }
+        }
     }
 
     useEffect(() => {
-        fetchGroupID()
-    }, [])
+        fetchGroupID(activeIndex)
+    }, [activeIndex])
 
     const addExp = async () => {
+        setRefreshExpense(prev=>!prev)
         onCloseExp()
         try {
-            const addExpense = await api.post('/expense/addexpense', { userID: userInfoID, groupID: groupID, amount, description })
+            //const addExpense = await api.post('/expense/addexpense', { userID: userInfoID, groupID: groupID, amount, description })
+            const addExpense = await api.post ('/expense/addexpense2',{ spenderID: userInfoID, groupID: groupID, amount, description })
             return addExpense.status === 200
 
         } catch (error) {

@@ -4,8 +4,8 @@ import useAxios from "../utility/useAxios"
 import { useHistory } from "react-router-dom";
 
 
-export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, userInfoID, groupID, groupName, setGroupName, setGroupInfo,setRefreshIndex}) {
-
+export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, userInfoID, groupID, groupName, setGroupName, setGroupInfo}) {
+    
     const api = useAxios()
     const history = useHistory();
 
@@ -13,17 +13,17 @@ export default function LeaveGroupModal({ showLeaveGroup, onCloseLeaveGroup, use
         try {
             const res = await api.post('/groups/removeuserfromgroup', { userID: userInfoID, groupID: groupID })
             const res2 = await api.get('/getusers/profile');
-            if (res.status === 200) {
+            if (res.status && res2.status === 200) {
                 onCloseLeaveGroup()
                 setGroupName(res2.data.groups[0].title) //update title in modal button to first group when leaving another group
                 setGroupInfo(res2.data.groups)
-                setRefreshIndex(0)
-                history.push(`/main/${res2.data.groups[0]._id}`); //redirect to first group when leaving another group
+                history.push(`/main/${res2.data.groups[0]._id}?${0}`); //redirect to first group when leaving another group
+                //!!!what happens when no group is left (e.g if user leaves all groups)
 
             }
         }
         catch (error) {
-            console.dir(error)
+            console.dir("Leave group error",error)
         }
     }
 

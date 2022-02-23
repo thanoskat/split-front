@@ -1,6 +1,6 @@
 
 
-.leavegroupmodal{
+.Modal{
     position: fixed;
     left:0;
     top:0;
@@ -15,26 +15,28 @@
     pointer-events: none; */
 }
 
-.leavegroup-title{
+.Modal-title{
     align-self: center;
     margin: 0;
+ 
 }
 
 
-.leavegroup-content{
+.Modal-content{
     width:25rem;
     background-color: #fff;
-    border-radius: 5px;  
+    border-radius: 5px;
+    
 }
 
-.leavegroup-header{
+.Modal-header{
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 1fr auto;
     padding: 0.5rem;
 }
 
-.leavegroup-decision-buttons{
+.Modal-decision-buttons{
     display: flex;
     flex-direction: row-reverse;
     
@@ -45,7 +47,7 @@
 
 
 
-.leavegroup-decison-button{
+.Modal-decison-button{
   margin: 0.2rem;
   font-weight: 500;
   font-size: 1.02rem;
@@ -64,14 +66,14 @@
 }
 
 
-.leavegroup-body{
+.Modal-body{
     padding:10px;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
 }
 
-.leavegroup-exit-button{
-    display: flex;
+.Modal-exit-button{
+    display:flex;
     background-color:wheat;
     border:none;
     border-radius:50%;
@@ -84,12 +86,10 @@
 }
 
 .x{
-    
     position:absolute;
     align-self:center;
     justify-self: center;
- 
 }
-.leavegroup-exit-button:hover{
+.Modal-exit-button:hover{
     opacity: 1;
 }

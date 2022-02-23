@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
+import {Button} from "."
 
 function Users() {
 
@@ -28,9 +29,9 @@ function Users() {
     <div>
       {users.map(user => (
         // Warning: Each child in a list should have a unique "key" prop
-        <button key={user._id}>
+        <Button key={user._id} placeholder="hello">
           <Link to={`/users/${user._id}`}>{user.nickname}</Link>
-        </button>
+        </Button>
       ))}
     </div>
   );
