@@ -1,5 +1,5 @@
 import './App.css';
-import { Group, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage } from './components'
+import { Test, Group, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './semantic-icons.css'
@@ -21,6 +21,7 @@ function App() {
             <Route path="/signup" component={SignUp}/>
             <PrivateRoute exact path="/group/:groupid"component={Group}/>
             <PrivateRoute exact path="/mygroups" component={MyGroups}/>
+            <PrivateRoute exact path="/test" component={Test}/>
             <PrivateRoute exact path="/users" component={Users}/>
             <PrivateRoute exact path="/profile" component={Profile}/>
             <PrivateRoute path="/user/:id" component={User}/>
