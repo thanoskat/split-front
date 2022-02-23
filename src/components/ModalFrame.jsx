@@ -1,94 +1,87 @@
 import React from 'react'
 import "../style/ModalFrame.css"
 import { useState, useEffect } from "react";
-import { Link, BrowserRouter as Router } from 'react-router-dom';
-
-export default function ModalFrame({ show, onClose, setGroupName, groupInfo, setGroupID, refreshIndex }) {
-
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [groupData, setGroupData] = useState([]);
+import { Link} from 'react-router-dom';
 
 
-    const handleOnClick = (index, group) => {
-        setActiveIndex(index);
-        setGroupData(group);
-        setGroupID(group._id);
-        onClose();
-    };
-    // No dependecies = Run after every render
-    // Empty [] dependencies = Run only after first render
 
-    useEffect(() => {
-        setGroupName(groupData.title)
+export default function ModalFrame({ show, onClose, setGroupName, list, setGroupID, activeIndex, setActiveIndex}) {
 
-    }, [groupData.title])
+  
+  const [groupData, setGroupData] = useState([]);
 
-    useEffect(() => {
-        setActiveIndex(refreshIndex)
-    }, [refreshIndex])
+  const handleOnClick = (index, group) => {
+    setActiveIndex(index);
+    setGroupData(group);
+    setGroupID(group._id);
+    onClose();
+  };
+  // No dependecies = Run after every render
+  // Empty [] dependencies = Run only after first render
 
-    // if(!show){
-    //     return null;
-    // }
+  useEffect(() => {
+    setGroupName(groupData.title)
+    
+  }, [groupData.title])
 
-    //modal is the whole thing (with grey area in the background)
-    //so it stops propagating only inside the content
-    //and only executes in other areas left (which is the outside)
+  // useEffect(() => {
+  //   setActiveIndex(refreshIndex)
 
-    return (
-        <Router>
-            <div>
-                <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
-                    <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
-                        <div className="box-widget">
+  // }, [refreshIndex])
 
-                                <div className="header">
-                                    <div className="header-content">
-                                        Groups
-                                    </div>
-                                </div>
+  // if(!show){
+  //     return null;
+  // }
 
-                                <div className="divider">
-                                    divider
-                                </div>
-                                <div className="total">
-                                    Total
-                                </div>
-
-                            <div className="groups-content">
-                                <div className="content-box">
-                                    <div className="individual-button-content">
-                                        {groupInfo.map((group, index) => (
-                                            <Link key={index} className='aTag' to={`/main/${group._id}`}>
-                                                <button area-pressed="true"
-
-                                                    key={index}
-                                                    onClick={() => handleOnClick(index, group)}
-                                                    className={activeIndex === index ? "modal-button-active" : "group-button"}>
-
-                                                    <div className="group-avatar">
-                                                        <div className="image-background">
-                                                        </div>
-                                                    </div>
-                                                    <span className="group-header ">
-                                                        {group.title}
-
-                                                    </span>
-                                                    <span className="group-total">
-                                                        $156
-                                                    </span>
-
-                                                </button>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+  //modal is the whole thing (with grey area in the background)
+  //so it stops propagating only inside the content
+  //and only executes in other areas left (which is the outside)
+  //https://stackoverflow.com/questions/28314368/how-to-maintain-state-after-a-page-refresh-in-react-js
+  return (
+   
+        <div>
+          <div className={`modal ${show ? "show" : ""}`} onClick={onClose}>
+            <div role="dialog" aria-modal="true" aria-labelledby="header-label-20" aria-describedby="header-desc-20" className="main" onClick={e => e.stopPropagation()}>
+              <div className="box-widget">
+                <div className="header">
+                  <div className="header-content">
+                    <strong>Groups</strong>
+                  </div>
                 </div>
+                <div className="divider">
+                  divider
+                </div>
+                <div className="total">
+                  <strong>Total</strong>
+                </div>
+                <div className="groups-content">
+                  <div className="content-box">
+                    <div className="individual-button-content">
+                      {list.map((group, index) => (
+                        <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
+                          <button area-pressed="true"
+                            key={index}
+                            onClick={() => handleOnClick(index, group)}
+                            className={activeIndex === index ? "modal-button-active" : "group-button"}>
+                            <div className="group-avatar">
+                              <div className="image-background">
+                              </div>
+                            </div>
+                            <span className="group-header ">
+                              <strong>{group.title}</strong>
+                            </span>
+                            <span className="group-total">
+                            <strong>{group.total}</strong>
+                            </span>
+                          </button>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </Router>
-    )
+          </div>
+        </div>
+  )
 }

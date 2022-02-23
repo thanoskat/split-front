@@ -1,5 +1,72 @@
+
+.notification-message{
+  display: flex;
+  flex-direction:column;
+  flex: 1 1 auto;
+  color: #a1a4a8;
+}
+
+.notification-text{
+display: flex;
+justify-content: flex-start;
+padding-bottom: 5px;
+}
+
+.notification-time{
+  display: flex;
+  justify-content: flex-start;
+  font-size:11px;
+  }
+
 .request-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+.request-container:hover{
+  background-color: #3a3b3c;
+  opacity:1
+}
+
+
+.nav-button {
+  /* Text in button in center */
+  /* display: inline-flex;
+  align-items: center;
+  justify-content: center; */
+
+  /* Button in flexbox in center */
+  align-self: center;
+
+  /* Width fits the text inside with some space */
+  text-decoration: none;
+  padding: 5px 18px 5px 18px;
+  width: fit-content;
+
+  white-space: nowrap;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin: 0px 2px 0px 2px;
+  cursor: pointer;
+  /* background-color: #000000; */
+  color: #8f8f91;
+}
+
+.nav-button:hover {
+  color: #f4f4f4;
+}
+
+@media screen and (min-width: 720px){
+  .container-component.notifications-container{
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;
+  
+}
+
 }

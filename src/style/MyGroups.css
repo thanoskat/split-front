@@ -1,7 +1,153 @@
-.my-groups-page {
-  /* text-align: center; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* flex-direction: column; */
-  /* width: 100%; */
+.groups-left-menu{
+ display: flex;
+ flex-direction: column;
+ row-gap: 20px;
+ background:#161618;
+ grid-area:groups-left-menu ;
+ position:relative;
+
+ }
+  
+.group-container{
+ background: #272323;
+ grid-area: group-container;
+  }
+
+
+  
+  
+.my-groups{
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "groups-left-menu group-container ";
+
 }
+
+
+.groups-searchbar .Add-Friend-Section .floating-label {
+	position: absolute;
+	pointer-events: none;
+	top: 0.5rem;
+	left: 1.8rem;
+	transition: none;
+  
+}
+.groups-searchbar .Add-Input-Field{
+  border-radius: 30px;
+  height: 25px;
+  width: 255px;
+  border: 2px solid rgb(137, 151, 155);
+  background-color: #3a3b3c;
+  color:#a1a4a8
+  
+}
+
+.groups-searchbar .Add-Friend-Section input:focus ~ .floating-label,
+.groups-searchbar .Add-Friend-Section input:not(:focus):valid ~ .floating-label{
+	top: 5px;
+	left: 15px;
+	font-size: 0;
+	opacity: 0.8;
+  transition: none;
+}
+
+.groups-searchbar .dropdown .options {
+  left: 22px;
+  width: 85%;
+  max-height:250px ;
+  
+}
+
+.groups-searchbar .dropdown .option {
+  box-sizing: border-box;
+  background-color: #242526;
+  color: #a1a4a8;
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+  width: 249.97728px;
+  
+}
+
+
+.groups-searchbar .dropdown .option:hover {
+  background-color: #2e3031;
+  color: #a1a4a5;
+  opacity:0.9;
+  transition: 0.2s;
+  
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  
+}
+::-webkit-scrollbar-track {
+  background: #242526; 
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #303233; 
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #666768; 
+}
+.createnewgroupsection{
+  margin-top: 1.75rem;
+  
+}
+.createnewgroupbutton{
+  width:240px;
+  height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+  background-color: #263951;
+  border: none;
+  color: #2d88ff;
+  font-weight: 700;
+  transition: 0.5s;
+}
+
+.createnewgroupbutton:hover{
+
+  background-color:rgb(61,77,99);
+  transition: 0.5s;
+  
+}
+
+.separator{
+  border-bottom: 1px solid;
+  margin: 8px 12px;
+}
+
+.groups-list{
+display: flex;
+flex-direction: column;
+}
+
+.individual-group{
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: 0.2s;
+  margin: 5px;
+  cursor: pointer;
+  color: #8f8f91;
+}
+
+.active-individual-group{
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #3a3b3c;
+  margin: 5px;
+  color: #8f8f91;
+}
+
+.individual-group:hover{
+  opacity:1;
+  background-color: #3a3b3c;
+}
+/* #3a3b3c */

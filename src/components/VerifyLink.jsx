@@ -14,7 +14,7 @@ const VerifyLink = ({ match }) => {
       const response = await axios.get(`http://localhost:4000/auth/v/${match.params.token}`, { withCredentials: true })
       signIn(response.data.accessToken, response.data.sessionData)
       setData('Redirecting !!')
-      history.push('/profile');
+      history.push('/main');
     }
     catch(error) {
       console.dir(error)

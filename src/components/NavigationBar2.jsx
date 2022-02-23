@@ -7,7 +7,7 @@ function NavigationBar2() {
     <div className='main-flex-container'>
       <div className="my-menu">
         <NotificationButton/>
-        <NavigationButton to='/about'>About</NavigationButton>
+        <NavigationButton to='/main'>Main</NavigationButton>
         <NavigationButton to='/users'>Users</NavigationButton>
         <NavigationButton to='/mygroups'>My groups</NavigationButton>
         <NavigationButton to='/profile'>Profile</NavigationButton>

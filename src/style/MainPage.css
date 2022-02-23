@@ -27,7 +27,7 @@ html, body {
     grid-area: box1 / box1 / box1 / box1;
     min-width: 0px;
     padding: 0.5rem 1rem;
-    border:solid;
+    
 }
 
 .homewidget{
@@ -233,20 +233,26 @@ background-color:rgb(78, 176, 233);
 }
 
 
-.image-background{
+.main-page .image-background{
+  display: flex;
+  justify-content: center;
   background-image: none;
-    background-blend-mode: overlay;
-
-    box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
-    /* font: inherit; */
-    background-color: rgba(6, 102, 235, 0.1);
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px
-
+  background-blend-mode: overlay;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font: inherit;
+  background-color: rgba(6, 102, 235, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px
 }
+
+.l{
+  align-self: center;
+  justify-self: center;
+}
+
 .group-title{
   display: block;
     max-width: 100%;
@@ -352,7 +358,7 @@ background-color:rgb(78, 176, 233);
     "box2 .box1 . ."
     "box4 box4 box4 box4 box4"
     "box5 box5 box5 box5 box5";
-    grid-template-columns: 5.5rem 1fr 31.25rem 1fr minmax(5.5rem, auto);
+    grid-template-columns: 5.5rem 1fr 36.25rem 1fr minmax(5.5rem, auto);
 }
 
 }
@@ -364,16 +370,16 @@ background-color:rgb(78, 176, 233);
         "box2 . box1 . box4"
         "box2 . box3 . box4"
         ". . box5 . .";
-    grid-template-columns: 6.5rem 1fr 31.25rem 1fr minmax(6.5rem, auto)
+    grid-template-columns: 6.5rem 1fr 39.25rem 1fr minmax(6.5rem, auto)
 }}
 
 @media screen and (min-width: 1280px){
   .main-page{
-    grid-template-columns: 15.5rem 1fr 33.5rem 1fr minmax(15.5rem, auto);
+    grid-template-columns: 15.5rem 1fr 40.5rem 1fr minmax(15.5rem, auto);
 }}
 
 @media screen and (min-width: 1920px){
   .main-page{
     max-width: 84.875rem;
-    grid-template-columns: 15.5rem 1fr 33.5rem 1fr 25rem
+    grid-template-columns: 15.5rem 1fr 40.5rem 1fr 25rem
 }}

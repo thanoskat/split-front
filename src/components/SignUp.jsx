@@ -16,14 +16,14 @@ const SignUp = () => {
     // })
     try {
       setLoading(true)
-      const res = await axios.post('http://localhost:4000/auth/signup', {email: email, nickname: nickname})
+      const res = await axios.post('http://localhost:4000/auth/signup', { email: email, nickname: nickname })
       console.dir(res)
       setEmailError(false)
       setNicknameError(false)
       setLoading(false)
     }
-    catch(error) {
-      if(error.response.data.email) {
+    catch (error) {
+      if (error.response.data.email) {
         setEmailError({
           content: error.response.data.email,
           pointing: 'above'
@@ -32,7 +32,7 @@ const SignUp = () => {
       else {
         setEmailError(false)
       }
-      if(error.response.data.nickname) {
+      if (error.response.data.nickname) {
         setNicknameError({
           content: error.response.data.nickname,
           pointing: 'above'
@@ -45,9 +45,25 @@ const SignUp = () => {
     }
   }
 
-  return(
+  return (
     <div>
+      <form onSubmit={formSubmit}>
+        <input
+          placeholder='Email'
+          onChange={e => setEmail(e.target.value)}>
+        </input>
+
+        <input
+          placeholder='Nickname'
+          onChange={ e => setNickname(e.target.value)}>
+        </input>
+        <button type='submit'>
+          Sign Up
+        </button>
+      </form>
+
     </div>
+
     // <Form onSubmit={formSubmit} loading={loading}>
     //   <Form.Field
     //     fluid
