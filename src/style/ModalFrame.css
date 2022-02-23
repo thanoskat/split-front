@@ -27,7 +27,7 @@
     padding: 0rem 0rem;
     background-color: #161618;
     border: solid;
-    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; */
     font-size: 1rem;
     line-height: 1.375;
     letter-spacing: -0.00625em;
@@ -53,7 +53,7 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
-    font: inherit;
+    /* font: inherit; */
     background-color: rgb(255, 255, 255);
     color: rgb(25, 28, 31);
     border-radius: 13px;
@@ -67,7 +67,7 @@
 
     background-color: rgb(95, 99, 160);
     padding: 1rem 0px;
-    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; */
     font-weight: 500;
     font-size: 1rem;
     line-height: 1.375;
@@ -223,7 +223,7 @@ a:-webkit-any-link {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
-    font: inherit;
+    /* font: inherit; */
     background-color: rgba(6, 102, 235, 0.1);
     width: 40px;
     height: 40px;
@@ -239,7 +239,7 @@ a:-webkit-any-link {
         padding: 0.5rem 1rem;
         background-color: aquamarine;
         border: solid;
-        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        /* font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; */
         font-size: 1rem;
         line-height: 1.375;
         letter-spacing: -0.00625em;

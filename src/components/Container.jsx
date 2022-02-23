@@ -1,12 +1,9 @@
 import '../style/Container.css'
 
+const Container = ({ children, className }) => {
 
-const Container = ({ children, className}) => {
-
-
-
-  return (
-    <div className={`container-component ${className}`}>{children}</div>
+  return(
+    <div className={className ? `container-component ${className}` : 'container-component'}>{children}</div>
   )
 }
 

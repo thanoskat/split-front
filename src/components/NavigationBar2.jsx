@@ -1,6 +1,5 @@
 import '../style/NavigationBar2.css';
-import { NavigationButton } from '.'
-import NotificationButton from './NotificationButton'
+import { NavigationButton, NotificationButton } from '.'
 
 function NavigationBar2() {
 

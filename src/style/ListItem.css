@@ -1,0 +1,35 @@
+.list-item-component {
+  margin: 2px 2px 2px 2px;
+  padding: 2px 2px 2px 2px;
+  /* align-self: center; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  border-style: solid;
+  border-radius: 8px;
+  border-width: 2px;
+  width: 100%;
+  border-color: var(--inactiveColor);
+  color: var(--activeColor);
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+.list-item-title {
+  align-self: flex-start;
+  font-size: 1.9rem;
+}
+
+.list-item-description {
+  align-self: flex-start;
+  font-size: 0.9rem;
+}
+
+.list-item-component:hover {
+  background-color: var(--activeColor);
+  border-color: var(--activeColor);
+  color: var(--highlightBackgroundColor)
+}
+

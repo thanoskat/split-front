@@ -46,34 +46,36 @@ const UserBar = () => {
 
   const authenticationMenu = () => {
     if(sessionData && sessionData.id) {
-      return(<>
-        <div className='nickname-dropdown' style={{display: nicknameDropdownDisplay}} ref={nicknameDropdownRef}>
-          <div className='nickname-dropdown-section'>
-            <div className='nickname-dropdown-item'>User ID</div>
-            <div className='nickname-dropdown-item'>{sessionData.userId}</div>
+      return(
+        <div style={{ fontFamily: 'Inter'}}>
+          <div className='nickname-dropdown' style={{display: nicknameDropdownDisplay}} ref={nicknameDropdownRef}>
+            <div className='nickname-dropdown-section'>
+              <div className='nickname-dropdown-item'>User ID</div>
+              <div className='nickname-dropdown-item'>{sessionData.userId}</div>
+            </div>
+            <div className='nickname-dropdown-divider'/>
+            <div className='nickname-dropdown-section'>
+              <div className='nickname-dropdown-item'>email</div>
+              <div className='nickname-dropdown-item'>{sessionData.userEmail}</div>
+            </div>
+            <div className='nickname-dropdown-divider'/>
+            <div className='nickname-dropdown-section'>
+              <div className='nickname-dropdown-item'>Session ID</div>
+              <div className='nickname-dropdown-item'>{sessionData.id}</div>
+            </div>
+            <div className='nickname-dropdown-divider'/>
+            <div className='nickname-dropdown-section'>
+              <div onClick={logoutClick} className='nickname-dropdown-item'>Sign out</div>
+            </div>
           </div>
-          <div className='nickname-dropdown-divider'/>
-          <div className='nickname-dropdown-section'>
-            <div className='nickname-dropdown-item'>email</div>
-            <div className='nickname-dropdown-item'>{sessionData.userEmail}</div>
-          </div>
-          <div className='nickname-dropdown-divider'/>
-          <div className='nickname-dropdown-section'>
-            <div className='nickname-dropdown-item'>Session ID</div>
-            <div className='nickname-dropdown-item'>{sessionData.id}</div>
-          </div>
-          <div className='nickname-dropdown-divider'/>
-          <div className='nickname-dropdown-section'>
-            <div onClick={logoutClick} className='nickname-dropdown-item'>Sign out</div>
-          </div>
+          <button className='nickname-button' onClick={nicknameClick} ref={nicknameButtonRef}>
+            <div>
+              {sessionData.userNickname}
+              <i className='nickname-arrow angle down icon'></i>
+            </div>
+          </button>
         </div>
-        <button className='nickname-button' onClick={nicknameClick} ref={nicknameButtonRef}>
-          <div>
-            {sessionData.userNickname}
-            <i className='nickname-arrow angle down icon'></i>
-          </div>
-        </button>
-      </>)
+      )
     }
     else {
       return(

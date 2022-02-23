@@ -18,7 +18,7 @@
     width:25rem;
     background-color: #fff;
     border-radius: 5px;
-    
+
 }
 
 .addexp-header{
@@ -31,7 +31,7 @@
 .addexp-decision-buttons{
     display: flex;
     flex-direction: row-reverse;
-    
+
     height: 5rem;
     padding: 1rem;
     padding-right: 1rem
@@ -41,7 +41,7 @@
     margin: 0.2rem;
     font-weight: 500;
     font-size: 1.02rem;
-    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; */
     border-radius: 10px;
     border:none;
     background-color: rgb(186, 216, 233);
@@ -54,11 +54,11 @@
     text-align: center;
     cursor: pointer;
   }
-  
+
   .addexp-title{
       margin: 0;
   }
-  
+
   .addexp-body{
       display: grid;
       grid-auto-flow: row;
@@ -68,7 +68,7 @@
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
   }
-  
+
 
   .addexp-exit-button{
     display: flex;
@@ -120,7 +120,7 @@
       margin-top: 38px
   }
 
-  .addexp-amount,.addexp-description{  
+  .addexp-amount,.addexp-description{
     display: grid;
     -webkit-box-align: center;
     grid-auto-flow: column;
@@ -132,7 +132,7 @@
   }
 
   select {
-      
+
     width: 2.5rem;
     height: 2.5rem;
     padding: 9px 5px 8px 13px;
@@ -140,13 +140,13 @@
     border: 1px solid rgb(197, 8, 8);
     -webkit-appearance: none;
     appearance: none;
-   
+
   }
-  
-  
+
+
   /* CAUTION: Internet Explorer hackery ahead */
-  
-  
+
+
   select::-ms-expand {
       display: none; /* Remove default arrow in Internet Explorer 10 and 11 */
   }
