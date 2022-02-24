@@ -42,12 +42,15 @@ function MainPage() {
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
-      if (isNaN(pathIndex)) {
+      console.log("pathIndex,activeIndex",pathIndex,activeIndex)
+      console.log("history",history)
+      if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         setTransactions(pulledtransactions.data)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
-      } else {
+      } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
+        setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`)
         setTransactions(pulledtransactions.data)
       }
@@ -55,7 +58,7 @@ function MainPage() {
       console.dir(err);
     }
 
-  }, [location])
+  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
 
 
   //this useEffect updates the list of groups when a new group is created.

@@ -17,7 +17,7 @@ export default function AddExpenseModal({ showExp, onCloseExp,userInfoID,activeI
    
     //It now can run without the first if statement but doesn't hurt to have it
     const fetchGroupID = async (activeIndex) => {
-        console.log("active Index addexp",activeIndex)
+        //console.log("active Index addexp",activeIndex)
         if(isNaN(activeIndex)){
             try {
                 const response = await api.get('/getusers/profile');
