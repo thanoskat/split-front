@@ -1,9 +1,9 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
-import { useState, useEffect, useContext} from "react";
-import { useLocation,useHistory } from "react-router-dom";
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal,Button,SelectGroup } from '.'
+import { useState, useEffect, useContext } from "react";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import { GlobalStateContext } from '../contexts/GlobalStateContext'
 
@@ -42,39 +42,29 @@ function MainPage() {
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
-      console.log("pathIndex,activeIndex",pathIndex,activeIndex)
-      console.log("history",history)
+      // console.log("pathIndex,activeIndex", pathIndex, activeIndex)
+      // console.log("history", history)
+
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        setTransactions(pulledtransactions.data)
+        const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
+        //console.log(await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`))
+        console.log(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
+        setGroupID(response.data.groups[pathIndex]._id)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`)
-        setTransactions(pulledtransactions.data)
+        const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
+       // console.log(await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`))
+       console.log(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
       }
     } catch (err) {
       console.dir(err);
     }
 
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
-
-
-  //this useEffect updates the list of groups when a new group is created.
-  useEffect(async () => {
-    try {
-      //This is specific to the Users schema when 
-      //feeding info for groupname and total
-      //although they are sourced from
-      //the group Schema with populate.
-      const response = await api.get('/getusers/profile');
-      setGroupInfo(response.data.groups)
-    } catch (err) {
-      console.dir("group info error", err);
-    }
-
-  }, [refreshGroupList])
 
   const cloner = () => {
     let clone = []
@@ -89,6 +79,21 @@ function MainPage() {
     tobeRemovedOption: cloner(),
     tobeRetrievedOption: [],
   }
+
+  const filterID = (value) => {
+    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+      return value;
+    }
+  }
+
+ const newContent=()=>{
+   return(
+     <div>
+       <Button>Hello world</Button>
+       <Button>Hi bish</Button>
+     </div>
+   )
+ }
 
   return (
     <div className="main-page">
@@ -110,12 +115,9 @@ function MainPage() {
               </button>
               <ModalFrame
                 onClose={() => setShow(false)}
+                content={SelectGroup({refreshGroupList,activeIndex,setActiveIndex,setShow})}
                 show={show}
-                setGroupName={setGroupName}
-                list={groupInfo}
-                setGroupID={setGroupID}
-                activeIndex={activeIndex}
-                setActiveIndex={setActiveIndex}
+                header="8eios"
               />
             </div>
             <div className='option-buttons'>
@@ -144,16 +146,16 @@ function MainPage() {
               <button className="transaction-button" key={index}>
                 <div className='image'>
                   <div className="image-background">
-                    <i className={transaction.debtorID === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
+                    <i className={transaction.sender._id === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
                   </div>
                 </div>
                 <span className='item-content'>
                   <span className="text-item-content">
-                    {transaction.debtorID === sessionData.userId ? `To ${transaction.ownedName}` : `from ${transaction.debtorName}`}
+                    {transaction.sender._id === sessionData.userId ? `To ${transaction.receiver.nickname}` : `from ${transaction.sender.nickname}`}
                   </span>
                 </span>
                 <span className='amount'>
-                  {Math.round(transaction.amount * 100) / 100} $
+                  {transaction.amount} $
                 </span>
               </button>))}
           </div>
@@ -180,7 +182,7 @@ function MainPage() {
           setShowCreate={setShowCreate}
           utilities={utilities}
           setRefresh={setRefresh}
-        
+
 
 
         />

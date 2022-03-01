@@ -1,37 +1,11 @@
 import React from 'react'
 import "../style/ModalFrame.css"
-import { useState, useEffect } from "react";
-import { Link} from 'react-router-dom';
+// import { useState, useEffect } from "react";
+// import { Link} from 'react-router-dom';
 
 
 
-export default function ModalFrame({ show, onClose, setGroupName, list, setGroupID, activeIndex, setActiveIndex}) {
-
-  
-  const [groupData, setGroupData] = useState([]);
-
-  const handleOnClick = (index, group) => {
-    setActiveIndex(index);
-    setGroupData(group);
-    setGroupID(group._id);
-    onClose();
-  };
-  // No dependecies = Run after every render
-  // Empty [] dependencies = Run only after first render
-
-  useEffect(() => {
-    setGroupName(groupData.title)
-    
-  }, [groupData.title])
-
-  // useEffect(() => {
-  //   setActiveIndex(refreshIndex)
-
-  // }, [refreshIndex])
-
-  // if(!show){
-  //     return null;
-  // }
+export default function ModalFrame({ show, onClose, content,header}) {
 
   //modal is the whole thing (with grey area in the background)
   //so it stops propagating only inside the content
@@ -45,11 +19,10 @@ export default function ModalFrame({ show, onClose, setGroupName, list, setGroup
               <div className="box-widget">
                 <div className="header">
                   <div className="header-content">
-                    <strong>Groups</strong>
+                    <strong>{header}</strong>
                   </div>
                 </div>
                 <div className="divider">
-                  divider
                 </div>
                 <div className="total">
                   <strong>Total</strong>
@@ -57,25 +30,7 @@ export default function ModalFrame({ show, onClose, setGroupName, list, setGroup
                 <div className="groups-content">
                   <div className="content-box">
                     <div className="individual-button-content">
-                      {list.map((group, index) => (
-                        <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
-                          <button area-pressed="true"
-                            key={index}
-                            onClick={() => handleOnClick(index, group)}
-                            className={activeIndex === index ? "modal-button-active" : "group-button"}>
-                            <div className="group-avatar">
-                              <div className="image-background">
-                              </div>
-                            </div>
-                            <span className="group-header ">
-                              <strong>{group.title}</strong>
-                            </span>
-                            <span className="group-total">
-                            <strong>{group.total}</strong>
-                            </span>
-                          </button>
-                        </Link>
-                      ))}
+                      {content}
                     </div>
                   </div>
                 </div>
