@@ -1,5 +1,5 @@
 import './App.css';
-import { Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
+import { MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -24,6 +24,7 @@ function App() {
               <PrivateRoute path="/mygroups" component={MyGroups} />
               <PrivateRoute path="/group/:groupid" component={Group} />
               <PrivateRoute exact path="/test" component={Test}/>
+              <PrivateRoute exact path="/maintest" component={MainTest}/>
               <PrivateRoute exact path="/users" component={Users} />
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute path="/user/:id" component={User} />

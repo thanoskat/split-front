@@ -11,6 +11,8 @@ function NavigationBar2() {
         <NavigationButton to='/users'>Users</NavigationButton>
         <NavigationButton to='/mygroups'>My groups</NavigationButton>
         <NavigationButton to='/profile'>Profile</NavigationButton>
+        <NavigationButton to='/test'>Test</NavigationButton>
+        <NavigationButton to='/maintest'>Main Test</NavigationButton>
       </div>
     </div>
   )
