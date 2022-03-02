@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal,Button,SelectGroup } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, Button, SelectGroup, Container } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -23,7 +23,8 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
   const [refreshExpense, setRefreshExpense] = useState(false);
-  const [transactions, setTransactions] = useState()
+  const [pendingtransactions, setPendingTransactions] = useState();
+  const [transactionHistory, setTransactionHistory] = useState();
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
 
   const api = useAxios()
@@ -42,28 +43,25 @@ function MainPage() {
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
-      // console.log("pathIndex,activeIndex", pathIndex, activeIndex)
-      // console.log("history", history)
-
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        //console.log(await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`))
-        console.log(pulledtransactions.data.pendingTransactions.filter(filterID))
-        setTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        console.log("pending txs", pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPendingTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactionHistory(pulledtransactions.data.transactions)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
         setGroupID(response.data.groups[pathIndex]._id)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-       // console.log(await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`))
-       console.log(pulledtransactions.data.pendingTransactions.filter(filterID))
-        setTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        console.log("pending txs", pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPendingTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactionHistory(pulledtransactions.data.transactions)
+
       }
     } catch (err) {
       console.dir(err);
     }
-
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
 
   const cloner = () => {
@@ -86,14 +84,35 @@ function MainPage() {
     }
   }
 
- const newContent=()=>{
-   return(
-     <div>
-       <Button>Hello world</Button>
-       <Button>Hi bish</Button>
-     </div>
-   )
- }
+  const transactHistory = () => {
+    return (
+      transactionHistory?.map(
+        (transaction, index) => (
+          <button className="transaction-button pending" key={index}>
+            <div className='image'>
+              <div className="image-background">
+                <i className={transaction.receiver === null ? `file alternate outline icon l` : `paper plane outline icon l`}></i>
+              </div>
+            </div>
+
+            <span className="text-item-content">
+              {transaction.receiver !== null ?
+                <span className='item-content'>
+                  <strong>{transaction.sender.nickname}</strong>&nbsp;to&nbsp;<strong>{transaction.receiver.nickname}</strong>
+                </span> :
+                <span className='item-content'>
+                  <strong>{transaction.sender.nickname}</strong>
+                </span>
+              }
+            </span>
+            <span className='amount'>
+              {transaction.amount} $
+            </span>
+          </button>
+        )
+      )
+    )
+  }
 
   return (
     <div className="main-page">
@@ -115,7 +134,7 @@ function MainPage() {
               </button>
               <ModalFrame
                 onClose={() => setShow(false)}
-                content={SelectGroup({refreshGroupList,activeIndex,setActiveIndex,setShow})}
+                content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
                 show={show}
                 header="8eios"
               />
@@ -123,26 +142,30 @@ function MainPage() {
             <div className='option-buttons'>
               <button className='option-button' onClick={() => setShowExp(true)}>
                 <i className='money icon y'></i>
-                Add expense
+                <strong>Add expense</strong>
               </button>
               <button className='option-button' onClick={() => setShowLeaveGroup(true)}>
                 <i className='user times icon y '></i>
-                Leave group
+                <strong> Leave group</strong>
               </button>
 
               <button className='option-button' onClick={() => setShowCreate(true)}>
                 <i className="group icon y"></i>
-                Create New Group
+                <strong>Create New Group</strong>
               </button>
             </div>
           </div>
           <div className='widget-subheader'>
-            <span className="transactions-header">
-              Transactions
-            </span>
+            {pendingtransactions.length?
+              <span className="transactions-header">
+                Pending Transactions
+              </span> : <span>
+                No Pending Transactions
+              </span>}
+
           </div>
           <div className='transaction-block'>
-            {transactions?.map((transaction, index) => (
+            {pendingtransactions?.map((transaction, index) => (
               <button className="transaction-button" key={index}>
                 <div className='image'>
                   <div className="image-background">
@@ -151,7 +174,11 @@ function MainPage() {
                 </div>
                 <span className='item-content'>
                   <span className="text-item-content">
-                    {transaction.sender._id === sessionData.userId ? `To ${transaction.receiver.nickname}` : `from ${transaction.sender.nickname}`}
+                    {transaction.sender._id === sessionData.userId ?
+                      <span>To <strong>{transaction.receiver.nickname}</strong>
+                      </span> :
+                      <span>From <strong>{transaction.receiver.nickname}</strong>
+                      </span>}
                   </span>
                 </span>
                 <span className='amount'>
@@ -167,6 +194,11 @@ function MainPage() {
             setRefreshExpense={setRefreshExpense}
           />
         </div>
+
+        <div className='transaction-history'>
+          <Container className="transaction-history-container">{transactHistory()}</Container>
+        </div>
+
         <LeaveGroupModal
           showLeaveGroup={showLeaveGroup}
           onCloseLeaveGroup={() => setShowLeaveGroup(false)}

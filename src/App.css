@@ -13,11 +13,13 @@ html, body, select {
   min-width: 0px !important; */
 
   --primaryBackgroundColor: #000000;
-  --secondaryBackgroundColor: #101011;
-  --highlightBackgroundColor: #161618;
-  --activeColor: #f4f4f4;
+  /* --secondaryBackgroundColor: #101011; */
+  --secondaryBackgroundColor: #161618;
+  /* --activeColor: #f4f4f4; */
   --inactiveColor: #8f8f91;
-
+  --darkletterColor:#a1a4a8;
+  --lightletterColor:#d3d3d3;
+  --hoverHighlightColor:#3a3b3c;
   color: var(--inactiveColor);
   background-color: var(--primaryBackgroundColor);
 }
