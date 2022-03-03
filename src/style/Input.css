@@ -1,0 +1,138 @@
+.input {
+  display: flex;
+  flex-direction: column;
+
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+
+  width: 100%;
+  transform: translateX(-50%);
+  max-height: 50%;
+
+  animation: inAnimation 50ms linear;
+  z-index: 1;
+  overflow: auto;
+
+  background-color: var(--highlightBackgroundColor);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+@media (orientation: landscape) {
+  .input {
+    max-width: calc(50%);
+  }
+}
+
+@keyframes inAnimation {
+  0% {
+    bottom: -200px;
+  }
+  100% {
+    bottom: 0px;
+  }
+}
+
+/* @keyframes outAnimation {
+  0% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -500px;
+  }
+} */
+
+.input-headline {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+
+  width: 100%;
+  padding: 10px 20px 10px 20px;
+  box-sizing: border-box;
+
+  user-select: none;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--activeColor);
+  background-color: var(--secondaryBackgroundColor);
+}
+
+.input-field {
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 0px 10px 0px 10px;
+  margin: 20px 20px 20px 20px;
+  height: 40px;
+  outline: none;
+  color: white;
+  background-color: var(--highlightBackgroundColor);
+  /* border: none; */
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: var(--inactiveColor)
+}
+
+.input-field::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--inactiveColor);
+  opacity: 1; /* Firefox */
+}
+
+.input-field:focus {
+  /* border-color: lightblue; */
+}
+
+.input-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 2rem;
+
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  /* padding: 0.5rem; */
+  /* border-radius: 8px; */
+  /* transition: 0.2s; */
+  padding: 20px;
+  cursor: pointer;
+  color: var(--activeColor);
+}
+
+.active-input-button {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #3a3b3c;
+  color: #8f8f91;
+}
+
+.input-button:hover {
+  opacity: 1;
+  background-color: #3a3b3c;
+}
+
+.input-button-icon {
+  min-width: var(--sliding-menu-button-size);
+}
+
+.input-button-icon-red {
+  color: #f88070;
+  /* color: #811e1e; */
+}
+
+.input-button-icon-green {
+  /* color: #00ba7c; */
+  color: #3ba55c;
+}
+
+.input-gray-box {
+  background-color: #000000;
+  opacity: 0.7;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  z-index: 0;
+}

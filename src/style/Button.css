@@ -1,14 +1,15 @@
-/* a {
-  color:#8f8f91;
-  text-decoration: none;
-} */
-
-.individual-button-text {
-  /* align-self: end; */
-}
-
 .individual-button-icon {
   min-width: var(--sliding-menu-button-size);
+}
+
+.red-icon {
+  color: #f88070;
+  /* color: #811e1e; */
+}
+
+.green-icon {
+  /* color: #00ba7c; */
+  color: #3ba55c;
 }
 
 .individual-button {

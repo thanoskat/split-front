@@ -1,20 +1,25 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { Container, SlidingMenu, Button } from '.'
+import { Container, Select, Input, Button } from '.'
 import "../style/MainTest.css"
 
 function MainTest() {
 
-  const [showMenu, setShowMenu] = useState(false)
+  const [showSelect, setShowSelect] = useState(false)
+  const [showInput, setShowInput] = useState(false)
   const [option, setOption] = useState(0)
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu)
+  const toggleSelect = () => {
+    setShowSelect(!showSelect)
+  }
+
+  const toggleInput = () => {
+    setShowInput(!showInput)
   }
 
   const setOptionAndClose = (optionIndex) => {
     setOption(optionIndex)
-    setShowMenu(false)
+    setShowSelect(false)
   }
 
   const array = [
@@ -63,19 +68,27 @@ function MainTest() {
   const array2 = [
     {
       text: 'Yes',
-      icon: 'check circle outline'
+      icon: 'check circle outline',
+      iconColor: 'green'
     },
     {
       text: 'No',
-      icon: 'times circle outline'
+      icon: 'times circle outline',
+      iconColor: 'red'
+    },
+    {
+      text: 'What',
+      icon: 'question',
+      // iconColor: 'red'
     }
   ]
 
   return (
     <div className='main-test'>
-      <Button text={option} onClick={toggleMenu}/>
-      <Button text={option} onClick={toggleMenu}/>
-      {showMenu && <SlidingMenu optionsArray={array2} closeFunc={toggleMenu} setOption={setOptionAndClose}/>}
+      <Button text={option} onClick={toggleSelect}/>
+      <Button text={option} onClick={toggleInput}/>
+      {showSelect && <Select optionsArray={array2} closeFunc={toggleSelect} setOption={setOptionAndClose}/>}
+      {showInput && <Input optionsArray={array2} closeFunc={toggleInput} setOption={setOptionAndClose}/>}
     </div>
   );
 }
