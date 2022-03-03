@@ -54,6 +54,54 @@ html, body {
   padding-top: 1rem;
 }
 
+
+.group-selection-button{
+  display: flex;
+}
+
+.option-button.granazi{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  padding: 15px;
+  width: 24px;
+  height: 24px;
+  border-radius: 99999px;
+  
+}
+
+.cog.icon{
+  align-self: center;
+  color:rgb(177, 182, 182);
+  font-size: 18px;
+}
+
+.button-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+  background-color:#263951;;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  transition: background-color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, color 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, opacity 300ms cubic-bezier(0.15, 0.5, 0.5, 1) 0s, box-shadow 200ms cubic-bezier(0.4, 0.3, 0.8, 0.6) 0s;
+
+}
+
+.button-layout:hover{
+  cursor: pointer;
+  background-color: rgb(61, 77, 99);
+  transition: 0.5s;
+}
+
+.angle.down.icon{
+  align-self: center;
+  color:rgb(177, 182, 182);
+  font-size: 18px;
+}
 .option-buttons {
   display: grid;
   -webkit-box-align: center;
@@ -146,20 +194,6 @@ html, body {
 }
 
 
-.button-layout {
-  background-image: none;
-  background-blend-mode: overlay;
-
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
-  /* font: inherit; */
-  background-color: rgba(6, 102, 235, 0.1);
-  width: 24px;
-  height: 24px;
-  border-radius: 9999px;
-}
-
 .widget-subheader {
   display: flex;
   flex-direction: row;
@@ -187,8 +221,6 @@ html, body {
 
   /* transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s; */
 }
-
-
 
 .transaction-button {
   display: flex;
@@ -243,8 +275,6 @@ html, body {
   height: 40px;
   border-radius: 9999px
 }
-
-
 
 .l {
   align-self: center;
@@ -311,11 +341,11 @@ html, body {
   padding-top: 10px;
 }
 
-.transaction-history-container {
+.transaction-history-container,.pending-transactions-container {
   max-width: none;
   margin: 0px;
   margin-top: 25px;
-  padding: 20px 0px 15px 0px;
+  padding: 0px 0px 0px 0px;
 }
 
 .showall{

@@ -23,7 +23,7 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
   const [refreshExpense, setRefreshExpense] = useState(false);
-  const [size,setSize]=useState(5);
+  const [size, setSize] = useState(5);
   const [pendingtransactions, setPendingTransactions] = useState([]);
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
@@ -85,21 +85,21 @@ function MainPage() {
     }
   }
 
-  const showAll=()=>{
+  const showAll = () => {
     console.log(transactionHistory.length)
     setSize(transactionHistory.length)
   }
-  
+
   const transactHistory = () => {
-    
+
     return (
       transactionHistory.slice(0, size)?.map(
         (transaction, index) => (
-          
+
           <button className="transaction-button pending" key={index}>
-            <div className='image'>       
-                <i className={transaction.receiver === null ? `credit card icon l` : `exchange icon l`}></i>
-              </div>
+            <div className='image'>
+              <i className={transaction.receiver === null ? `plus icon l` : `exchange icon l`}></i>
+            </div>
             <span className="text-item-content">
               {transaction.receiver !== null ?
                 <span className='item-content'>
@@ -114,7 +114,7 @@ function MainPage() {
               {transaction.amount} $
             </span>
           </button>
-          
+
         )
       )
     )
@@ -123,10 +123,9 @@ function MainPage() {
   return (
     <div className="main-page">
       <div className='box1'>
-        box1
         <div className='homewidget'>
-          home widget
           <div className='widget-header'>
+
             <div className='group-selection-button'>
               <button type="button" className="selection-button group-name-button " onClick={() => setShow(true)}>
                 <span className="group-title">
@@ -134,9 +133,14 @@ function MainPage() {
                 </span>
                 <span className="button-position">
                   <div className="button-layout">
-                    <i className='sort down icon'>  </i>
+                    <i className='angle down icon'>  </i>
                   </div>
                 </span>
+              </button>
+              <button className='option-button' onClick={() => setShowCreate(true)}>
+                <i className='group icon y'></i></button>
+              <button className='option-button granazi'>
+                <i className='cog icon'></i>
               </button>
               <ModalFrame
                 onClose={() => setShow(false)}
@@ -147,51 +151,15 @@ function MainPage() {
             </div>
             <div className='option-buttons'>
               <button className='option-button' onClick={() => setShowExp(true)}>
-                <i className='money icon y'></i>
+                <i className='add icon y'></i>
                 <strong>Add expense</strong>
               </button>
               <button className='option-button' onClick={() => setShowLeaveGroup(true)}>
-                <i className='user times icon y '></i>
-                <strong> Leave group</strong>
-              </button>
-
-              <button className='option-button' onClick={() => setShowCreate(true)}>
-                <i className="group icon y"></i>
-                <strong>Create New Group</strong>
+                <i className='exchange icon y '></i>
+                <strong> Transact </strong>
               </button>
             </div>
-          </div>
-          <div className='widget-subheader'>
-            {pendingtransactions.length?
-              <span className="transactions-header">
-                Pending Transactions
-              </span> : <span className="transactions-header">
-                No Pending Transactions
-              </span>}
-
-          </div>
-          <div className='transaction-block'>
-            {pendingtransactions?.map((transaction, index) => (
-              <button className="transaction-button" key={index}>
-                <div className='image'>
-                  
-                    <i className={transaction.sender._id === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
-                  
-                </div>
-                <span className='item-content'>
-                  <span className="text-item-content">
-                    {transaction.sender._id === sessionData.userId ?
-                      <span>To <strong>{transaction.receiver.nickname}</strong>
-                      </span> :
-                      <span>From <strong>{transaction.receiver.nickname}</strong>
-                      </span>}
-                  </span>
-                </span>
-                <span className='amount'>
-                  {transaction.amount} $
-                </span>
-              </button>))}
-          </div>
+          </div>  
           <AddExpenseModal
             showExp={showExp}
             onCloseExp={() => setShowExp(false)}
@@ -201,15 +169,50 @@ function MainPage() {
           />
         </div>
 
+        <div className='pending-transactions'>
+            <Container className="pending-transactions-container">
+              <div className='widget-subheader'>
+                {pendingtransactions.length ?
+                  <span className="transactions-header">
+                    Pending Transactions
+                  </span> : <span className="transactions-header">
+                    No Pending Transactions
+                  </span>}
+
+              </div>
+              <div className='transaction-block'>
+                {pendingtransactions?.map((transaction, index) => (
+                  <button className="transaction-button" key={index}>
+                    <div className='image'>
+
+                      <i className={transaction.sender._id === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
+
+                    </div>
+                    <span className='item-content'>
+                      <span className="text-item-content">
+                        {transaction.sender._id === sessionData.userId ?
+                          <span>To <strong>{transaction.receiver.nickname}</strong>
+                          </span> :
+                          <span>From <strong>{transaction.receiver.nickname}</strong>
+                          </span>}
+                      </span>
+                    </span>
+                    <span className='amount'>
+                      {transaction.amount} $
+                    </span>
+                  </button>))}
+              </div>
+            </Container>
+          </div>
         <div className='transaction-history'>
           <Container className="transaction-history-container">
             <div className='transaction-history-header'>
               <span className='transaction-history-header-text'>Transaction History</span>
-              <span className='transaction-history-header-total'>Total</span>
+              <span className='transaction-history-header-total'>Amount</span>
             </div>
             {transactHistory()}
             <div className='showall' onClick={showAll}>show all</div>
-            </Container>
+          </Container>
         </div>
 
         <LeaveGroupModal

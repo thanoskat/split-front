@@ -27,6 +27,7 @@ html, body, select {
   --orange:#ff7300;
   --green:#00ba7c;
   --lightblue:#1da1f3;
+  --lightorange:#f88070;
 
   color: var(--inactiveColor);
   background-color: var(--primaryBackgroundColor);
