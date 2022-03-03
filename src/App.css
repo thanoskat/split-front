@@ -9,6 +9,7 @@
 html, body, select {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
+  --buttonPadd:1rem;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */
 
@@ -20,6 +21,13 @@ html, body, select {
   --darkletterColor:#a1a4a8;
   --lightletterColor:#d3d3d3;
   --hoverHighlightColor:#3a3b3c;
+  --yellow:#ffd400;
+  --pink:#f91880;
+  --purple:#7856ff;
+  --orange:#ff7300;
+  --green:#00ba7c;
+  --lightblue:#1da1f3;
+
   color: var(--inactiveColor);
   background-color: var(--primaryBackgroundColor);
 }

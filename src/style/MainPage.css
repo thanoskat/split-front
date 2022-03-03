@@ -162,12 +162,10 @@ html, body {
 
 .widget-subheader {
   display: flex;
-  flex-flow: column;
-  justify-content: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  align-items: center;
-  color: rgb(91 104 116);
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: var(--buttonPadd);
+  color:var(--lightletterColor);
   /* font-family: "Segoe UI",  "Helvetica Neue", Helvetica, Arial, sans-serif; */
 }
 
@@ -190,6 +188,8 @@ html, body {
   /* transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s; */
 }
 
+
+
 .transaction-button {
   display: flex;
   flex-direction: row;
@@ -204,7 +204,7 @@ html, body {
   background-color: var(--secondaryBackgroundColor);
   border-radius: 10px;
   color: var( --lightletterColor);
-  padding: 1rem;
+  padding: var(--buttonPadd);
   transition: 0.2s;
 }
 
@@ -216,21 +216,20 @@ html, body {
 }
 
 .image {
+  display: flex;
+  justify-content: center;
   margin-bottom: 0.125rem;
-  margin-right: 1rem;
   order: 0;
-  align-self: flex-start;
-
   box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
+  margin: 3px;
   /* font: inherit; */
   width: 2.5rem;
   height: 2.5rem;
+  
 }
 
 
-.main-page .image-background {
+.image-background {
   display: flex;
   justify-content: center;
   background-image: none;
@@ -239,15 +238,19 @@ html, body {
   margin: 0px;
   padding: 0px;
   font: inherit;
-  background-color: rgba(6, 102, 235, 0.1);
+  background-color:var(--pink);
   width: 40px;
   height: 40px;
   border-radius: 9999px
 }
 
+
+
 .l {
   align-self: center;
   justify-self: center;
+  font-size: 25px;
+  color: var(--lightblue);
 }
 
 .group-title {
@@ -257,6 +260,7 @@ html, body {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow-wrap: normal;
+  color:var(--lightletterColor)
 }
 
 .text-item-content {
@@ -311,10 +315,39 @@ html, body {
   max-width: none;
   margin: 0px;
   margin-top: 25px;
-  padding: 20px 0px 0px 0px;
+  padding: 20px 0px 15px 0px;
 }
 
-.pending  {
+.showall{
+  margin-right: 200px;
+  margin-left: 200px;
+  cursor: pointer;
+  color: #2d88ff;
+  margin-top: 15px;
+}
+
+.transaction-button.pending {
+  
+}
+
+.sender{
+  color:var(--orange);
+}
+
+.receiver{
+  color:var(--green);
+}
+
+.transaction-history-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: var(--buttonPadd)
+}
+
+.transaction-history-header-total{
+  flex:1 1;
+  text-align: right;
 
 }
 

@@ -23,8 +23,9 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
   const [refreshExpense, setRefreshExpense] = useState(false);
-  const [pendingtransactions, setPendingTransactions] = useState();
-  const [transactionHistory, setTransactionHistory] = useState();
+  const [size,setSize]=useState(5);
+  const [pendingtransactions, setPendingTransactions] = useState([]);
+  const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
 
   const api = useAxios()
@@ -84,17 +85,21 @@ function MainPage() {
     }
   }
 
+  const showAll=()=>{
+    console.log(transactionHistory.length)
+    setSize(transactionHistory.length)
+  }
+  
   const transactHistory = () => {
+    
     return (
-      transactionHistory?.map(
+      transactionHistory.slice(0, size)?.map(
         (transaction, index) => (
+          
           <button className="transaction-button pending" key={index}>
-            <div className='image'>
-              <div className="image-background">
-                <i className={transaction.receiver === null ? `file alternate outline icon l` : `paper plane outline icon l`}></i>
+            <div className='image'>       
+                <i className={transaction.receiver === null ? `credit card icon l` : `exchange icon l`}></i>
               </div>
-            </div>
-
             <span className="text-item-content">
               {transaction.receiver !== null ?
                 <span className='item-content'>
@@ -109,6 +114,7 @@ function MainPage() {
               {transaction.amount} $
             </span>
           </button>
+          
         )
       )
     )
@@ -159,7 +165,7 @@ function MainPage() {
             {pendingtransactions.length?
               <span className="transactions-header">
                 Pending Transactions
-              </span> : <span>
+              </span> : <span className="transactions-header">
                 No Pending Transactions
               </span>}
 
@@ -168,9 +174,9 @@ function MainPage() {
             {pendingtransactions?.map((transaction, index) => (
               <button className="transaction-button" key={index}>
                 <div className='image'>
-                  <div className="image-background">
+                  
                     <i className={transaction.sender._id === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
-                  </div>
+                  
                 </div>
                 <span className='item-content'>
                   <span className="text-item-content">
@@ -196,7 +202,14 @@ function MainPage() {
         </div>
 
         <div className='transaction-history'>
-          <Container className="transaction-history-container">{transactHistory()}</Container>
+          <Container className="transaction-history-container">
+            <div className='transaction-history-header'>
+              <span className='transaction-history-header-text'>Transaction History</span>
+              <span className='transaction-history-header-total'>Total</span>
+            </div>
+            {transactHistory()}
+            <div className='showall' onClick={showAll}>show all</div>
+            </Container>
         </div>
 
         <LeaveGroupModal
@@ -207,16 +220,12 @@ function MainPage() {
           groupName={groupName}
           setGroupName={setGroupName}
           setGroupInfo={setGroupInfo}
-
         />
         <CreateGroupModal
           showCreate={showCreate}
           setShowCreate={setShowCreate}
           utilities={utilities}
           setRefresh={setRefresh}
-
-
-
         />
       </div>
 
