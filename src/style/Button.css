@@ -1,28 +1,41 @@
-
-a{
+/* a {
   color:#8f8f91;
   text-decoration: none;
+} */
+
+.individual-button-text {
+  /* align-self: end; */
 }
 
-.individual-button{
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: 0.2s;
-    margin: 5px;
-    cursor: pointer;
-    color: #8f8f91;
-  }
+.individual-button-icon {
+  min-width: var(--sliding-menu-button-size);
+}
 
-  .active-individual-button{
-    padding: 0.5rem;
-    border-radius: 8px;
-    background-color: #3a3b3c;
-    margin: 5px;
-    color: #8f8f91;
-  }
+.individual-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 2rem;
 
-  .individual-button:hover{
-    opacity:1;
-    background-color: #3a3b3c;
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  /* padding: 0.5rem; */
+  /* border-radius: 8px; */
+  /* transition: 0.2s; */
+  padding: 20px;
+  cursor: pointer;
+  color: var(--activeColor);
+}
 
-  }
+.active-individual-button {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #3a3b3c;
+  color: #8f8f91;
+}
+
+.individual-button:hover {
+  opacity: 1;
+  background-color: #3a3b3c;
+}

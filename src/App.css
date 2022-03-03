@@ -17,6 +17,7 @@ html, body, select {
   --highlightBackgroundColor: #161618;
   --activeColor: #f4f4f4;
   --inactiveColor: #8f8f91;
+  --sliding-menu-button-size: 1.4rem;
 
   color: var(--inactiveColor);
   background-color: var(--primaryBackgroundColor);
@@ -24,7 +25,7 @@ html, body, select {
 
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   /* min-width: 530px; */
   scrollbar-width: none;
 }

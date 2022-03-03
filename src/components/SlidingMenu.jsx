@@ -7,14 +7,13 @@ function SlidingMenu({ optionsArray, setOption, children, className, closeFunc }
 
   return (
     <div onAnimationEnd={() => console.log("ANIMATION END")}>
-      <div onClick={closeFunc} className='gray-box'/>
-      <Container className={className ? `sliding-menu ${className}` : 'sliding-menu'}>
+      <div onClick={closeFunc} className='sliding-menu-gray-box'/>
+      <div className={'sliding-menu'}>
+        <div className='sliding-menu-headline'>Are you sure??</div>
         {optionsArray.map((option, index) => (
-          <Button key={index} onClick={() => setOption(index)}>
-            {option}
-          </Button>
+          <Button key={index} text={option.text} icon={option.icon} onClick={() => setOption(index)}/>
         ))}
-      </Container>
+      </div>
     </div>
   );
 }
