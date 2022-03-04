@@ -7,6 +7,8 @@ import './semantic-icons.css'
 
 function App() {
 
+  // acomment
+
   return (
     <AuthenticationContextProvider>
       <GlobalStateContextProvider>
