@@ -9,10 +9,12 @@
   width: 100%;
   transform: translateX(-50%);
   max-height: 50%;
+  overflow: auto;
 
   animation: inAnimation 50ms linear;
   z-index: 1;
-  overflow: auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 
   background-color: var(--highlightBackgroundColor);
   border-top-left-radius: 10px;
@@ -43,20 +45,38 @@
   }
 } */
 
-.select-headline {
+.select-headline-section {
   display: flex;
   align-self: center;
   justify-self: center;
-
   width: 100%;
   padding: 10px 20px 10px 20px;
   box-sizing: border-box;
 
-  user-select: none;
-  font-size: 2.4rem;
   font-weight: 600;
   color: var(--activeColor);
   background-color: var(--secondaryBackgroundColor);
+}
+
+.select-headline {
+  /* display: flex;
+  align-self: center;
+  justify-self: center; */
+
+  /* width: 100%; */
+  /* padding: 10px 20px 10px 20px; */
+  /* box-sizing: border-box; */
+
+  /* user-select: none; */
+  font-size: 2.4rem;
+  /* font-weight: 600; */
+  /* color: var(--activeColor); */
+  /* background-color: var(--secondaryBackgroundColor); */
+}
+
+.select-right-headline {
+  font-size: var(--sliding-menu-button-size);
+  margin-left: auto;
 }
 
 .select-gray-box {
@@ -67,6 +87,10 @@
   height: 100%;
   bottom: 0;
   z-index: 0;
+}
+
+.select-button-section {
+  overflow: auto;
 }
 
 .select-button {
@@ -110,4 +134,12 @@
 .select-button-icon-green {
   /* color: #00ba7c; */
   color: #3ba55c;
+}
+
+.select-button-text {
+  overflow: hidden;
+}
+
+.select-button-right-text {
+  margin-left: auto;
 }

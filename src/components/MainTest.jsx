@@ -22,50 +22,65 @@ function MainTest() {
     setShowSelect(false)
   }
 
-  const array = [
+  const submitInputsAndClose = (inputs) => {
+    console.log(inputs)
+    setShowInput(false)
+  }
+
+  const array2 = [
     {
-      text:'Ena',
+      text:'Enaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      rightText: '1000$',
       icon:'exchange'
     },
     {
       text:'Tria',
+      rightText: '1$',
       icon: 'file'
     },
     {
       text:'Tria',
+      rightText: '10$',
       icon:'exchange'
     },
     {
-      text:'TRIA',
+      text:'TRIAAAAAAAAAAAAAAAAAA',
+      rightText: '1000000$',
       icon:'exchange'
     },
     {
       text:'Pente',
+      rightText: '10$',
       icon:'exchange'
     },
     {
       text:'Eksi',
+      rightText: '10$',
       icon:'exchange'
     },
     {
       text:'Efta',
+      rightText: '10$',
       icon:'exchange'
     },
     {
       text:'Oktw',
+      rightText: '10$',
       icon:'exchange'
     },
     {
       text:'Ennia',
+      rightText: '10$',
       icon:'exchange'
     },
     {
       text:'Deka',
+      rightText: '10$',
       icon:'exchange'
     },
   ]
 
-  const array2 = [
+  const array1 = [
     {
       text: 'Yes',
       icon: 'check circle outline',
@@ -83,12 +98,28 @@ function MainTest() {
     }
   ]
 
+  const inputArray = [
+    {
+      label: 'Group name',
+      required: true,
+      maxLength: 20,
+      userInput: ''
+    },
+    {
+      label: 'Description',
+      required: false,
+      maxLength: 120,
+      userInput: ''
+    }
+  ]
+
+
   return (
     <div className='main-test'>
       <Button text={option} onClick={toggleSelect}/>
       <Button text={option} onClick={toggleInput}/>
-      {showSelect && <Select optionsArray={array2} closeFunc={toggleSelect} setOption={setOptionAndClose}/>}
-      {showInput && <Input optionsArray={array2} closeFunc={toggleInput} setOption={setOptionAndClose}/>}
+      {showSelect && <Select headline="Your groups" optionsArray={array2} setOption={setOptionAndClose} close={toggleSelect}/>}
+      {showInput && <Input headline="Create a group" inputArray={inputArray} submit={submitInputsAndClose} close={toggleInput}/>}
     </div>
   );
 }

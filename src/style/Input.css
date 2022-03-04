@@ -14,7 +14,8 @@
   z-index: 1;
   overflow: auto;
 
-  background-color: var(--highlightBackgroundColor);
+  user-select: none;
+  background-color: #1b1b1d;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -52,36 +53,56 @@
   padding: 10px 20px 10px 20px;
   box-sizing: border-box;
 
-  user-select: none;
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--activeColor);
   background-color: var(--secondaryBackgroundColor);
 }
 
-.input-field {
+.inputs-section {
+  overflow: auto;
+}
+
+.single-input-section {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  font-size: 16px;
-  padding: 0px 10px 0px 10px;
   margin: 20px 20px 20px 20px;
+}
+
+.input-field {
+  padding: 2px 12px 0px 12px;
+  font-size: 22px;
   height: 40px;
   outline: none;
   color: white;
-  background-color: var(--highlightBackgroundColor);
-  /* border: none; */
-  border-style: solid;
+  background-color: #121214;
+  border-style: none;
   border-width: 1px;
-  border-radius: 2px;
-  border-color: var(--inactiveColor)
+  /* border-radius: 2px; */
+  /* border-color: #3e4042; */
+  line-height: 1px;
 }
 
-.input-field::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--inactiveColor);
-  opacity: 1; /* Firefox */
+.input-field:hover {
+  border-color: var(--inactiveColor);
 }
 
 .input-field:focus {
-  /* border-color: lightblue; */
+  border-color: var(--activeColor);
+}
+
+.input-field::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #9b9b9b;
+  opacity: 1; /* Firefox */
+}
+
+.input-label-section {
+  display: flex;
+}
+
+.input-right-label {
+  margin-left: auto;
 }
 
 .input-button {
@@ -99,6 +120,7 @@
   padding: 20px;
   cursor: pointer;
   color: var(--activeColor);
+  background-color: var(--secondaryBackgroundColor);
 }
 
 .active-input-button {
