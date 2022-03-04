@@ -1,0 +1,160 @@
+.input {
+  display: flex;
+  flex-direction: column;
+
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+
+  width: 100%;
+  transform: translateX(-50%);
+  max-height: 50%;
+
+  animation: inAnimation 50ms linear;
+  z-index: 1;
+  overflow: auto;
+
+  user-select: none;
+  background-color: #1b1b1d;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+@media (orientation: landscape) {
+  .input {
+    max-width: calc(50%);
+  }
+}
+
+@keyframes inAnimation {
+  0% {
+    bottom: -200px;
+  }
+  100% {
+    bottom: 0px;
+  }
+}
+
+/* @keyframes outAnimation {
+  0% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -500px;
+  }
+} */
+
+.input-headline {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+
+  width: 100%;
+  padding: 10px 20px 10px 20px;
+  box-sizing: border-box;
+
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--activeColor);
+  background-color: var(--secondaryBackgroundColor);
+}
+
+.inputs-section {
+  overflow: auto;
+}
+
+.single-input-section {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 20px 20px 20px 20px;
+}
+
+.input-field {
+  padding: 2px 12px 0px 12px;
+  font-size: 22px;
+  height: 40px;
+  outline: none;
+  color: white;
+  background-color: #121214;
+  border-style: none;
+  border-width: 1px;
+  /* border-radius: 2px; */
+  /* border-color: #3e4042; */
+  line-height: 1px;
+}
+
+.input-field:hover {
+  border-color: var(--inactiveColor);
+}
+
+.input-field:focus {
+  border-color: var(--activeColor);
+}
+
+.input-field::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #9b9b9b;
+  opacity: 1; /* Firefox */
+}
+
+.input-label-section {
+  display: flex;
+}
+
+.input-right-label {
+  margin-left: auto;
+}
+
+.input-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 2rem;
+
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  /* padding: 0.5rem; */
+  /* border-radius: 8px; */
+  /* transition: 0.2s; */
+  padding: 20px;
+  cursor: pointer;
+  color: var(--activeColor);
+  background-color: var(--secondaryBackgroundColor);
+}
+
+.active-input-button {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #3a3b3c;
+  color: #8f8f91;
+}
+
+.input-button:hover {
+  opacity: 1;
+  background-color: #3a3b3c;
+}
+
+.input-button-icon {
+  min-width: var(--sliding-menu-button-size);
+}
+
+.input-button-icon-red {
+  color: #f88070;
+  /* color: #811e1e; */
+}
+
+.input-button-icon-green {
+  /* color: #00ba7c; */
+  color: #3ba55c;
+}
+
+.input-gray-box {
+  background-color: #000000;
+  opacity: 0.7;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  z-index: 0;
+}

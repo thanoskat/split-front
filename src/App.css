@@ -18,6 +18,7 @@ html, body, select {
   --secondaryBackgroundColor: #161618;
   /* --activeColor: #f4f4f4; */
   --inactiveColor: #8f8f91;
+  --sliding-menu-button-size: 1.4rem;
   --darkletterColor:#a1a4a8;
   --lightletterColor:#d3d3d3;
   --hoverHighlightColor:#3a3b3c;
@@ -35,7 +36,7 @@ html, body, select {
 
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   /* min-width: 530px; */
   scrollbar-width: none;
 }
