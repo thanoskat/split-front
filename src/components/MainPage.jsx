@@ -98,7 +98,7 @@ function MainPage() {
 
           <button className="transaction-button pending" key={index}>
             <div className='image'>
-              <i className={transaction.receiver === null ? `plus icon l` : `exchange icon l`}></i>
+              <i className={transaction.receiver === null ? `las la-coins l` : `exchange icon l`}></i>
             </div>
             <span className="text-item-content">
               {transaction.receiver !== null ?
@@ -146,8 +146,8 @@ function MainPage() {
                 onClose={() => setShow(false)}
                 content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
                 show={show}
-                header="8eios"
-              />
+                header="8eios"/>
+               
             </div>
             <div className='option-buttons'>
               <button className='option-button' onClick={() => setShowExp(true)}>

@@ -113,8 +113,6 @@ html, body {
   overflow: auto;
 }
 
-
-
 .option-button {
   display: flex;
   flex-direction: row;
@@ -299,7 +297,6 @@ html, body {
   padding: 10px;
   right: 5px;
   /* font: inherit; */
-
   /* font-family: "Segoe UI",  "Helvetica Neue", Helvetica, Arial, sans-serif; */
   font-weight: 500;
   font-size: 1rem;
@@ -463,7 +460,8 @@ html, body {
 }
 
 
-
-
+.las.la-coins.l{
+  color: var(--yellow);
+}
 
 /*Extra CSS for Modal fix  - anyhting below this line also exists in ModalFrame and can be deleted in order to revert back to original*/
