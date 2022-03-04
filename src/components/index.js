@@ -29,3 +29,5 @@ export { default as Dropdown } from './Dropdown'
 export { default as NewDropdown } from './NewDropdown'
 export { default as MyGroupsCreateGroup } from './MyGroupsCreateGroup'
 export { default as Button } from './Button'
+export { default as SelectGroup } from './SelectGroup'
+

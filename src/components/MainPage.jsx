@@ -1,9 +1,9 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal } from '.'
-import { useState, useEffect, useContext} from "react";
-import { useLocation,useHistory } from "react-router-dom";
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, Button, SelectGroup, Container } from '.'
+import { useState, useEffect, useContext } from "react";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import { GlobalStateContext } from '../contexts/GlobalStateContext'
 
@@ -23,7 +23,9 @@ function MainPage() {
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
   const [refreshExpense, setRefreshExpense] = useState(false);
-  const [transactions, setTransactions] = useState()
+  const [size, setSize] = useState(5);
+  const [pendingtransactions, setPendingTransactions] = useState([]);
+  const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
 
   const api = useAxios()
@@ -42,36 +44,26 @@ function MainPage() {
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
-      if (isNaN(pathIndex)) {
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        setTransactions(pulledtransactions.data)
+      if (isNaN(pathIndex)) {//will get in here when there is no link on top
+        const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
+        console.log("pending txs", pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPendingTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactionHistory(pulledtransactions.data.transactions)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
-      } else {
+      } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
+        setGroupID(response.data.groups[pathIndex]._id)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
-        const pulledtransactions = await api.get(`/expense/getgroupexpenses/${response.data.groups[pathIndex]._id}`)
-        setTransactions(pulledtransactions.data)
+        setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
+        const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
+        console.log("pending txs", pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPendingTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setTransactionHistory(pulledtransactions.data.transactions)
+
       }
     } catch (err) {
       console.dir(err);
     }
-
-  }, [location])
-
-
-  //this useEffect updates the list of groups when a new group is created.
-  useEffect(async () => {
-    try {
-      //This is specific to the Users schema when 
-      //feeding info for groupname and total
-      //although they are sourced from
-      //the group Schema with populate.
-      const response = await api.get('/getusers/profile');
-      setGroupInfo(response.data.groups)
-    } catch (err) {
-      console.dir("group info error", err);
-    }
-
-  }, [refreshGroupList])
+  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
 
   const cloner = () => {
     let clone = []
@@ -87,13 +79,53 @@ function MainPage() {
     tobeRetrievedOption: [],
   }
 
+  const filterID = (value) => {
+    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+      return value;
+    }
+  }
+
+  const showAll = () => {
+    console.log(transactionHistory.length)
+    setSize(transactionHistory.length)
+  }
+
+  const transactHistory = () => {
+
+    return (
+      transactionHistory.slice(0, size)?.map(
+        (transaction, index) => (
+
+          <button className="transaction-button pending" key={index}>
+            <div className='image'>
+              <i className={transaction.receiver === null ? `las la-coins l` : `exchange icon l`}></i>
+            </div>
+            <span className="text-item-content">
+              {transaction.receiver !== null ?
+                <span className='item-content'>
+                  <strong>{transaction.sender.nickname}</strong>&nbsp;to&nbsp;<strong>{transaction.receiver.nickname}</strong>
+                </span> :
+                <span className='item-content'>
+                  <strong>{transaction.sender.nickname}</strong>
+                </span>
+              }
+            </span>
+            <span className='amount'>
+              {transaction.amount} $
+            </span>
+          </button>
+
+        )
+      )
+    )
+  }
+
   return (
     <div className="main-page">
       <div className='box1'>
-        box1
         <div className='homewidget'>
-          home widget
           <div className='widget-header'>
+
             <div className='group-selection-button'>
               <button type="button" className="selection-button group-name-button " onClick={() => setShow(true)}>
                 <span className="group-title">
@@ -101,59 +133,33 @@ function MainPage() {
                 </span>
                 <span className="button-position">
                   <div className="button-layout">
-                    <i className='sort down icon'>  </i>
+                    <i className='angle down icon'>  </i>
                   </div>
                 </span>
+              </button>
+              <button className='option-button' onClick={() => setShowCreate(true)}>
+                <i className='group icon y'></i></button>
+              <button className='option-button granazi'>
+                <i className='cog icon'></i>
               </button>
               <ModalFrame
                 onClose={() => setShow(false)}
+                content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
                 show={show}
-                setGroupName={setGroupName}
-                list={groupInfo}
-                setGroupID={setGroupID}
-                activeIndex={activeIndex}
-                setActiveIndex={setActiveIndex}
-              />
+                header="8eios"/>
+               
             </div>
             <div className='option-buttons'>
               <button className='option-button' onClick={() => setShowExp(true)}>
-                <i className='money icon y'></i>
-                Add expense
+                <i className='add icon y'></i>
+                <strong>Add expense</strong>
               </button>
               <button className='option-button' onClick={() => setShowLeaveGroup(true)}>
-                <i className='user times icon y '></i>
-                Leave group
-              </button>
-
-              <button className='option-button' onClick={() => setShowCreate(true)}>
-                <i className="group icon y"></i>
-                Create New Group
+                <i className='exchange icon y '></i>
+                <strong> Transact </strong>
               </button>
             </div>
-          </div>
-          <div className='widget-subheader'>
-            <span className="transactions-header">
-              Transactions
-            </span>
-          </div>
-          <div className='transaction-block'>
-            {transactions?.map((transaction, index) => (
-              <button className="transaction-button" key={index}>
-                <div className='image'>
-                  <div className="image-background">
-                    <i className={transaction.debtorID === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
-                  </div>
-                </div>
-                <span className='item-content'>
-                  <span className="text-item-content">
-                    {transaction.debtorID === sessionData.userId ? `To ${transaction.ownedName}` : `from ${transaction.debtorName}`}
-                  </span>
-                </span>
-                <span className='amount'>
-                  {Math.round(transaction.amount * 100) / 100} $
-                </span>
-              </button>))}
-          </div>
+          </div>  
           <AddExpenseModal
             showExp={showExp}
             onCloseExp={() => setShowExp(false)}
@@ -162,6 +168,53 @@ function MainPage() {
             setRefreshExpense={setRefreshExpense}
           />
         </div>
+
+        <div className='pending-transactions'>
+            <Container className="pending-transactions-container">
+              <div className='widget-subheader'>
+                {pendingtransactions.length ?
+                  <span className="transactions-header">
+                    Pending Transactions
+                  </span> : <span className="transactions-header">
+                    No Pending Transactions
+                  </span>}
+
+              </div>
+              <div className='transaction-block'>
+                {pendingtransactions?.map((transaction, index) => (
+                  <button className="transaction-button" key={index}>
+                    <div className='image'>
+
+                      <i className={transaction.sender._id === sessionData.userId ? `arrow right icon l` : `arrow left icon l`}></i>
+
+                    </div>
+                    <span className='item-content'>
+                      <span className="text-item-content">
+                        {transaction.sender._id === sessionData.userId ?
+                          <span>To <strong>{transaction.receiver.nickname}</strong>
+                          </span> :
+                          <span>From <strong>{transaction.receiver.nickname}</strong>
+                          </span>}
+                      </span>
+                    </span>
+                    <span className='amount'>
+                      {transaction.amount} $
+                    </span>
+                  </button>))}
+              </div>
+            </Container>
+          </div>
+        <div className='transaction-history'>
+          <Container className="transaction-history-container">
+            <div className='transaction-history-header'>
+              <span className='transaction-history-header-text'>Transaction History</span>
+              <span className='transaction-history-header-total'>Amount</span>
+            </div>
+            {transactHistory()}
+            <div className='showall' onClick={showAll}>show all</div>
+          </Container>
+        </div>
+
         <LeaveGroupModal
           showLeaveGroup={showLeaveGroup}
           onCloseLeaveGroup={() => setShowLeaveGroup(false)}
@@ -170,16 +223,12 @@ function MainPage() {
           groupName={groupName}
           setGroupName={setGroupName}
           setGroupInfo={setGroupInfo}
-
         />
         <CreateGroupModal
           showCreate={showCreate}
           setShowCreate={setShowCreate}
           utilities={utilities}
           setRefresh={setRefresh}
-        
-
-
         />
       </div>
 

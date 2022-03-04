@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { Container, NavigationButton, ListItem } from './'
+import { useState, useEffect , useContext} from 'react'
+import { Container,ListItem } from './'
 import useAxios from '../utility/useAxios'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 const Group = ({ match }) => {
   // const [creator, setCreator] = useState('')
@@ -14,6 +15,7 @@ const Group = ({ match }) => {
   const [inputAmount, setInputAmount] = useState('')
   const [inputDescription, setInputDescription] = useState('')
   const [message, setMessage] = useState('click submit')
+  const { sessionData } = useContext(AuthenticationContext)
   const api = useAxios()
 
   useEffect(() => {
@@ -63,9 +65,16 @@ const Group = ({ match }) => {
   //   setSelectedUserId(value)
   // }
 
+  const filterID = (value) => {
+    if (String(value.sender) === sessionData.userId || String(value.receiver) === sessionData.userId) {
+      return value;
+    }
+  }
+  
   const fetchGroupInfo = async () => {
     try {
       const res = await api.get(`/groups/${match.params.groupid}`)
+      console.log(res.data)
       setGroup(res.data)
       console.log(match.params.groupid)
     }

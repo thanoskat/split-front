@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   justify-content: center;
   flex-direction: column;
-  color: #f4f4f4;
+  color: var(--lightletterColor);
   background-color: #161618;
   border-radius: 5px;
   box-sizing: border-box;
