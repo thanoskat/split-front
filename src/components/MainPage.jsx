@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, Button, SelectGroup, Container } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container,Select } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -28,6 +28,9 @@ function MainPage() {
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
 
+  const [showSelect, setShowSelect] = useState(false)
+  
+
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -44,6 +47,8 @@ function MainPage() {
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
+      setGroupInfo(response.data.groups);
+      console.log(response.data.groups)
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         console.log("pending txs", pulledtransactions.data.pendingTransactions.filter(filterID))
@@ -64,6 +69,19 @@ function MainPage() {
       console.dir(err);
     }
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
+
+  const toggleSelect = () => {
+    setShowSelect(!showSelect)
+  }
+
+  const setOptionAndClose =(index)=>{
+    setActiveIndex(index);
+    setShowSelect(false)
+  }
+
+  const mapOn={
+    text:"title"
+  }
 
   const cloner = () => {
     let clone = []
@@ -119,7 +137,7 @@ function MainPage() {
       )
     )
   }
-
+  
   return (
     <div className="main-page">
       <div className='box1'>
@@ -139,9 +157,10 @@ function MainPage() {
               </button>
               <button className='option-button' onClick={() => setShowCreate(true)}>
                 <i className='group icon y'></i></button>
-              <button className='option-button granazi'>
+              <button className='option-button granazi' onClick={toggleSelect}>
                 <i className='cog icon'></i>
               </button>
+              {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect}/>}
               <ModalFrame
                 onClose={() => setShow(false)}
                 content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
