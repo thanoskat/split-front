@@ -1,12 +1,11 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { Container, Select, Input, Button, SelectBox, SelectButton, FormBox, FormInputField } from '.'
+import { Container, Button, SelectBox, FormBox } from '.'
 import "../style/MainTest.css"
 
 function MainTest() {
 
   const [showSelect, setShowSelect] = useState(false)
-  // const [showInput, setShowInput] = useState(false)
   const [option, setOption] = useState(0)
 
   const [newGroup, setNewGroup] = useState({
@@ -23,10 +22,6 @@ function MainTest() {
   const toggleSelect = () => {
     setShowSelect(!showSelect)
   }
-
-  // const toggleInput = () => {
-  //   setShowInput(!showInput)
-  // }
 
   const setOptionAndClose = (optionIndex) => {
     console.log(optionIndex)
@@ -69,20 +64,20 @@ function MainTest() {
       {showSelect &&
         <SelectBox headline="Your groups" close={toggleSelect}>
           {array1.map((item) => (
-            <SelectButton key={item.text} text={item.text} icon={item.icon} iconColor={item.iconColor} onClick={() => setOptionAndClose(item.text)}/>
+            <SelectBox.Button key={item.text} text={item.text} icon={item.icon} iconColor={item.iconColor} onClick={() => setOptionAndClose(item.text)}/>
           ))}
         </SelectBox>
       }
       {newGroup.show &&
         <FormBox headline="Create a group" submit={createNewGroup} close={e => changeNewGroup('show', false)}>
-          <FormInputField
+          <FormBox.InputField
             value={newGroup.name}
             label="Group name"
             maxLength={20}
             required={true}
             onChange={e => changeNewGroup('name', e.target.value)}
           />
-          <FormInputField
+          <FormBox.InputField
             value={newGroup.description}
             label="Description"
             maxLength={100}

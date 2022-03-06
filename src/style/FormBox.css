@@ -1,4 +1,4 @@
-.input {
+.form-box {
   display: flex;
   flex-direction: column;
 
@@ -10,7 +10,7 @@
   transform: translateX(-50%);
   max-height: 50%;
 
-  animation: inAnimation 50ms linear;
+  animation: inAnimationFormBox 50ms linear;
   z-index: 1;
   overflow: auto;
 
@@ -21,12 +21,12 @@
 }
 
 @media (orientation: landscape) {
-  .input {
+  .form-box {
     max-width: calc(50%);
   }
 }
 
-@keyframes inAnimation {
+@keyframes inAnimationFormBox {
   0% {
     bottom: -200px;
   }
@@ -44,7 +44,7 @@
   }
 } */
 
-.input-headline {
+.form-box-headline {
   display: flex;
   align-self: center;
   justify-self: center;

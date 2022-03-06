@@ -1,4 +1,4 @@
-.select {
+.select-box {
   display: flex;
   flex-direction: column;
 
@@ -11,7 +11,7 @@
   max-height: 50%;
   overflow: auto;
 
-  animation: inAnimation 50ms linear;
+  animation: inAnimationSelectBox 50ms linear;
   z-index: 1;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -22,12 +22,12 @@
 }
 
 @media (orientation: landscape) {
-  .select {
+  .select-box {
     max-width: calc(50%);
   }
 }
 
-@keyframes inAnimation {
+@keyframes inAnimationSelectBox {
   0% {
     bottom: -200px;
   }
@@ -59,19 +59,7 @@
 }
 
 .select-headline {
-  /* display: flex;
-  align-self: center;
-  justify-self: center; */
-
-  /* width: 100%; */
-  /* padding: 10px 20px 10px 20px; */
-  /* box-sizing: border-box; */
-
-  /* user-select: none; */
   font-size: 2.4rem;
-  /* font-weight: 600; */
-  /* color: var(--activeColor); */
-  /* background-color: var(--secondaryBackgroundColor); */
 }
 
 .select-right-headline {
