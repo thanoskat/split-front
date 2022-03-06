@@ -4,10 +4,18 @@ import "../style/FormBox.css"
 
 function FormBox({ headline, submit, close, children }) {
 
+  const [isAnimationOut, setIsAnimationOut] = useState(false)
+
+  const checkIfOutAndClose = (e) => {
+    if(e.animationName == 'outAnimationFormBox'){
+      close()
+    }
+  }
+
   return (
-    <div onAnimationEnd={() => console.log("ANIMATION END")}>
-      <div onClick={close} className='form-box-gray-box'/>
-      <div className={'form-box'}>
+    <div onAnimationEnd={checkIfOutAndClose}>
+      <div onClick={() => setIsAnimationOut(true)} className='form-box-gray-box'/>
+      <div className={'form-box'} style={{animation: `${isAnimationOut ? 'out' : 'in'}AnimationFormBox 100ms linear`}}>
         {headline && <div className='form-box-headline'>{headline}</div>}
         <div className='inputs-section'>
           {children}

@@ -10,7 +10,7 @@
   transform: translateX(-50%);
   max-height: 50%;
 
-  animation: inAnimationFormBox 50ms linear;
+  /* animation: inAnimationFormBox 50ms linear; */
   z-index: 1;
   overflow: auto;
 
@@ -27,11 +27,24 @@
 }
 
 @keyframes inAnimationFormBox {
-  0% {
-    bottom: -200px;
+  from {
+    bottom: -300px;
+    opacity: 0;
   }
-  100% {
-    bottom: 0px;
+  to {
+    bottom: -0px;
+    opacity: 1;
+  }
+}
+
+@keyframes outAnimationFormBox {
+  from {
+    bottom: -0px;
+    opacity: 1;
+  }
+  to {
+    bottom: -300px;
+    opacity: 0;
   }
 }
 
