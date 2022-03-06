@@ -4,12 +4,23 @@ import "../style/Input.css"
 
 function FormInputField({ value, label, maxLength, required, onChange }) {
 
+  const checkLengthAndChange = (e) => {
+    if(maxLength) {
+      if(e.target.value.length <= maxLength) {
+        return onChange(e)
+      }
+    }
+    else {
+      return onChange(e)
+    }
+  }
+
   return (
     <div className='single-input-section'>
       <input
         className='input-field'
         value={value}
-        onChange={onChange}
+        onChange={checkLengthAndChange}
         spellCheck="false"
       />
       <div className='input-label-section'>

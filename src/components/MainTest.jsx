@@ -34,7 +34,7 @@ function MainTest() {
     setShowSelect(false)
   }
 
-  const submitNewGroup = () => {
+  const createNewGroup = () => {
     console.log("New group created")
     console.log(newGroup)
     setNewGroup({
@@ -66,7 +66,6 @@ function MainTest() {
     <div className='main-test'>
       <Button text={option} onClick={toggleSelect}/>
       <Button text={option} onClick={e => changeNewGroup('show', !newGroup.show)}/>
-      {/* {showSelect && <Select headline="Your groups" optionsArray={array2} setOption={setOptionAndClose} close={toggleSelect}/>} */}
       {showSelect &&
         <SelectBox headline="Your groups" close={toggleSelect}>
           {array1.map((item) => (
@@ -74,22 +73,21 @@ function MainTest() {
           ))}
         </SelectBox>
       }
-      {/* {showInput && <Input headline="Create a group" inputArray={inputArray} submit={submitNewGroup} close={toggleInput}/>} */}
       {newGroup.show &&
-        <FormBox headline="Create a group" submit={submitNewGroup} close={e => changeNewGroup('show', false)}>
+        <FormBox headline="Create a group" submit={createNewGroup} close={e => changeNewGroup('show', false)}>
           <FormInputField
             value={newGroup.name}
             label="Group name"
             maxLength={20}
             required={true}
-            onChange={e => ((e.target.value.length <= 20) ? changeNewGroup('name', e.target.value) : {})}
+            onChange={e => changeNewGroup('name', e.target.value)}
           />
           <FormInputField
             value={newGroup.description}
             label="Description"
             maxLength={100}
             required={false}
-            onChange={e => ((e.target.value.length <= 100) ? changeNewGroup('description', e.target.value) : {})}
+            onChange={e => changeNewGroup('description', e.target.value)}
           />
         </FormBox>
       }
