@@ -1,5 +1,5 @@
 import { useState, useEffect , useContext} from 'react'
-import { Container,ListItem } from './'
+import { Container, ListItem } from './'
 import useAxios from '../utility/useAxios'
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
@@ -70,7 +70,7 @@ const Group = ({ match }) => {
       return value;
     }
   }
-  
+
   const fetchGroupInfo = async () => {
     try {
       const res = await api.get(`/groups/${match.params.groupid}`)

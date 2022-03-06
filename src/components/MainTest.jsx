@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { Container, Button, SelectBox, FormBox } from '.'
+import { Container, Button, SelectBox, Form } from '.'
 import "../style/MainTest.css"
 
 function MainTest() {
@@ -69,22 +69,22 @@ function MainTest() {
         </SelectBox>
       }
       {newGroup.show &&
-        <FormBox headline="Create a group" submit={createNewGroup} close={e => changeNewGroup('show', false)}>
-          <FormBox.InputField
+        <Form headline="Create a group" submit={createNewGroup} close={e => changeNewGroup('show', false)}>
+          <Form.InputField
             value={newGroup.name}
             label="Group name"
             maxLength={20}
             required={true}
             onChange={e => changeNewGroup('name', e.target.value)}
           />
-          <FormBox.InputField
+          <Form.InputField
             value={newGroup.description}
             label="Description"
             maxLength={100}
             required={false}
             onChange={e => changeNewGroup('description', e.target.value)}
           />
-        </FormBox>
+        </Form>
       }
     </div>
   );

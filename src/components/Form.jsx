@@ -1,28 +1,16 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { SlidingBox } from './'
 import "../style/FormBox.css"
 
-function FormBox({ headline, submit, close, children }) {
-
-  const [isAnimationOut, setIsAnimationOut] = useState(false)
-
-  const checkIfOutAndClose = (e) => {
-    if(e.animationName == 'outAnimationFormBox'){
-      close()
-    }
-  }
+function Form({ headline, submit, close, children }) {
 
   return (
-    <div onAnimationEnd={checkIfOutAndClose}>
-      <div onClick={() => setIsAnimationOut(true)} className='form-box-gray-box'/>
-      <div className={'form-box'} style={{animation: `${isAnimationOut ? 'out' : 'in'}AnimationFormBox 100ms linear`}}>
-        {headline && <div className='form-box-headline'>{headline}</div>}
-        <div className='inputs-section'>
-          {children}
-        </div>
-        <div className='input-button' onClick={submit}>OK</div>
+    <SlidingBox close={close}>
+      {headline && <div className='form-headline'>{headline}</div>}
+      <div className='input-field-section'>
+        {children}
       </div>
-    </div>
+      <div className='submit-button' onClick={submit}>OK</div>
+    </SlidingBox>
   );
 }
 
@@ -62,5 +50,5 @@ function InputField({ value, label, maxLength, required, onChange }) {
   )
 }
 
-FormBox.InputField = InputField;
-export default FormBox;
+Form.InputField = InputField;
+export default Form;

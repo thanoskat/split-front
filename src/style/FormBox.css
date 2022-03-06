@@ -1,63 +1,4 @@
-.form-box {
-  display: flex;
-  flex-direction: column;
-
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-
-  width: 100%;
-  transform: translateX(-50%);
-  max-height: 50%;
-
-  /* animation: inAnimationFormBox 50ms linear; */
-  z-index: 1;
-  overflow: auto;
-
-  user-select: none;
-  background-color: #1b1b1d;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-@media (orientation: landscape) {
-  .form-box {
-    max-width: calc(50%);
-  }
-}
-
-@keyframes inAnimationFormBox {
-  from {
-    bottom: -300px;
-    opacity: 0;
-  }
-  to {
-    bottom: -0px;
-    opacity: 1;
-  }
-}
-
-@keyframes outAnimationFormBox {
-  from {
-    bottom: -0px;
-    opacity: 1;
-  }
-  to {
-    bottom: -300px;
-    opacity: 0;
-  }
-}
-
-/* @keyframes outAnimation {
-  0% {
-    bottom: 0px;
-  }
-  100% {
-    bottom: -500px;
-  }
-} */
-
-.form-box-headline {
+.form-headline {
   display: flex;
   align-self: center;
   justify-self: center;
@@ -72,7 +13,7 @@
   background-color: var(--secondaryBackgroundColor);
 }
 
-.inputs-section {
+.input-field-section {
   overflow: auto;
 }
 
@@ -118,7 +59,7 @@
   margin-left: auto;
 }
 
-.input-button {
+.submit-button {
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -127,47 +68,17 @@
 
   font-size: var(--sliding-menu-button-size);
   user-select: none;
-  /* padding: 0.5rem; */
-  /* border-radius: 8px; */
-  /* transition: 0.2s; */
   padding: 20px;
   cursor: pointer;
   color: var(--activeColor);
   background-color: var(--secondaryBackgroundColor);
 }
 
-.active-input-button {
-  padding: 0.5rem;
-  border-radius: 8px;
-  background-color: #3a3b3c;
-  color: #8f8f91;
-}
-
-.input-button:hover {
+.submit-button:hover {
   opacity: 1;
   background-color: #3a3b3c;
 }
 
-.input-button-icon {
+.submit-button-icon {
   min-width: var(--sliding-menu-button-size);
-}
-
-.input-button-icon-red {
-  color: #f88070;
-  /* color: #811e1e; */
-}
-
-.input-button-icon-green {
-  /* color: #00ba7c; */
-  color: #3ba55c;
-}
-
-.form-box-gray-box {
-  background-color: #000000;
-  opacity: 0.7;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  bottom: 0;
-  z-index: 0;
 }
