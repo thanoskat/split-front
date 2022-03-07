@@ -68,7 +68,7 @@ html, body {
   width: 24px;
   height: 24px;
   border-radius: 99999px;
-  
+
 }
 
 .cog.icon{
@@ -255,7 +255,7 @@ html, body {
   /* font: inherit; */
   width: 2.5rem;
   height: 2.5rem;
-  
+
 }
 
 
@@ -351,10 +351,6 @@ html, body {
   cursor: pointer;
   color: #2d88ff;
   margin-top: 15px;
-}
-
-.transaction-button.pending {
-  
 }
 
 .sender{

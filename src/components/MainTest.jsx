@@ -6,10 +6,15 @@ import "../style/MainTest.css"
 function MainTest() {
 
   const [showSelect, setShowSelect] = useState(false)
+  const [showNewGroupForm, setShowNewGroupForm] = useState(false)
   const [option, setOption] = useState(0)
 
+  const [createdGroup, setCreatedGroup] = useState({
+    name: '',
+    description: '',
+  })
+
   const [newGroup, setNewGroup] = useState({
-    show: false,
     name: '',
     description: '',
   })
@@ -19,9 +24,6 @@ function MainTest() {
     setNewGroup({...newGroup})
   }
 
-  const toggleSelect = () => {
-    setShowSelect(!showSelect)
-  }
 
   const setOptionAndClose = (optionIndex) => {
     console.log(optionIndex)
@@ -32,8 +34,8 @@ function MainTest() {
   const createNewGroup = () => {
     console.log("New group created")
     console.log(newGroup)
+    setCreatedGroup({...newGroup})
     setNewGroup({
-      show: false,
       name: '',
       description: '',
     })
@@ -59,17 +61,22 @@ function MainTest() {
 
   return (
     <div className='main-test'>
-      <Button text={option} onClick={toggleSelect}/>
-      <Button text={option} onClick={e => changeNewGroup('show', !newGroup.show)}/>
+      <Button text={option} onClick={() => setShowSelect(true)}/>
+      <Button text={option} onClick={() => setShowNewGroupForm(true)}/>
       {showSelect &&
-        <SelectBox headline="Your groups" close={toggleSelect}>
+        <SelectBox headline="Your groups" close={() => setShowSelect(false)}>
           {array1.map((item) => (
-            <SelectBox.Button key={item.text} text={item.text} icon={item.icon} iconColor={item.iconColor} onClick={() => setOptionAndClose(item.text)}/>
+            <SelectBox.Button
+              key={item.text}
+              text={item.text}
+              icon={item.icon}
+              iconColor={item.iconColor}
+              onClick={() => setOption(item.text)}/>
           ))}
         </SelectBox>
       }
-      {newGroup.show &&
-        <Form headline="Create a group" submit={createNewGroup} close={e => changeNewGroup('show', false)}>
+      {showNewGroupForm &&
+        <Form headline="Create a group" submit={createNewGroup} close={() => setShowNewGroupForm(false)}>
           <Form.InputField
             value={newGroup.name}
             label="Group name"
@@ -86,6 +93,8 @@ function MainTest() {
           />
         </Form>
       }
+    <div>Created group name: {createdGroup.name}</div>
+    <div>Created group description: {createdGroup.description}</div>
     </div>
   );
 }

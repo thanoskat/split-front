@@ -3,6 +3,7 @@ import { MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, U
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { SlidingBoxContextProvider } from './contexts/SlidingBoxContext'
 import './semantic-icons.css'
 
 function App() {
@@ -26,7 +27,9 @@ function App() {
               <PrivateRoute path="/mygroups" component={MyGroups} />
               <PrivateRoute path="/group/:groupid" component={Group} />
               <PrivateRoute exact path="/test" component={Test}/>
-              <Route exact path="/maintest" component={MainTest}/>
+              <SlidingBoxContextProvider>
+                <Route exact path="/maintest" component={MainTest}/>
+              </SlidingBoxContextProvider>
               <PrivateRoute exact path="/users" component={Users} />
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute path="/user/:id" component={User} />

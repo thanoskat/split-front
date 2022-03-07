@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import { SlidingBox } from './'
+import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import "../style/SelectBox.css"
 
 function SelectBox({ headline, rightHeadline, close, children }) {
@@ -16,8 +18,16 @@ function SelectBox({ headline, rightHeadline, close, children }) {
 }
 
 function Button({ text, icon, iconColor, rightText, onClick }) {
+
+  const { closeBox } = useContext(SlidingBoxContext)
+
+  const clickAndClose = () => {
+    closeBox()
+    onClick()
+  }
+
   return (
-    <div className="select-button" onClick={onClick}>
+    <div className="select-button" onClick={clickAndClose}>
       {icon && <i className={`select-button-icon icon ${icon} select-button-icon-${iconColor}`}></i>}
       <div className='select-button-text'>{text}</div>
       {rightText && <div className='select-button-right-text'>{rightText}</div>}

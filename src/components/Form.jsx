@@ -1,7 +1,16 @@
 import { SlidingBox } from './'
+import { useContext } from 'react'
+import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import "../style/FormBox.css"
 
 function Form({ headline, submit, close, children }) {
+
+  const { closeBox } = useContext(SlidingBoxContext)
+
+  const submitAndClose = () => {
+    submit()
+    closeBox()
+  }
 
   return (
     <SlidingBox close={close}>
@@ -9,7 +18,7 @@ function Form({ headline, submit, close, children }) {
       <div className='input-field-section'>
         {children}
       </div>
-      <div className='submit-button' onClick={submit}>OK</div>
+      <div className='submit-button' onClick={submitAndClose}>OK</div>
     </SlidingBox>
   );
 }
