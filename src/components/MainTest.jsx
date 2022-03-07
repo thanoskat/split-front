@@ -32,8 +32,6 @@ function MainTest() {
   }
 
   const createNewGroup = () => {
-    console.log("New group created")
-    console.log(newGroup)
     setCreatedGroup({...newGroup})
     setNewGroup({
       name: '',
