@@ -1,7 +1,7 @@
 import { SlidingBox } from './'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
-import "../style/FormBox.css"
+import "../style/Form.css"
 
 function Form({ headline, submit, close, children }) {
 
@@ -23,7 +23,9 @@ function Form({ headline, submit, close, children }) {
   );
 }
 
-function InputField({ value, label, maxLength, required, onChange }) {
+function InputField({ value, label, maxLength, required, onChange, clear }) {
+
+  const inputFieldRef = useRef(null)
 
   const checkLengthAndChange = (e) => {
     if(maxLength) {
@@ -36,14 +38,21 @@ function InputField({ value, label, maxLength, required, onChange }) {
     }
   }
 
+  const clearAndFocus = () => {
+    clear()
+    inputFieldRef.current.focus()
+  }
+
   return (
     <div className='single-input-section'>
       <input
         className='input-field'
         value={value}
         onChange={checkLengthAndChange}
-        spellCheck="false"
+        spellCheck='false'
+        ref={inputFieldRef}
       />
+      {value && <i className='input-clear-icon times icon' onClick={clearAndFocus}/>}
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&

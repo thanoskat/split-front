@@ -42,17 +42,17 @@ function MainTest() {
   const array1 = [
     {
       text: 'Yes',
-      icon: 'check circle outline',
+      icon: 'check outline circle ',
       iconColor: 'green'
     },
     {
       text: 'No',
-      icon: 'times circle outline',
+      icon: 'times outline circle',
       iconColor: 'red'
     },
     {
       text: 'What',
-      icon: 'question',
+      icon: 'question outline circle',
       // iconColor: 'red'
     }
   ]
@@ -81,6 +81,7 @@ function MainTest() {
             maxLength={20}
             required={true}
             onChange={e => changeNewGroup('name', e.target.value)}
+            clear={e => changeNewGroup('name', '')}
           />
           <Form.InputField
             value={newGroup.description}
@@ -88,6 +89,7 @@ function MainTest() {
             maxLength={100}
             required={false}
             onChange={e => changeNewGroup('description', e.target.value)}
+            clear={e => changeNewGroup('description', '')}
           />
         </Form>
       }
