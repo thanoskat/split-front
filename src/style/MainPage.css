@@ -387,9 +387,8 @@ html, body {
   margin-top: 15px;
 }
 
-
-.sender {
-  color: var(--orange);
+.sender{
+  color:var(--orange);
 }
 
 .receiver {

@@ -1,151 +1,101 @@
 import axios from 'axios'
-import { useState, useEffect, useRef } from 'react'
-import { Container, Select, Input, Button } from '.'
+import { useState, useEffect } from 'react'
+import { Container, Button, SelectBox, Form } from '.'
 import "../style/MainTest.css"
 
 function MainTest() {
 
   const [showSelect, setShowSelect] = useState(false)
-  const [showInput, setShowInput] = useState(false)
+  const [showNewGroupForm, setShowNewGroupForm] = useState(false)
   const [option, setOption] = useState(0)
   const [isRight, setIsRight] = useState(true)
 
-  const toggleSelect = () => {
-    setShowSelect(!showSelect)
+  const [createdGroup, setCreatedGroup] = useState({
+    name: '',
+    description: '',
+  })
+
+  const [newGroup, setNewGroup] = useState({
+    name: '',
+    description: '',
+  })
+
+  const changeNewGroup = (prop, value) => {
+    newGroup[prop] = value
+    setNewGroup({...newGroup})
   }
 
-  const toggleInput = () => {
-    setShowInput(!showInput)
-  }
 
   const setOptionAndClose = (optionIndex) => {
+    console.log(optionIndex)
     setOption(optionIndex)
     setShowSelect(false)
   }
 
-  const submitInputsAndClose = (inputs) => {
-    console.log(inputs)
-    setShowInput(false)
+  const createNewGroup = () => {
+    setCreatedGroup({...newGroup})
+    setNewGroup({
+      name: '',
+      description: '',
+    })
   }
-
-  const array2 = [
-    {
-      text: 'Enaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      rightText: '1000$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Tria',
-      rightText: '1$',
-      icon: 'file'
-    },
-    {
-      text: 'Tria',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'TRIAAAAAAAAAAAAAAAAAA',
-      rightText: '1000000$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Pente',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Eksi',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Efta',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Oktw',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Ennia',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-    {
-      text: 'Deka',
-      rightText: '10$',
-      icon: 'exchange'
-    },
-  ]
 
   const array1 = [
     {
       text: 'Yes',
-      icon: 'check circle outline',
+      icon: 'check outline circle ',
       iconColor: 'green'
     },
     {
       text: 'No',
-      icon: 'times circle outline',
+      icon: 'times outline circle',
       iconColor: 'red'
     },
     {
       text: 'What',
-      icon: 'question',
+      icon: 'question outline circle',
       // iconColor: 'red'
     }
   ]
 
-  const inputArray = [
-    {
-      label: 'Group name',
-      required: true,
-      maxLength: 20,
-      userInput: ''
-    },
-    {
-      label: 'Description',
-      required: false,
-      maxLength: 120,
-      userInput: ''
-    }
-  ]
-
-  const mapOn = {
-    icon: "icon",
-    rightText: "rightText",
-    iconColor: "iconColor",
-    text: "text"
-  }
-
-
-
-  function leftClick() {
-    setIsRight(false)
-  }
-
-  function rightClick() {
-    setIsRight(true)
-  }
-
-
-  //https://github.com/trananhtuat/switch-button-html-css-js
   return (
     <div className='main-test'>
-      <Button text={option} onClick={toggleSelect} />
-      <Button text={option} onClick={toggleInput} />
-      {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={array2} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />}
-      {showInput && <Input headline="Create a group" inputArray={inputArray} submit={submitInputsAndClose} close={toggleInput} />}
-
-      <div className="form-box">
-        <div className="button-box">
-          <div className="btn" style = {isRight ? {transform:"translateX(100%)"}:{}}></div>
-        <button type="button" className="toggle-btn" onClick={leftClick}>left</button>
-        <button type="button" className="toggle-btn" onClick={rightClick}>Right</button>
-      </div>
+      <Button text={option} onClick={() => setShowSelect(true)}/>
+      <Button text={option} onClick={() => setShowNewGroupForm(true)}/>
+      {showSelect &&
+        <SelectBox headline="Your groups" close={() => setShowSelect(false)}>
+          {array1.map((item) => (
+            <SelectBox.Button
+              key={item.text}
+              text={item.text}
+              icon={item.icon}
+              iconColor={item.iconColor}
+              onClick={() => setOption(item.text)}/>
+          ))}
+        </SelectBox>
+      }
+      {showNewGroupForm &&
+        <Form headline="Create a group" submit={createNewGroup} close={() => setShowNewGroupForm(false)}>
+          <Form.InputField
+            value={newGroup.name}
+            label="Group name"
+            maxLength={20}
+            required={true}
+            onChange={e => changeNewGroup('name', e.target.value)}
+            clear={e => changeNewGroup('name', '')}
+          />
+          <Form.InputField
+            value={newGroup.description}
+            label="Description"
+            maxLength={100}
+            required={false}
+            onChange={e => changeNewGroup('description', e.target.value)}
+            clear={e => changeNewGroup('description', '')}
+          />
+        </Form>
+      }
+    <div>Created group name: {createdGroup.name}</div>
+    <div>Created group description: {createdGroup.description}</div>
     </div>
     </div >
   );

@@ -1,7 +1,7 @@
 
 .dropdown {
   position: relative;
-  color: #8f8f9;
+  color: #8f8f99;
   cursor: default;
 }
 
@@ -45,7 +45,7 @@
 }
 
 .dropdown.Add-Friend-Section .floating-label {
-  
+
 	position: absolute;
 	pointer-events: none;
 	top: 1rem;
@@ -84,7 +84,7 @@
 
 .nickname-box.nickname-exit-button{
   order:1;
-  
+
 }
 .nickname-box.nickname-name{
   order:0
