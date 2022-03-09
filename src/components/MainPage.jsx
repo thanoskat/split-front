@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container, Select } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -277,7 +277,7 @@ return (
           <button className='option-button granazi' onClick={toggleSelect}>
             <i className='cog icon'></i>
           </button>
-          {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />}
+          {/* {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />} */}
           <ModalFrame
             onClose={() => setShow(false)}
             content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}

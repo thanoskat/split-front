@@ -97,7 +97,6 @@ function MainTest() {
     <div>Created group name: {createdGroup.name}</div>
     <div>Created group description: {createdGroup.description}</div>
     </div>
-    </div >
   );
 }
 
