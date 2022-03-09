@@ -17,10 +17,9 @@ function Input({ headline, inputArray, submit, close }) {
   return (
     <div onAnimationEnd={() => console.log("ANIMATION END")}>
       <div onClick={close} className='input-gray-box'/>
-      <div className={'input'}>
+      <div className='input'>
         {headline && <div className='input-headline'>{headline}</div>}
         <div className='inputs-section'>
-
           {inputs.map((input, index) => (
             <div key={index} className='single-input-section'>
               <input className='input-field' value={input.userInput} onChange={e => changeUserInput(index, e.target.value)} spellCheck="false"/>

@@ -55,11 +55,11 @@ html, body {
 }
 
 
-.group-selection-button{
+.group-selection-button {
   display: flex;
 }
 
-.option-button.granazi{
+.option-button.granazi {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,12 +68,12 @@ html, body {
   width: 24px;
   height: 24px;
   border-radius: 99999px;
-  
+
 }
 
-.cog.icon{
+.cog.icon {
   align-self: center;
-  color:rgb(177, 182, 182);
+  color: rgb(177, 182, 182);
   font-size: 18px;
 }
 
@@ -83,7 +83,7 @@ html, body {
   justify-content: center;
   margin: 0px;
   padding: 0px;
-  background-color:#263951;;
+  background-color: #263951;
   width: 24px;
   height: 24px;
   border-radius: 9999px;
@@ -91,17 +91,18 @@ html, body {
 
 }
 
-.button-layout:hover{
+.button-layout:hover {
   cursor: pointer;
   background-color: rgb(61, 77, 99);
   transition: 0.5s;
 }
 
-.angle.down.icon{
+.angle.down.icon {
   align-self: center;
-  color:rgb(177, 182, 182);
+  color: rgb(177, 182, 182);
   font-size: 18px;
 }
+
 .option-buttons {
   display: grid;
   -webkit-box-align: center;
@@ -139,8 +140,6 @@ html, body {
   transition: 0.5s;
 
 }
-
-
 
 .y {
   align-self: center;
@@ -197,7 +196,7 @@ html, body {
   flex-direction: row;
   justify-content: flex-start;
   padding: var(--buttonPadd);
-  color:var(--lightletterColor);
+  color: var(--lightletterColor);
   /* font-family: "Segoe UI",  "Helvetica Neue", Helvetica, Arial, sans-serif; */
 }
 
@@ -233,7 +232,7 @@ html, body {
   justify-content: flex-start;
   background-color: var(--secondaryBackgroundColor);
   border-radius: 10px;
-  color: var( --lightletterColor);
+  color: var(--lightletterColor);
   padding: var(--buttonPadd);
   transition: 0.2s;
 }
@@ -255,7 +254,7 @@ html, body {
   /* font: inherit; */
   width: 2.5rem;
   height: 2.5rem;
-  
+
 }
 
 
@@ -268,13 +267,13 @@ html, body {
   margin: 0px;
   padding: 0px;
   font: inherit;
-  background-color:var(--pink);
+  background-color: var(--pink);
   width: 40px;
   height: 40px;
   border-radius: 9999px
 }
 
-.l {
+.el {
   align-self: center;
   justify-self: center;
   font-size: 25px;
@@ -288,7 +287,7 @@ html, body {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow-wrap: normal;
-  color:var(--lightletterColor)
+  color: var(--lightletterColor)
 }
 
 .text-item-content {
@@ -338,14 +337,49 @@ html, body {
   padding-top: 10px;
 }
 
-.transaction-history-container,.pending-transactions-container {
+.all-personal-options,.history-friends-options {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row-reverse;
+  column-gap: 0.5rem;
+  margin-top: 20px;
+}
+
+.all-active,.history-active,.members-active,.personal-active {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: var(--secondaryBackgroundColor);
+  color: var(--lightletterColor);
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.all-inactive,.history-inactive,.members-inactive,.personal-inactive{
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: var(--primaryBackgroundColor);
+  color: #8f8f91;
+  border: none;
+  cursor: pointer;
+}
+
+
+.all:hover{
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.3s;
+  background-color: var(--hoverHighlightColor);
+}
+
+.transaction-history-container, .pending-transactions-container,.members-container {
   max-width: none;
   margin: 0px;
-  margin-top: 25px;
+  margin-top: 10px;
   padding: 0px 0px 0px 0px;
 }
 
-.showall{
+.showall {
   margin-right: 200px;
   margin-left: 200px;
   cursor: pointer;
@@ -353,27 +387,24 @@ html, body {
   margin-top: 15px;
 }
 
-.transaction-button.pending {
-  
+
+.sender {
+  color: var(--orange);
 }
 
-.sender{
-  color:var(--orange);
+.receiver {
+  color: var(--green);
 }
 
-.receiver{
-  color:var(--green);
-}
-
-.transaction-history-header{
+.transaction-history-header,.members-header {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding: var(--buttonPadd)
 }
 
-.transaction-history-header-total{
-  flex:1 1;
+.transaction-history-header-total {
+  flex: 1 1;
   text-align: right;
 
 }
@@ -460,7 +491,7 @@ html, body {
 }
 
 
-.las.la-coins.l{
+.las.la-coins.el {
   color: var(--yellow);
 }
 

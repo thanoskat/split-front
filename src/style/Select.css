@@ -6,12 +6,11 @@
   bottom: 0;
   left: 50%;
 
-  width: 100%;
-  transform: translateX(-50%);
+  width: 99%;
+
   max-height: 50%;
   overflow: auto;
 
-  animation: inAnimation 50ms linear;
   z-index: 1;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -19,6 +18,21 @@
   background-color: var(--highlightBackgroundColor);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  border-style: solid;
+  border-color:rgb(143 143 145);
+  color:var(--lightletterColor)
+}
+.select-button-section{
+  background-color:var( --secondaryBackgroundColor)
+}
+.select-animation-rightslide {
+  animation: slidein 200ms linear;
+  max-height: 100%;
+}
+
+.select-animation-bottomslide {
+  animation: inAnimation2 150ms linear;
+  transform: translateX(-50%);
 }
 
 @media (orientation: landscape) {
@@ -27,23 +41,25 @@
   }
 }
 
-@keyframes inAnimation {
-  0% {
+@keyframes inAnimation2 {
+  from {
     bottom: -200px;
   }
-  100% {
+
+  to {
     bottom: 0px;
   }
 }
 
-/* @keyframes outAnimation {
-  0% {
-    bottom: 0px;
+@keyframes slidein {
+  from {
+    transform: translateX(100%);
   }
-  100% {
-    bottom: -500px;
+
+  to {
+    transform: translateX(0%);
   }
-} */
+}
 
 .select-headline-section {
   display: flex;
@@ -87,6 +103,7 @@
   height: 100%;
   bottom: 0;
   z-index: 0;
+  right:0
 }
 
 .select-button-section {

@@ -3,3 +3,32 @@
   /* align-items: center; */
   flex-direction: column;
 }
+
+.button-box {
+  width: 90px;
+  margin: 20px auto;
+  position: relative;
+  border-radius: 30px;
+  background: #1da1f3;
+}
+
+.toggle-btn {
+  padding: 6px 10px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  outline: none;
+  position: relative;
+  text-align: center;
+}
+
+.btn {
+  left:0;
+  top: 0;
+  position: absolute;
+  width:45px;
+  height: 100%;
+  background: #263951;
+  border-radius: 30px;
+  transition:all 0.1s
+}
