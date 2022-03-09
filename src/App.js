@@ -17,26 +17,26 @@ function App() {
           <div className="App">
             <UserBar />
             <NavigationBar2 />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/login" component={Login} />
-              <Route path="/about" component={About} />
-              <Route path="/v/:token" component={VerifyLink} />
-              <Route path="/signup" component={SignUp} />
-              {/* <PrivateRoute exact path="/group/:groupid"component={Group}/> */}
-              <PrivateRoute path="/mygroups" component={MyGroups} />
-              <PrivateRoute path="/group/:groupid" component={Group} />
-              <PrivateRoute exact path="/test" component={Test}/>
-              <SlidingBoxContextProvider>
+            <SlidingBoxContextProvider>
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/login" component={Login} />
+                <Route path="/about" component={About} />
+                <Route path="/v/:token" component={VerifyLink} />
+                <Route path="/signup" component={SignUp} />
+                {/* <PrivateRoute exact path="/group/:groupid"component={Group}/> */}
+                <PrivateRoute path="/mygroups" component={MyGroups} />
+                <PrivateRoute path="/group/:groupid" component={Group} />
+                <PrivateRoute exact path="/test" component={Test}/>
                 <Route exact path="/maintest" component={MainTest}/>
-              </SlidingBoxContextProvider>
-              <PrivateRoute exact path="/users" component={Users} />
-              <PrivateRoute exact path="/profile" component={Profile} />
-              <PrivateRoute path="/user/:id" component={User} />
-              <PrivateRoute path="/notifications" component={Notifications} />
-              <PrivateRoute path="/main" component={MainPage} />
-              <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
-            </Switch>
+                <PrivateRoute exact path="/users" component={Users} />
+                <PrivateRoute exact path="/profile" component={Profile} />
+                <PrivateRoute path="/user/:id" component={User} />
+                <PrivateRoute path="/notifications" component={Notifications} />
+                <PrivateRoute path="/main" component={MainPage} />
+                <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
+              </Switch>
+            </SlidingBoxContextProvider>
           </div>
         </BrowserRouter>
       </GlobalStateContextProvider>
