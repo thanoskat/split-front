@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container,Form } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -13,6 +13,9 @@ function MainPage() {
   const [show, setShow] = useState(false);
   const [showLeaveGroup, setShowLeaveGroup] = useState(false);
   const [showExp, setShowExp] = useState(false);
+  const [showtransact, setShowTransact]=useState(false)
+  const [inputAmount, setInputAmount] = useState('')
+  const [inputDescription, setInputDescription] = useState('')
   const [showCreate, setShowCreate] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupInfo, setGroupInfo] = useState([]);
@@ -22,8 +25,7 @@ function MainPage() {
   const [Users, setUsers] = useState([]);
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
-  const [refreshExpense, setRefreshExpense] = useState(false);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(200);
   const [personalTransactions, setPersonalTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
   const [showAll, setShowAll] = useState(localStorage.getItem("showAll") == "true");
@@ -31,9 +33,8 @@ function MainPage() {
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
-
   const [showSelect, setShowSelect] = useState(false)
-
+  const [refreshExpense, setRefreshExpense] = useState(false);
 
   const api = useAxios()
   const location = useLocation()
@@ -85,10 +86,6 @@ function MainPage() {
   const setOptionAndClose = (index) => {
     setActiveIndex(index);
     setShowSelect(false)
-  }
-
-  const mapOn = {
-    text: "title"
   }
 
   const cloner = () => {
@@ -255,6 +252,28 @@ return (
     localStorage.setItem("showMembers", boolean)
     setShowMembers(boolean);
   }
+
+
+const addExpense = async () => {
+  try {
+    const res = await api.post(`/expense/addtransaction`,
+      {
+        groupId: groupID, //does it feed at first render? Need to check 
+        sender: sessionData.userId,
+        receiver: "",
+        amount: inputAmount,
+        description: inputDescription
+      }
+    )
+    setInputAmount('')
+    setInputDescription('')
+    console.log(res)
+  }
+  catch(error) {
+    console.log(error)
+  }
+}
+
 return (
 <div className="main-page">
   <div className='box1'>
@@ -282,7 +301,7 @@ return (
             onClose={() => setShow(false)}
             content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
             show={show}
-            header="8eios" />
+            header="Groups" />
         </div>
         <div className='option-buttons'>
           <button className='option-button' onClick={() => setShowExp(true)}>
@@ -295,13 +314,34 @@ return (
           </button>
         </div>
       </div>
-      <AddExpenseModal
+      {/* <AddExpenseModal
         showExp={showExp}
         onCloseExp={() => setShowExp(false)}
         userInfoID={userInfo._id}
         activeIndex={activeIndex}
         setRefreshExpense={setRefreshExpense}
-      />
+      /> */}
+      {showExp &&
+        <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)}>
+          <Form.InputField
+            value={inputAmount}
+            label="Amount"
+            maxLength={20}
+            required={true}
+            onChange={e => setInputAmount(e.target.value)}
+            clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
+          />
+          <Form.InputField
+            value={inputDescription}
+            label="Description"
+            maxLength={100}
+            required={false}
+            onChange={e => setInputDescription( e.target.value)}
+            clear={e => setInputDescription('')}
+          />
+        </Form>
+      }
+       
     </div>
 
     <div className='pending-transactions'>

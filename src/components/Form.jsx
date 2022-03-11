@@ -1,6 +1,7 @@
 import { SlidingBox } from './'
 import { useContext, useRef } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
+import { Dropdown} from "."
 import "../style/Form.css"
 
 function Form({ headline, submit, close, children }) {
@@ -68,5 +69,21 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   )
 }
 
+function DropDownField(){
+  //from CreateGroupModal
+  // <Dropdown
+  // options={utilities.tobeRemovedOption}
+  // placeholder={"Send to"}
+  // value={value}
+  // setValue={setValue}
+  // mapTo="nickname"
+  // id="_id"
+  // utilities={utilities}
+  // displaynamesbox={1}
+  // mouse={"mouseup"}
+  // />
+}
+
 Form.InputField = InputField;
+Form.DropDownField = DropDownField;
 export default Form;
