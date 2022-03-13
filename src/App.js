@@ -28,7 +28,7 @@ function App() {
                 <PrivateRoute path="/mygroups" component={MyGroups} />
                 <PrivateRoute path="/group/:groupid" component={Group} />
                 <PrivateRoute exact path="/test" component={Test}/>
-                <Route exact path="/maintest" component={MainTest}/>
+                <PrivateRoute exact path="/maintest" component={MainTest}/>
                 <PrivateRoute exact path="/users" component={Users} />
                 <PrivateRoute exact path="/profile" component={Profile} />
                 <PrivateRoute path="/user/:id" component={User} />
