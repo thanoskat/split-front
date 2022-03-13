@@ -49,20 +49,21 @@ function MainTest() {
 
   // const [abortController, setAbortController] = useState(new AbortController())
   const abortControllerRef = useRef(new AbortController())
-  const [reqPending, setReqPending] = useState(false)
 
-  console.log("Rerender!")
+  console.log("Render !")
 
   const getData = async (abortController) => {
     const axiosInstance = axios.create({
       baseURL: 'http://localhost:4000'
     })
 
+    abortControllerRef.current.abort()
+    // const currentAbortController = new AbortController()
+    abortControllerRef.current = new AbortController()
+
     try {
-      setReqPending(true)
       setTestResponse('Waiting for response...')
-      const res = await axiosInstance.get('/test', { signal: abortController.signal })
-      setReqPending(false)
+      const res = await axiosInstance.get('/test', { signal: abortControllerRef.current.signal })
       setTestResponse(res.data)
     }
     catch(error) {
@@ -132,17 +133,13 @@ function MainTest() {
 
 
   const requestTest = async () => {
-  //   setTestResponse('Waiting for response...')
-  //   getData(abortController)
+    setTestResponse('Waiting for response...')
+    getData(abortControllerRef.current)
   }
 
   const cancelTest = () => {
-  //   console.log(typeof(abortController.signal.aborted))
-  //   if(reqPending) {
-  //     setTestResponse('Request canceled')
-  //     abortController.abort()
-  //   }
-  //   console.log(abortController)
+    setTestResponse('Request canceled')
+    abortControllerRef.current.abort()
   }
 
   return (
