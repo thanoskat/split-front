@@ -11,8 +11,12 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
   const [query, setQuery] = useState("")
   const [dummyState, setDummyState] = useState(false)
   const [item, setItem] = useState(false)
-
+  
   const ref = useRef(null)
+
+  options = utilities.tobeRemovedOption
+  console.log(utilities.tobeRemovedOption)
+  console.log(options)
 
   useEffect(() => {
     // Add a listener for mouse click
@@ -26,6 +30,7 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
   }
 
   function filter(options) {
+    
     return options.filter(option =>
       option[mapTo]?.toLowerCase().indexOf(query?.toLowerCase()) > -1)
   }

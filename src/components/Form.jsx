@@ -1,7 +1,7 @@
 import { SlidingBox } from './'
-import { useContext, useRef } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
-import { Dropdown} from "."
+import { Dropdown } from "."
 import "../style/Form.css"
 
 function Form({ headline, submit, close, children }) {
@@ -29,8 +29,8 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   const inputFieldRef = useRef(null)
 
   const checkLengthAndChange = (e) => {
-    if(maxLength) {
-      if(e.target.value.length <= maxLength) {
+    if (maxLength) {
+      if (e.target.value.length <= maxLength) {
         return onChange(e)
       }
     }
@@ -53,13 +53,13 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
         spellCheck='false'
         ref={inputFieldRef}
       />
-      {value && <i className='input-clear-icon times icon' onClick={clearAndFocus}/>}
+      {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&
           <div
             className='input-right-label'
-            style={required && value.length == 0 ? {color:'red'} : {}}
+            style={required && value.length == 0 ? { color: 'red' } : {}}
           >
             {`${value.length}/${maxLength}`}
           </div>
@@ -69,19 +69,26 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   )
 }
 
-function DropDownField(){
+function DropDownField(utilities) {
+  const [value, setValue] = useState(null);
+
+  console.log("utilities",utilities.tobeRemovedOption)
   //from CreateGroupModal
-  // <Dropdown
-  // options={utilities.tobeRemovedOption}
-  // placeholder={"Send to"}
-  // value={value}
-  // setValue={setValue}
-  // mapTo="nickname"
-  // id="_id"
-  // utilities={utilities}
-  // displaynamesbox={1}
-  // mouse={"mouseup"}
-  // />
+  return( 
+    <Dropdown
+      options={utilities.tobeRemovedOption}
+      placeholder={"Send to"}
+      value={value}
+      setValue={setValue}
+      mapTo="nickname"
+      id="_id"
+      utilities={utilities}
+      displaynamesbox={1}
+      mouse={"mouseup"}
+    />
+    )
+ 
+
 }
 
 Form.InputField = InputField;

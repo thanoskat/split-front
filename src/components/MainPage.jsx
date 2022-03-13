@@ -14,8 +14,6 @@ function MainPage() {
   const [showLeaveGroup, setShowLeaveGroup] = useState(false);
   const [showExp, setShowExp] = useState(false);
   const [showtransact, setShowTransact]=useState(false)
-  const [inputAmount, setInputAmount] = useState('')
-  const [inputDescription, setInputDescription] = useState('')
   const [showCreate, setShowCreate] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupInfo, setGroupInfo] = useState([]);
@@ -35,6 +33,8 @@ function MainPage() {
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
   const [showSelect, setShowSelect] = useState(false)
   const [refreshExpense, setRefreshExpense] = useState(false);
+  const [inputAmount, setInputAmount] = useState('')
+  const [inputDescription, setInputDescription] = useState('')
 
   const api = useAxios()
   const location = useLocation()
@@ -43,7 +43,7 @@ function MainPage() {
 
   //https://javascript.info/object-copy
   //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
-
+console.log("rendered", members.length)
   useEffect(async () => {
 
     try {
@@ -54,14 +54,15 @@ function MainPage() {
       setUsers(users.data);
       setUserInfo(response.data);
       setGroupInfo(response.data.groups);
-      console.log(response.data.groups)
+     
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        console.log("pending txs", pulledtransactions.data)
+        console.log("pending txs", pulledtransactions.data.members)
         setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions)
         setMembers(pulledtransactions.data.members)
+        console.log(pulledtransactions.data.members)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
         setGroupID(response.data.groups[pathIndex]._id)
@@ -73,6 +74,7 @@ function MainPage() {
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions);
         setMembers(pulledtransactions.data.members);
+        console.log(pulledtransactions.data.members)
       }
     } catch (err) {
       console.dir(err);
@@ -88,11 +90,11 @@ function MainPage() {
     setShowSelect(false)
   }
 
-  const cloner = () => {
+  const cloner = () => { //replaced Users with members
     let clone = []
-    for (let i = 0; i < Users.length; i++) {
-      if (Users[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
-      clone.push(Object.assign({}, Users[i]))
+    for (let i = 0; i < members.length; i++) {
+      if (members[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
+      clone.push(Object.assign({}, members[i]))
     }
     return clone;
   }
@@ -272,6 +274,7 @@ const addExpense = async () => {
   catch(error) {
     console.log(error)
   }
+
 }
 
 return (
@@ -322,7 +325,7 @@ return (
         setRefreshExpense={setRefreshExpense}
       /> */}
       {showExp &&
-        <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)}>
+        <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
           <Form.InputField
             value={inputAmount}
             label="Amount"
