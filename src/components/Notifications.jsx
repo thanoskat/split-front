@@ -21,9 +21,9 @@ const Notifications = () => {
     }
   }
 
-  
+
   useEffect(() => {
-    console.log('useEffect() ran')
+    // console.log('useEffect() ran')
     getRequests()
 
   }, [refresh])

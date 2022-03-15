@@ -9,14 +9,14 @@ function Users() {
   const api = useAxios()
 
   useEffect(() => {
-    console.log('useEffect() ran')
+    // console.log('useEffect() ran')
     fetchUsers()
     // eslint-disable-next-line
   }, [])
 
   const fetchUsers = async () => {
     try {
-      console.log('fetchUsers() ran')
+      // console.log('fetchUsers() ran')
       const response = await api.get('/getusers')
       setUsers(response.data)
     }

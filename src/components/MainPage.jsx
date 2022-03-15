@@ -46,17 +46,17 @@ function MainPage() {
   useEffect(async () => {
 
     try {
-      console.log("showAll", typeof (showAll))
+      // console.log("showAll", typeof (showAll))
       const response = await api.get('/getusers/profile');
       const users = await api.get('/getusers')
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
       setGroupInfo(response.data.groups);
-      console.log(response.data.groups)
+      // console.log(response.data.groups)
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        console.log("pending txs", pulledtransactions.data)
+        // console.log("pending txs", pulledtransactions.data)
         setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions)
@@ -67,7 +67,7 @@ function MainPage() {
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-        console.log("pending txs", pulledtransactions.data.members)
+        // console.log("pending txs", pulledtransactions.data.members)
         setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions);

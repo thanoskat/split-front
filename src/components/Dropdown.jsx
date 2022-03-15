@@ -67,8 +67,8 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-                console.log("tobeRemovedOption", utilities.tobeRemovedOption)
-                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
+                // console.log("tobeRemovedOption", utilities.tobeRemovedOption)
+                // console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
                 setItem(true)
               }}>
               {option[mapTo]}

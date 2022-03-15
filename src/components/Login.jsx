@@ -11,11 +11,11 @@ const Login = () => {
   const [linkText, setLinkText] = useState('')
 
   const formSubmit = async (e) => {
-    console.log(e)
+    // console.log(e)
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4000/auth/sendlink', { email: email })
-      console.log(res)
+      // console.log(res)
       if(res && res.data && res.data.link) {
         if(res.data === "Cannot read property '_id' of null") {
           setMessage("Email is not correct!")

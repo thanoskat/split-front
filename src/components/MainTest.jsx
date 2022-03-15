@@ -34,7 +34,7 @@ function MainTest() {
 
 
   const setOptionAndClose = (optionIndex) => {
-    console.log(optionIndex)
+    // console.log(optionIndex)
     setOption(optionIndex)
     setShowSelect(false)
   }
@@ -50,7 +50,7 @@ function MainTest() {
   // const [abortController, setAbortController] = useState(new AbortController())
   const abortControllerRef = useRef(new AbortController())
 
-  console.log("Render !")
+  // console.log("Render !")
 
   const getData = async (abortController) => {
     const axiosInstance = axios.create({
@@ -63,12 +63,12 @@ function MainTest() {
 
     try {
       setTestResponse('Waiting for response...')
-      const res = await axiosInstance.get('/test', { signal: abortControllerRef.current.signal })
+      const res = await api.get('/test', { signal: abortControllerRef.current.signal })
       setTestResponse(res.data)
     }
     catch(error) {
-      console.log('/test get error')
-      console.log(error)
+      // console.log('/test get error')
+      // console.log(error)
     }
   }
 
@@ -76,24 +76,14 @@ function MainTest() {
     try {
       setGroups([{title: 'Loading'}])
       const myGroups = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      console.log(myGroups.data)
+      // console.log(myGroups.data)
       setGroups(myGroups.data)
     }
     catch(error) {
-      console.log('/test get error')
-      console.log(error)
+      // console.log('/test get error')
+      // console.log(error)
     }
   }
-
-  // useEffect(() => {
-  //   getData(abortController)
-
-  //   return () => {
-  //     console.log("Unmount")
-  //     abortController.abort()
-  //   }
-
-  // },[])
 
   useEffect(() => {
     getGroups()
