@@ -16,7 +16,6 @@ const api = useAxios()
       //although they are sourced from
       //the group Schema with populate.
       const response = await api.get('/getusers/profile');
-      console.log(response)
       setGroupInfo(response.data.groups)
     } catch (err) {
       console.dir("group info error", err);

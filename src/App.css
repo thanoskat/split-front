@@ -34,6 +34,15 @@ html, body, select {
   background-color: var(--primaryBackgroundColor);
 }
 
+.v-flex{
+  display: flex;
+  flex-direction: column;
+}
+
+.h-flex{
+  display: flex;
+  flex-direction: row;
+}
 
 .App {
   /* text-align: center; */

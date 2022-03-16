@@ -31,11 +31,12 @@ function MainPage() {
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
-  const [showSelect, setShowSelect] = useState(false)
-  const [refreshExpense, setRefreshExpense] = useState(false);
   const [inputAmount, setInputAmount] = useState('')
+  const [txAmount, setTxAmount]=useState("")
   const [inputDescription, setInputDescription] = useState('')
-
+  const [txDescription, setTxDescription]=useState("")
+  const [keepID, setKeepID] = useState([])
+  console.log(keepID)
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -43,25 +44,23 @@ function MainPage() {
 
   //https://javascript.info/object-copy
   //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
-console.log("rendered", members.length)
+
   useEffect(async () => {
 
     try {
-      console.log("showAll", typeof (showAll))
       const response = await api.get('/getusers/profile');
       const users = await api.get('/getusers')
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
       setGroupInfo(response.data.groups);
-     
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         console.log("pending txs", pulledtransactions.data.members)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions)
-        setMembers(pulledtransactions.data.members)
+        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers))
         console.log(pulledtransactions.data.members)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
@@ -69,26 +68,17 @@ console.log("rendered", members.length)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-        console.log("pending txs", pulledtransactions.data.members)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
+        console.log("!!",pulledtransactions.data.pendingTransactions)
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions);
-        setMembers(pulledtransactions.data.members);
-        console.log(pulledtransactions.data.members)
+        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers));
+        console.log("members",pulledtransactions.data.members)
       }
     } catch (err) {
       console.dir(err);
     }
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
-
-  const toggleSelect = () => {
-    setShowSelect(!showSelect)
-  }
-
-  const setOptionAndClose = (index) => {
-    setActiveIndex(index);
-    setShowSelect(false)
-  }
 
   const cloner = () => { //replaced Users with members
     let clone = []
@@ -99,21 +89,28 @@ console.log("rendered", members.length)
     return clone;
   }
 
-  const utilities = {
-    tobeRemovedOption: cloner(),
-    tobeRetrievedOption: [],
-  }
+const utilities = {
+  tobeRemovedOption: cloner(),
+  tobeRetrievedOption: [],
+}
 
-  const filterID = (value) => {
-    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
-      return value;
-    }
+
+const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
+  if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+    return value;
   }
+}
+const filterIDfromMembers = (value) => { //removes userID from members
+  if (String(value._id) !== sessionData.userId) {
+    return value;
+  }
+}
 
   // const showAll = () => {
   //   console.log(transactionHistory.length)
   //   setSize(transactionHistory.length)
   // }
+  
 const membersComponent=()=>{
   return(
     <Container className="members-container">
@@ -143,7 +140,8 @@ const membersComponent=()=>{
   </Container>
   )
 }
-  const transactHistory = () => {
+
+const transactHistory = () => {
     return (
       <Container className="transaction-history-container">
         <div className='transaction-history-header'>
@@ -212,7 +210,7 @@ return (
   )
   }
 
-  const allPendingTransactions = () => {
+const allPendingTransactions = () => {
     return (
       <Container className="pending-transactions-container">
         <div className='widget-subheader'>
@@ -245,16 +243,15 @@ return (
     )
   }
 
-  const handleAllPersonalClick = (boolean) => {
+const handleAllPersonalClick = (boolean) => {
     localStorage.setItem("showAll", boolean)
     setShowAll(boolean);
   }
 
-  const handleHistoryOrFriendsClick = (boolean) => {
+const handleHistoryOrFriendsClick = (boolean) => {
     localStorage.setItem("showMembers", boolean)
     setShowMembers(boolean);
   }
-
 
 const addExpense = async () => {
   try {
@@ -262,7 +259,7 @@ const addExpense = async () => {
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver: "",
+        receiver:null,
         amount: inputAmount,
         description: inputDescription
       }
@@ -275,6 +272,31 @@ const addExpense = async () => {
     console.log(error)
   }
 
+}
+
+const recordTx = async ()=>{
+  //console.log("ID",utilities.tobeRetrievedOption[0]._id)
+
+  if (keepID == null) return null; //do not proceed to recording tx if no user has been selected
+  if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
+  if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
+  try {
+    const res = await api.post(`/expense/addtransaction`,
+      {
+        groupId: groupID, //does it feed at first render? Need to check 
+        sender: sessionData.userId,
+        receiver:keepID[0], //utilities.tobeRetrievedOption[0]._id, //can't record multiple txs at the moment. (will need a map)
+        amount: txAmount,
+        description: txDescription
+      }
+    )
+    setTxAmount('')
+    setTxDescription('')
+    console.log(res)
+  }
+  catch(error) {
+    console.log(error)
+  }
 }
 
 return (
@@ -296,7 +318,7 @@ return (
           </button>
           <button className='option-button' onClick={() => setShowCreate(true)}>
             <i className='group icon y'></i></button>
-          <button className='option-button granazi' onClick={toggleSelect}>
+          <button className='option-button granazi' >
             <i className='cog icon'></i>
           </button>
           {/* {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />} */}
@@ -311,19 +333,12 @@ return (
             <i className='add icon y'></i>
             <strong>Add expense</strong>
           </button>
-          <button className='option-button' onClick={() => setShowLeaveGroup(true)}>
+          <button className='option-button' onClick={() => setShowTransact(true)}>
             <i className='exchange icon y '></i>
             <strong> Transact </strong>
           </button>
         </div>
       </div>
-      {/* <AddExpenseModal
-        showExp={showExp}
-        onCloseExp={() => setShowExp(false)}
-        userInfoID={userInfo._id}
-        activeIndex={activeIndex}
-        setRefreshExpense={setRefreshExpense}
-      /> */}
       {showExp &&
         <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
           <Form.InputField
@@ -344,9 +359,35 @@ return (
           />
         </Form>
       }
-       
-    </div>
+      {
+        showtransact &&
+        <Form headline="Record tx" submit={recordTx} close={() => setShowTransact(false)} >
+          <Form.InputField
+            value={txAmount}
+            label="Amount"
+            maxLength={20}
+            required={true}
+            onChange={e => setTxAmount(e.target.value)}
+            clear={e => setTxAmount('')}
+          />
+          <Form.InputField
+            value={txDescription}
+            label="Description"
+            maxLength={100}
+            required={true}
+            onChange={e => setTxDescription( e.target.value)}
+            clear={e => setTxDescription('')}
+          />   
+        <Form.MultiSelect
+          setKeepID={setKeepID}
+          value={keepID}
+          optionsArray={members}
+          label="label"
+          allowMultiSelections={true}/>
+      </Form>
+      }
 
+    </div>
     <div className='pending-transactions'>
       <div className="all-personal-options">
         <button className={showAll ? "all-active" : "all-inactive"} onClick={() => handleAllPersonalClick(true)}><strong>All</strong></button>

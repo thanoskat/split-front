@@ -6,7 +6,6 @@ const baseURL = 'http://localhost:4000'
 
 const useAxios = () => {
 
-
   const { signOut, refreshAccessToken } = useContext(AuthenticationContext)
   const accessToken = window.localStorage.getItem('accessToken')
 
@@ -53,7 +52,7 @@ const useAxios = () => {
         catch(error) {
           console.log("useAxios RefreshError")
           console.dir(error)
-          //signOut()
+          signOut()
         }
       }
     }
