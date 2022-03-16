@@ -383,7 +383,7 @@ return (
           value={trackIndexAndID}
           optionsArray={members}
           label="label"
-          allowMultiSelections={false}/>
+          allowMultiSelections={true}/>
       </Form>
       }
 

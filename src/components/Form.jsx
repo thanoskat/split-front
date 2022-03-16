@@ -94,8 +94,8 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
     if (allowMultiSelections) {
       //console.log("value",value.map((element)=>element._id.includes(option._id)))
       console.log(value.findIndex(item => item._id === option._id))
-      const tracker=value.findIndex(item => item._id === option._id)
-      if (tracker==-1) { //if ID is not in the array, push it
+      const tracker = value.findIndex(item => item._id === option._id)
+      if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
       } else {
         setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
@@ -110,7 +110,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       <div className='multiselectbox'>
         {optionsArray.map((option, index) =>
           <div className='v-flex profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
-            <span className='avatar'></span>
+            <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
             <div className='avatar-description'>{option.nickname}</div>
           </div>
         )}

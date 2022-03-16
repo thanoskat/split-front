@@ -119,7 +119,9 @@
   width:3rem;
   border-radius: 50%;
 }
-
+.avatar-active{
+  background-color: #3e47c4;
+}
 .avatar-description{
   width:3rem;
   height:2rem;
