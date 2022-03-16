@@ -274,9 +274,9 @@ const addExpense = async () => {
 
 }
 
+console.log(trackIndexAndID.map(tracker=>tracker._id))
 const recordTx = async ()=>{
   //console.log("ID",utilities.tobeRetrievedOption[0]._id)
-
   if (trackIndexAndID == null) return null; //do not proceed to recording tx if no user has been selected
   if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
   if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
@@ -285,7 +285,7 @@ const recordTx = async ()=>{
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:trackIndexAndID[0], //utilities.tobeRetrievedOption[0]._id, //can't record multiple txs at the moment. (will need a map)
+        receiver:trackIndexAndID.map(tracker=>tracker._id), //using map although there will always be one element in array to avoid issues when state array is empty e.g.trackIndexAndID[0]._id might not always exist
         amount: txAmount,
         description: txDescription
       }
