@@ -35,8 +35,8 @@ function MainPage() {
   const [txAmount, setTxAmount]=useState("")
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription]=useState("")
-  const [keepID, setKeepID] = useState([])
-  console.log(keepID)
+  const [trackIndexAndID, setTrackIndexAndID] = useState([])
+  console.log(trackIndexAndID)
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -277,7 +277,7 @@ const addExpense = async () => {
 const recordTx = async ()=>{
   //console.log("ID",utilities.tobeRetrievedOption[0]._id)
 
-  if (keepID == null) return null; //do not proceed to recording tx if no user has been selected
+  if (trackIndexAndID == null) return null; //do not proceed to recording tx if no user has been selected
   if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
   if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
   try {
@@ -285,7 +285,7 @@ const recordTx = async ()=>{
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:keepID[0], //utilities.tobeRetrievedOption[0]._id, //can't record multiple txs at the moment. (will need a map)
+        receiver:trackIndexAndID[0], //utilities.tobeRetrievedOption[0]._id, //can't record multiple txs at the moment. (will need a map)
         amount: txAmount,
         description: txDescription
       }
@@ -379,11 +379,11 @@ return (
             clear={e => setTxDescription('')}
           />   
         <Form.MultiSelect
-          setKeepID={setKeepID}
-          value={keepID}
+          setTrackIndexAndID={setTrackIndexAndID}
+          value={trackIndexAndID}
           optionsArray={members}
           label="label"
-          allowMultiSelections={true}/>
+          allowMultiSelections={false}/>
       </Form>
       }
 

@@ -88,7 +88,7 @@ function DropDownField({ utilities }) {
 }
 
 
-function MultiSelect({ optionsArray, setKeepID, allowMultiSelections, label, value }) {
+function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value }) {
 
   const onSubmitFunction = (allowMultiSelections, option, index) => {
     if (allowMultiSelections) {
@@ -96,12 +96,12 @@ function MultiSelect({ optionsArray, setKeepID, allowMultiSelections, label, val
       console.log(value.findIndex(item => item._id === option._id))
       const tracker=value.findIndex(item => item._id === option._id)
       if (tracker==-1) { //if ID is not in the array, push it
-        setKeepID(oldArr => [...oldArr, { _id: option._id, index: index }])
+        setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
       } else {
-        setKeepID(value.filter(item => item._id !== option._id)) //else remove it
+        setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
       }
     } else {
-      setKeepID(option._id)
+      setTrackIndexAndID(option._id)
     }
   }
 
