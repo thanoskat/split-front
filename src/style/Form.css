@@ -107,6 +107,10 @@
   padding: 0.85rem;
 }
 
+.profilecircle{
+  cursor: pointer;
+}
+
 .avatar{
   border-radius: 99999px;
   border: none;
