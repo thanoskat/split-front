@@ -36,7 +36,7 @@ function MainPage() {
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription]=useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
-  console.log(trackIndexAndID)
+  console.log(trackIndexAndID[0] == null)
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -274,10 +274,10 @@ const addExpense = async () => {
 
 }
 
-console.log(trackIndexAndID.map(tracker=>tracker._id))
+
 const recordTx = async ()=>{
   //console.log("ID",utilities.tobeRetrievedOption[0]._id)
-  if (trackIndexAndID == null) return null; //do not proceed to recording tx if no user has been selected
+  if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
   if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
   if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
   try {
@@ -285,7 +285,7 @@ const recordTx = async ()=>{
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:trackIndexAndID.map(tracker=>tracker._id), //using map although there will always be one element in array to avoid issues when state array is empty e.g.trackIndexAndID[0]._id might not always exist
+        receiver:trackIndexAndID[0]._id, 
         amount: txAmount,
         description: txDescription
       }
@@ -383,7 +383,7 @@ return (
           value={trackIndexAndID}
           optionsArray={members}
           label="label"
-          allowMultiSelections={true}/>
+          allowMultiSelections={false}/>
       </Form>
       }
 
