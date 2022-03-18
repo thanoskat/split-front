@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container } from '.'
+import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container,Form } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -13,6 +13,7 @@ function MainPage() {
   const [show, setShow] = useState(false);
   const [showLeaveGroup, setShowLeaveGroup] = useState(false);
   const [showExp, setShowExp] = useState(false);
+  const [showtransact, setShowTransact]=useState(false)
   const [showCreate, setShowCreate] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupInfo, setGroupInfo] = useState([]);
@@ -22,8 +23,7 @@ function MainPage() {
   const [Users, setUsers] = useState([]);
   const { sessionData } = useContext(AuthenticationContext)
   const [refreshGroupList, setRefresh] = useState(false);
-  const [refreshExpense, setRefreshExpense] = useState(false);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(200);
   const [personalTransactions, setPersonalTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
   const [showAll, setShowAll] = useState(localStorage.getItem("showAll") == "true");
@@ -31,10 +31,12 @@ function MainPage() {
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
-
-  const [showSelect, setShowSelect] = useState(false)
-
-
+  const [inputAmount, setInputAmount] = useState('')
+  const [txAmount, setTxAmount]=useState("")
+  const [inputDescription, setInputDescription] = useState('')
+  const [txDescription, setTxDescription]=useState("")
+  const [trackIndexAndID, setTrackIndexAndID] = useState([])
+  console.log(trackIndexAndID[0] == null)
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -46,75 +48,69 @@ function MainPage() {
   useEffect(async () => {
 
     try {
-      // console.log("showAll", typeof (showAll))
       const response = await api.get('/getusers/profile');
       const users = await api.get('/getusers')
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setUsers(users.data);
       setUserInfo(response.data);
       setGroupInfo(response.data.groups);
-      // console.log(response.data.groups)
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        // console.log("pending txs", pulledtransactions.data)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        console.log("pending txs", pulledtransactions.data.members)
+        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions)
-        setMembers(pulledtransactions.data.members)
+        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers))
+        console.log(pulledtransactions.data.members)
         history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
         setGroupID(response.data.groups[pathIndex]._id)
         setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-        // console.log("pending txs", pulledtransactions.data.members)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterID))
+        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
+        console.log("!!",pulledtransactions.data.pendingTransactions)
         setAllTransactions(pulledtransactions.data.pendingTransactions);
         setTransactionHistory(pulledtransactions.data.transactions);
-        setMembers(pulledtransactions.data.members);
+        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers));
+        console.log("members",pulledtransactions.data.members)
       }
     } catch (err) {
       console.dir(err);
     }
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
 
-  const toggleSelect = () => {
-    setShowSelect(!showSelect)
-  }
-
-  const setOptionAndClose = (index) => {
-    setActiveIndex(index);
-    setShowSelect(false)
-  }
-
-  const mapOn = {
-    text: "title"
-  }
-
-  const cloner = () => {
+  const cloner = () => { //replaced Users with members
     let clone = []
-    for (let i = 0; i < Users.length; i++) {
-      if (Users[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
-      clone.push(Object.assign({}, Users[i]))
+    for (let i = 0; i < members.length; i++) {
+      if (members[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
+      clone.push(Object.assign({}, members[i]))
     }
     return clone;
   }
 
-  const utilities = {
-    tobeRemovedOption: cloner(),
-    tobeRetrievedOption: [],
-  }
+const utilities = {
+  tobeRemovedOption: cloner(),
+  tobeRetrievedOption: [],
+}
 
-  const filterID = (value) => {
-    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
-      return value;
-    }
+
+const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
+  if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+    return value;
   }
+}
+const filterIDfromMembers = (value) => { //removes userID from members
+  if (String(value._id) !== sessionData.userId) {
+    return value;
+  }
+}
 
   // const showAll = () => {
   //   console.log(transactionHistory.length)
   //   setSize(transactionHistory.length)
   // }
+  
 const membersComponent=()=>{
   return(
     <Container className="members-container">
@@ -144,7 +140,8 @@ const membersComponent=()=>{
   </Container>
   )
 }
-  const transactHistory = () => {
+
+const transactHistory = () => {
     return (
       <Container className="transaction-history-container">
         <div className='transaction-history-header'>
@@ -213,7 +210,7 @@ return (
   )
   }
 
-  const allPendingTransactions = () => {
+const allPendingTransactions = () => {
     return (
       <Container className="pending-transactions-container">
         <div className='widget-subheader'>
@@ -246,15 +243,63 @@ return (
     )
   }
 
-  const handleAllPersonalClick = (boolean) => {
+const handleAllPersonalClick = (boolean) => {
     localStorage.setItem("showAll", boolean)
     setShowAll(boolean);
   }
 
-  const handleHistoryOrFriendsClick = (boolean) => {
+const handleHistoryOrFriendsClick = (boolean) => {
     localStorage.setItem("showMembers", boolean)
     setShowMembers(boolean);
   }
+
+const addExpense = async () => {
+  try {
+    const res = await api.post(`/expense/addtransaction`,
+      {
+        groupId: groupID, //does it feed at first render? Need to check 
+        sender: sessionData.userId,
+        receiver:"",
+        amount: inputAmount,
+        description: inputDescription
+      }
+    )
+
+    setInputAmount('')
+    setInputDescription('')
+    console.log(res)
+  }
+  catch(error) {
+    console.log(error)
+  }
+
+}
+
+
+const recordTx = async ()=>{
+  //console.log("ID",utilities.tobeRetrievedOption[0]._id)
+  if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
+  if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
+  if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
+  try {
+    const res = await api.post(`/expense/addtransaction`,
+      {
+        groupId: groupID, //does it feed at first render? Need to check 
+        sender: sessionData.userId,
+        receiver:trackIndexAndID[0]._id, 
+        amount: txAmount,
+        description: txDescription
+      }
+    )
+    setTxAmount('')
+    setTxDescription('')
+    console.log(res)
+  }
+  catch(error) {
+    console.log(error)
+  }
+}
+
 return (
 <div className="main-page">
   <div className='box1'>
@@ -274,7 +319,7 @@ return (
           </button>
           <button className='option-button' onClick={() => setShowCreate(true)}>
             <i className='group icon y'></i></button>
-          <button className='option-button granazi' onClick={toggleSelect}>
+          <button className='option-button granazi' >
             <i className='cog icon'></i>
           </button>
           {/* {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />} */}
@@ -282,28 +327,68 @@ return (
             onClose={() => setShow(false)}
             content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
             show={show}
-            header="8eios" />
+            header="Groups" />
         </div>
         <div className='option-buttons'>
           <button className='option-button' onClick={() => setShowExp(true)}>
             <i className='add icon y'></i>
             <strong>Add expense</strong>
           </button>
-          <button className='option-button' onClick={() => setShowLeaveGroup(true)}>
+          <button className='option-button' onClick={() => setShowTransact(true)}>
             <i className='exchange icon y '></i>
             <strong> Transact </strong>
           </button>
         </div>
       </div>
-      <AddExpenseModal
-        showExp={showExp}
-        onCloseExp={() => setShowExp(false)}
-        userInfoID={userInfo._id}
-        activeIndex={activeIndex}
-        setRefreshExpense={setRefreshExpense}
-      />
-    </div>
+      {showExp &&
+        <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
+          <Form.InputField
+            value={inputAmount}
+            label="Amount"
+            maxLength={20}
+            required={true}
+            onChange={e => setInputAmount(e.target.value)}
+            clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
+          />
+          <Form.InputField
+            value={inputDescription}
+            label="Description"
+            maxLength={100}
+            required={false}
+            onChange={e => setInputDescription( e.target.value)}
+            clear={e => setInputDescription('')}
+          />
+        </Form>
+      }
+      {
+        showtransact &&
+        <Form headline="Record tx" submit={recordTx} close={() => setShowTransact(false)} >
+          <Form.InputField
+            value={txAmount}
+            label="Amount"
+            maxLength={20}
+            required={true}
+            onChange={e => setTxAmount(e.target.value)}
+            clear={e => setTxAmount('')}
+          />
+          <Form.InputField
+            value={txDescription}
+            label="Description"
+            maxLength={100}
+            required={true}
+            onChange={e => setTxDescription( e.target.value)}
+            clear={e => setTxDescription('')}
+          />   
+        <Form.MultiSelect
+          setTrackIndexAndID={setTrackIndexAndID}
+          value={trackIndexAndID}
+          optionsArray={members}
+          label="label"
+          allowMultiSelections={true}/>
+      </Form>
+      }
 
+    </div>
     <div className='pending-transactions'>
       <div className="all-personal-options">
         <button className={showAll ? "all-active" : "all-inactive"} onClick={() => handleAllPersonalClick(true)}><strong>All</strong></button>

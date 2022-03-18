@@ -1,6 +1,7 @@
 import { SlidingBox } from './'
-import { useContext, useRef } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
+import { Dropdown } from "."
 import "../style/Form.css"
 
 function Form({ headline, submit, close, children }) {
@@ -13,7 +14,7 @@ function Form({ headline, submit, close, children }) {
   }
 
   return (
-    <SlidingBox close={close}>
+    <SlidingBox close={close} >
       {headline && <div className='form-headline'>{headline}</div>}
       <div className='input-field-section'>
         {children}
@@ -28,8 +29,8 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   const inputFieldRef = useRef(null)
 
   const checkLengthAndChange = (e) => {
-    if(maxLength) {
-      if(e.target.value.length <= maxLength) {
+    if (maxLength) {
+      if (e.target.value.length <= maxLength) {
         return onChange(e)
       }
     }
@@ -52,13 +53,13 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
         spellCheck='false'
         ref={inputFieldRef}
       />
-      {value && <i className='input-clear-icon times icon' onClick={clearAndFocus}/>}
+      {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&
           <div
             className='input-right-label'
-            style={required && value.length == 0 ? {color:'red'} : {}}
+            style={required && value.length == 0 ? { color: 'red' } : {}}
           >
             {`${value.length}/${maxLength}`}
           </div>
@@ -68,5 +69,65 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   )
 }
 
+function DropDownField({ utilities }) {
+  const [value, setValue] = useState(null)
+  console.log("Value rendered", value)
+  // console.log("utilities",utilities)
+  return (
+    <Dropdown
+      placeholder={"Send to"}
+      value={value}
+      setValue={setValue}
+      mapTo="nickname"
+      id="_id"
+      utilities={utilities}
+      displaynamesbox={1}
+      mouse={"mouseup"}
+    />
+  )
+}
+
+
+function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value }) {
+
+  const onSubmitFunction = (allowMultiSelections, option, index) => {
+    if (allowMultiSelections) {
+      const tracker=value.findIndex(item => item._id === option._id)
+      if (tracker==-1) { //if ID is not in the array, push it
+        setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
+      } else {
+        setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
+      }
+    } else {
+      const tracker=value.findIndex(item => item._id === option._id)
+      if(tracker==-1){ //if ID is not in the array, push it
+        setTrackIndexAndID([{ _id: option._id, index: index }])
+      }else{ //else remove it
+        setTrackIndexAndID(value.filter(item => item._id !== option._id)) 
+      }
+      
+    }
+  }
+
+  return (
+    <div className='v-flex'>
+      <div className='multiselectbox'>
+        {optionsArray.map((option, index) =>
+          <div className='v-flex profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
+            <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
+            <div className='avatar-description'>{option.nickname}</div>
+          </div>
+        )}
+      </div>
+      <div className='multiselect-description'>
+        {label}
+      </div>
+    </div>
+  )
+}
+
 Form.InputField = InputField;
+Form.DropDownField = DropDownField;
+Form.MultiSelect = MultiSelect;
+
 export default Form;

@@ -1,9 +1,11 @@
 // import axios from 'axios'
 import useAxios from '../utility/useAxios'
 import axios from 'axios'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Container, Button, SelectBox, Form } from '.'
 import "../style/MainTest.css"
+import useAxios from '../utility/useAxios'
+import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 function MainTest() {
 
@@ -13,10 +15,11 @@ function MainTest() {
   const [showSelect, setShowSelect] = useState(false)
   const [showNewGroupForm, setShowNewGroupForm] = useState(false)
   const [option, setOption] = useState(0)
+  const [members, setMembers] = useState([])
   const [isRight, setIsRight] = useState(true)
   const [groups, setGroups] = useState()
   const [testResponse, setTestResponse] = useState('')
-
+  const { sessionData } = useContext(AuthenticationContext)
   const [createdGroup, setCreatedGroup] = useState({
     name: '',
     description: '',
@@ -29,7 +32,7 @@ function MainTest() {
 
   const changeNewGroup = (prop, value) => {
     newGroup[prop] = value
-    setNewGroup({...newGroup})
+    setNewGroup({ ...newGroup })
   }
 
 
@@ -40,7 +43,7 @@ function MainTest() {
   }
 
   const createNewGroup = () => {
-    setCreatedGroup({...newGroup})
+    setCreatedGroup({ ...newGroup })
     setNewGroup({
       name: '',
       description: '',
@@ -112,7 +115,7 @@ function MainTest() {
       // iconColor: 'red'
     }
   ]
-
+  
   const stats = [
     {name: 'CREATED AT', value: '23 Jan'},
     {name: 'LAST ACTIVITY', value: '3 hours ago'},
@@ -131,11 +134,10 @@ function MainTest() {
     setTestResponse('Request canceled')
     abortControllerRef.current.abort()
   }
-
   return (
     <div className='main-test'>
-      <Button text={option} onClick={() => setShowSelect(true)}/>
-      <Button text={option} onClick={() => setShowNewGroupForm(true)}/>
+      <Button text={option} onClick={() => setShowSelect(true)} />
+      <Button text={option} onClick={() => setShowNewGroupForm(true)} />
       {showSelect &&
         <SelectBox headline="Your groups" close={() => setShowSelect(false)}>
           {groups.map((group) => (
@@ -148,7 +150,7 @@ function MainTest() {
         </SelectBox>
       }
       {showNewGroupForm &&
-        <Form headline="Create a group" submit={createNewGroup} close={() => setShowNewGroupForm(false)}>
+        <Form headline="Create a group" submit={createNewGroup} close={() => setShowNewGroupForm(false)} >
           <Form.InputField
             value={newGroup.name}
             label="Group name"
@@ -157,14 +159,8 @@ function MainTest() {
             onChange={e => changeNewGroup('name', e.target.value)}
             clear={e => changeNewGroup('name', '')}
           />
-          <Form.InputField
-            value={newGroup.description}
-            label="Description"
-            maxLength={100}
-            required={false}
-            onChange={e => changeNewGroup('description', e.target.value)}
-            clear={e => changeNewGroup('description', '')}
-          />
+          <Form.DropDownField
+            utilities={utilities} />
         </Form>
       }
     <div>Created group name: {createdGroup.name}</div>

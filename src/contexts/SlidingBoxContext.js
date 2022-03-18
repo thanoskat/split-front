@@ -5,6 +5,8 @@ export const SlidingBoxContext = createContext()
 export function SlidingBoxContextProvider({ children }) {
 
   const [animation, setAnimation] = useState('in')
+ 
+
 
   const closeBox = () => {
     setAnimation('out')
@@ -16,7 +18,7 @@ export function SlidingBoxContextProvider({ children }) {
         {{
           closeBox: closeBox,
           animation: animation,
-          setAnimation: setAnimation
+          setAnimation: setAnimation,
         }}>
       {children}
     </SlidingBoxContext.Provider>
