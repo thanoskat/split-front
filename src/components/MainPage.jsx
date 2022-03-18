@@ -259,11 +259,12 @@ const addExpense = async () => {
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:null,
+        receiver:"",
         amount: inputAmount,
         description: inputDescription
       }
     )
+
     setInputAmount('')
     setInputDescription('')
     console.log(res)
@@ -383,7 +384,7 @@ return (
           value={trackIndexAndID}
           optionsArray={members}
           label="label"
-          allowMultiSelections={false}/>
+          allowMultiSelections={true}/>
       </Form>
       }
 
