@@ -3,7 +3,7 @@ import '../style/Dropdown.css'
 import { useState, useRef, useEffect } from 'react'
 
 
-export default function Dropdown({ placeholder, options, mouse, setValue, mapTo, id, utilities, displaynamesbox }) {
+export default function Dropdown({ placeholder, mouse, setValue, mapTo, id, utilities, displaynamesbox,value }) {
 
   // onChange={val=>setValue(val)}
 
@@ -11,7 +11,7 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
   const [query, setQuery] = useState("")
   const [dummyState, setDummyState] = useState(false)
   const [item, setItem] = useState(false)
-
+  
   const ref = useRef(null)
 
   useEffect(() => {
@@ -26,6 +26,7 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
   }
 
   function filter(options) {
+    
     return options.filter(option =>
       option[mapTo]?.toLowerCase().indexOf(query?.toLowerCase()) > -1)
   }
@@ -56,7 +57,7 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
       </div>
       <div className={`options ${open && utilities.tobeRemovedOption.length !== 0 ? 'open' : null}`}>
         {
-          filter(options).map((option, index) =>
+          filter(utilities.tobeRemovedOption).map((option, index) =>
             <div
               key={option[id]}
               // className={`option ${value === option ? "selected" : null}`}
@@ -67,8 +68,8 @@ export default function Dropdown({ placeholder, options, mouse, setValue, mapTo,
                 setOpen(false)
                 utilities.tobeRetrievedOption.push(option)
                 utilities.tobeRemovedOption.splice(index, 1);
-                console.log("tobeRemovedOption", utilities.tobeRemovedOption)
-                console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
+                // console.log("tobeRemovedOption", utilities.tobeRemovedOption)
+                // console.log("tobeRetrievedOption", utilities.tobeRetrievedOption)
                 setItem(true)
               }}>
               {option[mapTo]}

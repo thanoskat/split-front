@@ -243,7 +243,6 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
           <span className='floating-label'>Group name </span>
         </div>
         <Dropdown
-          options={utilities.tobeRemovedOption}
           placeholder={"Invite friends (optional)"}
           value={value}
           setValue={setValue}

@@ -65,6 +65,7 @@ function Profile() {
 
     await api.post('groups/addUserToGroup', IDs)
     //e.target.reset()
+    //need to rerender for calculations to appear
   }
 
   return (
