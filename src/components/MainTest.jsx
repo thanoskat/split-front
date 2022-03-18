@@ -1,5 +1,3 @@
-// import axios from 'axios'
-import useAxios from '../utility/useAxios'
 import axios from 'axios'
 import { useState, useEffect, useRef, useContext } from 'react'
 import { Container, Button, SelectBox, Form } from '.'
@@ -115,7 +113,7 @@ function MainTest() {
       // iconColor: 'red'
     }
   ]
-  
+
   const stats = [
     {name: 'CREATED AT', value: '23 Jan'},
     {name: 'LAST ACTIVITY', value: '3 hours ago'},
@@ -159,8 +157,6 @@ function MainTest() {
             onChange={e => changeNewGroup('name', e.target.value)}
             clear={e => changeNewGroup('name', '')}
           />
-          <Form.DropDownField
-            utilities={utilities} />
         </Form>
       }
     <div>Created group name: {createdGroup.name}</div>
