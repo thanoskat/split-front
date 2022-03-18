@@ -1,5 +1,7 @@
+// import axios from 'axios'
+import useAxios from '../utility/useAxios'
 import axios from 'axios'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Container, Button, SelectBox, Form } from '.'
 import "../style/MainTest.css"
 import useAxios from '../utility/useAxios'
@@ -7,13 +9,17 @@ import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 function MainTest() {
 
+  const api = useAxios()
+  const baseURL = 'http://localhost:4000'
+
   const [showSelect, setShowSelect] = useState(false)
   const [showNewGroupForm, setShowNewGroupForm] = useState(false)
   const [option, setOption] = useState(0)
   const [members, setMembers] = useState([])
   const [isRight, setIsRight] = useState(true)
+  const [groups, setGroups] = useState()
+  const [testResponse, setTestResponse] = useState('')
   const { sessionData } = useContext(AuthenticationContext)
-  const api = useAxios()
   const [createdGroup, setCreatedGroup] = useState({
     name: '',
     description: '',
@@ -31,7 +37,7 @@ function MainTest() {
 
 
   const setOptionAndClose = (optionIndex) => {
-    console.log(optionIndex)
+    // console.log(optionIndex)
     setOption(optionIndex)
     setShowSelect(false)
   }
@@ -43,6 +49,54 @@ function MainTest() {
       description: '',
     })
   }
+
+  // const [abortController, setAbortController] = useState(new AbortController())
+  const abortControllerRef = useRef(new AbortController())
+
+  // console.log("Render !")
+
+  const getData = async (abortController) => {
+    const axiosInstance = axios.create({
+      baseURL: 'http://localhost:4000'
+    })
+
+    abortControllerRef.current.abort()
+    // const currentAbortController = new AbortController()
+    abortControllerRef.current = new AbortController()
+
+    try {
+      setTestResponse('Waiting for response...')
+      const res = await api.get('/test', { signal: abortControllerRef.current.signal })
+      setTestResponse(res.data)
+    }
+    catch(error) {
+      // console.log('/test get error')
+      // console.log(error)
+    }
+  }
+
+  const getGroups = async () => {
+    try {
+      setGroups([{title: 'Loading'}])
+      const myGroups = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      // console.log(myGroups.data)
+      setGroups(myGroups.data)
+    }
+    catch(error) {
+      // console.log('/test get error')
+      // console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getGroups()
+
+    return () => {
+      console.log("Unmount")
+      abortControllerRef.current.abort()
+    }
+
+  },[])
 
   const array1 = [
     {
@@ -61,45 +115,37 @@ function MainTest() {
       // iconColor: 'red'
     }
   ]
+  
+  const stats = [
+    {name: 'CREATED AT', value: '23 Jan'},
+    {name: 'LAST ACTIVITY', value: '3 hours ago'},
+    {name: 'MEMBERS', value: '12'},
+    // {name: 'CREATED BY', value: 'Wasili'},
+    {name: 'TOTAL SPENT', value: '$540'},
+  ]
 
-  useEffect( () => {
-    fetch()
-  }, [])
 
-  const fetch = async ()=>{
-    const pulledtransactions = await api.get("/groups/619c30bcdd17753583bbe290")
-    console.log(pulledtransactions.data.members)
-    setMembers(pulledtransactions.data.members)
+  const requestTest = async () => {
+    setTestResponse('Waiting for response...')
+    getData(abortControllerRef.current)
   }
 
-  const cloner = () => { //replaced Users with members
-    let clone = []
-    for (let i = 0; i < members.length; i++) {
-      if (members[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
-      clone.push(Object.assign({}, members[i]))
-    }
-    return clone;
+  const cancelTest = () => {
+    setTestResponse('Request canceled')
+    abortControllerRef.current.abort()
   }
-
-  const utilities = {
-    tobeRemovedOption: cloner(),
-    tobeRetrievedOption: [],
-  }
-
-
   return (
     <div className='main-test'>
       <Button text={option} onClick={() => setShowSelect(true)} />
       <Button text={option} onClick={() => setShowNewGroupForm(true)} />
       {showSelect &&
         <SelectBox headline="Your groups" close={() => setShowSelect(false)}>
-          {array1.map((item) => (
+          {groups.map((group) => (
             <SelectBox.Button
-              key={item.text}
-              text={item.text}
-              icon={item.icon}
-              iconColor={item.iconColor}
-              onClick={() => setOption(item.text)} />
+              key={group._id}
+              text={group.title}
+              // iconColor={item.iconColor}
+              onClick={() => setOption(group._id)}/>
           ))}
         </SelectBox>
       }
@@ -117,9 +163,28 @@ function MainTest() {
             utilities={utilities} />
         </Form>
       }
-      <div>Created group name: {createdGroup.name}</div>
-      <div>Created group description: {createdGroup.description}</div>
-      <div>Members: {members.length>0? members[0].nickname:""}</div>
+    <div>Created group name: {createdGroup.name}</div>
+    <div>Created group description: {createdGroup.description}</div>
+    <div className='group-card'>
+      <div className='group-name'>
+        Grooopie
+      </div>
+      <div className='group-stats'>
+        {stats.map((stat, index) => (
+          <div key={index} className='group-stat'>
+            <div className='group-stat-name'>
+              {stat.name}
+            </div>
+            <div className='group-stat-value' style={{textAlign: `${index<stats.length/2 ? 'left' : 'right'}`}}>
+              {stat.value}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div onClick={requestTest}>SEND TEST REQUEST</div>
+    <div>{testResponse}</div>
+    <div onClick={cancelTest}>CANCEL TEST REQUEST</div>
     </div>
   );
 }

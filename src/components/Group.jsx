@@ -74,9 +74,9 @@ const Group = ({ match }) => {
   const fetchGroupInfo = async () => {
     try {
       const res = await api.get(`/groups/${match.params.groupid}`)
-      console.log(res.data)
+      // console.log(res.data)
       setGroup(res.data)
-      console.log(match.params.groupid)
+      // console.log(match.params.groupid)
     }
     catch (error) {
       console.dir("GROUP PAGE ERROR: ", error)
@@ -158,7 +158,7 @@ const Group = ({ match }) => {
         }
       )
       setMessage(res.data)
-      console.log(res)
+      // console.log(res)
     }
     catch(error) {
       console.log(error)

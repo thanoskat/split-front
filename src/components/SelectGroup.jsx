@@ -5,13 +5,13 @@ import {Link } from "react-router-dom";
 
 
 export default function SelectGroup({refreshGroupList,activeIndex,setActiveIndex,setShow}) {
-    
+
 const [groupInfo, setGroupInfo] = useState([]);
 const api = useAxios()
 
   useEffect(async () => {
     try {
-      //This is specific to the Users schema when 
+      //This is specific to the Users schema when
       //feeding info for groupname and total
       //although they are sourced from
       //the group Schema with populate.

@@ -26,9 +26,56 @@
   left:0;
   top: 0;
   position: absolute;
-  width:45px;
+  width: 45px;
   height: 100%;
   background: #263951;
   border-radius: 30px;
   transition:all 0.1s
+}
+
+.group-card {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  /* font-family: "Open Sans", Helvetica, Arial, sans-serif; */
+  width: auto;
+  margin: 20px;
+  white-space: nowrap;
+  overflow: auto;
+  border-style: solid;
+  border-radius: 6px;
+  border-color: black;
+  background-color: black;
+}
+
+.group-name {
+  display: flex;
+  flex-direction: row;
+  /* align-self: center; */
+  font-size: 3em;
+  padding: 10px;
+  font-weight: 500;
+}
+
+.group-stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.group-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.group-stat-name {
+  font-weight: 500;
+  color: #555555;
+}
+
+.group-stat-value {
+  font-weight: 700;
+  color: #cccccc;
 }

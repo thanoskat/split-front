@@ -13,7 +13,6 @@ export function AuthenticationContextProvider({ children }) {
   })
 
   const signIn = (token, sessionData) => {
-    console.log("Auth context signIn()")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
     setSessionData(sessionData)
@@ -24,13 +23,11 @@ export function AuthenticationContextProvider({ children }) {
   }
 
   const refreshAccessToken = (token) => {
-    console.log("Auth context refreshAccessToken()")
     setAccessToken(token)
     localStorage.setItem('accessToken', token)
   }
 
   const signOut = () => {
-    console.log("Auth context signOut()")
     setAccessToken('')
     localStorage.setItem('accessToken', '')
     setSessionData('')
@@ -49,7 +46,7 @@ export function AuthenticationContextProvider({ children }) {
         signOut: signOut,
         refreshAccessToken: refreshAccessToken,
         sessionData: sessionData,
-        setSessionData: setSessionData
+        setSessionData: setSessionData,
       }}>
       {children}
     </AuthenticationContext.Provider>
