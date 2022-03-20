@@ -36,7 +36,10 @@ function MainPage() {
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription]=useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
-  console.log(trackIndexAndID[0] == null)
+  //console.log(trackIndexAndID.map(tracker=>tracker._id))
+  //console.log(Users)
+  //console.log(members.map(member=>member._id))
+ 
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -255,19 +258,39 @@ const handleHistoryOrFriendsClick = (boolean) => {
 
 const addExpense = async () => {
   try {
-    const res = await api.post(`/expense/addtransaction`,
+    if(trackIndexAndID.length!==0){
+      const res = await api.post(`/expense/addtransaction`,
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
         receiver:"",
         amount: inputAmount,
-        description: inputDescription
+        description: inputDescription,
+        tobeSharedWith:[...trackIndexAndID.map(tracker=>tracker._id),sessionData.userId] //only feed selected ids
       }
     )
 
-    setInputAmount('')
-    setInputDescription('')
-    console.log(res)
+      setInputAmount('')
+      setInputDescription('')
+      console.log(res)
+    }else{ //this might be redundant as all members exist in back end. Not sure how it's going to work yet
+            //but knowing members.length, if nothing has been selected here it could just check this by
+            //doing if members.length-shareWtih.length==1 then all users should be included.
+      const res = await api.post(`/expense/addtransaction`,
+      {
+        groupId: groupID, //does it feed at first render? Need to check 
+        sender: sessionData.userId,
+        receiver:"",
+        amount: inputAmount,
+        description: inputDescription,
+        tobeSharedWith:[...members.map(member=>member._id),sessionData.userId] //feed all ids
+      }
+    )
+      setInputAmount('')
+      setInputDescription('')
+      console.log(res)
+    }
+    
   }
   catch(error) {
     console.log(error)
@@ -288,7 +311,8 @@ const recordTx = async ()=>{
         sender: sessionData.userId,
         receiver:trackIndexAndID[0]._id, 
         amount: txAmount,
-        description: txDescription
+        description: txDescription,
+        tobeSharedWith:""
       }
     )
     setTxAmount('')
@@ -358,6 +382,12 @@ return (
             onChange={e => setInputDescription( e.target.value)}
             clear={e => setInputDescription('')}
           />
+          <Form.MultiSelect
+          setTrackIndexAndID={setTrackIndexAndID}
+          value={trackIndexAndID}
+          optionsArray={members}
+          label="share expense with"
+          allowMultiSelections={true}/>
         </Form>
       }
       {
@@ -384,7 +414,7 @@ return (
           value={trackIndexAndID}
           optionsArray={members}
           label="label"
-          allowMultiSelections={true}/>
+          allowMultiSelections={false}/>
       </Form>
       }
 
