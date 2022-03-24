@@ -11,6 +11,19 @@
 html, body, select {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
+
+  --base-color: #3F6AC0;
+  --base-dark-color: #121212;
+  --light-color: #EFF3FB;
+  --layer-0-color: #131519;
+  --layer-1-color: #37383C;
+  --layer-2-color: #47484B;
+  --layer-3-color: #555659;
+  --layer-4-color: #626366;
+  --layer-5-color: #6E6F72;
+
+
+
   --buttonPadd:1rem;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */
@@ -33,17 +46,7 @@ html, body, select {
   --lightorange:#f88070;
 
   color: var(--inactiveColor);
-  background-color: var(--primaryBackgroundColor);
-}
-
-.v-flex{
-  display: flex;
-  flex-direction: column;
-}
-
-.h-flex{
-  display: flex;
-  flex-direction: row;
+  background-color: var(--layer-0-color);
 }
 
 .App {
@@ -51,6 +54,84 @@ html, body, select {
   /* min-width: 530px; */
   scrollbar-width: none;
 }
+
+.v-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.h-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.group-info-frame {
+  margin: 14px 14px 7px 14px;
+  justify-content: space-between;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--light-color)
+}
+
+.group-info-frame .icon.angle.down {
+  position: relative;
+  top: 4px;
+  left: 10px;
+}
+
+.group-info-frame .icon.ellipsis.vertical {
+  position: relative;
+  font-size: 24px;
+}
+
+.tab-switcher {
+  margin: 7px 14px 14px 14px;
+  font-size: 16px;
+  justify-content: space-between;
+}
+
+.tab-switcher a {
+  font-weight: 700;
+}
+
+.tab-button-active {
+  color: var(--light-color);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--base-color);
+}
+
+.tab-button-inactive {
+  color: var(--layer-5-color);
+  text-decoration: none;
+}
+
+.tab-button-inactive:focus {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--layer-1-color);
+}
+
+.tab-button-inactive:hover {
+  color: var(--light-color);
+}
+
+.expenses-tab {
+  background-color: var(--layer-1-color);
+
+  height: 100%;
+}
+
+
+
+
+
 
 @font-face {
   font-family: 'Inter';
