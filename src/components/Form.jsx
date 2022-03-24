@@ -92,20 +92,20 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
   const onSubmitFunction = (allowMultiSelections, option, index) => {
     if (allowMultiSelections) {
-      const tracker=value.findIndex(item => item._id === option._id)
-      if (tracker==-1) { //if ID is not in the array, push it
+      const tracker = value.findIndex(item => item._id === option._id)
+      if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
       } else {
         setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
       }
     } else {
-      const tracker=value.findIndex(item => item._id === option._id)
-      if(tracker==-1){ //if ID is not in the array, push it
+      const tracker = value.findIndex(item => item._id === option._id)
+      if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID([{ _id: option._id, index: index }])
-      }else{ //else remove it
-        setTrackIndexAndID(value.filter(item => item._id !== option._id)) 
+      } else { //else remove it
+        setTrackIndexAndID(value.filter(item => item._id !== option._id))
       }
-      
+
     }
   }
 
@@ -126,6 +126,53 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   )
 }
 
+function Tags({ label }) {
+
+  return (
+    <div className='v-flex'>
+      <div className='multiselectbox tags'>
+
+          <div className='h-flex tag-section' style={{backgroundColor:"var(--pink)"}}>
+            <div className='tag-section-name'>
+            Tickets
+            </div>
+            <div className='tag-section-close'>
+              <i className="times icon"></i>
+            </div>
+        </div>
+
+        <div className='h-flex tag-section' style={{backgroundColor:"var(--purple)"}}>
+            <div className='tag-section-name'>
+            Bill
+            </div>
+            <div className='tag-section-close'>
+              <i className="times icon"></i>
+            </div>
+        </div>
+
+        <div className='h-flex tag-section'>
+            <div className='tag-section-name'>
+            Food
+            </div>
+            <div className='tag-section-close'>
+              <i className="times icon"></i>
+            </div>
+        </div>
+        <div className='h-flex tag-section' style={{backgroundColor:"var(--orange)"}}>
+            <div className='tag-section-name'>
+            Rent
+            </div>
+            <div className='tag-section-close'>
+              <i className="times icon"></i>
+            </div>
+        </div>
+       
+      </div>
+    </div>
+  )
+}
+
+Form.Tags = Tags;
 Form.InputField = InputField;
 Form.DropDownField = DropDownField;
 Form.MultiSelect = MultiSelect;

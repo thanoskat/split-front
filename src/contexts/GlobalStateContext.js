@@ -7,13 +7,16 @@ export const GlobalStateContext = React.createContext();
 export function GlobalStateContextProvider({ children }) {
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const[pathIndex,setPathIndex]=useState(0)
 
   return (
     <GlobalStateContext.Provider
       value=
       {{
         activeIndex: activeIndex,
-        setActiveIndex:setActiveIndex,
+        setActiveIndex:setActiveIndex, 
+        pathIndex:pathIndex,
+        setPathIndex:setPathIndex
       }}>
       {children}
     </GlobalStateContext.Provider>

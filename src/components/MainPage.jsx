@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, AddExpenseModal, CreateGroupModal, SelectGroup, Container,Form } from '.'
+import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container,Form,SelectBox,SelectGroup} from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -36,6 +36,8 @@ function MainPage() {
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription]=useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
+  const [showSelectGroups, setShowSelectGroups] = useState(false)
+  
   //console.log(trackIndexAndID.map(tracker=>tracker._id))
   //console.log(Users)
   //console.log(members.map(member=>member._id))
@@ -51,38 +53,46 @@ function MainPage() {
   useEffect(async () => {
 
     try {
-      const response = await api.get('/getusers/profile');
-      const users = await api.get('/getusers')
+      const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
-      setUsers(users.data);
-      setUserInfo(response.data);
-      setGroupInfo(response.data.groups);
+      console.log("pathIndex",pathIndex)
+      console.log("activeIndex", activeIndex)
+      console.log("profile",profile)
+      //const pulledtransactions = await api.get("/groups")
+      setGroupInfo(profile.data.groups);
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
-        const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        console.log("pending txs", pulledtransactions.data.members)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
-        setAllTransactions(pulledtransactions.data.pendingTransactions);
-        setTransactionHistory(pulledtransactions.data.transactions)
-        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers))
-        console.log(pulledtransactions.data.members)
-        history.push(`/main/${response.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
+        //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
+        if(activeIndex==0){
+          setGroupID(profile.data.groups[0]._id)
+          setGroupName(profile.data.groups[0].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
+          setActiveIndex(0)
+          const txhistory = [...profile.data.groups[0].expenses,...profile.data.groups[0].transfers]
+          setPersonalTransactions(profile.data.groups[0].pendingTransactions.filter(filterIDforPersonalTransactions))
+          setAllTransactions(profile.data.groups[0].pendingTransactions);
+          setTransactionHistory(txhistory)
+          console.log(txhistory.map(x=>x.receiver==undefined))
+          setMembers(profile.data.groups[0].members.filter( filterIDfromMembers))
+          //console.log(pulledtransactions.data.members)
+        }else{
+          history.push(`/main/${profile.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
+        }
+         
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
-        setGroupID(response.data.groups[pathIndex]._id)
-        setGroupName(response.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
+        setGroupID(profile.data.groups[pathIndex]._id)
+        setGroupName(profile.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
-        const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-        setPersonalTransactions(pulledtransactions.data.pendingTransactions.filter(filterIDforPersonalTransactions))
-        console.log("!!",pulledtransactions.data.pendingTransactions)
-        setAllTransactions(pulledtransactions.data.pendingTransactions);
-        setTransactionHistory(pulledtransactions.data.transactions);
-        setMembers(pulledtransactions.data.members.filter( filterIDfromMembers));
-        console.log("members",pulledtransactions.data.members)
+        //const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
+        const txhistory = [...profile.data.groups[pathIndex].expenses,...profile.data.groups[pathIndex].transfers]
+        setPersonalTransactions(profile.data.groups[pathIndex].pendingTransactions.filter(filterIDforPersonalTransactions))
+        setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
+        setTransactionHistory(txhistory);
+        setMembers(profile.data.groups[pathIndex].members.filter( filterIDfromMembers));
       }
     } catch (err) {
       console.dir(err);
     }
-  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location)
-
+  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location due to history)
+console.log("tx history",transactionHistory)
   const cloner = () => { //replaced Users with members
     let clone = []
     for (let i = 0; i < members.length; i++) {
@@ -155,10 +165,10 @@ const transactHistory = () => {
           (transaction, index) => (
             <button className="transaction-button pending" key={index}>
               <div className='image'>
-                <i className={transaction.receiver === null ? `las la-coins el` : `long arrow alternate right icon el`}></i>
+                <i className={transaction.receiver === undefined ? `las la-coins el` : `long arrow alternate right icon el`}></i>
               </div>
               <span className="text-item-content">
-                {transaction.receiver !== null ?
+                {transaction.receiver !== undefined ?
                   <span className='item-content'>
                     <strong>{transaction.sender.nickname}</strong>&nbsp;to&nbsp;<strong>{transaction.receiver.nickname}</strong>
                   </span> :
@@ -259,11 +269,10 @@ const handleHistoryOrFriendsClick = (boolean) => {
 const addExpense = async () => {
   try {
     if(trackIndexAndID.length!==0){
-      const res = await api.post(`/expense/addtransaction`,
+      const res = await api.post(`/expense/addexpense`,
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:"",
         amount: inputAmount,
         description: inputDescription,
         tobeSharedWith:[...trackIndexAndID.map(tracker=>tracker._id),sessionData.userId] //only feed selected ids
@@ -276,11 +285,10 @@ const addExpense = async () => {
     }else{ //this might be redundant as all members exist in back end. Not sure how it's going to work yet
             //but knowing members.length, if nothing has been selected here it could just check this by
             //doing if members.length-shareWtih.length==1 then all users should be included.
-      const res = await api.post(`/expense/addtransaction`,
+      const res = await api.post(`/expense/addexpense`,
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
-        receiver:"",
         amount: inputAmount,
         description: inputDescription,
         tobeSharedWith:[...members.map(member=>member._id),sessionData.userId] //feed all ids
@@ -305,14 +313,13 @@ const recordTx = async ()=>{
   if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
   if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
   try {
-    const res = await api.post(`/expense/addtransaction`,
+    const res = await api.post(`/expense/addtransfer`,
       {
         groupId: groupID, //does it feed at first render? Need to check 
         sender: sessionData.userId,
         receiver:trackIndexAndID[0]._id, 
         amount: txAmount,
-        description: txDescription,
-        tobeSharedWith:""
+        description: txDescription
       }
     )
     setTxAmount('')
@@ -324,6 +331,10 @@ const recordTx = async ()=>{
   }
 }
 
+const handleSelectGroups=(index)=>{
+ setActiveIndex(index);
+}
+
 return (
 <div className="main-page">
   <div className='box1'>
@@ -331,7 +342,7 @@ return (
       <div className='widget-header'>
 
         <div className='group-selection-button'>
-          <button type="button" className="selection-button group-name-button " onClick={() => setShow(true)}>
+          <button type="button" className="selection-button group-name-button " onClick={() => setShowSelectGroups(true)}>
             <span className="group-title">
               <strong>{groupName}</strong>
             </span>
@@ -346,12 +357,27 @@ return (
           <button className='option-button granazi' >
             <i className='cog icon'></i>
           </button>
-          {/* {showSelect && <Select headline="Groups" rightHeadline="total" optionsArray={groupInfo} mapOn={mapOn} setOption={setOptionAndClose} close={toggleSelect} />} */}
-          <ModalFrame
+          {showSelectGroups && 
+           <SelectBox headline="Groups" rightHeadline={"total"}close={() => setShowSelectGroups(false)}>
+            {groupInfo.map((group,index) => (
+               <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
+                <SelectBox.GroupButton
+                  key={group._id}
+                  text={group.title}
+                  rightText={group.totalSpent}
+                  index={index}
+                  activeIndex={activeIndex}
+                  // iconColor={item.iconColor}
+                  onClick={() => handleSelectGroups(index)}>
+                </SelectBox.GroupButton>
+               </Link>
+          ))}
+          </SelectBox>}
+          {/* <ModalFrame
             onClose={() => setShow(false)}
             content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
             show={show}
-            header="Groups" />
+            header="Groups" /> */}
         </div>
         <div className='option-buttons'>
           <button className='option-button' onClick={() => setShowExp(true)}>
@@ -382,6 +408,8 @@ return (
             onChange={e => setInputDescription( e.target.value)}
             clear={e => setInputDescription('')}
           />
+         <Form.Tags/>
+         
           <Form.MultiSelect
           setTrackIndexAndID={setTrackIndexAndID}
           value={trackIndexAndID}
@@ -436,7 +464,7 @@ return (
     <LeaveGroupModal
       showLeaveGroup={showLeaveGroup}
       onCloseLeaveGroup={() => setShowLeaveGroup(false)}
-      userInfoID={userInfo._id}
+      userInfoID={sessionData.userId}
       groupID={groupID}
       groupName={groupName}
       setGroupName={setGroupName}
@@ -452,7 +480,6 @@ return (
 
   <div className="box2">
     box2
-
   </div>
   <div className="box3">
     box3
