@@ -28,13 +28,11 @@ function FigmaMain() {
       <UserBar />
       <div className='separator-1'/>
       <div className='t1 group-info-frame flex row alignitems-center'>
-        <div onClick={() => changeDisplayedGroup}>
+        <div className='flex row alignitems-center' onClick={() => changeDisplayedGroup}>
           <span className='group-info-title'>{displayedGroup?.title}</span>
           <i className='icon angle down'/>
         </div>
-        <div>
-          <i className='t2 icon ellipsis vertical'/>
-        </div>
+        <i className='t2 icon ellipsis vertical'/>
       </div>
       <div className='separator-1'/>
       <TabSwitcher/>

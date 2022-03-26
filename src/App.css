@@ -89,15 +89,19 @@ html, body, select {
 }
 
 .t2 {
-  font-size: 20px
+  font-size: 18px
 }
 
-.t3 {
+.t25 {
   font-size: 16px
 }
 
-.t4 {
+.t3 {
   font-size: 14px
+}
+
+.t4 {
+  font-size: 12px
 }
 
 .white {
@@ -206,7 +210,7 @@ html, body, select {
 
 .expenses-tab {
   background-color: var(--layer-1-color);
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 14px 14px 0px 0px;
 }
 
 .expense {
@@ -252,16 +256,13 @@ html, body, select {
 ::-webkit-scrollbar-thumb {
   border: 4px solid transparent;
   background-clip: padding-box;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: var(--base-color);
 }
 
-/* ::-webkit-scrollbar-track {
-  margin-top: 14px
-} */
-
-
-/* Webkit scrollbar */
+::-webkit-scrollbar-track {
+  margin-block: 3px
+}
 
 /* ::-webkit-scrollbar-thumb {
   border-radius: 8px;
@@ -269,17 +270,14 @@ html, body, select {
 }
 ::-webkit-scrollbar-track {
   margin-top: 0px
+  margin-block: 10px;
+  background: transparent
 }
 
 ::-webkit-scrollbar {
   width: 6px;
   background: transparent
-}
-
-::-webkit-scrollbar-track {
-  background: transparent
-} */
-
+}*/
 
 @font-face {
   font-family: 'Inter';

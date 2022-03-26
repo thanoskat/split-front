@@ -11,7 +11,7 @@ const TabSwitcher = () => {
   }
 
   return(
-    <div className='tab-switcher t3 flex row alignitems-center'>
+    <div className='tab-switcher t25 flex row alignitems-center'>
       <TabButton text='Expenses' to='/figmamain/expenses'/>
       <TabButton text='Members' to='/figmamain/members'/>
       <TabButton text='Settle Up' to='/figmamain/settleup'/>
