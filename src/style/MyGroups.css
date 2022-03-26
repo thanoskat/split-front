@@ -7,15 +7,15 @@
  position:relative;
 
  }
-  
+
 .group-container{
  background: #272323;
  grid-area: group-container;
   }
 
 
-  
-  
+
+
 .my-groups{
   height: 100vh;
   display: grid;
@@ -32,7 +32,7 @@
 	top: 0.5rem;
 	left: 1.8rem;
 	transition: none;
-  
+
 }
 .groups-searchbar .Add-Input-Field{
   border-radius: 30px;
@@ -41,7 +41,7 @@
   border: 2px solid rgb(137, 151, 155);
   background-color: #3a3b3c;
   color:#a1a4a8
-  
+
 }
 
 .groups-searchbar .Add-Friend-Section input:focus ~ .floating-label,
@@ -57,7 +57,7 @@
   left: 22px;
   width: 85%;
   max-height:250px ;
-  
+
 }
 
 .groups-searchbar .dropdown .option {
@@ -68,7 +68,7 @@
   display: block;
   padding: 8px 10px;
   width: 249.97728px;
-  
+
 }
 
 
@@ -77,28 +77,28 @@
   color: #a1a4a5;
   opacity:0.9;
   transition: 0.2s;
-  
+
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 8px;
-  
-}
-::-webkit-scrollbar-track {
-  background: #242526; 
-}
 
-::-webkit-scrollbar-track:hover {
-  background: #303233; 
-}
+} */
+/* ::-webkit-scrollbar-track {
+  background: #242526;
+} */
 
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-track:hover {
+  background: #303233;
+} */
+
+/* ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: #666768; 
-}
+  background: #666768;
+} */
 .createnewgroupsection{
   margin-top: 1.75rem;
-  
+
 }
 .createnewgroupbutton{
   width:240px;
@@ -116,13 +116,13 @@
 
   background-color:rgb(61,77,99);
   transition: 0.5s;
-  
+
 }
 
-.separator{
+/* .separator{
   border-bottom: 1px solid;
   margin: 8px 12px;
-}
+} */
 
 .groups-list{
 display: flex;

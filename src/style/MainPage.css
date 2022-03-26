@@ -3,15 +3,14 @@ box-sizing: border-box;
 outline: none;
 } */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   height: 0px;
-}
+} */
 
-html, body {
+/* html, body {
   -webkit-font-smoothing: antialiased;
   min-height: 100%;
-  /* font-family: "Basier Circle", sans-serif; */
-}
+} */
 
 .Xmple {
   border: solid;

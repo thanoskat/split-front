@@ -103,17 +103,17 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       if(tracker==-1){ //if ID is not in the array, push it
         setTrackIndexAndID([{ _id: option._id, index: index }])
       }else{ //else remove it
-        setTrackIndexAndID(value.filter(item => item._id !== option._id)) 
+        setTrackIndexAndID(value.filter(item => item._id !== option._id))
       }
-      
+
     }
   }
 
   return (
-    <div className='v-flex'>
+    <div className='flex column'>
       <div className='multiselectbox'>
         {optionsArray.map((option, index) =>
-          <div className='v-flex profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
+          <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
             <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
             <div className='avatar-description'>{option.nickname}</div>
           </div>

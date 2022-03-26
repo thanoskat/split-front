@@ -8,15 +8,16 @@ import './semantic-icons.css'
 
 function App() {
 
-  // acomment
+  const pathname = window.location.pathname
+  console.log(pathname)
 
   return (
     <AuthenticationContextProvider>
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            <UserBar />
-            <NavigationBar2 />
+            {/* <UserBar/> */}
+            {/* <NavigationBar2/> */}
             <SlidingBoxContextProvider>
               <Switch>
                 <Route exact path="/" component={Home} />
