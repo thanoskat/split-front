@@ -14,7 +14,7 @@ html, body, select {
   user-select: none;
   height: 100vh;
 
-  --base-color: #3F6AC0;
+  --base-color: hsl(220, 50%, 50%);
   --base-dark-color: #121212;
   --light-color: #EFF3FB;
   --layer-0-color: #131519;
@@ -72,12 +72,16 @@ html, body, select {
   overflow: hidden
 }
 
-.position-relative {
+.relative {
   position: relative
 }
 
-.position-absolute {
+.absolute {
   position: absolute
+}
+
+.fixed {
+  position: fixed
 }
 
 .selectable {
@@ -150,6 +154,14 @@ html, body, select {
   border-color: var(--layer-2-color);
 }
 
+.cursor-pointer {
+  cursor: pointer
+}
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 .figma-main {
   height: inherit
 }
@@ -219,6 +231,25 @@ html, body, select {
   height: 120px;
 }
 
+.floating-button {
+  position: fixed;
+  gap: 0px;
+  border-radius: 4px;
+  /* padding: 0px 10px 0px 4px; */
+  /* width: fit-content; */
+  /* height: fit-content; */
+  /* right: 52px; */
+  bottom: 36px;
+  right: 40px;
+  /* transform: translateX(50%); */
+  font-size: 20px;
+  color: white;
+  background-color: hsl(220, 50%, 50%);
+  border-color: var(--layer-0-color);
+  border-width: 1px;
+  /* border-style: solid; */
+}
+
 .expense .icon.ellipsis.vertical {
   color: var(--layer-6-color)
 }
@@ -237,10 +268,8 @@ html, body, select {
 }
 
 .expense-tag {
-  cursor: pointer;
   padding: 2px 6px 2px 6px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 4px;
+  border-radius: 2px;
   color: var(--layer-1-color);
   font-weight: 500;
   width: fit-content;
@@ -248,7 +277,6 @@ html, body, select {
 
 
 /* Webkit scrollbar */
-
 ::-webkit-scrollbar {
   width: 14px;
 }
@@ -257,11 +285,12 @@ html, body, select {
   border: 4px solid transparent;
   background-clip: padding-box;
   border-radius: 10px;
-  background-color: var(--base-color);
+  background-color: var(--layer-3-color);
 }
 
 ::-webkit-scrollbar-track {
-  margin-block: 3px
+  /* margin-block: 3px; */
+  margin-top: 3px;
 }
 
 /* ::-webkit-scrollbar-thumb {

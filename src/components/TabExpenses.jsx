@@ -1,3 +1,7 @@
+import 'font-awesome/css/font-awesome.min.css';
+import IonIcon from '@reacticons/ionicons';
+var FontAwesome = require('react-fontawesome');
+
 const TabExpense = ({ expenses }) => {
 
   const Expense = ({ description, amount, tags, spender, participants, timestamp }) => {
@@ -8,7 +12,7 @@ const TabExpense = ({ expenses }) => {
           <div className='t2 white'>{`$ ${amount}`}</div>
         </div>
         <div className='flex row justcont-flexstart' style={{ flexWrap: 'wrap', gap: '10px' }}>
-          <ExpenseTag text='Ticket' color='#6490E5'/>
+          <ExpenseTag text='Tickets' color='#6490E5'/>
           <ExpenseTag text='Shopping' color='#F29A7E'/>
           <ExpenseTag text='Food' color='#FFE897'/>
         </div>
@@ -35,7 +39,7 @@ const TabExpense = ({ expenses }) => {
 
   const ExpenseTag = ({ text, color }) => {
     return(
-      <div className='t4 expense-tag flex row' style={{ backgroundColor: `${color}` }}>
+      <div className='t4 expense-tag flex row shadow cursor-pointer' style={{ backgroundColor: `${color}` }}>
         {text}
       </div>
     )
@@ -47,7 +51,7 @@ const TabExpense = ({ expenses }) => {
         {expenses?.map(expense => (
           <div key={expense._id}>
             <Expense
-              description={expense._id.slice(expense._id.length - 20)}
+              description={expense._id.slice(expense._id.length - 15)}
               amount={expense.amount}
               spender={expense.sender.nickname}
               participants={expense.tobeSharedWith}
@@ -55,8 +59,19 @@ const TabExpense = ({ expenses }) => {
             <div className='separator-2'/>
           </div>
         ))}
-        {/* {expenses[0].sender} */}
-        {/* <Expense title={expense.title}/> */}
+      <div className='expense'/>
+      </div>
+      <div className='floating-button cursor-pointer flex row shadow justcont-center alignitems-center'>
+        {/* <i className='icon plus'/> */}
+        {/* <i className='fa fa-plus'/> */}
+        {/* <i className="fa fa-plus-circle"></i> */}
+        {/* <FontAwesome
+          className='super-crazy-colors'
+          name='plus'
+          size='lg'
+        /> */}
+        <IonIcon name='add' style={{ fontSize: '48px' }}/>
+        {/* Add new */}
       </div>
     </div>
   )
