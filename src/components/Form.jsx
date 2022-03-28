@@ -1,5 +1,5 @@
 import { SlidingBox } from './'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useRef, useState, useEffect } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
 import "../style/Form.css"
@@ -105,7 +105,6 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       } else { //else remove it
         setTrackIndexAndID(value.filter(item => item._id !== option._id))
       }
-
     }
   }
 
@@ -126,47 +125,79 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   )
 }
 
-function Tags({ label }) {
+function Tags({ upTags, setUpTags, downTags, setDownTags, maxLength, onChange, tagText, onSubmit }) {
 
+
+
+  const handleUpTagsClick = (tag) => {
+    setUpTags(upTags.filter(item => item.name !== tag.name))
+    setDownTags(prevTag => [...prevTag, tag])
+  }
+
+  const handleDownTagsClick = (tag) => {
+    setDownTags(downTags.filter(item => item.name !== tag.name))
+    setUpTags(prevTag => [...prevTag, tag])
+  }
+
+  const checkLengthAndChange = (e) => {
+
+    if (maxLength) {
+      if (e.target.value.length <= maxLength) {
+        return onChange(e)
+      }
+    }
+    else {
+      return onChange(e)
+    }
+  }
+//https://erikmartinjordan.com/resize-input-text-size-react
   return (
-    <div className='v-flex'>
-      <div className='multiselectbox tags'>
+    <div className='Tags v-flex'>
 
-          <div className='h-flex tag-section' style={{backgroundColor:"var(--pink)"}}>
-            <div className='tag-section-name'>
-            Tickets
+      <div className='multiselectbox tobeSelectedTags'>
+        {upTags.map((tag, index) =>
+          <div className='h-flex tag-section'
+            key={index}
+            style={{ backgroundColor: `${tag.color}` }}
+            onClick={() => handleUpTagsClick(tag)}>
+            <div className='h-flex tag-section-name'>
+              {tag.name}
+              <i className="trash alternate icon"></i>
             </div>
-            <div className='tag-section-close'>
-              <i className="times icon"></i>
-            </div>
+          </div>
+        )}
+
+        <div className='h-flex tag-section newtag-section'>
+
+          <input
+            className='newtag-input'
+            placeholder='new tag'
+            value={tagText}
+            onChange={checkLengthAndChange}
+            style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
+            onBlur={(e) =>console.log("Unfocused") } />
+
+          <i className="tag icon newtagIcon"></i>
+
         </div>
 
-        <div className='h-flex tag-section' style={{backgroundColor:"var(--purple)"}}>
-            <div className='tag-section-name'>
-            Bill
-            </div>
-            <div className='tag-section-close'>
-              <i className="times icon"></i>
-            </div>
-        </div>
+      </div>
 
-        <div className='h-flex tag-section'>
+      <div className='multiselectbox selectedTags'>
+        {downTags.map((tag, index) =>
+          <div className='h-flex tag-section'
+            key={index}
+            style={{ backgroundColor: `${tag.color}` }}>
             <div className='tag-section-name'>
-            Food
+              {tag.name}
             </div>
-            <div className='tag-section-close'>
+            <div className='tag-section-close'
+              onClick={() => handleDownTagsClick(tag)}>
               <i className="times icon"></i>
             </div>
-        </div>
-        <div className='h-flex tag-section' style={{backgroundColor:"var(--orange)"}}>
-            <div className='tag-section-name'>
-            Rent
-            </div>
-            <div className='tag-section-close'>
-              <i className="times icon"></i>
-            </div>
-        </div>
-       
+          </div>
+        )}
+
       </div>
     </div>
   )

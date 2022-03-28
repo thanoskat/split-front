@@ -1,7 +1,7 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
-import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container,Form,SelectBox,SelectGroup} from '.'
+import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container, Form, SelectBox, SelectGroup } from '.'
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -13,7 +13,7 @@ function MainPage() {
   const [show, setShow] = useState(false);
   const [showLeaveGroup, setShowLeaveGroup] = useState(false);
   const [showExp, setShowExp] = useState(false);
-  const [showtransact, setShowTransact]=useState(false)
+  const [showtransact, setShowTransact] = useState(false)
   const [showCreate, setShowCreate] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupInfo, setGroupInfo] = useState([]);
@@ -32,16 +32,20 @@ function MainPage() {
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
   const [inputAmount, setInputAmount] = useState('')
-  const [txAmount, setTxAmount]=useState("")
+  const [txAmount, setTxAmount] = useState("")
   const [inputDescription, setInputDescription] = useState('')
-  const [txDescription, setTxDescription]=useState("")
+  const [txDescription, setTxDescription] = useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
-  
+  const [upTags, setUpTags] = useState([{ name: "Tickets", color: "var(--color1)" }, { name: "Bill", color: "var(--color2)" }, { name: "Food", color: "var(--color3)" }])
+  const [downTags, setDownTags] = useState([])
+  const [tagText, setTagText] = useState("");
+  //console.log(tagText.length===0)
+
   //console.log(trackIndexAndID.map(tracker=>tracker._id))
   //console.log(Users)
   //console.log(members.map(member=>member._id))
- 
+
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
@@ -51,48 +55,48 @@ function MainPage() {
   //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
 
   useEffect(async () => {
-
+    window.addEventListener("keydown", handleKeyDown); //TODO has to run on first render so it works with just []
     try {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
-      console.log("pathIndex",pathIndex)
-      console.log("activeIndex", activeIndex)
-      console.log("profile",profile)
+      //console.log("pathIndex",pathIndex)
+      //console.log("activeIndex", activeIndex)
+      //console.log("profile",profile.data.groups[activeIndex])
       //const pulledtransactions = await api.get("/groups")
       setGroupInfo(profile.data.groups);
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
-        if(activeIndex==0){
+        if (activeIndex == 0) {
           setGroupID(profile.data.groups[0]._id)
           setGroupName(profile.data.groups[0].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
           setActiveIndex(0)
-          const txhistory = [...profile.data.groups[0].expenses,...profile.data.groups[0].transfers]
+          const txhistory = [...profile.data.groups[0].expenses, ...profile.data.groups[0].transfers]
           setPersonalTransactions(profile.data.groups[0].pendingTransactions.filter(filterIDforPersonalTransactions))
           setAllTransactions(profile.data.groups[0].pendingTransactions);
           setTransactionHistory(txhistory)
-          console.log(txhistory.map(x=>x.receiver==undefined))
-          setMembers(profile.data.groups[0].members.filter( filterIDfromMembers))
+          //console.log(txhistory.map(x=>x.receiver==undefined))
+          setMembers(profile.data.groups[0].members.filter(filterIDfromMembers))
           //console.log(pulledtransactions.data.members)
-        }else{
+        } else {
           history.push(`/main/${profile.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
         }
-         
+
       } else {//it will get in here when there is a link to look at (hence pathIndex is not null)
         setGroupID(profile.data.groups[pathIndex]._id)
         setGroupName(profile.data.groups[pathIndex].title) //by keeping track of the path Index variable we can preserve a group after a refresh of the page
         setActiveIndex(pathIndex)//set active index in order to preserve highlighted option
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[pathIndex]._id}`)
-        const txhistory = [...profile.data.groups[pathIndex].expenses,...profile.data.groups[pathIndex].transfers]
+        const txhistory = [...profile.data.groups[pathIndex].expenses, ...profile.data.groups[pathIndex].transfers]
         setPersonalTransactions(profile.data.groups[pathIndex].pendingTransactions.filter(filterIDforPersonalTransactions))
         setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
         setTransactionHistory(txhistory);
-        setMembers(profile.data.groups[pathIndex].members.filter( filterIDfromMembers));
+        setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
       }
     } catch (err) {
       console.dir(err);
     }
   }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location due to history)
-console.log("tx history",transactionHistory)
+  //console.log("tx history",transactionHistory)
   const cloner = () => { //replaced Users with members
     let clone = []
     for (let i = 0; i < members.length; i++) {
@@ -102,59 +106,59 @@ console.log("tx history",transactionHistory)
     return clone;
   }
 
-const utilities = {
-  tobeRemovedOption: cloner(),
-  tobeRetrievedOption: [],
-}
+  const utilities = {
+    tobeRemovedOption: cloner(),
+    tobeRetrievedOption: [],
+  }
 
 
-const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
-  if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
-    return value;
+  const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
+    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+      return value;
+    }
   }
-}
-const filterIDfromMembers = (value) => { //removes userID from members
-  if (String(value._id) !== sessionData.userId) {
-    return value;
+  const filterIDfromMembers = (value) => { //removes userID from members
+    if (String(value._id) !== sessionData.userId) {
+      return value;
+    }
   }
-}
 
   // const showAll = () => {
   //   console.log(transactionHistory.length)
   //   setSize(transactionHistory.length)
   // }
-  
-const membersComponent=()=>{
-  return(
-    <Container className="members-container">
-    <div className='members-header'>
-      <span className='members-header-text'>Members</span>
-      <span className='transaction-history-header-total'>Balance</span>
-    </div>
-    {members.map(
-      (member, index) => (
-        <button className="transaction-button pending" key={index}>
-          <div className='image'>
-            <i className="user icon el"></i>
-          </div>
-          <span className="text-item-content">
-            {member.nickname !== null ?
-              <span className='item-content'>
-                <strong>{member.nickname}</strong>
-              </span> :
-              <span className='item-content'>
-                <strong>No Members</strong>
-              </span>
-            }
-          </span>
-        </button>
-      )
-    )}
-  </Container>
-  )
-}
 
-const transactHistory = () => {
+  const membersComponent = () => {
+    return (
+      <Container className="members-container">
+        <div className='members-header'>
+          <span className='members-header-text'>Members</span>
+          <span className='transaction-history-header-total'>Balance</span>
+        </div>
+        {members.map(
+          (member, index) => (
+            <button className="transaction-button pending" key={index}>
+              <div className='image'>
+                <i className="user icon el"></i>
+              </div>
+              <span className="text-item-content">
+                {member.nickname !== null ?
+                  <span className='item-content'>
+                    <strong>{member.nickname}</strong>
+                  </span> :
+                  <span className='item-content'>
+                    <strong>No Members</strong>
+                  </span>
+                }
+              </span>
+            </button>
+          )
+        )}
+      </Container>
+    )
+  }
+
+  const transactHistory = () => {
     return (
       <Container className="transaction-history-container">
         <div className='transaction-history-header'>
@@ -188,42 +192,42 @@ const transactHistory = () => {
     )
   }
 
-const personalPendingTransactions = () => {
-return (
-  <Container className="pending-transactions-container">
-    <div className='widget-subheader'>
-      {personalTransactions.length ?
-        <span className="transactions-header">
-          Pending Transactions
-        </span> : <span className="transactions-header">
-          No Pending Transactions
-        </span>}
-    </div>
-    <div className='transaction-block'>
-      {personalTransactions?.map((transaction, index) => (
-        <button className="transaction-button" key={index}>
-          <div className='image'>
-            <i className={transaction.sender._id === sessionData.userId ? `arrow right icon el` : `arrow left icon el`}></i>
-          </div>
-          <span className='item-content'>
-            <span className="text-item-content">
-              {transaction.sender._id === sessionData.userId ?
-                <span>To <strong>{transaction.receiver.nickname}</strong>
-                </span> :
-                <span>From <strong>{transaction.sender.nickname}</strong>
-                </span>}
-            </span>
-          </span>
-          <span className='amount'>
+  const personalPendingTransactions = () => {
+    return (
+      <Container className="pending-transactions-container">
+        <div className='widget-subheader'>
+          {personalTransactions.length ?
+            <span className="transactions-header">
+              Pending Transactions
+            </span> : <span className="transactions-header">
+              No Pending Transactions
+            </span>}
+        </div>
+        <div className='transaction-block'>
+          {personalTransactions?.map((transaction, index) => (
+            <button className="transaction-button" key={index}>
+              <div className='image'>
+                <i className={transaction.sender._id === sessionData.userId ? `arrow right icon el` : `arrow left icon el`}></i>
+              </div>
+              <span className='item-content'>
+                <span className="text-item-content">
+                  {transaction.sender._id === sessionData.userId ?
+                    <span>To <strong>{transaction.receiver.nickname}</strong>
+                    </span> :
+                    <span>From <strong>{transaction.sender.nickname}</strong>
+                    </span>}
+                </span>
+              </span>
+              <span className='amount'>
                 {transaction.amount} $
               </span>
-        </button>))}
-    </div>
-  </Container>
-  )
+            </button>))}
+        </div>
+      </Container>
+    )
   }
 
-const allPendingTransactions = () => {
+  const allPendingTransactions = () => {
     return (
       <Container className="pending-transactions-container">
         <div className='widget-subheader'>
@@ -256,241 +260,277 @@ const allPendingTransactions = () => {
     )
   }
 
-const handleAllPersonalClick = (boolean) => {
+  const handleAllPersonalClick = (boolean) => {
     localStorage.setItem("showAll", boolean)
     setShowAll(boolean);
   }
 
-const handleHistoryOrFriendsClick = (boolean) => {
+  const handleHistoryOrFriendsClick = (boolean) => {
     localStorage.setItem("showMembers", boolean)
     setShowMembers(boolean);
   }
 
-const addExpense = async () => {
-  try {
-    if(trackIndexAndID.length!==0){
-      const res = await api.post(`/expense/addexpense`,
-      {
-        groupId: groupID, //does it feed at first render? Need to check 
-        sender: sessionData.userId,
-        amount: inputAmount,
-        description: inputDescription,
-        tobeSharedWith:[...trackIndexAndID.map(tracker=>tracker._id),sessionData.userId] //only feed selected ids
-      }
-    )
+  const addExpense = async () => {
+    try {
+      if (trackIndexAndID.length !== 0) {
+        //TO DO 
+        //Will need to change the db request that gets you the group on potential merge.
+        const res = await api.post(`/expense/addexpense`,
+          {
+            groupId: groupID, //does it feed at first render? Need to check 
+            sender: sessionData.userId,
+            amount: inputAmount,
+            description: inputDescription,
+            tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+            groupTags: [...upTags, ...downTags],
+            expenseTags: downTags //expense tags include all
+          }
+        )
 
-      setInputAmount('')
-      setInputDescription('')
-      console.log(res)
-    }else{ //this might be redundant as all members exist in back end. Not sure how it's going to work yet
-            //but knowing members.length, if nothing has been selected here it could just check this by
-            //doing if members.length-shareWtih.length==1 then all users should be included.
-      const res = await api.post(`/expense/addexpense`,
-      {
-        groupId: groupID, //does it feed at first render? Need to check 
-        sender: sessionData.userId,
-        amount: inputAmount,
-        description: inputDescription,
-        tobeSharedWith:[...members.map(member=>member._id),sessionData.userId] //feed all ids
+        setInputAmount('')
+        setInputDescription('')
+        console.log(res)
+      } else { //this might be redundant as all members exist in back end. Not sure how it's going to work yet
+        //but knowing members.length, if nothing has been selected here it could just check this by
+        //doing if members.length-shareWtih.length==1 then all users should be included.
+        const res = await api.post(`/expense/addexpense`,
+          {
+            groupId: groupID, //does it feed at first render? Need to check 
+            sender: sessionData.userId,
+            amount: inputAmount,
+            description: inputDescription,
+            tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
+            groupTags: [...upTags, ...downTags],
+            expenseTags: downTags //expense tags include all
+          }
+        )
+        setInputAmount('')
+        setInputDescription('')
+        console.log(res)
       }
-    )
-      setInputAmount('')
-      setInputDescription('')
+
+    }
+    catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
+  const recordTx = async () => {
+    //console.log("ID",utilities.tobeRetrievedOption[0]._id)
+    if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
+    if (txAmount == null) return null; //do not proceed to recording tx if no amount has been given
+    if (txDescription == null) return null; //do not proceed to recording tx if no description has been given
+    try {
+      const res = await api.post(`/expense/addtransfer`,
+        {
+          groupId: groupID, //does it feed at first render? Need to check 
+          sender: sessionData.userId,
+          receiver: trackIndexAndID[0]._id,
+          amount: txAmount,
+          description: txDescription
+        }
+      )
+      setTxAmount('')
+      setTxDescription('')
       console.log(res)
     }
-    
+    catch (error) {
+      console.log(error)
+    }
   }
-  catch(error) {
-    console.log(error)
+
+  const handleSelectGroups = (index) => {
+    setActiveIndex(index);
   }
 
-}
+  const handleKeyDown = (event) => {
+   
+    if (event.key === "Spacebar" || event.key === ' ') {
+      console.log("Submit Button Pressed");
+      event.preventDefault() //prevents space from leaving actual space
+      //TODO Create the tag here
 
+      event.target.blur() //unfocus from cell
+      setTagText("")  //empty cell
+    }
+  };
 
-const recordTx = async ()=>{
-  //console.log("ID",utilities.tobeRetrievedOption[0]._id)
-  if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
-  if (txAmount==null) return null; //do not proceed to recording tx if no amount has been given
-  if (txDescription==null) return null; //do not proceed to recording tx if no description has been given
-  try {
-    const res = await api.post(`/expense/addtransfer`,
-      {
-        groupId: groupID, //does it feed at first render? Need to check 
-        sender: sessionData.userId,
-        receiver:trackIndexAndID[0]._id, 
-        amount: txAmount,
-        description: txDescription
-      }
-    )
-    setTxAmount('')
-    setTxDescription('')
-    console.log(res)
+  const onChangeTagName = (e) => {
+    //capitalises first and lowercases rest
+    const capitalFirstLowerRest = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()
+    setTagText(capitalFirstLowerRest) 
+    handleKeyDown(e)
+   
+
   }
-  catch(error) {
-    console.log(error)
-  }
-}
 
-const handleSelectGroups=(index)=>{
- setActiveIndex(index);
-}
+  return (
+    <div className="main-page">
+      <div className='box1'>
+        <div className='homewidget'>
+          <div className='widget-header'>
 
-return (
-<div className="main-page">
-  <div className='box1'>
-    <div className='homewidget'>
-      <div className='widget-header'>
-
-        <div className='group-selection-button'>
-          <button type="button" className="selection-button group-name-button " onClick={() => setShowSelectGroups(true)}>
-            <span className="group-title">
-              <strong>{groupName}</strong>
-            </span>
-            <span className="button-position">
-              <div className="button-layout">
-                <i className='angle down icon'>  </i>
-              </div>
-            </span>
-          </button>
-          <button className='option-button' onClick={() => setShowCreate(true)}>
-            <i className='group icon y'></i></button>
-          <button className='option-button granazi' >
-            <i className='cog icon'></i>
-          </button>
-          {showSelectGroups && 
-           <SelectBox headline="Groups" rightHeadline={"total"}close={() => setShowSelectGroups(false)}>
-            {groupInfo.map((group,index) => (
-               <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
-                <SelectBox.GroupButton
-                  key={group._id}
-                  text={group.title}
-                  rightText={group.totalSpent}
-                  index={index}
-                  activeIndex={activeIndex}
-                  // iconColor={item.iconColor}
-                  onClick={() => handleSelectGroups(index)}>
-                </SelectBox.GroupButton>
-               </Link>
-          ))}
-          </SelectBox>}
-          {/* <ModalFrame
+            <div className='group-selection-button'>
+              <button type="button" className="selection-button group-name-button " onClick={() => setShowSelectGroups(true)}>
+                <span className="group-title">
+                  <strong>{groupName}</strong>
+                </span>
+                <span className="button-position">
+                  <div className="button-layout">
+                    <i className='angle down icon'>  </i>
+                  </div>
+                </span>
+              </button>
+              <button className='option-button' onClick={() => setShowCreate(true)}>
+                <i className='group icon y'></i></button>
+              <button className='option-button granazi' >
+                <i className='cog icon'></i>
+              </button>
+              {showSelectGroups &&
+                <SelectBox headline="Groups" rightHeadline={"total"} close={() => setShowSelectGroups(false)}>
+                  {groupInfo.map((group, index) => (
+                    <Link key={index} className='aTag' to={`/main/${group._id}?${index}`}>
+                      <SelectBox.GroupButton
+                        key={group._id}
+                        text={group.title}
+                        rightText={group.totalSpent}
+                        index={index}
+                        activeIndex={activeIndex}
+                        // iconColor={item.iconColor}
+                        onClick={() => handleSelectGroups(index)}>
+                      </SelectBox.GroupButton>
+                    </Link>
+                  ))}
+                </SelectBox>}
+              {/* <ModalFrame
             onClose={() => setShow(false)}
             content={SelectGroup({ refreshGroupList, activeIndex, setActiveIndex, setShow })}
             show={show}
             header="Groups" /> */}
-        </div>
-        <div className='option-buttons'>
-          <button className='option-button' onClick={() => setShowExp(true)}>
-            <i className='add icon y'></i>
-            <strong>Add expense</strong>
-          </button>
-          <button className='option-button' onClick={() => setShowTransact(true)}>
-            <i className='exchange icon y '></i>
-            <strong> Transact </strong>
-          </button>
-        </div>
-      </div>
-      {showExp &&
-        <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
-          <Form.InputField
-            value={inputAmount}
-            label="Amount"
-            maxLength={20}
-            required={true}
-            onChange={e => setInputAmount(e.target.value)}
-            clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
-          />
-          <Form.InputField
-            value={inputDescription}
-            label="Description"
-            maxLength={100}
-            required={false}
-            onChange={e => setInputDescription( e.target.value)}
-            clear={e => setInputDescription('')}
-          />
-         <Form.Tags/>
-         
-          <Form.MultiSelect
-          setTrackIndexAndID={setTrackIndexAndID}
-          value={trackIndexAndID}
-          optionsArray={members}
-          label="share expense with"
-          allowMultiSelections={true}/>
-        </Form>
-      }
-      {
-        showtransact &&
-        <Form headline="Record tx" submit={recordTx} close={() => setShowTransact(false)} >
-          <Form.InputField
-            value={txAmount}
-            label="Amount"
-            maxLength={20}
-            required={true}
-            onChange={e => setTxAmount(e.target.value)}
-            clear={e => setTxAmount('')}
-          />
-          <Form.InputField
-            value={txDescription}
-            label="Description"
-            maxLength={100}
-            required={true}
-            onChange={e => setTxDescription( e.target.value)}
-            clear={e => setTxDescription('')}
-          />   
-        <Form.MultiSelect
-          setTrackIndexAndID={setTrackIndexAndID}
-          value={trackIndexAndID}
-          optionsArray={members}
-          label="label"
-          allowMultiSelections={false}/>
-      </Form>
-      }
+            </div>
+            <div className='option-buttons'>
+              <button className='option-button' onClick={() => setShowExp(true)}>
+                <i className='add icon y'></i>
+                <strong>Add expense</strong>
+              </button>
+              <button className='option-button' onClick={() => setShowTransact(true)}>
+                <i className='exchange icon y '></i>
+                <strong> Transact </strong>
+              </button>
+            </div>
+          </div>
+          {showExp &&
+            <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
+              <Form.InputField
+                value={inputAmount}
+                label="Amount"
+                maxLength={20}
+                required={true}
+                onChange={e => setInputAmount(e.target.value)}
+                clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
+              />
+              <Form.InputField
+                value={inputDescription}
+                label="Description"
+                maxLength={100}
+                required={false}
+                onChange={e => setInputDescription(e.target.value)}
+                clear={e => setInputDescription('')}
+              />
+              <Form.Tags
+                upTags={upTags}
+                setUpTags={setUpTags}
+                downTags={downTags}
+                setDownTags={setDownTags}
+                tagText={tagText}
+                maxLength={12}
+                onChange={onChangeTagName}
 
-    </div>
-    <div className='pending-transactions'>
-      <div className="all-personal-options">
-        <button className={showAll ? "all-active" : "all-inactive"} onClick={() => handleAllPersonalClick(true)}><strong>All</strong></button>
-        <button className={showAll ? "personal-inactive" : "personal-active"} onClick={() => handleAllPersonalClick(false)}><strong>Personal</strong></button>
-      </div>
-      {showAll ? allPendingTransactions() : personalPendingTransactions()}
-    </div>
-    <div className='transaction-history'>
-      <div className="history-friends-options">
-        <button className={showMembers ? "history-inactive" : "history-active"} onClick={() => handleHistoryOrFriendsClick(false)}><strong>History</strong></button>
-        <button className={showMembers ? "members-active" : "members-inactive"} onClick={() => handleHistoryOrFriendsClick(true)}><strong>Members</strong></button>
-      </div>
-      {showMembers ? membersComponent() : transactHistory()}
-    </div>
-    <LeaveGroupModal
-      showLeaveGroup={showLeaveGroup}
-      onCloseLeaveGroup={() => setShowLeaveGroup(false)}
-      userInfoID={sessionData.userId}
-      groupID={groupID}
-      groupName={groupName}
-      setGroupName={setGroupName}
-      setGroupInfo={setGroupInfo}
-    />
-    <CreateGroupModal
-      showCreate={showCreate}
-      setShowCreate={setShowCreate}
-      utilities={utilities}
-      setRefresh={setRefresh}
-    />
-  </div>
+              />
 
-  <div className="box2">
-    box2
-  </div>
-  <div className="box3">
-    box3
-  </div>
-  <div className="box4">
-    box4
-  </div>
-  <div className="box5">
-    box5
-  </div>
-</div>
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndID}
+                value={trackIndexAndID}
+                optionsArray={members}
+                label="share expense with"
+                allowMultiSelections={true} />
+            </Form>
+          }
+          {
+            showtransact &&
+            <Form headline="Record tx" submit={recordTx} close={() => setShowTransact(false)} >
+              <Form.InputField
+                value={txAmount}
+                label="Amount"
+                maxLength={20}
+                required={true}
+                onChange={e => setTxAmount(e.target.value)}
+                clear={e => setTxAmount('')}
+              />
+              <Form.InputField
+                value={txDescription}
+                label="Description"
+                maxLength={100}
+                required={true}
+                onChange={e => setTxDescription(e.target.value)}
+                clear={e => setTxDescription('')}
+              />
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndID}
+                value={trackIndexAndID}
+                optionsArray={members}
+                label="label"
+                allowMultiSelections={false} />
+            </Form>
+          }
+
+        </div>
+        <div className='pending-transactions'>
+          <div className="all-personal-options">
+            <button className={showAll ? "all-active" : "all-inactive"} onClick={() => handleAllPersonalClick(true)}><strong>All</strong></button>
+            <button className={showAll ? "personal-inactive" : "personal-active"} onClick={() => handleAllPersonalClick(false)}><strong>Personal</strong></button>
+          </div>
+          {showAll ? allPendingTransactions() : personalPendingTransactions()}
+        </div>
+        <div className='transaction-history'>
+          <div className="history-friends-options">
+            <button className={showMembers ? "history-inactive" : "history-active"} onClick={() => handleHistoryOrFriendsClick(false)}><strong>History</strong></button>
+            <button className={showMembers ? "members-active" : "members-inactive"} onClick={() => handleHistoryOrFriendsClick(true)}><strong>Members</strong></button>
+          </div>
+          {showMembers ? membersComponent() : transactHistory()}
+        </div>
+        <LeaveGroupModal
+          showLeaveGroup={showLeaveGroup}
+          onCloseLeaveGroup={() => setShowLeaveGroup(false)}
+          userInfoID={sessionData.userId}
+          groupID={groupID}
+          groupName={groupName}
+          setGroupName={setGroupName}
+          setGroupInfo={setGroupInfo}
+        />
+        <CreateGroupModal
+          showCreate={showCreate}
+          setShowCreate={setShowCreate}
+          utilities={utilities}
+          setRefresh={setRefresh}
+        />
+      </div>
+
+      <div className="box2">
+        box2
+      </div>
+      <div className="box3">
+        box3
+      </div>
+      <div className="box4">
+        box4
+      </div>
+      <div className="box5">
+        box5
+      </div>
+    </div>
 
   )
 }
