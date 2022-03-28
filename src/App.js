@@ -1,5 +1,5 @@
 import './App.css';
-import { MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
+import { FigmaMain, MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
 import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -8,15 +8,16 @@ import './semantic-icons.css'
 
 function App() {
 
-  // acomment
+  const pathname = window.location.pathname
+  console.log(pathname)
 
   return (
     <AuthenticationContextProvider>
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            <UserBar />
-            <NavigationBar2 />
+            {/* <UserBar/> */}
+            {/* <NavigationBar2/> */}
             <SlidingBoxContextProvider>
               <Switch>
                 <Route exact path="/" component={Home} />
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/v/:token" component={VerifyLink} />
                 <Route path="/signup" component={SignUp} />
                 {/* <PrivateRoute exact path="/group/:groupid"component={Group}/> */}
+                <PrivateRoute path="/figmamain" component={FigmaMain} />
                 <PrivateRoute path="/mygroups" component={MyGroups} />
                 <PrivateRoute path="/group/:groupid" component={Group} />
                 <PrivateRoute exact path="/test" component={Test}/>

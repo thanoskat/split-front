@@ -109,10 +109,10 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   }
 
   return (
-    <div className='v-flex'>
+    <div className='flex column'>
       <div className='multiselectbox'>
         {optionsArray.map((option, index) =>
-          <div className='v-flex profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
+          <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
             <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
             <div className='avatar-description'>{option.nickname}</div>
           </div>

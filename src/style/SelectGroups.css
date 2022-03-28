@@ -16,11 +16,11 @@ border-top-right-radius: 12px; */
   transition: margin-top 300ms ease 0s, margin-bottom 300ms ease 0s;
 }
 
-a:-webkit-any-link {
+/* a:-webkit-any-link {
   color: none;
   cursor: pointer;
   text-decoration: none;
-}
+} */
 
 .modal-button-active {
   /* box-shadow:inset 0 0 0 9999px rgba(6, 104, 241, 0.05) ; */
