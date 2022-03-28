@@ -35,5 +35,33 @@ function Button({ text, icon, iconColor, rightText, onClick }) {
   );
 }
 
+
+function GroupButton({text,rightText,onClick,index,activeIndex }) {
+
+  const { closeBox } = useContext(SlidingBoxContext)
+  const clickAndClose = () => {
+    closeBox()
+    onClick()
+  }
+
+  return (
+    <button area-pressed="true"
+      onClick={clickAndClose}
+      className={activeIndex === index ? "group-button-active" : "group-button"}>
+      <div className="group-avatar">
+        <div className="image-background">
+        </div>
+      </div>
+      <span className="group-header ">
+        <strong>{text}</strong>
+      </span>
+      <span className="group-total">
+        <strong>{rightText}</strong>
+      </span>
+    </button>
+  )
+}
+
+SelectBox.GroupButton=GroupButton
 SelectBox.Button = Button
 export default SelectBox

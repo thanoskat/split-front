@@ -7,13 +7,15 @@ export const GlobalStateContext = React.createContext();
 export function GlobalStateContextProvider({ children }) {
 
   const [activeIndex, setActiveIndex] = useState(0);
+  
 
   return (
     <GlobalStateContext.Provider
       value=
       {{
         activeIndex: activeIndex,
-        setActiveIndex:setActiveIndex,
+        setActiveIndex:setActiveIndex, 
+        
       }}>
       {children}
     </GlobalStateContext.Provider>
