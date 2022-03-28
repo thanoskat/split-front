@@ -32,7 +32,7 @@ function FigmaMain() {
           <span className='group-info-title'>{displayedGroup?.title}</span>
           <i className='icon angle down'/>
         </div>
-        <i className='t2 icon ellipsis vertical'/>
+        <i className='t3 icon ellipsis vertical'/>
       </div>
       <div className='separator-1'/>
       <TabSwitcher/>

@@ -8,29 +8,34 @@ const TabExpense = ({ expenses }) => {
     return(
       <div className='expense flex column justcont-spacebetween'>
         <div className='flex row justcont-spacebetween'>
-          <div className='t2 white'>{description}</div>
-          <div className='t2 white'>{`$ ${amount}`}</div>
+          <div className='t3 white'>{description}</div>
+          <div className='t3 white'>{`$ ${amount}`}</div>
         </div>
-        <div className='flex row justcont-flexstart' style={{ flexWrap: 'wrap', gap: '10px' }}>
-          <ExpenseTag text='Tickets' color='#6490E5'/>
+        <div className='flex row justcont-flexstart' style={{ gap: '10px' }}>
+          {/* <ExpenseTag text='Tickets' color='#6490E5'/> */}
+          <ExpenseTag text='Tickets' color='#86dda0'/>
           <ExpenseTag text='Shopping' color='#F29A7E'/>
           <ExpenseTag text='Food' color='#FFE897'/>
         </div>
         <div className='flex row justcont-spacebetween'>
-          <div>
-            <i className='user icon expense-stat-icon'/>
-            <span className='t3 expense-stat-text'>{spender}</span>
+          <div className='flex row alignitems-center expense-stat'>
+            <IonIcon name='person-sharp' className='t3 expense-stat-icon'/>
+            {/* <i className='user icon expense-stat-icon'/> */}
+            <span className='t5 expense-stat-text'>{spender}</span>
           </div>
-          <div>
-            <i className='clock icon expense-stat-icon'/>
-            <span className='t3 expense-stat-text'>3 hours ago</span>
+          <div className='flex row alignitems-center expense-stat'>
+            <IonIcon name='time' className='t3 expense-stat-icon'/>
+            {/* <i className='clock icon expense-stat-icon'/> */}
+            <span className='t5 expense-stat-text'>3 hours ago</span>
           </div>
-          <div>
-            <i className='users icon expense-stat-icon'/>
-            <span className='t3 expense-stat-text'>{participants.length}</span>
+          <div className='flex row alignitems-center expense-stat'>
+            <IonIcon name='people-sharp' className='t3 expense-stat-icon'/>
+            {/* <i className='users icon expense-stat-icon'/> */}
+            <span className='t5 expense-stat-text'>{participants.length}</span>
           </div>
-          <div>
-            <i className='ellipsis vertical icon expense-options-icon'/>
+          <div className='flex row alignitems-center'>
+            <IonIcon name='ellipsis-vertical' className='t3 expense-options-icon'/>
+            {/* <i className='ellipsis vertical icon expense-options-icon'/> */}
           </div>
         </div>
       </div>
@@ -39,14 +44,14 @@ const TabExpense = ({ expenses }) => {
 
   const ExpenseTag = ({ text, color }) => {
     return(
-      <div className='t4 expense-tag flex row shadow cursor-pointer' style={{ backgroundColor: `${color}` }}>
+      <div className='t5 expense-tag flex row shadow cursor-pointer' style={{ backgroundColor: `${color}` }}>
         {text}
       </div>
     )
   }
 
   return (
-    <div className='expenses-tab t3 flex flex-1 column overflow-hidden'>
+    <div className='expenses-tab t5 flex flex-1 column overflow-hidden'>
       <div className='overflow-auto'>
         {expenses?.map(expense => (
           <div key={expense._id}>
@@ -70,8 +75,8 @@ const TabExpense = ({ expenses }) => {
           name='plus'
           size='lg'
         /> */}
-        <IonIcon name='add' style={{ fontSize: '48px' }}/>
-        {/* Add new */}
+        <IonIcon name='add' className='floating-button-icon'/>
+        <div className='floating-button-text'>New</div>
       </div>
     </div>
   )

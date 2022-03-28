@@ -10,11 +10,14 @@
 
 html, body, select {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  /* font-size: 14px; */
   user-select: none;
   height: 100vh;
+  white-space: nowrap;
 
-  --base-color: hsl(220, 50%, 50%);
+  --base-color: #406abf;
+  --tag-color-1: #c3dd86;
+  --tag-color-2: #86dda0;
   --base-dark-color: #121212;
   --light-color: #EFF3FB;
   --layer-0-color: #131519;
@@ -92,19 +95,19 @@ html, body, select {
   font-size: 32px
 }
 
-.t2 {
+.t3 {
   font-size: 18px
 }
 
-.t25 {
+.t4 {
   font-size: 16px
 }
 
-.t3 {
+.t5 {
   font-size: 14px
 }
 
-.t4 {
+.t6 {
   font-size: 12px
 }
 
@@ -114,6 +117,7 @@ html, body, select {
 
 .flex {
   display: flex;
+  flex-wrap: nowrap;
 }
 
 .row {
@@ -159,7 +163,8 @@ html, body, select {
 }
 
 .shadow {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+  box-shadow: rgba(0, 0, 0, 0.25) 1px 4px 12px;
 }
 
 .figma-main {
@@ -233,30 +238,40 @@ html, body, select {
 
 .floating-button {
   position: fixed;
-  gap: 0px;
-  border-radius: 4px;
-  /* padding: 0px 10px 0px 4px; */
+  gap: 2px;
+  border-radius: 6px;
+  padding: 0px 10px 0px 4px;
   /* width: fit-content; */
   /* height: fit-content; */
   /* right: 52px; */
-  bottom: 36px;
-  right: 40px;
+  bottom: 44px;
+  right: 44px;
   /* transform: translateX(50%); */
-  font-size: 20px;
-  color: white;
-  background-color: hsl(220, 50%, 50%);
-  border-color: var(--layer-0-color);
+  color: var(--light-color);
+  background-color: var(--layer-0-color);
+  border-color: var(--layer-2-color);
   border-width: 1px;
-  /* border-style: solid; */
+  border-style: solid;
+}
+
+.floating-button {
+  font-size: 34px;
+}
+
+.floating-button-text {
+  font-size: 20px;
 }
 
 .expense .icon.ellipsis.vertical {
   color: var(--layer-6-color)
 }
 
+.expense-stat {
+  gap: 6px;
+}
+
 .expense-stat-icon {
   color: var(--layer-3-color);
-  margin-right: 6px;
 }
 
 .expense-stat-text {
@@ -264,13 +279,13 @@ html, body, select {
 }
 
 .expense-options-icon {
-  color: var(--light-color);
+  color: var(--layer-7-color);
 }
 
 .expense-tag {
   padding: 2px 6px 2px 6px;
-  border-radius: 2px;
-  color: var(--layer-1-color);
+  border-radius: 4px;
+  color: var(--layer-2-color);
   font-weight: 500;
   width: fit-content;
 }
