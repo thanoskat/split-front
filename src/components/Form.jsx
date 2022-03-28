@@ -1,5 +1,5 @@
 import { SlidingBox } from './'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useRef, useState, useEffect } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
 import "../style/Form.css"
@@ -92,20 +92,19 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
   const onSubmitFunction = (allowMultiSelections, option, index) => {
     if (allowMultiSelections) {
-      const tracker=value.findIndex(item => item._id === option._id)
-      if (tracker==-1) { //if ID is not in the array, push it
+      const tracker = value.findIndex(item => item._id === option._id)
+      if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
       } else {
         setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
       }
     } else {
-      const tracker=value.findIndex(item => item._id === option._id)
-      if(tracker==-1){ //if ID is not in the array, push it
+      const tracker = value.findIndex(item => item._id === option._id)
+      if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID([{ _id: option._id, index: index }])
-      }else{ //else remove it
-        setTrackIndexAndID(value.filter(item => item._id !== option._id)) 
+      } else { //else remove it
+        setTrackIndexAndID(value.filter(item => item._id !== option._id))
       }
-      
     }
   }
 
@@ -126,6 +125,104 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   )
 }
 
+
+
+
+function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown,newtagRef}) {
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown); //Listens to handleKeyDown function
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown); //removes listening to handleKeyDown function once component ceases to run
+    }
+  }, [])
+
+//TODO
+//Potential problem: Listener is "on" while Form component is running (therefore as long as the sliding menu is on). Potential implications when hitting Enter? (or Space)
+//Making input a separate component didn't resolve the issue
+
+
+  const checkLengthAndChange = (e) => {
+    if (maxLength) {
+      if (e.target.value.length <= maxLength) {
+        return onChange(e)
+      }
+    }
+    else {
+      return onChange(e)
+    }
+  }
+
+
+  const handleUpTagsClick = (tag) => {
+    setUpTags(upTags.filter(item => item.name !== tag.name))
+    setDownTags(prevTag => [...prevTag, tag])
+  }
+
+  const handleDownTagsClick = (tag) => {
+    setDownTags(downTags.filter(item => item.name !== tag.name))
+    setUpTags(prevTag => [...prevTag, tag])
+  }
+
+//event.key === "Spacebar" || event.key === ' ' || 
+
+
+  
+  //https://erikmartinjordan.com/resize-input-text-size-react
+  return (
+    <div className='Tags v-flex'>
+
+      <div className='multiselectbox tobeSelectedTags'>
+        {upTags.map((tag, index) =>
+          <div className='h-flex tag-section'
+            key={index}
+            style={{ backgroundColor: `${tag.color}` }}
+            onClick={() => handleUpTagsClick(tag)}>
+            <div className='h-flex tag-section-name'>
+              {tag.name}
+              <i className="trash alternate icon"></i>
+            </div>
+          </div>
+        )}
+
+        <div className='h-flex tag-section newtag-section'>
+
+          <input
+            ref={newtagRef}
+            className='newtag-input'
+            placeholder='new tag'
+            value={tagText}
+            onChange={checkLengthAndChange}
+            style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
+            onBlur={()=>console.log("unfocused")} />
+
+          <i className="tag icon newtagIcon"></i>
+
+        </div>
+
+      </div>
+
+      <div className='multiselectbox selectedTags'>
+        {downTags.map((tag, index) =>
+          <div className='h-flex tag-section'
+            key={index}
+            style={{ backgroundColor: `${tag.color}` }}>
+            <div className='tag-section-name'>
+              {tag.name}
+            </div>
+            <div className='tag-section-close'
+              onClick={() => handleDownTagsClick(tag)}>
+              <i className="times icon"></i>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  )
+}
+
+Form.Tags = Tags;
 Form.InputField = InputField;
 Form.DropDownField = DropDownField;
 Form.MultiSelect = MultiSelect;

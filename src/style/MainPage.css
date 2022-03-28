@@ -257,22 +257,6 @@ html, body {
 
 }
 
-
-.image-background {
-  display: flex;
-  justify-content: center;
-  background-image: none;
-  background-blend-mode: overlay;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
-  font: inherit;
-  background-color: var(--pink);
-  width: 40px;
-  height: 40px;
-  border-radius: 9999px
-}
-
 .el {
   align-self: center;
   justify-self: center;

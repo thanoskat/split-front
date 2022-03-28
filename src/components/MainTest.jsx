@@ -142,7 +142,7 @@ function MainTest() {
             <SelectBox.Button
               key={group._id}
               text={group.title}
-              // iconColor={item.iconColor}
+              iconColor={array1.iconColor}
               onClick={() => setOption(group._id)}/>
           ))}
         </SelectBox>
