@@ -2,7 +2,7 @@ import '../style/MainPage.css'
 import '../style/summary.css'
 import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container, Form, SelectBox, SelectGroup } from '.'
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import { GlobalStateContext } from '../contexts/GlobalStateContext'
@@ -37,11 +37,13 @@ function MainPage() {
   const [txDescription, setTxDescription] = useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
-  const [upTags, setUpTags] = useState([{ name: "Tickets", color: "var(--color1)" }, { name: "Bill", color: "var(--color2)" }, { name: "Food", color: "var(--color3)" }])
+  const [upTags, setUpTags] = useState()
   const [downTags, setDownTags] = useState([])
   const [tagText, setTagText] = useState("");
-  //console.log(tagText.length===0)
 
+
+  const tagTextRef = useRef(tagText)
+  const newtagRef = useRef(null)
   //console.log(trackIndexAndID.map(tracker=>tracker._id))
   //console.log(Users)
   //console.log(members.map(member=>member._id))
@@ -55,13 +57,13 @@ function MainPage() {
   //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
 
   useEffect(async () => {
-    window.addEventListener("keydown", handleKeyDown); //TODO has to run on first render so it works with just []
     try {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       //console.log("pathIndex",pathIndex)
       //console.log("activeIndex", activeIndex)
-      //console.log("profile",profile.data.groups[activeIndex])
+      console.log("profile", profile.data.groups[activeIndex])
+      setUpTags(profile.data.groups[activeIndex].groupTags)
       //const pulledtransactions = await api.get("/groups")
       setGroupInfo(profile.data.groups);
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
@@ -344,27 +346,36 @@ function MainPage() {
   const handleSelectGroups = (index) => {
     setActiveIndex(index);
   }
-
-  const handleKeyDown = (event) => {
-   
-    if (event.key === "Spacebar" || event.key === ' ') {
-      console.log("Submit Button Pressed");
-      event.preventDefault() //prevents space from leaving actual space
-      //TODO Create the tag here
-
-      event.target.blur() //unfocus from cell
-      setTagText("")  //empty cell
-    }
-  };
+  //////////////////////////////////////////////////////////////
+  //Tags handlers START ///////////////////////////////////////
+  ////////////////////////////////////////////////////////////
 
   const onChangeTagName = (e) => {
+
     //capitalises first and lowercases rest
-    const capitalFirstLowerRest = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()
-    setTagText(capitalFirstLowerRest) 
-    handleKeyDown(e)
-   
+    const capitalFirstLowerCaseRest = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()
+    tagTextRef.current = capitalFirstLowerCaseRest //listener only has access to the initial state, so it will always log "" (as initialised)
+    setTagText(capitalFirstLowerCaseRest)       //This is because listener belongs to the initial render and is not updated on subsequent rerenders.
 
   }
+
+
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      console.log("Submit Button Pressed");
+      console.log(tagTextRef.current)
+      console.log(event.target==newtagRef.current)
+
+
+      setTagText("")  //empty cell
+      event.target.blur() //unfocus from cell
+
+    }
+  };
+  //////////////////////////////////////////////////////////////
+  //Tags handlers END /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
 
   return (
     <div className="main-page">
@@ -445,8 +456,12 @@ function MainPage() {
                 downTags={downTags}
                 setDownTags={setDownTags}
                 tagText={tagText}
+                setTagText={setTagText}
                 maxLength={12}
                 onChange={onChangeTagName}
+                handleKeyDown={handleKeyDown}
+                newtagRef={newtagRef}
+
 
               />
 

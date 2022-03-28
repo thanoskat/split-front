@@ -125,8 +125,33 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   )
 }
 
-function Tags({ upTags, setUpTags, downTags, setDownTags, maxLength, onChange, tagText, onSubmit }) {
 
+
+
+function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown,newtagRef}) {
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown); //Listens to handleKeyDown function
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown); //removes listening to handleKeyDown function once component ceases to run
+    }
+  }, [])
+
+//TODO
+//Potential problem: Listener is "on" while Form component is running (therefore as long as the sliding menu is on). Potential implications when hitting Enter? (or Space)
+//Making input a separate component didn't resolve the issue
+
+
+  const checkLengthAndChange = (e) => {
+    if (maxLength) {
+      if (e.target.value.length <= maxLength) {
+        return onChange(e)
+      }
+    }
+    else {
+      return onChange(e)
+    }
+  }
 
 
   const handleUpTagsClick = (tag) => {
@@ -139,18 +164,11 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, maxLength, onChange, t
     setUpTags(prevTag => [...prevTag, tag])
   }
 
-  const checkLengthAndChange = (e) => {
+//event.key === "Spacebar" || event.key === ' ' || 
 
-    if (maxLength) {
-      if (e.target.value.length <= maxLength) {
-        return onChange(e)
-      }
-    }
-    else {
-      return onChange(e)
-    }
-  }
-//https://erikmartinjordan.com/resize-input-text-size-react
+
+  
+  //https://erikmartinjordan.com/resize-input-text-size-react
   return (
     <div className='Tags v-flex'>
 
@@ -170,12 +188,13 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, maxLength, onChange, t
         <div className='h-flex tag-section newtag-section'>
 
           <input
+            ref={newtagRef}
             className='newtag-input'
             placeholder='new tag'
             value={tagText}
             onChange={checkLengthAndChange}
             style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
-            onBlur={(e) =>console.log("Unfocused") } />
+            onBlur={()=>console.log("unfocused")} />
 
           <i className="tag icon newtagIcon"></i>
 
