@@ -17,7 +17,7 @@ function App() {
         <BrowserRouter>
           <div className="App">
             {/* <UserBar/> */}
-            {/* <NavigationBar2/> */}
+            <NavigationBar2/>
             <SlidingBoxContextProvider>
               <Switch>
                 <Route exact path="/" component={Home} />

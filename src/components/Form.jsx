@@ -128,12 +128,15 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown,newtagRef}) {
+function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown,handleBlur,newtagRef}) {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown); //Listens to handleKeyDown function
+    //window.addEventListener("blur", handleBlur); 
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown); //removes listening to handleKeyDown function once component ceases to run
+      //window.removeEventListener("blur", handleBlur)
     }
   }, [])
 
@@ -166,8 +169,6 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
 
 //event.key === "Spacebar" || event.key === ' ' || 
 
-
-  
   //https://erikmartinjordan.com/resize-input-text-size-react
   return (
     <div className='Tags v-flex'>
@@ -194,7 +195,7 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
             value={tagText}
             onChange={checkLengthAndChange}
             style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
-            onBlur={()=>console.log("unfocused")} />
+            onBlur={(e)=>handleBlur(e)} />
 
           <i className="tag icon newtagIcon"></i>
 
@@ -203,6 +204,7 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
       </div>
 
       <div className='multiselectbox selectedTags'>
+        {downTags.length? "":"add tag"}
         {downTags.map((tag, index) =>
           <div className='h-flex tag-section'
             key={index}

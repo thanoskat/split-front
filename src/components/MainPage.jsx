@@ -47,6 +47,7 @@ function MainPage() {
   //console.log(trackIndexAndID.map(tracker=>tracker._id))
   //console.log(Users)
   //console.log(members.map(member=>member._id))
+  // console.log(downTags)
 
   const api = useAxios()
   const location = useLocation()
@@ -97,7 +98,7 @@ function MainPage() {
     } catch (err) {
       console.dir(err);
     }
-  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location due to history)
+  }, [location, refreshGroupList])//This useEffect might be running twice (once at first render, then again because of changes in location due to history)
   //console.log("tx history",transactionHistory)
   const cloner = () => { //replaced Users with members
     let clone = []
@@ -284,8 +285,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            groupTags: [...upTags, ...downTags],
-            expenseTags: downTags //expense tags include all
+            expenseTags: downTags
           }
         )
 
@@ -302,8 +302,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
-            groupTags: [...upTags, ...downTags],
-            expenseTags: downTags //expense tags include all
+            expenseTags: downTags
           }
         )
         setInputAmount('')
@@ -359,20 +358,45 @@ function MainPage() {
 
   }
 
-
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      console.log("Submit Button Pressed");
-      console.log(tagTextRef.current)
-      console.log(event.target==newtagRef.current)
-
-
+  const handleKeyDown = async (event) => {
+    if (event.key === "Enter" && //if Enter pressed
+      event.target == newtagRef.current && //if clicked in new-tag
+      groupInfo[activeIndex].groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {//if nametag doesn't exist in current grouptags
+      try {
+        await api.post(`/expense/addtag`,
+          {
+            groupId: groupID,
+            groupTag: { name: tagTextRef.current, color: "var(--color3)" }
+          })
+      } catch (err) {
+        console.dir("groupTagErr", err)
+      }
       setTagText("")  //empty cell
-      event.target.blur() //unfocus from cell
+      setRefresh(prev => !prev)//re-run useEffect to update group
+      //event.target.blur() //unfocus from cell
 
     }
   };
+
+  const handleBlur = async (event) => {
+    if (event.target == newtagRef.current && //if clicked in new-tag
+      groupInfo[activeIndex].groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
+      try {
+        await api.post(`/expense/addtag`,
+          {
+            groupId: groupID,
+            groupTag: { name: tagTextRef.current, color: "var(--color3)" }
+          })
+      } catch (err) {
+        console.dir("groupTagErr", err)
+      }
+      setTagText("")  //empty cell
+      setRefresh(prev => !prev)//re-run useEffect to update group
+      event.target.blur() //unfocus from cell
+    }
+
+  }
+
   //////////////////////////////////////////////////////////////
   //Tags handlers END /////////////////////////////////////////
   /////////////////////////////////////////////////////////////
@@ -460,9 +484,8 @@ function MainPage() {
                 maxLength={12}
                 onChange={onChangeTagName}
                 handleKeyDown={handleKeyDown}
+                handleBlur={handleBlur}
                 newtagRef={newtagRef}
-
-
               />
 
               <Form.MultiSelect
