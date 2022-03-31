@@ -27,7 +27,7 @@ html, body, select {
   --layer-4-color: #555659;
   --layer-5-color: #626366;
   --layer-6-color: #6E6F72;
-  
+
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */
@@ -74,7 +74,7 @@ html, body, select {
   overflow: auto;
 
   /* chrome */
-  overflow: auto;
+  overflow: overlay;
 }
 
 .overflow-hidden {
@@ -101,6 +101,14 @@ html, body, select {
   font-size: 32px
 }
 
+.t15 {
+  font-size: 20px
+}
+
+.t2 {
+  font-size: 22px
+}
+
 .t3 {
   font-size: 18px
 }
@@ -117,20 +125,76 @@ html, body, select {
   font-size: 12px
 }
 
+.regular {
+  font-weight: 400
+}
+
+.medium {
+  font-weight: 500
+}
+
+.semibold {
+  font-weight: 600
+}
+
+.extrabold {
+  font-weight: 700
+}
+
+.gap4 {
+  gap: 4px
+}
+
+.gap6 {
+  gap: 6px
+}
+
+.gap8 {
+  gap: 8px
+}
+
+.light-color {
+  color: var(--light-color)
+}
+
 .white {
   color: #FFFFFF
+}
+
+.layer0 {
+  color: var(--layer-0-color)
+}
+
+.layer1 {
+  color: var(--layer-1-color)
+}
+
+.layer2 {
+  color: var(--layer-2-color)
+}
+
+.layer3 {
+  color: var(--layer-3-color)
+}
+
+.layer4 {
+  color: var(--layer-4-color)
+}
+
+.layer5 {
+  color: var(--layer-5-color)
 }
 
 .flex {
   display: flex;
   flex-wrap: nowrap;
 }
-  
+
 .v-flex {
   display: flex;
   flex-direction: column;
 }
-  
+
 .h-flex {
   display: flex;
   flex-wrap: nowrap;
@@ -164,6 +228,11 @@ html, body, select {
   flex: 1;
 }
 
+.separator-0 {
+  border-bottom: 1px solid;
+  border-color: var(--layer-0-color);
+}
+
 .separator-1 {
   border-bottom: 1px solid;
   border-color: var(--layer-1-color);
@@ -174,13 +243,28 @@ html, body, select {
   border-color: var(--layer-2-color);
 }
 
-.cursor-pointer {
+.pointer {
   cursor: pointer
 }
 
 .shadow {
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   box-shadow: rgba(0, 0, 0, 0.25) 1px 4px 12px;
+}
+
+.spin {
+  /* animation: spin-animation 1s infinite; */
+  animation: spin-animation 1s linear infinite;
+}
+
+
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .figma-main {
@@ -193,17 +277,17 @@ html, body, select {
   padding: 0px 14px 0px 14px;
   justify-content: space-between;
   font-weight: 700;
+  background-color: var(--layer-0-color);
   color: var(--light-color)
 }
 
-.group-info-frame .icon.angle.down {
-  position: relative;
-  top: 4px;
-  left: 10px;
+.group-options-icon {
+  color: var(--layer-6-color);
 }
 
-.group-info-frame .icon.ellipsis.vertical {
-  color: var(--layer-6-color)
+.group-selector {
+  color: var(--light-color);
+  background-color: var(--layer-1-color);
 }
 
 .tab-switcher {
@@ -241,9 +325,12 @@ html, body, select {
   color: var(--light-color);
 }
 
+.top-radius {
+  border-radius: 14px 14px 0px 0px;
+}
+
 .expenses-tab {
   background-color: var(--layer-1-color);
-  border-radius: 14px 14px 0px 0px;
 }
 
 .expense {
@@ -263,9 +350,30 @@ html, body, select {
   bottom: 44px;
   right: 44px;
   /* transform: translateX(50%); */
+  color: white;
+  background-color: var(--base-color);
+  border-color: var(--layer-2-color);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.padding4 {
+  padding: 4px
+}
+
+.padding1812 {
+  padding: 18px 12px
+}
+
+.button-11 {
+  /* gap: 2px; */
+  border-radius: 4px;
+  /* padding: 0px 10px 0px 4px; */
+
+  box-sizing: border-box;
   color: var(--light-color);
   background-color: var(--layer-0-color);
-  border-color: var(--layer-2-color);
+  border-color: var(--layer-3-color);
   border-width: 1px;
   border-style: solid;
 }
@@ -306,6 +414,9 @@ html, body, select {
   width: fit-content;
 }
 
+.layer-1-color {
+  background-color: var(--layer-1-color);
+}
 
 /* Webkit scrollbar */
 ::-webkit-scrollbar {

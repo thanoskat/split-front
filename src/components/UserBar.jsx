@@ -23,7 +23,7 @@ const UserBar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     // Remove listener when done with it
     return(() => {document.removeEventListener("mousedown", handleClickOutside)})
-    }, [nicknameDropdownRef, nicknameButtonRef]);
+    }, []);
 
   const logoutClick = async () => {
     console.log('onLogoutClick')
