@@ -19,7 +19,7 @@ export default function Dropdown({ placeholder, mouse, setValue, mapTo, id, util
     document.addEventListener(mouse, close);
     // Remove listener when done with it
     return (() => { document.removeEventListener(mouse, close) })
-  }, [ref]);
+  }, []);
 
   function close(event) {
     setOpen(event && ref.current === event.target)

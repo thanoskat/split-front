@@ -16,7 +16,7 @@ function App() {
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            {/* <UserBar/> */}
+            <UserBar/>
             <NavigationBar2/>
             <SlidingBoxContextProvider>
               <Switch>

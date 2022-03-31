@@ -128,22 +128,9 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown,handleBlur,newtagRef}) {
+function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef,colors }) {
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown); //Listens to handleKeyDown function
-    //window.addEventListener("blur", handleBlur); 
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown); //removes listening to handleKeyDown function once component ceases to run
-      //window.removeEventListener("blur", handleBlur)
-    }
-  }, [])
-
-//TODO
-//Potential problem: Listener is "on" while Form component is running (therefore as long as the sliding menu is on). Potential implications when hitting Enter? (or Space)
-//Making input a separate component didn't resolve the issue
-
+console.log(downTags.length+upTags.length,colors.length)
 
   const checkLengthAndChange = (e) => {
     if (maxLength) {
@@ -167,7 +154,15 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
     setUpTags(prevTag => [...prevTag, tag])
   }
 
-//event.key === "Spacebar" || event.key === ' ' || 
+  const characterCondition = (e) => {
+    const re = /[a-zA-Z]+/g
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
+
+  //event.key === "Spacebar" || event.key === ' ' || 
 
   //https://erikmartinjordan.com/resize-input-text-size-react
   return (
@@ -186,7 +181,8 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
           </div>
         )}
 
-        <div className='h-flex tag-section newtag-section'>
+        {downTags.length+upTags.length !== colors.length ?
+         <div className='h-flex tag-section newtag-section'>
 
           <input
             ref={newtagRef}
@@ -195,16 +191,18 @@ function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, on
             value={tagText}
             onChange={checkLengthAndChange}
             style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
-            onBlur={(e)=>handleBlur(e)} />
+            onBlur={(e) => handleBlur(e)}
+            onKeyPress={(e) => handleKeyDown(e)} />
 
           <i className="tag icon newtagIcon"></i>
 
-        </div>
+        </div> : ""}
+
 
       </div>
 
       <div className='multiselectbox selectedTags'>
-        {downTags.length? "":"add tag"}
+        {downTags.length ? "" : "add tag"}
         {downTags.map((tag, index) =>
           <div className='h-flex tag-section'
             key={index}
