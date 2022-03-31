@@ -15,9 +15,9 @@
   overflow: auto;
 
   user-select: none;
-  background-color: #1b1b1d;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  /* background-color: var(--layer-0-color); */
+  /* border-top-left-radius: 10px; */
+  /* border-top-right-radius: 10px; */
 }
 
 @media (orientation: landscape) {
