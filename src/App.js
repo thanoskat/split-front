@@ -16,8 +16,8 @@ function App() {
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            {/* <UserBar/> */}
-            {/* <NavigationBar2/> */}
+            <UserBar/>
+            <NavigationBar2/>
             <SlidingBoxContextProvider>
               <Switch>
                 <Route exact path="/" component={Home} />

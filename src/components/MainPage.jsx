@@ -43,10 +43,8 @@ function MainPage() {
 
 
   const tagTextRef = useRef(tagText)
+  const groupInfoRef = useRef(groupInfo)
   const newtagRef = useRef(null)
-  //console.log(trackIndexAndID.map(tracker=>tracker._id))
-  //console.log(Users)
-  //console.log(members.map(member=>member._id))
 
   const api = useAxios()
   const location = useLocation()
@@ -56,16 +54,37 @@ function MainPage() {
   //https://javascript.info/object-copy
   //https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
 
-  useEffect(async () => {
+  useEffect(() => {
+
+    fetchData()
+
+
+  }, [location, refreshGroupList])
+
+  const cloner = () => { //replaced Users with members
+    let clone = []
+    for (let i = 0; i < members.length; i++) {
+      if (members[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
+      clone.push(Object.assign({}, members[i]))
+    }
+    return clone;
+  }
+
+  const utilities = {
+    tobeRemovedOption: cloner(),
+    tobeRetrievedOption: [],
+  }
+
+  const fetchData = async () => {
+    console.log("ran")
     try {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
-      //console.log("pathIndex",pathIndex)
-      //console.log("activeIndex", activeIndex)
-      console.log("profile", profile.data.groups[activeIndex])
+
       setUpTags(profile.data.groups[activeIndex].groupTags)
-      //const pulledtransactions = await api.get("/groups")
+
       setGroupInfo(profile.data.groups);
+
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         if (activeIndex == 0) {
@@ -94,23 +113,10 @@ function MainPage() {
         setTransactionHistory(txhistory);
         setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
       }
+      // window.addEventListener("keydown", (e) => handleKeyDown(e, profile.data.groups[activeIndex].groupTags));
     } catch (err) {
       console.dir(err);
     }
-  }, [location])//This useEffect might be running twice (once at first render, then again because of changes in location due to history)
-  //console.log("tx history",transactionHistory)
-  const cloner = () => { //replaced Users with members
-    let clone = []
-    for (let i = 0; i < members.length; i++) {
-      if (members[i]._id === sessionData.userId) { continue } //do not feed own ID in users to be added to group
-      clone.push(Object.assign({}, members[i]))
-    }
-    return clone;
-  }
-
-  const utilities = {
-    tobeRemovedOption: cloner(),
-    tobeRetrievedOption: [],
   }
 
 
@@ -129,6 +135,18 @@ function MainPage() {
   //   console.log(transactionHistory.length)
   //   setSize(transactionHistory.length)
   // }
+  const colors = [
+    "var(--yellow)",
+    "var(--pink)",
+    "var(--purple)",
+    "var(--orange)",
+    "var(--green)",
+    "var(--lightblue)",
+    "var(--lightorange)",
+    "var(--color1)",
+    "var(--color2)",
+    "var(--color3)"]
+
 
   const membersComponent = () => {
     return (
@@ -284,8 +302,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            groupTags: [...upTags, ...downTags],
-            expenseTags: downTags //expense tags include all
+            expenseTags: downTags
           }
         )
 
@@ -302,8 +319,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
-            groupTags: [...upTags, ...downTags],
-            expenseTags: downTags //expense tags include all
+            expenseTags: downTags
           }
         )
         setInputAmount('')
@@ -354,25 +370,78 @@ function MainPage() {
 
     //capitalises first and lowercases rest
     const capitalFirstLowerCaseRest = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()
+
     tagTextRef.current = capitalFirstLowerCaseRest //listener only has access to the initial state, so it will always log "" (as initialised)
     setTagText(capitalFirstLowerCaseRest)       //This is because listener belongs to the initial render and is not updated on subsequent rerenders.
-
   }
 
+  const handleKeyDown = async (event) => {
 
+    const re = /[a-zA-Z0-9]+/g
+    if (!re.test(event.key)) {
+      event.preventDefault();
+      return
+    }
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      console.log("Submit Button Pressed");
-      console.log(tagTextRef.current)
-      console.log(event.target==newtagRef.current)
+    if (event.key === "Enter") { // && event.target == newtagRef.current
+      if (groupInfo[activeIndex].groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
 
+        // console.log(colors)
+        // console.log(groupInfo[activeIndex].groupTags.map(groupTag=>groupTag.color)) 
+        const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
+        // console.log(colors.filter(x => !dbColors.includes(x)))
+        const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
 
-      setTagText("")  //empty cell
-      event.target.blur() //unfocus from cell
+        if (filteredColors.length !==0) { //while there are colors still available
+          try {
+            await api.post(`/expense/addtag`,
+              {
+                groupId: groupID,
+                groupTag: { name: tagTextRef.current, color: filteredColors[0] }
+              })
+          } catch (err) {
+            console.dir("groupTagErr", err)
+          }
+          setTagText("")  //empty cell
+          await fetchData()//request group from DB
+          //event.target.blur() //unfocus from cell
+        } else {
+          return
+        }
+
+      }
+    }
+  }
+
+  const handleBlur = async () => {
+
+    if (tagText != "" && groupInfo[activeIndex].groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
+
+      const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
+      const filteredColors = colors.filter(x => !dbColors.includes(x))
+      
+      console.log(filteredColors,filteredColors.length)
+
+      if (filteredColors.length !==0) {
+        try {
+          await api.post(`/expense/addtag`,
+            {
+              groupId: groupID,
+              groupTag: { name: tagTextRef.current, color: filteredColors[0] }
+            })
+        } catch (err) {
+          console.dir("groupTagErr", err)
+        }
+        setTagText("")  //empty cell
+        await fetchData()//request group from DB
+        //event.target.blur() //unfocus from cell
+      } else {
+        return
+      }
 
     }
-  };
+  }
+
   //////////////////////////////////////////////////////////////
   //Tags handlers END /////////////////////////////////////////
   /////////////////////////////////////////////////////////////
@@ -460,9 +529,9 @@ function MainPage() {
                 maxLength={12}
                 onChange={onChangeTagName}
                 handleKeyDown={handleKeyDown}
+                handleBlur={handleBlur}
                 newtagRef={newtagRef}
-
-
+                colors={colors}
               />
 
               <Form.MultiSelect
