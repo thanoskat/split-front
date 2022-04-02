@@ -1,4 +1,4 @@
-import { SlidingBox } from './'
+import { SlidingBox, ExpenseTag } from './'
 import { useContext, useRef, useState, useEffect } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
@@ -24,7 +24,7 @@ function Form({ headline, submit, close, children }) {
   );
 }
 
-function InputField({ value, label, maxLength, required, onChange, clear }) {
+function InputField({ value, label, maxLength, required, onChange, clear, placeholder, allowTag, expenseTags, setExpenseTags, setGroupTags }) {
 
   const inputFieldRef = useRef(null)
 
@@ -43,17 +43,33 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
     clear()
     inputFieldRef.current.focus()
   }
+  const handleExpenseTagsClick = (tag) => {
+    setExpenseTags(expenseTags.filter(item => item.name !== tag.name))
+    setGroupTags(prevTag => [...prevTag, tag])
+  }
 
   return (
     <div className='single-input-section'>
       <input
         className='input-field'
+        placeholder={placeholder}
         value={value}
         onChange={checkLengthAndChange}
         spellCheck='false'
         ref={inputFieldRef}
       />
       {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
+      {allowTag ?
+        <div className='input-tagsection gap8'>
+          {expenseTags.map((tag) =>
+            <ExpenseTag
+              showClose={true}
+              text={tag.name}
+              color={tag.color}
+              onCloseClick={() => handleExpenseTagsClick(tag)} />
+          )}
+        </div> : ""
+      }
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&
@@ -69,23 +85,23 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   )
 }
 
-function DropDownField({ utilities }) {
-  const [value, setValue] = useState(null)
-  console.log("Value rendered", value)
-  // console.log("utilities",utilities)
-  return (
-    <Dropdown
-      placeholder={"Send to"}
-      value={value}
-      setValue={setValue}
-      mapTo="nickname"
-      id="_id"
-      utilities={utilities}
-      displaynamesbox={1}
-      mouse={"mouseup"}
-    />
-  )
-}
+// function DropDownField({ utilities }) {
+//   const [value, setValue] = useState(null)
+//   console.log("Value rendered", value)
+//   // console.log("utilities",utilities)
+//   return (
+//     <Dropdown
+//       placeholder={"Send to"}
+//       value={value}
+//       setValue={setValue}
+//       mapTo="nickname"
+//       id="_id"
+//       utilities={utilities}
+//       displaynamesbox={1}
+//       mouse={"mouseup"}
+//     />
+//   )
+// }
 
 
 function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value }) {
@@ -125,12 +141,9 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
   )
 }
 
+function Tags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors }) {
 
-
-
-function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef,colors }) {
-
-console.log(downTags.length+upTags.length,colors.length)
+  console.log(expenseTags.length + groupTags.length, colors.length)
 
   const checkLengthAndChange = (e) => {
     if (maxLength) {
@@ -143,65 +156,49 @@ console.log(downTags.length+upTags.length,colors.length)
     }
   }
 
-
-  const handleUpTagsClick = (tag) => {
-    setUpTags(upTags.filter(item => item.name !== tag.name))
-    setDownTags(prevTag => [...prevTag, tag])
+  const handleGroupTagsClick = (tag) => {
+    setGroupTags(groupTags.filter(item => item.name !== tag.name))
+    setExpenseTags(prevTag => [...prevTag, tag])
   }
 
-  const handleDownTagsClick = (tag) => {
-    setDownTags(downTags.filter(item => item.name !== tag.name))
-    setUpTags(prevTag => [...prevTag, tag])
-  }
+  // const handleDownTagsClick = (tag) => {
+  //   setDownTags(downTags.filter(item => item.name !== tag.name))
+  //   setUpTags(prevTag => [...prevTag, tag])
+  // }
 
-  const characterCondition = (e) => {
-    const re = /[a-zA-Z]+/g
-    if (!re.test(e.key)) {
-      e.preventDefault();
-    }
-  }
-
-
-  //event.key === "Spacebar" || event.key === ' ' || 
-
-  //https://erikmartinjordan.com/resize-input-text-size-react
   return (
     <div className='Tags v-flex'>
-
+      <div className='tags-header'>
+        Select tags
+      </div>
       <div className='multiselectbox tobeSelectedTags'>
-        {upTags.map((tag, index) =>
-          <div className='h-flex tag-section'
-            key={index}
-            style={{ backgroundColor: `${tag.color}` }}
-            onClick={() => handleUpTagsClick(tag)}>
-            <div className='h-flex tag-section-name'>
-              {tag.name}
-              <i className="trash alternate icon"></i>
-            </div>
-          </div>
+
+        {groupTags.map((tag) =>
+          <ExpenseTag
+            showClose={false}
+            text={tag.name}
+            color={tag.color}
+            onBodyClick={() => handleGroupTagsClick(tag)} />
         )}
 
-        {downTags.length+upTags.length !== colors.length ?
-         <div className='h-flex tag-section newtag-section'>
+        {expenseTags.length + groupTags.length !== colors.length ?
+          <div className='h-flex tag-section newtag-section'>
+            <input
+              ref={newtagRef}
+              className='newtag-input'
+              placeholder='new tag'
+              value={tagText}
+              onChange={checkLengthAndChange}
+              style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
+              onBlur={(e) => handleBlur(e)}
+              onKeyPress={(e) => handleKeyDown(e)} />
 
-          <input
-            ref={newtagRef}
-            className='newtag-input'
-            placeholder='new tag'
-            value={tagText}
-            onChange={checkLengthAndChange}
-            style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
-            onBlur={(e) => handleBlur(e)}
-            onKeyPress={(e) => handleKeyDown(e)} />
+            <i className="tag icon newtagIcon"></i>
 
-          <i className="tag icon newtagIcon"></i>
-
-        </div> : ""}
-
-
+          </div> : ""}
       </div>
 
-      <div className='multiselectbox selectedTags'>
+      {/* <div className='multiselectbox selectedTags'>
         {downTags.length ? "" : "add tag"}
         {downTags.map((tag, index) =>
           <div className='h-flex tag-section'
@@ -216,15 +213,14 @@ console.log(downTags.length+upTags.length,colors.length)
             </div>
           </div>
         )}
-
-      </div>
+      </div> */}
     </div>
   )
 }
 
 Form.Tags = Tags;
 Form.InputField = InputField;
-Form.DropDownField = DropDownField;
+//Form.DropDownField = DropDownField;
 Form.MultiSelect = MultiSelect;
 
 export default Form;

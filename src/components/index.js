@@ -37,4 +37,4 @@ export { default as MyGroupsCreateGroup } from './MyGroupsCreateGroup'
 export { default as Button } from './Button'
 export { default as SelectGroup } from './SelectGroup'
 export { default as GroupSelector } from './GroupSelector'
-
+export { default as ExpenseTag } from './ExpenseTag'

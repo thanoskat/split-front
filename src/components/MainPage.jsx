@@ -37,13 +37,12 @@ function MainPage() {
   const [txDescription, setTxDescription] = useState("")
   const [trackIndexAndID, setTrackIndexAndID] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
-  const [upTags, setUpTags] = useState()
-  const [downTags, setDownTags] = useState([])
+  const [groupTags, setGroupTags] = useState([])
+  const [expenseTags, setExpenseTags] = useState([])
   const [tagText, setTagText] = useState("");
 
 
   const tagTextRef = useRef(tagText)
-  const groupInfoRef = useRef(groupInfo)
   const newtagRef = useRef(null)
 
   const api = useAxios()
@@ -57,7 +56,6 @@ function MainPage() {
   useEffect(() => {
 
     fetchData()
-
 
   }, [location, refreshGroupList])
 
@@ -75,15 +73,32 @@ function MainPage() {
     tobeRetrievedOption: [],
   }
 
+  //some returns true if the condition is satisfied at least once.
+  //if the id we're interested in is found at least once in the second array it returns true (found).
+  //this id is not what we need though so it is filtered out.
+  //hence we only keep objects with ids that only exist in one array and not the other.
+  //run twice in case first array has less objects than second
+  //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
+//https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+function getDifference(array1, array2) {
+  return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
+    return !array2.some(object2 => {
+      return object1._id === object2._id; 
+    }); 
+  });
+}
+
   const fetchData = async () => {
-    console.log("ran")
+
     try {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
-
-      setUpTags(profile.data.groups[activeIndex].groupTags)
-
       setGroupInfo(profile.data.groups);
+      //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user. 
+      //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
+      //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
+      const difference = [...getDifference(profile.data.groups[activeIndex].groupTags,expenseTags),...getDifference(expenseTags,profile.data.groups[activeIndex].groupTags)]
+      setGroupTags(difference)
 
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
@@ -302,7 +317,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            expenseTags: downTags
+            expenseTags: expenseTags
           }
         )
 
@@ -319,7 +334,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
-            expenseTags: downTags
+            expenseTags: expenseTags
           }
         )
         setInputAmount('')
@@ -392,7 +407,7 @@ function MainPage() {
         // console.log(colors.filter(x => !dbColors.includes(x)))
         const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
 
-        if (filteredColors.length !==0) { //while there are colors still available
+        if (filteredColors.length !== 0) { //while there are colors still available
           try {
             await api.post(`/expense/addtag`,
               {
@@ -419,10 +434,10 @@ function MainPage() {
 
       const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
       const filteredColors = colors.filter(x => !dbColors.includes(x))
-      
-      console.log(filteredColors,filteredColors.length)
 
-      if (filteredColors.length !==0) {
+      console.log(filteredColors, filteredColors.length)
+
+      if (filteredColors.length !== 0) {
         try {
           await api.post(`/expense/addtag`,
             {
@@ -505,7 +520,8 @@ function MainPage() {
             <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
               <Form.InputField
                 value={inputAmount}
-                label="Amount"
+                allowTag={false}
+                placeholder={"Amount"}
                 maxLength={20}
                 required={true}
                 onChange={e => setInputAmount(e.target.value)}
@@ -513,17 +529,29 @@ function MainPage() {
               />
               <Form.InputField
                 value={inputDescription}
-                label="Description"
+                allowTag={true}
+                setExpenseTags={setExpenseTags}
+                setGroupTags={setGroupTags}
+                expenseTags={expenseTags}
+                placeholder={"Description"}
                 maxLength={100}
                 required={false}
                 onChange={e => setInputDescription(e.target.value)}
                 clear={e => setInputDescription('')}
               />
+
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndID}
+                value={trackIndexAndID}
+                optionsArray={members}
+                label="share expense with"
+                allowMultiSelections={true} />
+
               <Form.Tags
-                upTags={upTags}
-                setUpTags={setUpTags}
-                downTags={downTags}
-                setDownTags={setDownTags}
+                groupTags={groupTags}
+                setGroupTags={setGroupTags}
+                expenseTags={expenseTags}
+                setExpenseTags={setExpenseTags}
                 tagText={tagText}
                 setTagText={setTagText}
                 maxLength={12}
@@ -534,12 +562,6 @@ function MainPage() {
                 colors={colors}
               />
 
-              <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
-                optionsArray={members}
-                label="share expense with"
-                allowMultiSelections={true} />
             </Form>
           }
           {
