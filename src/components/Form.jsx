@@ -191,12 +191,12 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
               <div className='firstLetter'>
               {option.nickname.charAt(0)}
               </div>
-            {value.findIndex(item => item.index === index) == -1? 
+            {value.findIndex(item => item.index === index) == -1? "":
              <div className='circleOfCircle'>
              <div className='tick-circle'>
                <i className='check icon avatarcheck'></i>
              </div>
-           </div>:""
+           </div>
            }
              
             </span>
