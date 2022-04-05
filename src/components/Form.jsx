@@ -1,4 +1,4 @@
-import { SlidingBox, ExpenseTag } from './'
+import { SlidingBox, Tag } from './'
 import { useContext, useRef, useState, useEffect } from 'react'
 import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
@@ -24,7 +24,11 @@ function Form({ headline, submit, close, children }) {
   );
 }
 
-function InputField({ value, label, maxLength, required, onChange, clear, placeholder, allowTag, expenseTags, setExpenseTags, setGroupTags }) {
+function InputField({ value, label, maxLength,
+  required, onChange, clear,
+  placeholder, allowExpenseTags, allowMembersTags, expenseTags,
+  setExpenseTags, setGroupTags,
+  splitAmongMembers, setSplitAmongMembers }) {
 
   const inputFieldRef = useRef(null)
 
@@ -48,6 +52,10 @@ function InputField({ value, label, maxLength, required, onChange, clear, placeh
     setGroupTags(prevTag => [...prevTag, tag])
   }
 
+  const handleMembersTagsClick = (tag) => {
+
+  }
+
   return (
     <div className='single-input-section'>
       <input
@@ -59,10 +67,12 @@ function InputField({ value, label, maxLength, required, onChange, clear, placeh
         ref={inputFieldRef}
       />
       {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
-      {allowTag ?
+
+      {allowExpenseTags ?
         <div className='input-tagsection gap8'>
+
           {expenseTags.map((tag) =>
-            <ExpenseTag
+            <Tag
               showClose={true}
               text={tag.name}
               color={tag.color}
@@ -70,6 +80,18 @@ function InputField({ value, label, maxLength, required, onChange, clear, placeh
           )}
         </div> : ""
       }
+      {allowMembersTags ?
+        <div className='input-tagsection gap8'>
+          {splitAmongMembers.map((tag) =>
+            <Tag
+              showClose={true}
+              text={tag.nickname}
+              color="var(--inactiveColor)"
+              onCloseClick={() => handleMembersTagsClick(tag)} />
+          )}
+        </div> : ""
+      }
+
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&
@@ -103,6 +125,37 @@ function InputField({ value, label, maxLength, required, onChange, clear, placeh
 //   )
 // }
 
+function MembersTags({ optionsArray, allowMultiSelections }) {
+
+  const handleMembersClick = (option) => {
+
+  }
+
+  return (
+    <div className='split v-flex'>
+      <div className='multiselectbox tobeSelectedTags'>
+        {optionsArray.map(option =>
+          <Tag
+            onBodyClick={() => handleMembersClick(option)}
+            showClose={false}
+            text={option.nickname}
+            color="var(--inactiveColor)"
+          />)}
+
+      </div>
+
+      <div className='splitamongAllChecker h-flex'>
+        <div className='checkBox'>
+          <input type="checkbox" />
+        </div>
+        <div className='checkBox-text '>
+          split among all members
+        </div>
+      </div>
+
+    </div>
+  )
+}
 
 function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value }) {
 
@@ -123,25 +176,61 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       }
     }
   }
-
+  // value.findIndex(item => item.index === index) == -1
   return (
     <div className='flex column'>
-      <div className='multiselectbox'>
-        {optionsArray.map((option, index) =>
-          <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
-            <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
-            <div className='avatar-description'>{option.nickname}</div>
-          </div>
-        )}
-      </div>
       <div className='multiselect-description'>
         {label}
+      </div>
+      <div className='multiselectbox'>
+
+        {optionsArray.map((option, index) =>
+          <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
+
+            <span className='avatar'>
+              <div className='firstLetter'>
+              {option.nickname.charAt(0)}
+              </div>
+            {value.findIndex(item => item.index === index) == -1? 
+             <div className='circleOfCircle'>
+             <div className='tick-circle'>
+               <i className='check icon avatarcheck'></i>
+             </div>
+           </div>:""
+           }
+             
+            </span>
+            <div className='avatar-description'>{option.nickname}</div>
+
+          </div>
+
+        )}
+
+        <div className='flex column profilecircle'>
+          <span className='avatar'>
+            <div className='firstLetter'>
+              AB
+            </div>
+
+            <div className='circleOfCircle'>
+              <div className='tick-circle'>
+                <i className='check icon avatarcheck'></i>
+              </div>
+            </div>
+
+          </span>
+          <div className='avatar-description'>hello</div>
+        </div>
+        
+
       </div>
     </div>
   )
 }
 
-function Tags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors }) {
+
+
+function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors }) {
 
   console.log(expenseTags.length + groupTags.length, colors.length)
 
@@ -174,7 +263,7 @@ function Tags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, m
       <div className='multiselectbox tobeSelectedTags'>
 
         {groupTags.map((tag) =>
-          <ExpenseTag
+          <Tag
             showClose={false}
             text={tag.name}
             color={tag.color}
@@ -218,7 +307,8 @@ function Tags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, m
   )
 }
 
-Form.Tags = Tags;
+Form.MembersTags = MembersTags;
+Form.ExpenseTags = ExpenseTags;
 Form.InputField = InputField;
 //Form.DropDownField = DropDownField;
 Form.MultiSelect = MultiSelect;

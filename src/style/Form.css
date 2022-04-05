@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin: 20px 20px 20px 20px;
+  margin: 20px 20px 5px 20px;
 }
 
 .input-field {
@@ -51,12 +51,12 @@
 
 .input-field::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var( --inactiveColor);
+  color: var(--inactiveColor);
   opacity: 1;
   /* Firefox */
 }
 
-.input-tagsection{
+.input-tagsection {
   background-color: #121214;
   padding: 0px 40px 0px 10px;
 }
@@ -101,7 +101,7 @@
   min-width: var(--sliding-menu-button-size);
 }
 
-.input-tagsection{
+.input-tagsection {
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 5px;
@@ -125,17 +125,67 @@
 }
 
 .avatar {
+  position: relative;
+  display: flex;
   border-radius: 99999px;
   border: none;
-  background-color: #13bd2a;
-  height: 3rem;
-  width: 3rem;
+  background-color: #585a58;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
+  justify-content: center;
+  
+}
+
+.firstLetter {
+  position:absolute;
+  justify-self: center;
+  align-self: center;
+  font-weight: bold;
+
 }
 
 .avatar-active {
   background-color: #3e47c4;
 }
+
+
+.circleOfCircle {
+  position: absolute;
+  border-radius: 99999px;
+  border: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #121212;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.tick-circle {
+  position: absolute;
+  justify-self: center;
+  align-self: center;
+  border-radius: 99999px;
+  border: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: #2c29e0;
+  margin-left: 1px;
+  margin-top: 1px;
+
+}
+
+.avatarcheck {
+  position: absolute;
+  padding-top: 2px;
+  padding-left: 2px;
+  font-size: small;
+  color: #f0f0f0;
+}
+
+
 
 .avatar-description {
   width: 3rem;
@@ -147,7 +197,8 @@
 }
 
 .multiselect-description {
-  margin-left: 20px
+  margin-left: 20px;
+  font-size: small;
 }
 
 
@@ -159,11 +210,15 @@
 .multiselectbox.tobeSelectedTags {
   margin: 0px 20px 0px 10px;
   background-color: var(--menuFrameColor);
+  padding-top: 5px;
   /* background-color: aliceblue; */
 }
-.tags-header{
-  margin: 20px 10px 0px 20px;
+
+.tags-header {
+  margin: 0px 10px 0px 20px;
+  font-size: x-small;
 }
+
 .tag-section {
   display: flex;
   padding: 5px;
@@ -176,11 +231,11 @@
   gap: 1rem;
   color: var(--text);
   align-self: center;
-  
+
 }
 
 .newtag-section {
-  border-style:solid;
+  border-style: solid;
   color: var(--inactiveColor);
   padding: 1px 1px 1px 0px;
   border-radius: 4px;
@@ -192,7 +247,7 @@
   outline: none;
   color: aliceblue;
   width: 7ch;
-  
+
 
 }
 
@@ -220,3 +275,24 @@
 }
 
 /*Tags*/
+.checkBox {
+  margin-left: 20px;
+}
+
+.selectmembersbox {
+  background-color: #121214;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+}
+
+.split-among-text {
+  margin-left: 20px;
+
+}
+
+.splitamongAllChecker {
+  margin-bottom: 5px;
+}

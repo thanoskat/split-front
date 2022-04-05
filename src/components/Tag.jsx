@@ -1,7 +1,7 @@
 
 
 
-const ExpenseTag = ({ text, color, onCloseClick, showClose, onDeleteClick,onBodyClick }) => {
+const Tag = ({ text, color, onCloseClick, showClose, onDeleteClick,onBodyClick }) => {
   return (
     <div className='t5 expense-tag flex row shadow pointer gap6' onClick={onBodyClick} style={{ backgroundColor: `${color}` }}>
       {text}
@@ -22,4 +22,4 @@ const ExpenseTag = ({ text, color, onCloseClick, showClose, onDeleteClick,onBody
   )
 }
 
-export default ExpenseTag
+export default Tag

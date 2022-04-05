@@ -27,7 +27,7 @@ function MainPage() {
   const [personalTransactions, setPersonalTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
   const [showAll, setShowAll] = useState(localStorage.getItem("showAll") == "true");
-  const [members, setMembers] = useState([])
+
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
@@ -40,6 +40,8 @@ function MainPage() {
   const [groupTags, setGroupTags] = useState([])
   const [expenseTags, setExpenseTags] = useState([])
   const [tagText, setTagText] = useState("");
+  const [members, setMembers] = useState([])
+  const [splitAmongMembers, setSplitAmongMembers] = useState([])
 
 
   const tagTextRef = useRef(tagText)
@@ -79,14 +81,14 @@ function MainPage() {
   //hence we only keep objects with ids that only exist in one array and not the other.
   //run twice in case first array has less objects than second
   //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
-//https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
-function getDifference(array1, array2) {
-  return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
-    return !array2.some(object2 => {
-      return object1._id === object2._id; 
-    }); 
-  });
-}
+  //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+  function getDifference(array1, array2) {
+    return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
+      return !array2.some(object2 => {
+        return object1._id === object2._id;
+      });
+    });
+  }
 
   const fetchData = async () => {
 
@@ -97,7 +99,7 @@ function getDifference(array1, array2) {
       //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user. 
       //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
       //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
-      const difference = [...getDifference(profile.data.groups[activeIndex].groupTags,expenseTags),...getDifference(expenseTags,profile.data.groups[activeIndex].groupTags)]
+      const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
       setGroupTags(difference)
 
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
@@ -520,34 +522,39 @@ function getDifference(array1, array2) {
             <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
               <Form.InputField
                 value={inputAmount}
-                allowTag={false}
+                allowMembersTags={true}
+                splitAmongMembers={splitAmongMembers}
+                setSplitAmongMembers={setSplitAmongMembers}
                 placeholder={"Amount"}
-                maxLength={20}
-                required={true}
+                // maxLength={20}
+                // required={true}
                 onChange={e => setInputAmount(e.target.value)}
                 clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
               />
+
+              {/* <Form.MembersTags
+                optionsArray={members} /> */}
+                <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndID}
+                value={trackIndexAndID}
+                optionsArray={members}
+                label="split expense among"
+                allowMultiSelections={true} />
+
+
               <Form.InputField
                 value={inputDescription}
-                allowTag={true}
+                allowExpenseTags={true}
                 setExpenseTags={setExpenseTags}
                 setGroupTags={setGroupTags}
                 expenseTags={expenseTags}
                 placeholder={"Description"}
-                maxLength={100}
-                required={false}
+                // maxLength={100}
+                // required={false}
                 onChange={e => setInputDescription(e.target.value)}
                 clear={e => setInputDescription('')}
               />
-
-              <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
-                optionsArray={members}
-                label="share expense with"
-                allowMultiSelections={true} />
-
-              <Form.Tags
+              <Form.ExpenseTags
                 groupTags={groupTags}
                 setGroupTags={setGroupTags}
                 expenseTags={expenseTags}
@@ -561,7 +568,7 @@ function getDifference(array1, array2) {
                 newtagRef={newtagRef}
                 colors={colors}
               />
-
+          
             </Form>
           }
           {
