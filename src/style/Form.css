@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin: 20px 20px 5px 20px;
+  margin: 20px 20px 20px 20px;
 }
 
 .input-field {
@@ -199,7 +199,7 @@
   gap:8px;
   margin-left: 20px;
   font-size: small;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .label {
@@ -207,16 +207,19 @@ align-self: center;
 }
 
 .headercheck{
+  position: absolute;
   font-size:xx-large;
-  top: 130px;
+  bottom: 0px;
 }
 
 .tick-cube{
+  position: relative;
   height:25px;
   width: 25px;
   background-color:var(--inactiveColor);
   border-radius: 3px;
   cursor: pointer;
+ 
 }
 
 
@@ -233,8 +236,8 @@ align-self: center;
 }
 
 .tags-header {
-  margin: 0px 10px 0px 20px;
-  font-size: x-small;
+  margin: 20px 20px 0px 20px;
+  font-size: small;
 }
 
 .tag-section {
@@ -282,8 +285,12 @@ align-self: center;
   align-self: center;
 }
 
-.trash.icon {
-  
+.shaker{
+  animation: shake-animation 4.72s ease ;
+  transform-origin: 20% 20%;
+}
+
+.trash.alternate.icon {
   color: var(--text)
 }
 
@@ -325,4 +332,15 @@ align-self: center;
 
 .splitamongAllChecker {
   margin-bottom: 5px;
+}
+
+@keyframes shake-animation {
+  0% { transform:translate(0,0) }
+ 1.78571% { transform:translate(2px,0) }
+ 3.57143% { transform:translate(0,0) }
+ 5.35714% { transform:translate(5px,0) }
+ 7.14286% { transform:translate(0,0) }
+ 8.92857% { transform:translate(2px,0) }
+ 10.71429% { transform:translate(0,0) }
+ 100% { transform:translate(0,0) }
 }

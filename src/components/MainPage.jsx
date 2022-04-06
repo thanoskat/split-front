@@ -54,12 +54,12 @@ function MainPage() {
   const location = useLocation()
   const history = useHistory()
 
-  
-  const tickAllmembers = (members) => {
-    if(!splitAmongMembersCheck) return
-    setTrackIndexAndIDmulti(() => [members.map((option,index)=>({ _id: option._id, index: index })) ])
-   }
- 
+
+  // const tickAllmembers = (members) => {
+  //   if(!splitAmongMembersCheck) return
+  //   setTrackIndexAndIDmulti(() => [members.map((option,index)=>({ _id: option._id, index: index })) ])
+  //  }
+
 
 
   //https://javascript.info/object-copy
@@ -69,7 +69,7 @@ function MainPage() {
 
     fetchData()
 
-  }, [location, refreshGroupList,splitAmongMembersCheck])
+  }, [location, splitAmongMembersCheck])
 
   const cloner = () => { //replaced Users with members
     let clone = []
@@ -111,7 +111,7 @@ function MainPage() {
       //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
       const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
       setGroupTags(difference)
-      
+
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         if (activeIndex == 0) {
@@ -125,8 +125,8 @@ function MainPage() {
           //console.log(txhistory.map(x=>x.receiver==undefined))
           setMembers(profile.data.groups[0].members.filter(filterIDfromMembers))
 
-          if(splitAmongMembersCheck){ setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option,index)=>({ _id: option._id, index: index })))}
-         
+          if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+
           //console.log(pulledtransactions.data.members)
         } else {
           history.push(`/main/${profile.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
@@ -142,7 +142,7 @@ function MainPage() {
         setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
         setTransactionHistory(txhistory);
         setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
-        if(splitAmongMembersCheck){ setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option,index)=>({ _id: option._id, index: index })))}
+        if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
       }
       // window.addEventListener("keydown", (e) => handleKeyDown(e, profile.data.groups[activeIndex].groupTags));
     } catch (err) {
@@ -431,16 +431,33 @@ function MainPage() {
                 groupTag: { name: tagTextRef.current, color: filteredColors[0] }
               })
           } catch (err) {
-            console.dir("groupTagErr", err)
+            console.dir("Adding tag Err", err)
+          } finally {
+            setTagText("")  //empty cell
+            await fetchData()//request group from DB
+            console.log("added")
+            //event.target.blur() //unfocus from cell
           }
-          setTagText("")  //empty cell
-          await fetchData()//request group from DB
-          //event.target.blur() //unfocus from cell
         } else {
           return
         }
-
       }
+    }
+  }
+
+  const handleGroupTagsDelete = async (tag) => {
+
+    try {
+      await api.post(`/expense/deletetag`,
+        {
+          groupId: groupID,
+          groupTag: { name: tag.name, color: tag.color, _id: tag._id }
+        })
+    } catch (err) {
+      console.dir("deleting tag Err", err)
+    } finally {
+      await fetchData()
+      console.log("deleted")
     }
   }
 
@@ -547,16 +564,6 @@ function MainPage() {
               {/* <Form.MembersTags
                 optionsArray={members} /> */}
 
-              <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndIDmulti}
-                value={trackIndexAndIDmulti}
-                optionsArray={members}
-                label="split expense among all members"
-                splitAmongMembersCheck={splitAmongMembersCheck}
-                setSplitAmongMembersCheck={setSplitAmongMembersCheck}
-                allowMultiSelections={true} />
-
-
               <Form.InputField
                 value={inputDescription}
                 allowTags={true}
@@ -569,6 +576,19 @@ function MainPage() {
                 onChange={e => setInputDescription(e.target.value)}
                 clear={e => setInputDescription('')}
               />
+
+
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndIDmulti}
+                value={trackIndexAndIDmulti}
+                optionsArray={members}
+                label="split expense between you and all members"
+                splitAmongMembersCheck={splitAmongMembersCheck}
+                setSplitAmongMembersCheck={setSplitAmongMembersCheck}
+                allowMultiSelections={true} />
+
+
+
               <Form.ExpenseTags
                 groupTags={groupTags}
                 setGroupTags={setGroupTags}
@@ -580,6 +600,7 @@ function MainPage() {
                 onChange={onChangeTagName}
                 handleKeyDown={handleKeyDown}
                 handleBlur={handleBlur}
+                handleGroupTagsDelete={handleGroupTagsDelete}
                 newtagRef={newtagRef}
                 colors={colors}
               />

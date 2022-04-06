@@ -19,7 +19,7 @@ function Form({ headline, submit, close, children }) {
       <div className='input-field-section'>
         {children}
       </div>
-      <div className='submit-button' onClick={submitAndClose}>OK</div>
+      <div className='submit-button' onClick={submitAndClose}>Submit</div>
     </SlidingBox>
   );
 }
@@ -67,8 +67,9 @@ function InputField({ value, label, maxLength,
       {allowTags && expenseTags.length !== 0 ?
         <div className='input-tagsection gap8'>
 
-          {expenseTags.map((tag) =>
+          {expenseTags.map((tag, index) =>
             <Tag
+              key={index}
               showClose={true}
               text={tag.name}
               color={tag.color}
@@ -130,8 +131,9 @@ function MembersTags({ optionsArray, allowMultiSelections }) {
   return (
     <div className='split v-flex'>
       <div className='multiselectbox tobeSelectedTags'>
-        {optionsArray.map(option =>
+        {optionsArray.map((option, index) =>
           <Tag
+            key={index}
             onBodyClick={() => handleMembersClick(option)}
             showClose={false}
             text={option.nickname}
@@ -148,10 +150,11 @@ function MembersTags({ optionsArray, allowMultiSelections }) {
           split among all members
         </div>
       </div>
-
     </div>
   )
 }
+
+
 
 function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value, splitAmongMembersCheck, setSplitAmongMembersCheck }) {
 
@@ -186,12 +189,12 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
     <div className='flex column '>
 
       <div className='multiselect-description '>
-        <div className='label'>
-          {label}
-        </div>
+        
         <div className='tick-cube' onClick={handleTickBox}>
           {splitAmongMembersCheck ? <i className='check icon avatarcheck headercheck'></i> : ""}
-
+        </div>
+        <div className='label'>
+          {label}
         </div>
       </div>
 
@@ -218,10 +221,6 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
           </div>
 
         )}
-
-
-
-
       </div>
     </div>
   )
@@ -229,8 +228,8 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors }) {
-
+function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete }) {
+  
   const [showTrash, setShowTrash] = useState(false)
 
   const checkLengthAndChange = (e) => {
@@ -249,9 +248,7 @@ function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tag
     setExpenseTags(prevTag => [...prevTag, tag])
   }
 
-  const handleGroupTagsDelete=(tag)=>{
 
-  }
 
   // const handleDownTagsClick = (tag) => {
   //   setDownTags(downTags.filter(item => item.name !== tag.name))
@@ -266,8 +263,9 @@ function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tag
       {!showTrash ?
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag) =>
+          {groupTags.map((tag, index) =>
             <Tag
+              key={index}
               showClose={false}
               text={tag.name}
               color={tag.color}
@@ -293,12 +291,13 @@ function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tag
           <div className='deleteTagSection' onClick={() => setShowTrash(true)}>
             <i className="trash alternate icon deleteTagButton"></i>
           </div>
-        </div> 
-            :
+        </div>
+        :
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag) =>
+          {groupTags.map((tag, index) =>
             <Tag
+              key={index}
               showClose={false}
               showTrash={true}
               text={tag.name}

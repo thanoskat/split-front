@@ -12,7 +12,7 @@ const Tag = ({ text, color, onCloseClick, showClose, showTrash, onDeleteClick, o
         </div> : ""}
 
       {showTrash ?
-        <div className='tag-section-option'
+        <div className='tag-section-option shaker'
           onClick={onDeleteClick}>
           <i className="trash alternate icon"></i>
         </div> : ""}
