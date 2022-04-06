@@ -5,12 +5,13 @@ import { SlidingBox } from './'
 import store from '../redux/store'
 import { useDispatch } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
+import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import useAxios2 from '../utility/useAxios2'
 import IonIcon from '@reacticons/ionicons';
 
 const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }) => {
-  console.log('GroupSelector rendered.')
+  console.log('GroupSelector rendered.', highlightedGroup)
   const dispatch = useDispatch()
 
   const api = useAxios2()
@@ -35,8 +36,9 @@ const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }
       setLoading(true)
       try {
         const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id }, { signal: abortControllerRef.current.signal })
-        setDisplayedGroup(res.data)
+        // setDisplayedGroup(res.data)
         setLoading(false)
+        dispatch(setSelectedGroup(res.data))
         dispatch(closeSlidingBox())
       }
       catch(error) {
@@ -53,7 +55,7 @@ const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }
         {groupList?.map((group, index) => (
             <div
             key={index}
-            className={`${group._id == highlightedGroup ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
+            className={`${group._id == highlightedGroup._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
             onClick={() => setDisplayedGroupAndClose(index)}>
               <div>{group.title}</div>
               {isLoading && clickedIndex == index && <IonIcon name='sync' className='t3 spin'/>}

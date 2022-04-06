@@ -4,9 +4,13 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
 import useAxios from '../utility/useAxios'
 import useAxios2 from '../utility/useAxios2'
+import store from '../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
 
 function FigmaMain() {
 
+  const dispatch = useDispatch()
   console.log('FigmaMain render.')
   const api = useAxios()
   const api2 = useAxios2()
@@ -50,6 +54,7 @@ function FigmaMain() {
     const response = await api2.get('/groups');
     console.log(response)
     setDisplayedGroup(response.data[0])
+    dispatch(setSelectedGroup(response.data[0]))
     // console.log(response.data[0])
   }
 
@@ -61,8 +66,10 @@ function FigmaMain() {
       const res = await api2.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
       // setGroupList(res.data)
       groupList.current = res.data
+      dispatch(setGroupList(res.data))
+      dispatch(setCurrentMenu('groupSelector'))
       setLoading(false)
-      setShowSelect(true)
+      // setShowSelect(true)
     }
     catch(error) {
       setLoading(false)

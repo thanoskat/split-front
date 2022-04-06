@@ -7,10 +7,10 @@ export const slidingSlice = createSlice({
   },
   reducers: {
     openSlidingBox: (state) => {
-      state.animation ='in'
+      state.animation = 'in'
     },
     closeSlidingBox: (state) => {
-      state.animation ='out'
+      state.animation = 'out'
     },
   }
 })
