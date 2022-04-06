@@ -14,9 +14,7 @@ const User = ({ match }) => {
   const fetchUser = async () => {
     try{
       const response = await api.get(`/userinfo/${match.params.id}`)
-      const user = response.data
-      console.dir(user)
-      setUser(user)
+      setUser(response.data)
     }
     catch(error) {
       console.dir(error)

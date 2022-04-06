@@ -4,7 +4,6 @@ import { FigmaMain, MainTest, Group, Test, Notifications, UserBar, NavigationBar
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 // import { SlidingBoxContextProvider } from './contexts/SlidingBoxContext'
-import FloatingTest from './components/FloatingTest'
 import './semantic-icons.css'
 
 function App() {
