@@ -1,6 +1,6 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
-import useAxios2 from '../utility/useAxios2'
+import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container, Form, SelectBox, SelectGroup } from '.'
 import { useState, useEffect, useContext, useRef } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
@@ -51,7 +51,7 @@ function MainPage() {
   const tagTextRef = useRef(tagText)
   const newtagRef = useRef(null)
 
-  const api = useAxios2()
+  const api = useAxios()
   const location = useLocation()
   const history = useHistory()
 

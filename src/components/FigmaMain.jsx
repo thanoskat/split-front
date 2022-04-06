@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
 import useAxios from '../utility/useAxios'
-import useAxios2 from '../utility/useAxios2'
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
@@ -13,8 +12,9 @@ function FigmaMain() {
   const dispatch = useDispatch()
   console.log('FigmaMain render.')
   const api = useAxios()
-  const api2 = useAxios2()
-  const [displayedGroup, setDisplayedGroup] = useState()
+  const api2 = useAxios()
+  const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  // const [displayedGroup, setDisplayedGroup] = useState()
   // const [groupList, setGroupList] = useState()
   const [showSelect, setShowSelect] = useState(false)
   const [isLoading, setLoading] = useState(false)
@@ -53,7 +53,7 @@ function FigmaMain() {
   const getFirstGroup = async () => {
     const response = await api2.get('/groups');
     console.log(response)
-    setDisplayedGroup(response.data[0])
+    // setDisplayedGroup(response.data[0])
     dispatch(setSelectedGroup(response.data[0]))
     // console.log(response.data[0])
   }
@@ -108,12 +108,12 @@ function FigmaMain() {
           <Route path="/figmamain/members" component={TabMembers}/>
           <Route path="/figmamain/settleup" component={TabSettleUp}/>
         </Switch>
-      {showSelect &&
+      {/* {showSelect &&
       <GroupSelector close={() => setShowSelect(false)}
       groupList={groupList.current}
       setDisplayedGroup={setDisplayedGroup}
       highlightedGroup={displayedGroup._id}/>
-      }
+      } */}
     </div>
   );
 }

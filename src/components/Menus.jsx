@@ -8,9 +8,9 @@ import { setCurrentMenu } from '../redux/mainSlice'
 function Menus() {
 
   const dispatch = useDispatch()
-  const menu = useSelector(state => state.menuReducer.currentMenu)
-  const groupList = store.getState().menuReducer.groupList
-  const selectedGroup = store.getState().menuReducer.selectedGroup
+  const menu = useSelector(state => state.mainReducer.currentMenu)
+  const groupList = store.getState().mainReducer.groupList
+  const selectedGroup = store.getState().mainReducer.selectedGroup
 
   useEffect(() => {
   }, [])

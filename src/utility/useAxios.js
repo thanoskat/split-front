@@ -1,27 +1,41 @@
 import axios from 'axios'
-// import { useContext } from 'react'
-// import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import { useDispatch } from 'react-redux'
+import { refreshAccessToken } from '../redux/authSlice'
 import store from '../redux/store'
 
 const baseURL = 'http://localhost:4000'
 
+const refresh = {
+  refreshSubscribers: [],
+  isRefreshing: false
+}
+
 const useAxios = () => {
 
-  // const { accessToken, signOut, refreshAccessToken } = useContext(AuthenticationContext)
-  const { accessToken, signOut, refreshAccessToken } = store.getState().authReducer
-  // const accessToken = window.localStorage.getItem('accessToken')
+  const dispatch = useDispatch()
 
-  // Goes to header and gets access token so we don't have to bother with
-  // Writting this piece of code every time it is required.
+  const onRrefreshed = (token) => {
+    while(refresh.refreshSubscribers.length > 0){
+      try {
+        refresh.refreshSubscribers.shift()(token)
+      }
+      catch(error) {
+        console.log(error)
+      }
+    }
+  }
+
+  // Adds a header with access token to every api request
   const axiosInstance = axios.create({
     baseURL,
     headers: {
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${store.getState().authReducer.accessToken}`
     }
   })
 
   // Intercepts at request
   axiosInstance.interceptors.request.use(async request => {
+    // console.log(request.headers['Authorization'])
     return request
   })
 
@@ -31,42 +45,42 @@ const useAxios = () => {
   },
   async (error) => {
     const originalRequest = error.config
-    if(error.response) {
-      console.log(`Response error ${error.response.data}`, error.response.status)
-      if(error.response.status === 401 && !originalRequest.retry) {
-        try {
-          const refreshResponse = await axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})  //Tries to get access token
-          const { newAccessToken } = refreshResponse.data
-          console.log("Refreshing access token with", newAccessToken.slice(newAccessToken.length - 10))
-          refreshAccessToken(newAccessToken)
-          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
-          try {
-            // Creating a property "retry" and setting to true to prevent infinite loop
-            originalRequest.retry = true
-            // Retries to submit request that was initially denied (401)
-            return axiosInstance(originalRequest)
-          }
-          catch(error) {
-            console.log("Retry error", error.message)
-          }
-        }
-        catch(error) {
-          console.log(`Refresh response error ${error.response.data}`, error.response.status)
-          if(error.response.status === 419) {
-            return axiosInstance(originalRequest)
-          }
-          else {
-            console.log('Signing out.')
-            signOut()
-          }
-        }
+    const errorStatus = error.response.status
+
+    console.log(`errorStatus === ${errorStatus}`)
+    if (errorStatus === 401) {
+      console.log(`isRefreshing === ${refresh.isRefreshing}`)
+      if(!refresh.isRefreshing) {
+        refresh.isRefreshing = true
+        // Getting new access token
+        axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})
+        .then(response => {
+          dispatch(refreshAccessToken(response.data.newAccessToken))
+          refresh.isRefreshing = false
+          onRrefreshed(store.getState().authReducer.accessToken)
+        }).catch(error => {
+          console.log("Error while refreshing")
+          refresh.isRefreshing = false
+          onRrefreshed(store.getState().authReducer.accessToken)
+          refresh.refreshSubscribers = []
+          console.log(error)
+        })
       }
-      else if(error.response.status === 419) {
-        return axiosInstance(originalRequest)
-      }
+
+      const retryOriginalRequest = new Promise((resolve, reject) => {
+        refresh.refreshSubscribers.push(token => {
+          originalRequest.headers['Authorization'] = 'Bearer ' + token
+          resolve(axios(originalRequest))
+        });
+      }).catch(error => console.log(error));
+      return retryOriginalRequest;
     }
-    return Promise.reject(error)
+    else {
+      console.log('Error code: ', errorStatus)
+      return Promise.reject(error)
+    }
   })
+
   return axiosInstance
 }
 
