@@ -1,7 +1,8 @@
 import { useState, useEffect , useContext} from 'react'
 import { Container, ListItem } from './'
 import useAxios from '../utility/useAxios'
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import store from '../redux/store'
 
 const Group = ({ match }) => {
   // const [creator, setCreator] = useState('')
@@ -15,7 +16,8 @@ const Group = ({ match }) => {
   const [inputAmount, setInputAmount] = useState('')
   const [inputDescription, setInputDescription] = useState('')
   const [message, setMessage] = useState('click submit')
-  const { sessionData } = useContext(AuthenticationContext)
+  // const { sessionData } = useContext(AuthenticationContext)
+  const sessionData = store.getState().authReducer.sessionData
   const api = useAxios()
 
   useEffect(() => {

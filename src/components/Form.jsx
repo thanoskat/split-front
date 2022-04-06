@@ -1,16 +1,22 @@
 import { SlidingBox } from './'
 import { useContext, useRef, useState, useEffect } from 'react'
-import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
+// import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
+import store from '../redux/store'
+import { useDispatch } from 'react-redux'
+import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/Form.css"
 
 function Form({ headline, submit, close, children }) {
 
-  const { closeBox } = useContext(SlidingBoxContext)
+  // const { closeBox } = useContext(SlidingBoxContext)
+
+  const dispatch = useDispatch()
 
   const submitAndClose = () => {
     submit()
-    closeBox()
+    // closeBox()
+    dispatch(closeSlidingBox())
   }
 
   return (
@@ -162,7 +168,7 @@ console.log(downTags.length+upTags.length,colors.length)
   }
 
 
-  //event.key === "Spacebar" || event.key === ' ' || 
+  //event.key === "Spacebar" || event.key === ' ' ||
 
   //https://erikmartinjordan.com/resize-input-text-size-react
   return (

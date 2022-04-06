@@ -1,12 +1,19 @@
 import '../style/UserBar.css'
-import { useContext, useState, useRef, useEffect } from 'react'
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import { useState, useRef, useEffect } from 'react'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import useAxios from '../utility/useAxios'
 import { NavigationButton } from '.'
+import { useDispatch } from 'react-redux'
+import { signOut } from '../redux/authSlice'
+import store from '../redux/store'
 
 const UserBar = () => {
+
+  const dispatch = useDispatch()
+  const sessionData = store.getState().authReducer.sessionData
+
   const api = useAxios()
-  const { signOut, sessionData } = useContext(AuthenticationContext)
+  // const { signOut, sessionData } = useContext(AuthenticationContext)
   const [nicknameDropdownDisplay, setNicknameDropdownDisplay] = useState('none')
   const nicknameDropdownRef = useRef(null);
   const nicknameButtonRef = useRef(null);
@@ -32,7 +39,8 @@ const UserBar = () => {
     } catch (error) {
       console.dir(error)
     }
-    signOut()
+    dispatch(signOut())
+    // signOut()
   }
 
   const nicknameClick = () => {
@@ -91,7 +99,6 @@ const UserBar = () => {
     <div className='userbar-flex-container'>
       <div className='userbar-left-items'>
         <div className='nickname-button'>LOGO?</div>
-        <img style={{width: '44x', height: '40px'}} src="logo192.png"/>
       </div>
       <div className='userbar-right-items'>
         {authenticationMenu()}

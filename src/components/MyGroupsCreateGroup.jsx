@@ -1,14 +1,16 @@
-import React,{ useState,useContext,useEffect  } from 'react';
+import { useState, useEffect  } from 'react';
 import { Dropdown } from '.'
 import useAxios from '../utility/useAxios'
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import store from '../redux/store'
 
 export default function MyGroupsCreateGroup() {
 
     const [value, setValue] = useState(null);
     const [Users, setUsers] = useState([]);
     const [groupName, setGroupName] = useState("")
-    const { sessionData } = useContext(AuthenticationContext)
+    // const { sessionData } = useContext(AuthenticationContext)
+    const sessionData = store.getState().authReducer.sessionData
     const api = useAxios()
 
     useEffect(async () => {
@@ -68,7 +70,7 @@ export default function MyGroupsCreateGroup() {
             <div className="groups-left-menu">
                 <div className="createnewgroupoptionsbox">
                     <div className='createnewgroupoptionsbox-Input'>
-                        <input className="createnewgroupoptionsbox-Input-field" required="" type="text" 
+                        <input className="createnewgroupoptionsbox-Input-field" required="" type="text"
                         onChange={(event) => setGroupName(event.target.value)}/>
                         <span className='floating-label'>Group name </span>
                     </div>

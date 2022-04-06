@@ -4,9 +4,9 @@ import useAxios from '../utility/useAxios'
 import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container, Form, SelectBox, SelectGroup } from '.'
 import { useState, useEffect, useContext, useRef } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import { GlobalStateContext } from '../contexts/GlobalStateContext'
-
+import store from '../redux/store'
 
 function MainPage() {
 
@@ -21,7 +21,8 @@ function MainPage() {
   const [userInfo, setUserInfo] = useState({});
   // const [activeIndex, setActiveIndex] = useState(0);
   const [Users, setUsers] = useState([]);
-  const { sessionData } = useContext(AuthenticationContext)
+  // const { sessionData } = useContext(AuthenticationContext)
+  const sessionData = store.getState().authReducer.sessionData
   const [refreshGroupList, setRefresh] = useState(false);
   const [size, setSize] = useState(200);
   const [personalTransactions, setPersonalTransactions] = useState([]);
@@ -293,11 +294,11 @@ function MainPage() {
   const addExpense = async () => {
     try {
       if (trackIndexAndID.length !== 0) {
-        //TO DO 
+        //TO DO
         //Will need to change the db request that gets you the group on potential merge.
         const res = await api.post(`/expense/addexpense`,
           {
-            groupId: groupID, //does it feed at first render? Need to check 
+            groupId: groupID, //does it feed at first render? Need to check
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
@@ -314,7 +315,7 @@ function MainPage() {
         //doing if members.length-shareWtih.length==1 then all users should be included.
         const res = await api.post(`/expense/addexpense`,
           {
-            groupId: groupID, //does it feed at first render? Need to check 
+            groupId: groupID, //does it feed at first render? Need to check
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
@@ -343,7 +344,7 @@ function MainPage() {
     try {
       const res = await api.post(`/expense/addtransfer`,
         {
-          groupId: groupID, //does it feed at first render? Need to check 
+          groupId: groupID, //does it feed at first render? Need to check
           sender: sessionData.userId,
           receiver: trackIndexAndID[0]._id,
           amount: txAmount,
@@ -387,7 +388,7 @@ function MainPage() {
       if (groupInfo[activeIndex].groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
 
         // console.log(colors)
-        // console.log(groupInfo[activeIndex].groupTags.map(groupTag=>groupTag.color)) 
+        // console.log(groupInfo[activeIndex].groupTags.map(groupTag=>groupTag.color))
         const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
         // console.log(colors.filter(x => !dbColors.includes(x)))
         const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
@@ -419,7 +420,7 @@ function MainPage() {
 
       const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
       const filteredColors = colors.filter(x => !dbColors.includes(x))
-      
+
       console.log(filteredColors,filteredColors.length)
 
       if (filteredColors.length !==0) {
