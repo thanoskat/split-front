@@ -15,6 +15,8 @@
 
 .input-field-section {
   overflow: visible;
+  background-color: var(--menuFrameColor);
+
 }
 
 .single-input-section {
@@ -49,10 +51,16 @@
 
 .input-field::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #9b9b9b;
+  color: var(--inactiveColor);
   opacity: 1;
   /* Firefox */
 }
+
+.input-tagsection {
+  background-color: #121214;
+  padding: 0px 40px 0px 10px;
+}
+
 
 .input-clear-icon {
   position: absolute;
@@ -93,6 +101,11 @@
   min-width: var(--sliding-menu-button-size);
 }
 
+.input-tagsection {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+}
 
 .multiselectbox {
   display: flex;
@@ -112,16 +125,64 @@
 }
 
 .avatar {
+  position: relative;
+  display: flex;
   border-radius: 99999px;
   border: none;
-  background-color: #13bd2a;
-  height: 3rem;
-  width: 3rem;
+  background-color: #585a58;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
+  justify-content: center;
+
+}
+
+.firstLetter {
+  position: absolute;
+  justify-self: center;
+  align-self: center;
+  font-weight: bold;
+
 }
 
 .avatar-active {
   background-color: #3e47c4;
+}
+
+
+.circleOfCircle {
+  position: absolute;
+  border-radius: 99999px;
+  border: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #121212;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.tick-circle {
+  position: absolute;
+  justify-self: center;
+  align-self: center;
+  border-radius: 99999px;
+  border: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: #2c29e0;
+  margin-left: 1px;
+  margin-top: 1px;
+
+}
+
+.avatarcheck {
+  position: absolute;
+  padding-top: 2px;
+  padding-left: 2px;
+  font-size: small;
+  color: #f0f0f0;
 }
 
 .avatar-description {
@@ -134,7 +195,31 @@
 }
 
 .multiselect-description {
-  margin-left: 20px
+  display: flex;
+  gap:8px;
+  margin-left: 20px;
+  font-size: small;
+  margin-bottom: 20px;
+}
+
+.label {
+align-self: center;
+}
+
+.headercheck{
+  position: absolute;
+  font-size:xx-large;
+  bottom: 0px;
+}
+
+.tick-cube{
+  position: relative;
+  height:25px;
+  width: 25px;
+  background-color:var(--inactiveColor);
+  border-radius: 3px;
+  cursor: pointer;
+ 
 }
 
 
@@ -144,15 +229,21 @@
 }
 
 .multiselectbox.tobeSelectedTags {
-  margin: 20px 20px 0px 20px;
+  margin: 0px 20px 0px 10px;
   background-color: var(--menuFrameColor);
+  padding-top: 5px;
   /* background-color: aliceblue; */
+}
+
+.tags-header {
+  margin: 20px 20px 0px 20px;
+  font-size: small;
 }
 
 .tag-section {
   display: flex;
   padding: 5px;
-  gap: 1rem;
+  gap: 0rem;
   border-radius: 5px;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.2);
 }
@@ -161,13 +252,14 @@
   gap: 1rem;
   color: var(--text);
   align-self: center;
-  
+
 }
 
 .newtag-section {
-  border-style: dashed;
-  color: aliceblue;
-  gap: 0rem;
+  border-style: solid;
+  color: var(--inactiveColor);
+  padding: 1px 1px 1px 0px;
+  border-radius: 4px;
 }
 
 .newtag-input {
@@ -176,7 +268,6 @@
   outline: none;
   color: aliceblue;
   width: 7ch;
-
 }
 
 .newtag-input:hover {
@@ -190,16 +281,66 @@
 }
 
 .newtagIcon {
-  color: aliceblue;
+  color: var(--inactiveColor);
   align-self: center;
 }
 
-.trash.icon {
+.shaker{
+  animation: shake-animation 4.72s ease ;
+  transform-origin: 20% 20%;
+}
+
+.trash.alternate.icon {
   color: var(--text)
 }
 
-.tag-section-close {
+
+.tag-section-option {
   align-self: flex-end;
 }
 
+.deleteTagButton,.checkTagButton{
+  align-self: center;
+  justify-self: center;
+  cursor: pointer;
+ 
+}
+
+.deleteTagButton,.checkTagButton{
+  color:#ffffff !important;
+  font-size: larger;
+}
+
 /*Tags*/
+.checkBox {
+  margin-left: 20px;
+}
+
+.selectmembersbox {
+  background-color: #121214;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+}
+
+.split-among-text {
+  margin-left: 20px;
+
+}
+
+.splitamongAllChecker {
+  margin-bottom: 5px;
+}
+
+@keyframes shake-animation {
+  0% { transform:translate(0,0) }
+ 1.78571% { transform:translate(2px,0) }
+ 3.57143% { transform:translate(0,0) }
+ 5.35714% { transform:translate(5px,0) }
+ 7.14286% { transform:translate(0,0) }
+ 8.92857% { transform:translate(2px,0) }
+ 10.71429% { transform:translate(0,0) }
+ 100% { transform:translate(0,0) }
+}

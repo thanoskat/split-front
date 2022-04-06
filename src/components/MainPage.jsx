@@ -27,7 +27,7 @@ function MainPage() {
   const [personalTransactions, setPersonalTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
   const [showAll, setShowAll] = useState(localStorage.getItem("showAll") == "true");
-  const [members, setMembers] = useState([])
+
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
@@ -35,20 +35,31 @@ function MainPage() {
   const [txAmount, setTxAmount] = useState("")
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription] = useState("")
-  const [trackIndexAndID, setTrackIndexAndID] = useState([])
+  const [trackIndexAndIDmulti, setTrackIndexAndIDmulti] = useState([])
+  const [trackIndexAndIDsingle, setTrackIndexAndIDsingle] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
-  const [upTags, setUpTags] = useState()
-  const [downTags, setDownTags] = useState([])
+  const [groupTags, setGroupTags] = useState([])
+  const [expenseTags, setExpenseTags] = useState([])
   const [tagText, setTagText] = useState("");
+  const [members, setMembers] = useState([])
+  const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
 
+  //console.log(trackIndexAndIDmulti)
+  //console.log(members.map((option,index)=>({ _id: option._id, index: index })))
 
   const tagTextRef = useRef(tagText)
-  const groupInfoRef = useRef(groupInfo)
   const newtagRef = useRef(null)
 
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
+
+
+  // const tickAllmembers = (members) => {
+  //   if(!splitAmongMembersCheck) return
+  //   setTrackIndexAndIDmulti(() => [members.map((option,index)=>({ _id: option._id, index: index })) ])
+  //  }
+
 
 
   //https://javascript.info/object-copy
@@ -58,8 +69,7 @@ function MainPage() {
 
     fetchData()
 
-
-  }, [location, refreshGroupList])
+  }, [location, splitAmongMembersCheck])
 
   const cloner = () => { //replaced Users with members
     let clone = []
@@ -75,15 +85,32 @@ function MainPage() {
     tobeRetrievedOption: [],
   }
 
+  //some returns true if the condition is satisfied at least once.
+  //if the id we're interested in is found at least once in the second array it returns true (found).
+  //this id is not what we need though so it is filtered out.
+  //hence we only keep objects with ids that only exist in one array and not the other.
+  //run twice in case first array has less objects than second
+  //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
+  //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+  function getDifference(array1, array2) {
+    return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
+      return !array2.some(object2 => {
+        return object1._id === object2._id;
+      });
+    });
+  }
+
   const fetchData = async () => {
-    console.log("ran")
+
     try {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
-
-      setUpTags(profile.data.groups[activeIndex].groupTags)
-
       setGroupInfo(profile.data.groups);
+      //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user. 
+      //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
+      //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
+      const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
+      setGroupTags(difference)
 
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
@@ -97,6 +124,9 @@ function MainPage() {
           setTransactionHistory(txhistory)
           //console.log(txhistory.map(x=>x.receiver==undefined))
           setMembers(profile.data.groups[0].members.filter(filterIDfromMembers))
+
+          if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+
           //console.log(pulledtransactions.data.members)
         } else {
           history.push(`/main/${profile.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
@@ -112,6 +142,7 @@ function MainPage() {
         setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
         setTransactionHistory(txhistory);
         setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
+        if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
       }
       // window.addEventListener("keydown", (e) => handleKeyDown(e, profile.data.groups[activeIndex].groupTags));
     } catch (err) {
@@ -292,7 +323,7 @@ function MainPage() {
 
   const addExpense = async () => {
     try {
-      if (trackIndexAndID.length !== 0) {
+      if (trackIndexAndIDmulti.length !== 0) {
         //TO DO 
         //Will need to change the db request that gets you the group on potential merge.
         const res = await api.post(`/expense/addexpense`,
@@ -301,8 +332,8 @@ function MainPage() {
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
-            tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            expenseTags: downTags
+            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+            expenseTags: expenseTags
           }
         )
 
@@ -319,7 +350,7 @@ function MainPage() {
             amount: inputAmount,
             description: inputDescription,
             tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
-            expenseTags: downTags
+            expenseTags: expenseTags
           }
         )
         setInputAmount('')
@@ -337,7 +368,7 @@ function MainPage() {
 
   const recordTx = async () => {
     //console.log("ID",utilities.tobeRetrievedOption[0]._id)
-    if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
+    if (trackIndexAndIDsingle[0] == null) return null; //do not proceed to recording tx if no user has been selected
     if (txAmount == null) return null; //do not proceed to recording tx if no amount has been given
     if (txDescription == null) return null; //do not proceed to recording tx if no description has been given
     try {
@@ -345,7 +376,7 @@ function MainPage() {
         {
           groupId: groupID, //does it feed at first render? Need to check 
           sender: sessionData.userId,
-          receiver: trackIndexAndID[0]._id,
+          receiver: trackIndexAndIDsingle[0]._id,
           amount: txAmount,
           description: txDescription
         }
@@ -392,7 +423,7 @@ function MainPage() {
         // console.log(colors.filter(x => !dbColors.includes(x)))
         const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
 
-        if (filteredColors.length !==0) { //while there are colors still available
+        if (filteredColors.length !== 0) { //while there are colors still available
           try {
             await api.post(`/expense/addtag`,
               {
@@ -400,16 +431,33 @@ function MainPage() {
                 groupTag: { name: tagTextRef.current, color: filteredColors[0] }
               })
           } catch (err) {
-            console.dir("groupTagErr", err)
+            console.dir("Adding tag Err", err)
+          } finally {
+            setTagText("")  //empty cell
+            await fetchData()//request group from DB
+            console.log("added")
+            //event.target.blur() //unfocus from cell
           }
-          setTagText("")  //empty cell
-          await fetchData()//request group from DB
-          //event.target.blur() //unfocus from cell
         } else {
           return
         }
-
       }
+    }
+  }
+
+  const handleGroupTagsDelete = async (tag) => {
+
+    try {
+      await api.post(`/expense/deletetag`,
+        {
+          groupId: groupID,
+          groupTag: { name: tag.name, color: tag.color, _id: tag._id }
+        })
+    } catch (err) {
+      console.dir("deleting tag Err", err)
+    } finally {
+      await fetchData()
+      console.log("deleted")
     }
   }
 
@@ -419,10 +467,10 @@ function MainPage() {
 
       const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
       const filteredColors = colors.filter(x => !dbColors.includes(x))
-      
-      console.log(filteredColors,filteredColors.length)
 
-      if (filteredColors.length !==0) {
+      console.log(filteredColors, filteredColors.length)
+
+      if (filteredColors.length !== 0) {
         try {
           await api.post(`/expense/addtag`,
             {
@@ -505,41 +553,58 @@ function MainPage() {
             <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
               <Form.InputField
                 value={inputAmount}
-                label="Amount"
-                maxLength={20}
-                required={true}
+                allowTags={false}
+                placeholder={"Amount"}
+                // maxLength={20}
+                // required={true}
                 onChange={e => setInputAmount(e.target.value)}
                 clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
               />
+
+              {/* <Form.MembersTags
+                optionsArray={members} /> */}
+
               <Form.InputField
                 value={inputDescription}
-                label="Description"
-                maxLength={100}
-                required={false}
+                allowTags={true}
+                setExpenseTags={setExpenseTags}
+                setGroupTags={setGroupTags}
+                expenseTags={expenseTags}
+                placeholder={"Description"}
+                // maxLength={100}
+                // required={false}
                 onChange={e => setInputDescription(e.target.value)}
                 clear={e => setInputDescription('')}
               />
-              <Form.Tags
-                upTags={upTags}
-                setUpTags={setUpTags}
-                downTags={downTags}
-                setDownTags={setDownTags}
+
+
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndIDmulti}
+                value={trackIndexAndIDmulti}
+                optionsArray={members}
+                label="split expense between you and all members"
+                splitAmongMembersCheck={splitAmongMembersCheck}
+                setSplitAmongMembersCheck={setSplitAmongMembersCheck}
+                allowMultiSelections={true} />
+
+
+
+              <Form.ExpenseTags
+                groupTags={groupTags}
+                setGroupTags={setGroupTags}
+                expenseTags={expenseTags}
+                setExpenseTags={setExpenseTags}
                 tagText={tagText}
                 setTagText={setTagText}
                 maxLength={12}
                 onChange={onChangeTagName}
                 handleKeyDown={handleKeyDown}
                 handleBlur={handleBlur}
+                handleGroupTagsDelete={handleGroupTagsDelete}
                 newtagRef={newtagRef}
                 colors={colors}
               />
 
-              <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
-                optionsArray={members}
-                label="share expense with"
-                allowMultiSelections={true} />
             </Form>
           }
           {
@@ -562,8 +627,8 @@ function MainPage() {
                 clear={e => setTxDescription('')}
               />
               <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
+                setTrackIndexAndID={setTrackIndexAndIDsingle}
+                value={trackIndexAndIDsingle}
                 optionsArray={members}
                 label="label"
                 allowMultiSelections={false} />
