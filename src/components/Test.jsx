@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Container, NavigationButton, ListItem } from './'
+// import { Link } from 'react-router-dom'
+import { Container, ListItem } from './'
 import useAxios from '../utility/useAxios'
 import '../style/MyGroups.css'
 

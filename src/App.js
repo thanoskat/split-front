@@ -1,9 +1,9 @@
 import './App.css';
 import { FigmaMain, MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
-import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
+// import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { SlidingBoxContextProvider } from './contexts/SlidingBoxContext'
+// import { SlidingBoxContextProvider } from './contexts/SlidingBoxContext'
 import './semantic-icons.css'
 
 function App() {
@@ -12,13 +12,11 @@ function App() {
   console.log(pathname)
 
   return (
-    <AuthenticationContextProvider>
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            <UserBar/>
-            <NavigationBar2/>
-            <SlidingBoxContextProvider>
+            {/* <UserBar/> */}
+            {/* <NavigationBar2/> */}
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/login" component={Login} />
@@ -35,14 +33,12 @@ function App() {
                 <PrivateRoute exact path="/profile" component={Profile} />
                 <PrivateRoute path="/user/:id" component={User} />
                 <PrivateRoute path="/notifications" component={Notifications} />
-                <PrivateRoute path="/main" component={MainPage} />
+                <PrivateRoute exact path="/main" component={MainPage} />
                 <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
               </Switch>
-            </SlidingBoxContextProvider>
           </div>
         </BrowserRouter>
       </GlobalStateContextProvider>
-    </AuthenticationContextProvider>
   );
 }
 

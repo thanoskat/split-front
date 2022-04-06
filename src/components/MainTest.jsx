@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import { Container, Button, SelectBox, Form } from '.'
 import "../style/MainTest.css"
 import useAxios from '../utility/useAxios'
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
 
 function MainTest() {
 
@@ -17,7 +17,7 @@ function MainTest() {
   const [isRight, setIsRight] = useState(true)
   const [groups, setGroups] = useState()
   const [testResponse, setTestResponse] = useState('')
-  const { sessionData } = useContext(AuthenticationContext)
+  // const { sessionData } = useContext(AuthenticationContext)
   const [createdGroup, setCreatedGroup] = useState({
     name: '',
     description: '',

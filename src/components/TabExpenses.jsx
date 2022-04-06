@@ -3,6 +3,8 @@ import IonIcon from '@reacticons/ionicons';
 
 const TabExpense = ({ expenses }) => {
 
+  console.log("TabExpense rendered.")
+
   const Expense = ({ description, amount, tags, spender, participants, timestamp }) => {
     return(
       <div className='expense flex column justcont-spacebetween'>

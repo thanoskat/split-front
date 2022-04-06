@@ -1,6 +1,9 @@
 import { useContext } from 'react'
 import { SlidingBox } from './'
-import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
+// import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
+import store from '../redux/store'
+import { useDispatch } from 'react-redux'
+import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/SelectBox.css"
 
 function SelectBox({ headline, rightHeadline, close, children }) {
@@ -19,10 +22,12 @@ function SelectBox({ headline, rightHeadline, close, children }) {
 
 function Button({ text, icon, iconColor, rightText, onClick }) {
 
-  const { closeBox } = useContext(SlidingBoxContext)
+  // const { closeBox } = useContext(SlidingBoxContext)
+  const dispatch = useDispatch()
 
   const clickAndClose = () => {
-    closeBox()
+    // closeBox()
+    dispatch(closeSlidingBox())
     onClick()
   }
 
@@ -38,9 +43,12 @@ function Button({ text, icon, iconColor, rightText, onClick }) {
 
 function GroupButton({text,rightText,onClick,index,activeIndex }) {
 
-  const { closeBox } = useContext(SlidingBoxContext)
+  // const { closeBox } = useContext(SlidingBoxContext)
+  const dispatch = useDispatch()
+
   const clickAndClose = () => {
-    closeBox()
+    // closeBox()
+    dispatch(closeSlidingBox())
     onClick()
   }
 

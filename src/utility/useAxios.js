@@ -1,13 +1,14 @@
 import axios from 'axios'
-import { useContext } from 'react'
-import { AuthenticationContext } from '../contexts/AuthenticationContext'
+// import { useContext } from 'react'
+// import { AuthenticationContext } from '../contexts/AuthenticationContext'
+import store from '../redux/store'
 
 const baseURL = 'http://localhost:4000'
 
 const useAxios = () => {
 
-
-  const { accessToken, signOut, refreshAccessToken } = useContext(AuthenticationContext)
+  // const { accessToken, signOut, refreshAccessToken } = useContext(AuthenticationContext)
+  const { accessToken, signOut, refreshAccessToken } = store.getState().authReducer
   // const accessToken = window.localStorage.getItem('accessToken')
 
   // Goes to header and gets access token so we don't have to bother with
