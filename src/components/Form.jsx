@@ -1,4 +1,4 @@
-import { SlidingBox } from './'
+import { SlidingBox, Tag } from './'
 import { useContext, useRef, useState, useEffect } from 'react'
 // import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 import { Dropdown } from "."
@@ -25,12 +25,15 @@ function Form({ headline, submit, close, children }) {
       <div className='input-field-section'>
         {children}
       </div>
-      <div className='submit-button' onClick={submitAndClose}>OK</div>
+      <div className='submit-button' onClick={submitAndClose}>Submit</div>
     </SlidingBox>
   );
 }
 
-function InputField({ value, label, maxLength, required, onChange, clear }) {
+function InputField({ value, label, maxLength,
+  required, onChange, clear,
+  placeholder, allowTags, expenseTags,
+  setExpenseTags, setGroupTags }) {
 
   const inputFieldRef = useRef(null)
 
@@ -49,17 +52,49 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
     clear()
     inputFieldRef.current.focus()
   }
+  const handleExpenseTagsClick = (tag) => {
+    setExpenseTags(expenseTags.filter(item => item.name !== tag.name))
+    setGroupTags(prevTag => [...prevTag, tag])
+  }
+
 
   return (
     <div className='single-input-section'>
       <input
         className='input-field'
+        placeholder={placeholder}
         value={value}
         onChange={checkLengthAndChange}
         spellCheck='false'
         ref={inputFieldRef}
       />
       {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
+
+      {allowTags && expenseTags.length !== 0 ?
+        <div className='input-tagsection gap8'>
+
+          {expenseTags.map((tag, index) =>
+            <Tag
+              key={index}
+              showClose={true}
+              text={tag.name}
+              color={tag.color}
+              onCloseClick={() => handleExpenseTagsClick(tag)} />
+          )}
+        </div> : ""
+      }
+      {/* {allowMembersTags ?
+        <div className='input-tagsection gap8'>
+          {splitAmongMembers.map((tag) =>
+            <Tag
+              showClose={true}
+              text={tag.nickname}
+              color="var(--inactiveColor)"
+              onCloseClick={() => handleMembersTagsClick(tag)} />
+          )}
+        </div> : ""
+      } */}
+
       <div className='input-label-section'>
         <div className='input-label'>{label}</div>
         {maxLength &&
@@ -75,32 +110,67 @@ function InputField({ value, label, maxLength, required, onChange, clear }) {
   )
 }
 
-function DropDownField({ utilities }) {
-  const [value, setValue] = useState(null)
-  console.log("Value rendered", value)
-  // console.log("utilities",utilities)
+// function DropDownField({ utilities }) {
+//   const [value, setValue] = useState(null)
+//   console.log("Value rendered", value)
+//   // console.log("utilities",utilities)
+//   return (
+//     <Dropdown
+//       placeholder={"Send to"}
+//       value={value}
+//       setValue={setValue}
+//       mapTo="nickname"
+//       id="_id"
+//       utilities={utilities}
+//       displaynamesbox={1}
+//       mouse={"mouseup"}
+//     />
+//   )
+// }
+
+function MembersTags({ optionsArray, allowMultiSelections }) {
+
+  const handleMembersClick = (option) => {
+
+  }
+
   return (
-    <Dropdown
-      placeholder={"Send to"}
-      value={value}
-      setValue={setValue}
-      mapTo="nickname"
-      id="_id"
-      utilities={utilities}
-      displaynamesbox={1}
-      mouse={"mouseup"}
-    />
+    <div className='split v-flex'>
+      <div className='multiselectbox tobeSelectedTags'>
+        {optionsArray.map((option, index) =>
+          <Tag
+            key={index}
+            onBodyClick={() => handleMembersClick(option)}
+            showClose={false}
+            text={option.nickname}
+            color="var(--inactiveColor)"
+          />)}
+
+      </div>
+
+      <div className='splitamongAllChecker h-flex'>
+        <div className='checkBox'>
+          <input type="checkbox" />
+        </div>
+        <div className='checkBox-text '>
+          split among all members
+        </div>
+      </div>
+    </div>
   )
 }
 
 
-function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value }) {
+
+function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value, splitAmongMembersCheck, setSplitAmongMembersCheck }) {
 
   const onSubmitFunction = (allowMultiSelections, option, index) => {
     if (allowMultiSelections) {
+      setSplitAmongMembersCheck(false)
       const tracker = value.findIndex(item => item._id === option._id)
       if (tracker == -1) { //if ID is not in the array, push it
         setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
+
       } else {
         setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
       }
@@ -114,18 +184,49 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
     }
   }
 
+
+  const handleTickBox = () => {
+    setSplitAmongMembersCheck(prev => !prev)
+    setTrackIndexAndID([])
+  }
+
+  // value.findIndex(item => item.index === index) == -1
   return (
-    <div className='flex column'>
+    <div className='flex column '>
+
+      <div className='multiselect-description '>
+        
+        <div className='tick-cube' onClick={handleTickBox}>
+          {splitAmongMembersCheck ? <i className='check icon avatarcheck headercheck'></i> : ""}
+        </div>
+        <div className='label'>
+          {label}
+        </div>
+      </div>
+
       <div className='multiselectbox'>
+
         {optionsArray.map((option, index) =>
           <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
-            <span className={value.findIndex(item => item.index === index) == -1 ? "avatar" : "avatar avatar-active"}> </span>
+
+            <span className='avatar'>
+              <div className='firstLetter'>
+                {option.nickname.charAt(0)}
+              </div>
+              {value.findIndex(item => item.index === index) == -1 ? "" :
+                <div className='circleOfCircle'>
+                  <div className='tick-circle'>
+                    <i className='check icon avatarcheck'></i>
+                  </div>
+                </div>
+              }
+
+            </span>
             <div className='avatar-description'>{option.nickname}</div>
+
           </div>
+
         )}
-      </div>
-      <div className='multiselect-description'>
-        {label}
       </div>
     </div>
   )
@@ -133,10 +234,9 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-
-function Tags({ upTags, setUpTags, downTags, setDownTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef,colors }) {
-
-console.log(downTags.length+upTags.length,colors.length)
+function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete }) {
+  
+  const [showTrash, setShowTrash] = useState(false)
 
   const checkLengthAndChange = (e) => {
     if (maxLength) {
@@ -149,65 +249,75 @@ console.log(downTags.length+upTags.length,colors.length)
     }
   }
 
-
-  const handleUpTagsClick = (tag) => {
-    setUpTags(upTags.filter(item => item.name !== tag.name))
-    setDownTags(prevTag => [...prevTag, tag])
-  }
-
-  const handleDownTagsClick = (tag) => {
-    setDownTags(downTags.filter(item => item.name !== tag.name))
-    setUpTags(prevTag => [...prevTag, tag])
-  }
-
-  const characterCondition = (e) => {
-    const re = /[a-zA-Z]+/g
-    if (!re.test(e.key)) {
-      e.preventDefault();
-    }
+  const handleGroupTagsClick = (tag) => {
+    setGroupTags(groupTags.filter(item => item.name !== tag.name))
+    setExpenseTags(prevTag => [...prevTag, tag])
   }
 
 
-  //event.key === "Spacebar" || event.key === ' ' ||
 
-  //https://erikmartinjordan.com/resize-input-text-size-react
+  // const handleDownTagsClick = (tag) => {
+  //   setDownTags(downTags.filter(item => item.name !== tag.name))
+  //   setUpTags(prevTag => [...prevTag, tag])
+  // }
+
   return (
     <div className='Tags v-flex'>
-
-      <div className='multiselectbox tobeSelectedTags'>
-        {upTags.map((tag, index) =>
-          <div className='h-flex tag-section'
-            key={index}
-            style={{ backgroundColor: `${tag.color}` }}
-            onClick={() => handleUpTagsClick(tag)}>
-            <div className='h-flex tag-section-name'>
-              {tag.name}
-              <i className="trash alternate icon"></i>
-            </div>
-          </div>
-        )}
-
-        {downTags.length+upTags.length !== colors.length ?
-         <div className='h-flex tag-section newtag-section'>
-
-          <input
-            ref={newtagRef}
-            className='newtag-input'
-            placeholder='new tag'
-            value={tagText}
-            onChange={checkLengthAndChange}
-            style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
-            onBlur={(e) => handleBlur(e)}
-            onKeyPress={(e) => handleKeyDown(e)} />
-
-          <i className="tag icon newtagIcon"></i>
-
-        </div> : ""}
-
-
+      <div className='tags-header'>
+        Select <i className="tag icon newtagIcon"></i>
       </div>
+      {!showTrash ?
+        <div className='multiselectbox tobeSelectedTags'>
 
-      <div className='multiselectbox selectedTags'>
+          {groupTags.map((tag, index) =>
+            <Tag
+              key={index}
+              showClose={false}
+              text={tag.name}
+              color={tag.color}
+              onBodyClick={() => handleGroupTagsClick(tag)} />
+          )}
+
+          {expenseTags.length + groupTags.length !== colors.length ?
+            <div className='h-flex tag-section newtag-section'>
+              <input
+                ref={newtagRef}
+                className='newtag-input'
+                placeholder='new tag'
+                value={tagText}
+                onChange={checkLengthAndChange}
+                style={tagText.length ? { width: `${tagText.length + 1}ch` } : { width: `${tagText.length + 7}ch` }}
+                onBlur={(e) => handleBlur(e)}
+                onKeyPress={(e) => handleKeyDown(e)} />
+
+              <i className="tag icon newtagIcon"></i>
+            </div> : ""}
+
+
+          <div className='deleteTagSection' onClick={() => setShowTrash(true)}>
+            <i className="trash alternate icon deleteTagButton"></i>
+          </div>
+        </div>
+        :
+        <div className='multiselectbox tobeSelectedTags'>
+
+          {groupTags.map((tag, index) =>
+            <Tag
+              key={index}
+              showClose={false}
+              showTrash={true}
+              text={tag.name}
+              color={tag.color}
+              onDeleteClick={() => handleGroupTagsDelete(tag)} />
+          )}
+
+          <div className='checkTagSection' onClick={() => setShowTrash(!true)}>
+            <i className="check icon checkTagButton"></i>
+          </div>
+        </div>}
+
+
+      {/* <div className='multiselectbox selectedTags'>
         {downTags.length ? "" : "add tag"}
         {downTags.map((tag, index) =>
           <div className='h-flex tag-section'
@@ -222,15 +332,15 @@ console.log(downTags.length+upTags.length,colors.length)
             </div>
           </div>
         )}
-
-      </div>
+      </div> */}
     </div>
   )
 }
 
-Form.Tags = Tags;
+Form.MembersTags = MembersTags;
+Form.ExpenseTags = ExpenseTags;
 Form.InputField = InputField;
-Form.DropDownField = DropDownField;
+//Form.DropDownField = DropDownField;
 Form.MultiSelect = MultiSelect;
 
 export default Form;
