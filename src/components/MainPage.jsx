@@ -1,6 +1,6 @@
 import '../style/MainPage.css'
 import '../style/summary.css'
-import useAxios from '../utility/useAxios'
+import useAxios2 from '../utility/useAxios2'
 import { ModalFrame, LeaveGroupModal, CreateGroupModal, Container, Form, SelectBox, SelectGroup } from '.'
 import { useState, useEffect, useContext, useRef } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
@@ -51,7 +51,7 @@ function MainPage() {
   const tagTextRef = useRef(tagText)
   const newtagRef = useRef(null)
 
-  const api = useAxios()
+  const api = useAxios2()
   const location = useLocation()
   const history = useHistory()
 
@@ -107,7 +107,7 @@ function MainPage() {
       const profile = await api.get('/getusers/profile');
       const pathIndex = parseInt(location.search.substring(location.search.indexOf("?") + 1))
       setGroupInfo(profile.data.groups);
-      //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user. 
+      //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user.
       //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
       //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
       const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
