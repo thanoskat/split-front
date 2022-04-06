@@ -16,6 +16,7 @@ html, body, select {
   white-space: nowrap;
 
   --base-color: #406abf;
+  --base-color-1: #4563A1;
   --tag-color-1: #c3dd86;
   --tag-color-2: #86dda0;
   --base-dark-color: #121212;
@@ -95,6 +96,10 @@ html, body, select {
 
 .selectable {
   user-select: text
+}
+
+.t05 {
+  font-size: 36px
 }
 
 .t1 {
@@ -276,7 +281,6 @@ html, body, select {
   height: 60px;
   padding: 0px 14px 0px 14px;
   justify-content: space-between;
-  font-weight: 700;
   background-color: var(--layer-0-color);
   color: var(--light-color)
 }
@@ -351,7 +355,7 @@ html, body, select {
   right: 44px;
   /* transform: translateX(50%); */
   color: white;
-  background-color: var(--base-color);
+  background-color: var(--base-color-1);
   border-color: var(--layer-2-color);
   border-width: 1px;
   border-style: solid;
@@ -376,6 +380,21 @@ html, body, select {
   border-color: var(--layer-3-color);
   border-width: 1px;
   border-style: solid;
+}
+
+.group-selector-button {
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--light-color);
+  background-color: var(--layer-0-color);
+  border-color: var(--layer-2-color);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.group-selector-button.highlighted-group {
+  color: white;
+  background-color: var(--base-color-1);
 }
 
 .floating-button {
