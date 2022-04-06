@@ -134,11 +134,11 @@
   width: 50px;
   border-radius: 50%;
   justify-content: center;
-  
+
 }
 
 .firstLetter {
-  position:absolute;
+  position: absolute;
   justify-self: center;
   align-self: center;
   font-weight: bold;
@@ -185,8 +185,6 @@
   color: #f0f0f0;
 }
 
-
-
 .avatar-description {
   width: 3rem;
   text-overflow: ellipsis;
@@ -197,8 +195,28 @@
 }
 
 .multiselect-description {
+  display: flex;
+  gap:8px;
   margin-left: 20px;
   font-size: small;
+  margin-bottom: 5px;
+}
+
+.label {
+align-self: center;
+}
+
+.headercheck{
+  font-size:xx-large;
+  top: 130px;
+}
+
+.tick-cube{
+  height:25px;
+  width: 25px;
+  background-color:var(--inactiveColor);
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 
@@ -247,8 +265,6 @@
   outline: none;
   color: aliceblue;
   width: 7ch;
-
-
 }
 
 .newtag-input:hover {
@@ -267,11 +283,25 @@
 }
 
 .trash.icon {
+  
   color: var(--text)
 }
 
+
 .tag-section-option {
   align-self: flex-end;
+}
+
+.deleteTagButton,.checkTagButton{
+  align-self: center;
+  justify-self: center;
+  cursor: pointer;
+ 
+}
+
+.deleteTagButton,.checkTagButton{
+  color:#ffffff !important;
+  font-size: larger;
 }
 
 /*Tags*/

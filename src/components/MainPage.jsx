@@ -35,14 +35,17 @@ function MainPage() {
   const [txAmount, setTxAmount] = useState("")
   const [inputDescription, setInputDescription] = useState('')
   const [txDescription, setTxDescription] = useState("")
-  const [trackIndexAndID, setTrackIndexAndID] = useState([])
+  const [trackIndexAndIDmulti, setTrackIndexAndIDmulti] = useState([])
+  const [trackIndexAndIDsingle, setTrackIndexAndIDsingle] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
   const [groupTags, setGroupTags] = useState([])
   const [expenseTags, setExpenseTags] = useState([])
   const [tagText, setTagText] = useState("");
   const [members, setMembers] = useState([])
-  const [splitAmongMembers, setSplitAmongMembers] = useState([])
+  const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
 
+  //console.log(trackIndexAndIDmulti)
+  //console.log(members.map((option,index)=>({ _id: option._id, index: index })))
 
   const tagTextRef = useRef(tagText)
   const newtagRef = useRef(null)
@@ -50,6 +53,13 @@ function MainPage() {
   const api = useAxios()
   const location = useLocation()
   const history = useHistory()
+
+  
+  const tickAllmembers = (members) => {
+    if(!splitAmongMembersCheck) return
+    setTrackIndexAndIDmulti(() => [members.map((option,index)=>({ _id: option._id, index: index })) ])
+   }
+ 
 
 
   //https://javascript.info/object-copy
@@ -59,7 +69,7 @@ function MainPage() {
 
     fetchData()
 
-  }, [location, refreshGroupList])
+  }, [location, refreshGroupList,splitAmongMembersCheck])
 
   const cloner = () => { //replaced Users with members
     let clone = []
@@ -101,7 +111,7 @@ function MainPage() {
       //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
       const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
       setGroupTags(difference)
-
+      
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
         if (activeIndex == 0) {
@@ -114,6 +124,9 @@ function MainPage() {
           setTransactionHistory(txhistory)
           //console.log(txhistory.map(x=>x.receiver==undefined))
           setMembers(profile.data.groups[0].members.filter(filterIDfromMembers))
+
+          if(splitAmongMembersCheck){ setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option,index)=>({ _id: option._id, index: index })))}
+         
           //console.log(pulledtransactions.data.members)
         } else {
           history.push(`/main/${profile.data.groups[activeIndex]._id}?${activeIndex}`)//reroutes to the first group on first render and then keeps track of the active index from global context
@@ -129,6 +142,7 @@ function MainPage() {
         setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
         setTransactionHistory(txhistory);
         setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
+        if(splitAmongMembersCheck){ setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option,index)=>({ _id: option._id, index: index })))}
       }
       // window.addEventListener("keydown", (e) => handleKeyDown(e, profile.data.groups[activeIndex].groupTags));
     } catch (err) {
@@ -309,7 +323,7 @@ function MainPage() {
 
   const addExpense = async () => {
     try {
-      if (trackIndexAndID.length !== 0) {
+      if (trackIndexAndIDmulti.length !== 0) {
         //TO DO 
         //Will need to change the db request that gets you the group on potential merge.
         const res = await api.post(`/expense/addexpense`,
@@ -318,7 +332,7 @@ function MainPage() {
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
-            tobeSharedWith: [...trackIndexAndID.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
             expenseTags: expenseTags
           }
         )
@@ -354,7 +368,7 @@ function MainPage() {
 
   const recordTx = async () => {
     //console.log("ID",utilities.tobeRetrievedOption[0]._id)
-    if (trackIndexAndID[0] == null) return null; //do not proceed to recording tx if no user has been selected
+    if (trackIndexAndIDsingle[0] == null) return null; //do not proceed to recording tx if no user has been selected
     if (txAmount == null) return null; //do not proceed to recording tx if no amount has been given
     if (txDescription == null) return null; //do not proceed to recording tx if no description has been given
     try {
@@ -362,7 +376,7 @@ function MainPage() {
         {
           groupId: groupID, //does it feed at first render? Need to check 
           sender: sessionData.userId,
-          receiver: trackIndexAndID[0]._id,
+          receiver: trackIndexAndIDsingle[0]._id,
           amount: txAmount,
           description: txDescription
         }
@@ -522,9 +536,7 @@ function MainPage() {
             <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
               <Form.InputField
                 value={inputAmount}
-                allowMembersTags={true}
-                splitAmongMembers={splitAmongMembers}
-                setSplitAmongMembers={setSplitAmongMembers}
+                allowTags={false}
                 placeholder={"Amount"}
                 // maxLength={20}
                 // required={true}
@@ -534,17 +546,20 @@ function MainPage() {
 
               {/* <Form.MembersTags
                 optionsArray={members} /> */}
-                <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
+
+              <Form.MultiSelect
+                setTrackIndexAndID={setTrackIndexAndIDmulti}
+                value={trackIndexAndIDmulti}
                 optionsArray={members}
-                label="split expense among"
+                label="split expense among all members"
+                splitAmongMembersCheck={splitAmongMembersCheck}
+                setSplitAmongMembersCheck={setSplitAmongMembersCheck}
                 allowMultiSelections={true} />
 
 
               <Form.InputField
                 value={inputDescription}
-                allowExpenseTags={true}
+                allowTags={true}
                 setExpenseTags={setExpenseTags}
                 setGroupTags={setGroupTags}
                 expenseTags={expenseTags}
@@ -568,7 +583,7 @@ function MainPage() {
                 newtagRef={newtagRef}
                 colors={colors}
               />
-          
+
             </Form>
           }
           {
@@ -591,8 +606,8 @@ function MainPage() {
                 clear={e => setTxDescription('')}
               />
               <Form.MultiSelect
-                setTrackIndexAndID={setTrackIndexAndID}
-                value={trackIndexAndID}
+                setTrackIndexAndID={setTrackIndexAndIDsingle}
+                value={trackIndexAndIDsingle}
                 optionsArray={members}
                 label="label"
                 allowMultiSelections={false} />
