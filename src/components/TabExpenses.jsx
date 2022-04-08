@@ -1,9 +1,34 @@
 import 'font-awesome/css/font-awesome.min.css';
 import IonIcon from '@reacticons/ionicons';
+import { useState } from 'react';
+//import store from '../redux/store'
+import { useDispatch} from 'react-redux'
+import { setCurrentMenu } from '../redux/mainSlice'
 
 const TabExpense = ({ expenses }) => {
 
+  const [isLoading, setLoading] = useState(false)
   console.log("TabExpense rendered.")
+  const dispatch = useDispatch()
+
+  const getGroups = async () => {
+    try {
+      setLoading(true)
+      dispatch(setCurrentMenu('addExpense'))
+      setLoading(false)
+      // setShowSelect(true)
+    }
+    catch(error) {
+      setLoading(false)
+      console.log(error)
+    }
+  }
+
+  const openExpenseSelector = async () => {
+    if(!isLoading) {
+      await getGroups()
+    }
+  }
 
   const Expense = ({ description, amount, tags, spender, participants, timestamp }) => {
     return(
@@ -48,7 +73,7 @@ const TabExpense = ({ expenses }) => {
   }
 
   return (
-    <div className='expenses-tab t5 flex flex-1 column overflow-hidden'>
+    <div className='expenses-tab t5 flex flex-1 column overflow-hidden' onClick={openExpenseSelector}>
       <div className='overflow-auto'>
         {expenses?.map(expense => (
           <div key={expense._id}>

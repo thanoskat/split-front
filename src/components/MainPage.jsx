@@ -32,15 +32,15 @@ function MainPage() {
   const [showMembers, setShowMembers] = useState(localStorage.getItem("showMembers") == "true");
   const [transactionHistory, setTransactionHistory] = useState([]);
   const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)
-  const [inputAmount, setInputAmount] = useState('')
+ 
   const [txAmount, setTxAmount] = useState("")
-  const [inputDescription, setInputDescription] = useState('')
+  
   const [txDescription, setTxDescription] = useState("")
-  const [trackIndexAndIDmulti, setTrackIndexAndIDmulti] = useState([])
+  
   const [trackIndexAndIDsingle, setTrackIndexAndIDsingle] = useState([])
   const [showSelectGroups, setShowSelectGroups] = useState(false)
   const [groupTags, setGroupTags] = useState([])
-  const [expenseTags, setExpenseTags] = useState([])
+  
   const [tagText, setTagText] = useState("");
   const [members, setMembers] = useState([])
   const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
@@ -110,8 +110,8 @@ function MainPage() {
       //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user.
       //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
       //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
-      const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
-      setGroupTags(difference)
+      //const difference = [...getDifference(profile.data.groups[activeIndex].groupTags, expenseTags), ...getDifference(expenseTags, profile.data.groups[activeIndex].groupTags)]
+     // setGroupTags(difference)
 
       if (isNaN(pathIndex)) {//will get in here when there is no link on top
         //const pulledtransactions = await api.get(`/groups/${response.data.groups[0]._id}`) //gets don't have body so need to send data like this
@@ -126,7 +126,7 @@ function MainPage() {
           //console.log(txhistory.map(x=>x.receiver==undefined))
           setMembers(profile.data.groups[0].members.filter(filterIDfromMembers))
 
-          if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+         // if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
 
           //console.log(pulledtransactions.data.members)
         } else {
@@ -143,7 +143,7 @@ function MainPage() {
         setAllTransactions(profile.data.groups[pathIndex].pendingTransactions);
         setTransactionHistory(txhistory);
         setMembers(profile.data.groups[pathIndex].members.filter(filterIDfromMembers));
-        if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+        //if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(profile.data.groups[0].members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
       }
       // window.addEventListener("keydown", (e) => handleKeyDown(e, profile.data.groups[activeIndex].groupTags));
     } catch (err) {
@@ -322,49 +322,7 @@ function MainPage() {
     setShowMembers(boolean);
   }
 
-  const addExpense = async () => {
-    try {
-      if (trackIndexAndIDmulti.length !== 0) {
-        //TO DO
-        //Will need to change the db request that gets you the group on potential merge.
-        const res = await api.post(`/expense/addexpense`,
-          {
-            groupId: groupID, //does it feed at first render? Need to check
-            sender: sessionData.userId,
-            amount: inputAmount,
-            description: inputDescription,
-            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            expenseTags: expenseTags
-          }
-        )
-
-        setInputAmount('')
-        setInputDescription('')
-        console.log(res)
-      } else { //this might be redundant as all members exist in back end. Not sure how it's going to work yet
-        //but knowing members.length, if nothing has been selected here it could just check this by
-        //doing if members.length-shareWtih.length==1 then all users should be included.
-        const res = await api.post(`/expense/addexpense`,
-          {
-            groupId: groupID, //does it feed at first render? Need to check
-            sender: sessionData.userId,
-            amount: inputAmount,
-            description: inputDescription,
-            tobeSharedWith: [...members.map(member => member._id), sessionData.userId],//feed all ids
-            expenseTags: expenseTags
-          }
-        )
-        setInputAmount('')
-        setInputDescription('')
-        console.log(res)
-      }
-
-    }
-    catch (error) {
-      console.log(error)
-    }
-
-  }
+ 
 
 
   const recordTx = async () => {
@@ -398,99 +356,7 @@ function MainPage() {
   //Tags handlers START ///////////////////////////////////////
   ////////////////////////////////////////////////////////////
 
-  const onChangeTagName = (e) => {
-
-    //capitalises first and lowercases rest
-    const capitalFirstLowerCaseRest = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()
-
-    tagTextRef.current = capitalFirstLowerCaseRest //listener only has access to the initial state, so it will always log "" (as initialised)
-    setTagText(capitalFirstLowerCaseRest)       //This is because listener belongs to the initial render and is not updated on subsequent rerenders.
-  }
-
-  const handleKeyDown = async (event) => {
-
-    const re = /[a-zA-Z0-9]+/g
-    if (!re.test(event.key)) {
-      event.preventDefault();
-      return
-    }
-
-    if (event.key === "Enter") { // && event.target == newtagRef.current
-      if (groupInfo[activeIndex].groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
-
-        // console.log(colors)
-        // console.log(groupInfo[activeIndex].groupTags.map(groupTag=>groupTag.color))
-        const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
-        // console.log(colors.filter(x => !dbColors.includes(x)))
-        const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
-
-        if (filteredColors.length !== 0) { //while there are colors still available
-          try {
-            await api.post(`/expense/addtag`,
-              {
-                groupId: groupID,
-                groupTag: { name: tagTextRef.current, color: filteredColors[0] }
-              })
-          } catch (err) {
-            console.dir("Adding tag Err", err)
-          } finally {
-            setTagText("")  //empty cell
-            await fetchData()//request group from DB
-            console.log("added")
-            //event.target.blur() //unfocus from cell
-          }
-        } else {
-          return
-        }
-      }
-    }
-  }
-
-  const handleGroupTagsDelete = async (tag) => {
-
-    try {
-      await api.post(`/expense/deletetag`,
-        {
-          groupId: groupID,
-          groupTag: { name: tag.name, color: tag.color, _id: tag._id }
-        })
-    } catch (err) {
-      console.dir("deleting tag Err", err)
-    } finally {
-      await fetchData()
-      console.log("deleted")
-    }
-  }
-
-  const handleBlur = async () => {
-
-    if (tagText != "" && groupInfo[activeIndex].groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
-
-      const dbColors = groupInfo[activeIndex].groupTags.map(groupTag => groupTag.color)
-      const filteredColors = colors.filter(x => !dbColors.includes(x))
-
-      console.log(filteredColors, filteredColors.length)
-
-      if (filteredColors.length !== 0) {
-        try {
-          await api.post(`/expense/addtag`,
-            {
-              groupId: groupID,
-              groupTag: { name: tagTextRef.current, color: filteredColors[0] }
-            })
-        } catch (err) {
-          console.dir("groupTagErr", err)
-        }
-        setTagText("")  //empty cell
-        await fetchData()//request group from DB
-        //event.target.blur() //unfocus from cell
-      } else {
-        return
-      }
-
-    }
-  }
-
+  
   //////////////////////////////////////////////////////////////
   //Tags handlers END /////////////////////////////////////////
   /////////////////////////////////////////////////////////////
@@ -550,8 +416,8 @@ function MainPage() {
               </button>
             </div>
           </div>
-          {showExp &&
-            <Form headline="Add Expense" submit={addExpense} close={() => setShowExp(false)} >
+          {/* {showExp &&
+            <Form headline="Add Expense" close={() => setShowExp(false)} >
               <Form.InputField
                 value={inputAmount}
                 allowTags={false}
@@ -562,8 +428,8 @@ function MainPage() {
                 clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
               />
 
-              {/* <Form.MembersTags
-                optionsArray={members} /> */}
+              <Form.MembersTags
+                optionsArray={members} />
 
               <Form.InputField
                 value={inputDescription}
@@ -607,7 +473,7 @@ function MainPage() {
               />
 
             </Form>
-          }
+          } */}
           {
             showtransact &&
             <Form headline="Record tx" submit={recordTx} close={() => setShowTransact(false)} >

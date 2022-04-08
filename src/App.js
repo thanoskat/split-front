@@ -15,8 +15,8 @@ function App() {
       <GlobalStateContextProvider>
         <BrowserRouter>
           <div className="App">
-            {/* <UserBar/> */}
-            {/* <NavigationBar2/> */}
+            <UserBar/>
+            <NavigationBar2/>
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/login" component={Login} />

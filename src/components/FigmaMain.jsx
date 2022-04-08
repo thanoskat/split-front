@@ -11,13 +11,10 @@ function FigmaMain() {
 
   const dispatch = useDispatch()
   console.log('FigmaMain render.')
-  const api = useAxios()
   const api2 = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  // const [displayedGroup, setDisplayedGroup] = useState()
-  // const [groupList, setGroupList] = useState()
-  const [showSelect, setShowSelect] = useState(false)
   const [isLoading, setLoading] = useState(false)
+   const sessionData = store.getState().authReducer.sessionData
 
   const groupList = useRef()
 
@@ -64,7 +61,7 @@ function FigmaMain() {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
       const res = await api2.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      // setGroupList(res.data)
+      console.log(res.data)
       groupList.current = res.data
       dispatch(setGroupList(res.data))
       dispatch(setCurrentMenu('groupSelector'))
@@ -78,14 +75,15 @@ function FigmaMain() {
   }
 
   useEffect(() => {
-    getFirstGroup()
+    getFirstGroup() 
   }, [])
 
   const openGroupSelector = async () => {
     if(!isLoading) {
-      await getGroups()
+      await getGroups() 
     }
   }
+
 
   return (
     <div className='flex column overflow-auto figma-main'>
