@@ -1,5 +1,5 @@
 import { SlidingBox, Tag } from './'
-import { useRef, useState, useEffect} from 'react'
+import { useRef, useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,11 +8,13 @@ import "../style/Form.css"
 import { setSelectedGroup } from '../redux/mainSlice'
 
 //TODO LIST
-// 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result
-// 2. populate add expense routers and dispatch selected group 
-// 3. fix tenekedes
+// 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result //DONE
+// 2. populate add expense routers and dispatch selected group //DONE
+// 3. fix tenekedes //DONE
 // 4. Turn profiles into pills
-// 5. timestamp on submit expense
+// 5. timestamp on submit expense //DONE
+// 6. WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT row 168
+
 
 function Form({ headline, close }) {
 
@@ -27,7 +29,7 @@ function Form({ headline, close }) {
 
   console.log(selectedGroup.groupTags)
 
-  const showGroupTags = getDifference(selectedGroup.groupTags, expenseTags)
+  const showGroupTags = [...getDifference(selectedGroup.groupTags, expenseTags),...getDifference(expenseTags,selectedGroup.groupTags)] //run twice in case first array has less objects than second (seems impossible). See row 58
   const [tagText, setTagText] = useState("");
   const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
 
@@ -38,9 +40,9 @@ function Form({ headline, close }) {
 
   //console.log(selectedGroup)
 
-  useEffect(() => {
-    fetchData()
-  }, [splitAmongMembersCheck])
+  // useEffect(() => {
+  //   fetchData()
+  // }, [splitAmongMembersCheck])
 
   useEffect(() => {
     abortControllerRef.current = new AbortController;
@@ -49,6 +51,13 @@ function Form({ headline, close }) {
     }
   }, [])
 
+  //some returns true if the condition is satisfied at least once.
+  //if the id we're interested in is found at least once in the second array it returns true (found).
+  //this id is not what we need though so it is filtered out.
+  //hence we only keep objects with ids that only exist in one array and not the other.
+  //run twice in case first array has less objects than second
+  //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
+  //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
   function getDifference(array1, array2) {
     return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
       return !array2.some(object2 => {
@@ -59,14 +68,6 @@ function Form({ headline, close }) {
 
 
   const fetchData = () => {
-    //some returns true if the condition is satisfied at least once.
-    //if the id we're interested in is found at least once in the second array it returns true (found).
-    //this id is not what we need though so it is filtered out.
-    //hence we only keep objects with ids that only exist in one array and not the other.
-    //run twice in case first array has less objects than second
-    //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
-    //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
-
 
     //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user.
     //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
@@ -75,7 +76,7 @@ function Form({ headline, close }) {
     //setShowGroupTags(difference)
 
     //not sure that's the right way
-    if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(selectedGroup.members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+    //if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(selectedGroup.members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
 
   }
 
@@ -104,7 +105,6 @@ function Form({ headline, close }) {
 
     if (filteredColors.length !== 0) { //while there are colors still available
       try {
-
         const res = await api.post(`/expense/addtag`,
           {
             groupId: selectedGroup._id, //TODO check actual response
@@ -112,7 +112,7 @@ function Form({ headline, close }) {
           }, { signal: abortControllerRef.current.signal })
         //console.log(res.data)
         dispatch(setSelectedGroup(res.data))
-      
+
 
       } catch (err) {
         console.dir("Adding tag Err", err)
@@ -146,7 +146,7 @@ function Form({ headline, close }) {
           groupTag: { _id: tag._id }
         }, { signal: abortControllerRef.current.signal })
       dispatch(setSelectedGroup(res.data))
-     
+
     } catch (err) {
       console.dir("deleting tag Err", err)
     } finally {
@@ -165,7 +165,7 @@ function Form({ headline, close }) {
     try {
       if (trackIndexAndIDmulti.length !== 0) {
         //TO DO
-        //Will need to change the db request that gets you the group on potential merge.
+        //WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT
         const res = await api.post(`/expense/addexpense`,
           {
             groupId: selectedGroup._id, //does it feed at first render? Need to check
@@ -177,8 +177,8 @@ function Form({ headline, close }) {
           }
         )
         setInputAmount('')
-        setInputDescription('')
-        console.log(res)
+        setInputDescription('')    
+        dispatch(setSelectedGroup(res.data))
       } else { //this might be redundant as all members exist in back end. Not sure how it's going to work yet
         //but knowing members.length, if nothing has been selected here it could just check this by
         //doing if members.length-shareWtih.length==1 then all users should be included.
@@ -188,13 +188,13 @@ function Form({ headline, close }) {
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
-            tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId],//feed all ids
+            tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids
             expenseTags: expenseTags
           }
         )
         setInputAmount('')
         setInputDescription('')
-        console.log(res)
+        dispatch(setSelectedGroup(res.data))
       }
     }
     catch (error) {
@@ -273,7 +273,7 @@ function Form({ headline, close }) {
 function InputField({ value, label, maxLength,
   required, onChange, clear,
   placeholder, allowTags, expenseTags,
-  setExpenseTags, setGroupTags }) {
+  setExpenseTags}) {
 
   const inputFieldRef = useRef(null)
 
@@ -313,9 +313,9 @@ function InputField({ value, label, maxLength,
       {allowTags && expenseTags.length !== 0 ?
         <div className='input-tagsection gap8'>
 
-          {expenseTags.map((tag, index) =>
+          {expenseTags.map((tag) =>
             <Tag
-              key={index}
+              key={tag._id}
               showClose={true}
               text={tag.name}
               color={tag.color}
@@ -377,9 +377,9 @@ function MembersTags({ optionsArray, allowMultiSelections }) {
   return (
     <div className='split v-flex'>
       <div className='multiselectbox tobeSelectedTags'>
-        {optionsArray.map((option, index) =>
+        {optionsArray.map((option) =>
           <Tag
-            key={index}
+            key={option._id}
             onBodyClick={() => handleMembersClick(option)}
             showClose={false}
             text={option.nickname}
@@ -444,11 +444,12 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
         </div>
       </div>
 
-      <div className='multiselectbox'>
 
+   {!splitAmongMembersCheck ?  //CHECK WHETHER TO SHOW MEMBERS TO BE SELECTED OR NOT
+
+    <div className='multiselectbox'>
         {optionsArray.map((option, index) =>
           <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
-
             <span className='avatar'>
               <div className='firstLetter'>
                 {option.nickname.charAt(0)}
@@ -464,7 +465,11 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
             <div className='avatar-description'>{option.nickname}</div>
           </div>
         )}
-      </div>
+      </div> :""
+
+      }
+   
+
     </div>
   )
 }
@@ -504,9 +509,9 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
       {!showTrash ?
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag, index) =>
+          {groupTags.map((tag) =>
             <Tag
-              key={index}
+              key={tag._id}
               showClose={false}
               text={tag.name}
               color={tag.color}
@@ -536,9 +541,9 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
         :
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag, index) =>
+          {groupTags.map((tag) =>
             <Tag
-              key={index}
+              key={tag._id}
               showClose={false}
               showTrash={true}
               text={tag.name}

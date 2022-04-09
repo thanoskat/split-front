@@ -195,6 +195,7 @@
 }
 
 .multiselect-description {
+
   display: flex;
   gap:8px;
   margin-left: 20px;
@@ -204,6 +205,8 @@
 
 .label {
 align-self: center;
+
+
 }
 
 .headercheck{
@@ -216,6 +219,7 @@ align-self: center;
   position: relative;
   height:25px;
   width: 25px;
+  min-width: 25px;
   background-color:var(--inactiveColor);
   border-radius: 3px;
   cursor: pointer;
@@ -285,10 +289,7 @@ align-self: center;
   align-self: center;
 }
 
-.shaker{
-  animation: shake-animation 4.72s ease ;
-  transform-origin: 20% 20%;
-}
+
 
 .trash.alternate.icon {
   color: var(--text)
@@ -334,11 +335,15 @@ align-self: center;
   margin-bottom: 5px;
 }
 
+.shaker{
+  animation: shake-animation 4.72s ease ;
+  transform-origin: 20% 20%;
+}
 @keyframes shake-animation {
   0% { transform:translate(0,0) }
  1.78571% { transform:translate(2px,0) }
  3.57143% { transform:translate(0,0) }
- 5.35714% { transform:translate(5px,0) }
+ 5.35714% { transform:translate(2px,0) }
  7.14286% { transform:translate(0,0) }
  8.92857% { transform:translate(2px,0) }
  10.71429% { transform:translate(0,0) }
