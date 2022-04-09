@@ -1,50 +1,82 @@
 import { SlidingBox, Tag } from './'
-import { useRef, useState, useEffect, useContext } from 'react'
+import { useRef, useState, useEffect} from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/Form.css"
-import { GlobalStateContext } from '../contexts/GlobalStateContext'
+import { setSelectedGroup } from '../redux/mainSlice'
 
-function Form({ headline, submit, close, groupList, activeIndex }) {
+//TODO LIST
+// 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result
+// 2. populate add expense routers and dispatch selected group 
+// 3. fix tenekedes
+// 4. Turn profiles into pills
+// 5. timestamp on submit expense
+
+function Form({ headline, close }) {
+
+  console.log("Form Rendered")
   const api = useAxios()
   const sessionData = store.getState().authReducer.sessionData
-  const selectedGroup = store.getState().mainReducer.selectedGroup
+  const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [trackIndexAndIDmulti, setTrackIndexAndIDmulti] = useState([])
   const [inputDescription, setInputDescription] = useState('')
   const [inputAmount, setInputAmount] = useState('')
   const [expenseTags, setExpenseTags] = useState([])
-  const [tagText, setTagText] = useState("");
 
-  //const [groupInfo, setGroupInfo] = useState([]);
-  //const { activeIndex, setActiveIndex } = useContext(GlobalStateContext)//
-  //const [members, setMembers] = useState([])//
+  console.log(selectedGroup.groupTags)
+
+  const showGroupTags = getDifference(selectedGroup.groupTags, expenseTags)
+  const [tagText, setTagText] = useState("");
   const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
-  const [showGroupTags, setShowGroupTags] = useState([])
-  //const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
 
   const tagTextRef = useRef(tagText)
   const newtagRef = useRef(null)
+  const abortControllerRef = useRef(null)
   const dispatch = useDispatch()
-  console.log(selectedGroup)
+
+  //console.log(selectedGroup)
 
   useEffect(() => {
     fetchData()
+  }, [splitAmongMembersCheck])
+
+  useEffect(() => {
+    abortControllerRef.current = new AbortController;
+    return () => {
+      abortControllerRef.current.abort()
+    }
   }, [])
 
- 
-  const fetchData = async () => {
-    function getDifference(array1, array2) {
-      return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
-        return !array2.some(object2 => {
-          return object1._id === object2._id;
-        });
+  function getDifference(array1, array2) {
+    return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
+      return !array2.some(object2 => {
+        return object1._id === object2._id;
       });
-    }
-    const difference = [...getDifference(selectedGroup.groupTags, expenseTags), ...getDifference(expenseTags, selectedGroup.groupTags)]
-    setShowGroupTags(difference)
+    });
+  }
+
+
+  const fetchData = () => {
+    //some returns true if the condition is satisfied at least once.
+    //if the id we're interested in is found at least once in the second array it returns true (found).
+    //this id is not what we need though so it is filtered out.
+    //hence we only keep objects with ids that only exist in one array and not the other.
+    //run twice in case first array has less objects than second
+    //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
+    //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+
+
+    //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user.
+    //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
+    //that has already been chosen (the one in the "downTags array") we prohibit it from appearing in the available options (so avoid showing it twice)
+    //const difference = [...getDifference(selectedGroup.groupTags, expenseTags), ...getDifference(expenseTags, selectedGroup.groupTags)]
+    //setShowGroupTags(difference)
+
+    //not sure that's the right way
     if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(selectedGroup.members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
+
   }
 
   const colors = [
@@ -66,6 +98,32 @@ function Form({ headline, submit, close, groupList, activeIndex }) {
     setTagText(capitalFirstLowerCaseRest)       //This is because listener belongs to the initial render and is not updated on subsequent rerenders.
   }
 
+  const onCreateTag = async () => {
+    const dbColors = selectedGroup.groupTags.map(groupTag => groupTag.color)
+    const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
+
+    if (filteredColors.length !== 0) { //while there are colors still available
+      try {
+
+        const res = await api.post(`/expense/addtag`,
+          {
+            groupId: selectedGroup._id, //TODO check actual response
+            groupTag: { name: tagTextRef.current, color: filteredColors[0] }
+          }, { signal: abortControllerRef.current.signal })
+        //console.log(res.data)
+        dispatch(setSelectedGroup(res.data))
+      
+
+      } catch (err) {
+        console.dir("Adding tag Err", err)
+      } finally {
+        setTagText("")  //empty cell
+      }
+    } else {
+      return
+    }
+  }
+
   const handleKeyDown = async (event) => {
 
     const re = /[a-zA-Z0-9]+/g
@@ -73,80 +131,33 @@ function Form({ headline, submit, close, groupList, activeIndex }) {
       event.preventDefault();
       return
     }
-
     if (event.key === "Enter") { // && event.target == newtagRef.current
       if (selectedGroup.groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
-
-        // console.log(colors)
-        // console.log(groupInfo[activeIndex].groupTags.map(groupTag=>groupTag.color))
-        const dbColors = selectedGroup.groupTags.map(groupTag => groupTag.color)
-        // console.log(colors.filter(x => !dbColors.includes(x)))
-        const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
-
-        if (filteredColors.length !== 0) { //while there are colors still available
-          try {
-            await api.post(`/expense/addtag`,
-              {
-                groupId: selectedGroup._id, //TODO check actual response
-                groupTag: { name: tagTextRef.current, color: filteredColors[0] }
-              })
-          } catch (err) {
-            console.dir("Adding tag Err", err)
-          } finally {
-            setTagText("")  //empty cell
-            await fetchData()// !!!!!!!!!!!!!!!!!NEED TO RERENDER!!!!!!!!!!!!!!!!!!!!
-            // console.log("added")
-            //event.target.blur() //unfocus from cell
-          }
-        } else {
-          return
-        }
+        await onCreateTag()
       }
     }
   }
 
   const handleGroupTagsDelete = async (tag) => {
-
     try {
-      await api.post(`/expense/deletetag`,
+      const res = await api.post(`/expense/deletetag`,
         {
           groupId: selectedGroup._id,
-          groupTag: { name: tag.name, color: tag.color, _id: tag._id }
-        })
+          groupTag: { _id: tag._id }
+        }, { signal: abortControllerRef.current.signal })
+      dispatch(setSelectedGroup(res.data))
+     
     } catch (err) {
       console.dir("deleting tag Err", err)
     } finally {
-      await fetchData()
+
       console.log("deleted")
     }
   }
 
   const handleBlur = async () => {
-
     if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
-
-      const dbColors = selectedGroup.groupTags.map(groupTag => groupTag.color)
-      const filteredColors = colors.filter(x => !dbColors.includes(x))
-
-      console.log(filteredColors, filteredColors.length)
-
-      if (filteredColors.length !== 0) {
-        try {
-          await api.post(`/expense/addtag`,
-            {
-              groupId: selectedGroup._id,
-              groupTag: { name: tagTextRef.current, color: filteredColors[0] }
-            })
-        } catch (err) {
-          console.dir("groupTagErr", err)
-        }
-        setTagText("")  //empty cell
-        await fetchData()//request group from DB
-        //event.target.blur() //unfocus from cell
-      } else {
-        return
-      }
-
+      await onCreateTag()
     }
   }
 
@@ -222,7 +233,7 @@ function Form({ headline, submit, close, groupList, activeIndex }) {
           value={inputDescription}
           allowTags={true}
           setExpenseTags={setExpenseTags}
-          setGroupTags={setShowGroupTags}
+          //setGroupTags={setShowGroupTags}
           expenseTags={expenseTags}
           placeholder={"Description"}
           // maxLength={100}
@@ -240,7 +251,7 @@ function Form({ headline, submit, close, groupList, activeIndex }) {
           allowMultiSelections={true} />
         <ExpenseTags
           groupTags={showGroupTags}
-          setGroupTags={setShowGroupTags}
+          //setGroupTags={setShowGroupTags}
           expenseTags={expenseTags}
           setExpenseTags={setExpenseTags}
           tagText={tagText}
@@ -283,7 +294,7 @@ function InputField({ value, label, maxLength,
   }
   const handleExpenseTagsClick = (tag) => {
     setExpenseTags(expenseTags.filter(item => item.name !== tag.name))
-    setGroupTags(prevTag => [...prevTag, tag])
+    //setGroupTags(prevTag => [...prevTag, tag])
   }
 
 
@@ -460,7 +471,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete }) {
+function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete }) {
 
   const [showTrash, setShowTrash] = useState(false)
 
@@ -476,7 +487,7 @@ function ExpenseTags({ groupTags, setGroupTags, expenseTags, setExpenseTags, tag
   }
 
   const handleGroupTagsClick = (tag) => {
-    setGroupTags(groupTags.filter(item => item.name !== tag.name))
+    //setGroupTags(groupTags.filter(item => item.name !== tag.name))
     setExpenseTags(prevTag => [...prevTag, tag])
   }
 

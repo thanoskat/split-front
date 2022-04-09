@@ -12,9 +12,9 @@ function FigmaMain() {
   const dispatch = useDispatch()
   console.log('FigmaMain render.')
   const api2 = useAxios()
-  const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const displayedGroup = useSelector(state => state.mainReducer.selectedGroup) //need to render when selectedGroup is filled on getFirstGroup() from dispatch
   const [isLoading, setLoading] = useState(false)
-   const sessionData = store.getState().authReducer.sessionData
+  //const sessionData = store.getState().authReducer.sessionData
 
   const groupList = useRef()
 

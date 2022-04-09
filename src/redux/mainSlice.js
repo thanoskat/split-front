@@ -9,6 +9,8 @@ export const mainSlice = createSlice({
     groupTags: [], //new
     activeIndex: 0 //new
   },
+
+  
   reducers: {
     setCurrentMenu: (state, action) => {
       state.currentMenu = action.payload

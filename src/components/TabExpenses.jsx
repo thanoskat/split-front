@@ -7,27 +7,18 @@ import { setCurrentMenu } from '../redux/mainSlice'
 
 const TabExpense = ({ expenses }) => {
 
-  const [isLoading, setLoading] = useState(false)
+  //const [isLoading, setLoading] = useState(false)
   console.log("TabExpense rendered.")
   const dispatch = useDispatch()
 
-  const getGroups = async () => {
-    try {
-      setLoading(true)
+  const openExpenseSelector = () => {
+  //  if(!isLoading) {
+      //setLoading(true)
       dispatch(setCurrentMenu('addExpense'))
-      setLoading(false)
+     // setLoading(false)
       // setShowSelect(true)
-    }
-    catch(error) {
-      setLoading(false)
-      console.log(error)
-    }
-  }
-
-  const openExpenseSelector = async () => {
-    if(!isLoading) {
-      await getGroups()
-    }
+     // setLoading(false)
+    //}
   }
 
   const Expense = ({ description, amount, tags, spender, participants, timestamp }) => {
@@ -73,7 +64,7 @@ const TabExpense = ({ expenses }) => {
   }
 
   return (
-    <div className='expenses-tab t5 flex flex-1 column overflow-hidden' onClick={openExpenseSelector}>
+    <div className='expenses-tab t5 flex flex-1 column overflow-hidden' >
       <div className='overflow-auto'>
         {expenses?.map(expense => (
           <div key={expense._id}>
@@ -88,9 +79,9 @@ const TabExpense = ({ expenses }) => {
         ))}
       <div className='expense'/>
       </div>
-      <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
+      <div className='floating-button pointer flex row shadow justcont-center alignitems-center ' onClick={openExpenseSelector}>
         <IonIcon name='add' className='floating-button-icon'/>
-        <div className='floating-button-text'>New</div>
+        <div className='floating-button-text' >New</div>
       </div>
     </div>
   )

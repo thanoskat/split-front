@@ -36,6 +36,7 @@ const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }
       try {
         const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id }, { signal: abortControllerRef.current.signal })
         // setDisplayedGroup(res.data)
+       
         setLoading(false)
         dispatch(setSelectedGroup(res.data))
         dispatch(setActiveIndex(index))
