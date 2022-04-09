@@ -179,22 +179,25 @@ function Form({ headline, close }) {
         setInputAmount('')
         setInputDescription('')    
         dispatch(setSelectedGroup(res.data))
-      } else { //this might be redundant as all members exist in back end. Not sure how it's going to work yet
-        //but knowing members.length, if nothing has been selected here it could just check this by
-        //doing if members.length-shareWtih.length==1 then all users should be included.
+      } else if(splitAmongMembersCheck) {
+                                                          //this might be redundant as all members exist in back end. Not sure how it's going to work yet
+                                                          //but knowing members.length, if nothing has been selected here it could just check this by
+                                                          //doing if members.length-shareWtih.length==1 then all users should be included.
         const res = await api.post(`/expense/addexpense`,
           {
             groupId: selectedGroup._id, //does it feed at first render? Need to check
             sender: sessionData.userId,
             amount: inputAmount,
             description: inputDescription,
-            tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids
+            tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
             expenseTags: expenseTags
           }
         )
         setInputAmount('')
         setInputDescription('')
         dispatch(setSelectedGroup(res.data))
+      } else{
+        return //do nothing if trackIndexAndIDmulti.length == 0 and not all users are selected
       }
     }
     catch (error) {
