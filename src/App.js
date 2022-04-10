@@ -8,8 +8,8 @@ import './semantic-icons.css'
 
 function App() {
 
-  const pathname = window.location.pathname
-  console.log(pathname)
+  // const pathname = window.location.pathname
+  // console.log(pathname)
 
   return (
       <GlobalStateContextProvider>

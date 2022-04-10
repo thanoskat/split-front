@@ -114,6 +114,10 @@ html, body, select {
   font-size: 22px
 }
 
+.t25 {
+  font-size: 20px
+}
+
 .t3 {
   font-size: 18px
 }
@@ -128,6 +132,14 @@ html, body, select {
 
 .t6 {
   font-size: 12px
+}
+
+.t7 {
+  font-size: 10px
+}
+
+.t8 {
+  font-size: 8px
 }
 
 .regular {
@@ -156,6 +168,10 @@ html, body, select {
 
 .gap8 {
   gap: 8px
+}
+
+.gap10 {
+  gap: 10px
 }
 
 .light-color {
@@ -272,6 +288,18 @@ html, body, select {
   }
 }
 
+.pill {
+  align-self: center;
+  justify-content: center;
+  padding: 2px 6px;
+  gap: 6px;
+  border-radius: 4px;
+  width: fit-content;
+  border-style: solid;
+  border-width: 1px;
+  opacity: 80%;
+}
+
 .figma-main {
   height: inherit
 }
@@ -330,17 +358,22 @@ html, body, select {
 }
 
 .top-radius {
-  border-radius: 14px 14px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
 }
 
 .expenses-tab {
-  background-color: var(--layer-1-color);
+  background-color: var(--layer-0-color);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--layer-1-color);
+  box-sizing: content-box;
 }
 
 .expense {
   box-sizing: border-box;
-  padding: 14px 14px 14px 14px;
-  height: 120px;
+  padding: 10px 14px;
+  /* height: 100px; */
+  height: fit-content;
 }
 
 .floating-button {
@@ -367,6 +400,10 @@ html, body, select {
 
 .padding1812 {
   padding: 18px 12px
+}
+
+.padding0014 {
+  margin: 0px 14px
 }
 
 .button-11 {
@@ -453,7 +490,7 @@ html, body, select {
 
 ::-webkit-scrollbar-track {
   /* margin-block: 3px; */
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 /* ::-webkit-scrollbar-thumb {

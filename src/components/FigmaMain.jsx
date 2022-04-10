@@ -10,9 +10,8 @@ import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSli
 function FigmaMain() {
 
   const dispatch = useDispatch()
-  console.log('FigmaMain render.')
+  // console.log('FigmaMain render.')
   const api = useAxios()
-  const api2 = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   // const [displayedGroup, setDisplayedGroup] = useState()
   // const [groupList, setGroupList] = useState()
@@ -51,7 +50,7 @@ function FigmaMain() {
   ]
 
   const getFirstGroup = async () => {
-    const response = await api2.get('/groups');
+    const response = await api.get('/groups');
     console.log(response)
     // setDisplayedGroup(response.data[0])
     dispatch(setSelectedGroup(response.data[0]))
@@ -63,7 +62,7 @@ function FigmaMain() {
       setLoading(true)
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
-      const res = await api2.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      const res = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
       // setGroupList(res.data)
       groupList.current = res.data
       dispatch(setGroupList(res.data))
@@ -101,19 +100,19 @@ function FigmaMain() {
       </div>
       <div className='separator-1'/>
       <TabSwitcher/>
-        <Switch>
-          <Route path="/figmamain/expenses">
-            <TabExpenses expenses={displayedGroup?.expenses}/>
-          </Route>
-          <Route path="/figmamain/members" component={TabMembers}/>
-          <Route path="/figmamain/settleup" component={TabSettleUp}/>
-        </Switch>
-      {/* {showSelect &&
-      <GroupSelector close={() => setShowSelect(false)}
-      groupList={groupList.current}
-      setDisplayedGroup={setDisplayedGroup}
-      highlightedGroup={displayedGroup._id}/>
-      } */}
+      <Switch>
+        <Route path="/figmamain/expenses">
+          <TabExpenses expenses={displayedGroup?.expenses} members={displayedGroup?.members}/>
+        </Route>
+        <Route path="/figmamain/members" component={TabMembers}/>
+        <Route path="/figmamain/settleup" component={TabSettleUp}/>
+      </Switch>
+      <div
+      className='floating-button pointer flex row shadow justcont-center alignitems-center'
+      onClick={() => dispatch(setCurrentMenu('new'))}>
+        <IonIcon name='add' className='floating-button-icon'/>
+        <div className='floating-button-text'>New</div>
+      </div>
     </div>
   );
 }
