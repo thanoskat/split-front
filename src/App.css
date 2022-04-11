@@ -225,10 +225,21 @@ html, body, select {
   justify-content: center
 }
 
+.justself-center{
+  justify-self: center;
+}
+
+.alignself-center{
+  align-self: center;
+}
+
 .justcont-spacebetween {
   justify-content: space-between
 }
 
+.justcont-spacearound{
+  justify-content: space-around;
+}
 .justcont-flexstart {
   justify-content: flex-start
 }

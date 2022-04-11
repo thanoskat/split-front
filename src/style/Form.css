@@ -28,6 +28,7 @@
 }
 
 .input-field {
+  border-radius: 4px;
   padding: 0px 40px 0px 10px;
   font-size: 22px;
   height: 40px;
@@ -76,25 +77,36 @@
 .input-right-label {
   margin-left: auto;
 }
+.submit-button-container{
+  margin: 10px 15px 10px 15px;
+}
+
 
 .submit-button {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  gap: 2rem;
-
+  position: relative;
+ border-radius: 4px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
-  padding: 20px;
+  padding: 0.5rem;
+  
+  width: 100%;
   cursor: pointer;
-  color: var(--activeColor);
-  background-color: var(--secondaryBackgroundColor);
+  color: var(--text);
+  background-color:#f0f0f0;
+  font-size:16px;
+  
 }
 
 .submit-button:hover {
   opacity: 1;
+  cursor: not-allowed;
   background-color: #3a3b3c;
+}
+
+.submit-button.active:hover{
+  opacity: 0.75;
+  cursor: pointer;
+  
 }
 
 .submit-button-icon {
@@ -288,10 +300,13 @@
 
 .newtagIcon {
   color: var(--inactiveColor);
+  background-color:var(--menuFrameColor);
   align-self: center;
 }
 
-
+.selectTag{
+  background-color:var(--text)
+}
 
 .trash.alternate.icon {
   color: var(--text)

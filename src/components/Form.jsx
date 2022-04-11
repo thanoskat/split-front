@@ -168,6 +168,7 @@ function Form({ headline, close }) {
   }
 
   const addExpense = async () => {
+    if (!inputAmount) return
     try {
       if (splitAmongMembersCheck) {
         //If all members have been chosen
@@ -179,7 +180,7 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
             expenseTags: expenseTags
-          }
+          },{ signal: abortControllerRef.current.signal }
         )
         setInputAmount('')
         setInputDescription('')
@@ -195,7 +196,7 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
             expenseTags: expenseTags
-          }
+          },{ signal: abortControllerRef.current.signal }
         )
         setInputAmount('')
         setInputDescription('')
@@ -227,7 +228,7 @@ function Form({ headline, close }) {
   return (
     <SlidingBox close={close} className='addExpense-selector top-radius' >
       {headline && <div className='flex row t05 justcont-center alignitems-center padding4'>{headline}</div>}
-      <div className='separator-0'/>
+      <div className='separator-0' />
       <div className='flex column padding4'>
         <InputField
           value={inputAmount}
@@ -250,14 +251,6 @@ function Form({ headline, close }) {
           onChange={e => setInputDescription(e.target.value)}
           clear={e => setInputDescription('')}
         />
-        <MultiSelect
-          setTrackIndexAndID={setTrackIndexAndIDmulti}
-          value={trackIndexAndIDmulti}
-          optionsArray={selectedGroup.members.filter(filterIDfromMembers)} //filters out user's ID from showing as option. Debatable
-          label="split expense between you and all members"
-          splitAmongMembersCheck={splitAmongMembersCheck}
-          setSplitAmongMembersCheck={setSplitAmongMembersCheck}
-          allowMultiSelections={true} />
         <ExpenseTags
           groupTags={showGroupTags}
           //setGroupTags={setShowGroupTags}
@@ -276,8 +269,20 @@ function Form({ headline, close }) {
           setClickedIndex={setClickedIndex}
           clickedIndex={clickedIndex}
         />
+        <MultiSelect
+          setTrackIndexAndID={setTrackIndexAndIDmulti}
+          value={trackIndexAndIDmulti}
+          optionsArray={selectedGroup.members.filter(filterIDfromMembers)} //filters out user's ID from showing as option. Debatable
+          label="split between you and all members"
+          splitAmongMembersCheck={splitAmongMembersCheck}
+          setSplitAmongMembersCheck={setSplitAmongMembersCheck}
+          allowMultiSelections={true} />
+        
+        <div className='submit-button-container v-flex alignitems-center justcont-center'>
+        <div className={`submit-button ${inputAmount? "active":null} h-flex justcont-spacearound `} onClick={submitAndClose}>Submit</div>
       </div>
-      <div className='submit-button' onClick={submitAndClose}>Submit</div>
+      </div>
+     
     </SlidingBox>
   );
 }
@@ -517,7 +522,7 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
   return (
     <div className='Tags v-flex'>
       <div className='tags-header'>
-        Select <i className="tag icon newtagIcon"></i>
+        Select <i className="tag icon newtagIcon selectTag"></i>
       </div>
 
       {!showTrash ?

@@ -95,6 +95,12 @@ align-content: center;
     cursor: not-allowed;
 }
 
+.Modal-decison-button.Create-Group-Modal.Active:hover{
+    opacity: 0.75;
+    cursor: pointer;
+    
+}
+
 .Modal-decison-button.Create-Group-Modal.Active{
     padding-right: 120px;
     padding-left: 120px;
@@ -103,8 +109,3 @@ align-content: center;
     
 }
 
-.Modal-decison-button.Create-Group-Modal.Active:hover{
-    opacity: 0.75;
-    cursor: pointer;
-    
-}
