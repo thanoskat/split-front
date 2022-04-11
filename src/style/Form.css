@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin: 20px 20px 20px 20px;
+  margin: 10px 10px 10px 10px;
 }
 
 .input-field {
@@ -111,8 +111,8 @@
   display: flex;
   flex-wrap: wrap;
   border-radius: 4px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   gap: 10px;
   padding-top: 10px;
   padding-bottom: 5px;
@@ -197,50 +197,52 @@
 .multiselect-description {
 
   display: flex;
-  gap:8px;
-  margin-left: 20px;
+  gap: 8px;
+  margin-left: 10px;
   font-size: small;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 .label {
-align-self: center;
-
+ 
+  align-self: center;
+  font-size: 15px;
 
 }
 
-.headercheck{
+.headercheck {
   position: absolute;
-  font-size:xx-large;
+  font-size: xx-large;
   bottom: 0px;
 }
 
-.tick-cube{
+.tick-cube {
   position: relative;
-  height:25px;
+  height: 25px;
   width: 25px;
   min-width: 25px;
-  background-color:var(--inactiveColor);
+  background-color: var(--inactiveColor);
   border-radius: 3px;
   cursor: pointer;
- 
+
 }
 
 
 /* Tags */
 .multiselectbox.selectedTags {
-  margin: 0px 20px 20px 20px;
+  margin: 0px 10px 10px 10px;
 }
 
 .multiselectbox.tobeSelectedTags {
-  margin: 0px 20px 0px 10px;
-  background-color: var(--menuFrameColor);
+  margin: 0px 0px 0px 0px;
+  background-color: var(--text);
   padding-top: 5px;
   /* background-color: aliceblue; */
 }
 
 .tags-header {
-  margin: 20px 20px 0px 20px;
+  margin: 10px 10px 0px 10px;
   font-size: small;
 }
 
@@ -300,15 +302,15 @@ align-self: center;
   align-self: flex-end;
 }
 
-.deleteTagButton,.checkTagButton{
+.deleteTagButton, .checkTagButton {
   align-self: center;
   justify-self: center;
   cursor: pointer;
- 
+
 }
 
-.deleteTagButton,.checkTagButton{
-  color:#ffffff !important;
+.deleteTagButton, .checkTagButton {
+  color: #ffffff !important;
   font-size: larger;
 }
 
@@ -327,7 +329,7 @@ align-self: center;
 }
 
 .split-among-text {
-  margin-left: 20px;
+  margin-left: 10px;
 
 }
 
@@ -335,17 +337,41 @@ align-self: center;
   margin-bottom: 5px;
 }
 
-.shaker{
-  animation: shake-animation 4.72s ease ;
+.shaker {
+  animation: shake-animation 4.72s ease;
   transform-origin: 20% 20%;
 }
+
 @keyframes shake-animation {
-  0% { transform:translate(0,0) }
- 1.78571% { transform:translate(2px,0) }
- 3.57143% { transform:translate(0,0) }
- 5.35714% { transform:translate(2px,0) }
- 7.14286% { transform:translate(0,0) }
- 8.92857% { transform:translate(2px,0) }
- 10.71429% { transform:translate(0,0) }
- 100% { transform:translate(0,0) }
+  0% {
+    transform: translate(0, 0)
+  }
+
+  1.78571% {
+    transform: translate(2px, 0)
+  }
+
+  3.57143% {
+    transform: translate(0, 0)
+  }
+
+  5.35714% {
+    transform: translate(2px, 0)
+  }
+
+  7.14286% {
+    transform: translate(0, 0)
+  }
+
+  8.92857% {
+    transform: translate(2px, 0)
+  }
+
+  10.71429% {
+    transform: translate(0, 0)
+  }
+
+  100% {
+    transform: translate(0, 0)
+  }
 }

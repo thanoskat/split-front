@@ -146,6 +146,10 @@ html, body, select {
   font-weight: 700
 }
 
+.gap1{
+  gap:1px;
+}
+
 .gap4 {
   gap: 4px
 }
@@ -289,7 +293,7 @@ html, body, select {
   color: var(--layer-6-color);
 }
 
-.group-selector {
+.group-selector,.addExpense-selector {
   color: var(--light-color);
   background-color: var(--layer-1-color);
 }

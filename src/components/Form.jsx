@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/Form.css"
 import { setSelectedGroup } from '../redux/mainSlice'
-
+import IonIcon from '@reacticons/ionicons'
 //TODO LIST
 // 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result //DONE
 // 2. populate add expense routers and dispatch selected group //DONE
 // 3. fix tenekedes //DONE
 // 4. Turn profiles into pills
 // 5. timestamp on submit expense //DONE
-// 6. WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT row 168
+// 6. WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT row 168 DONE
 
 
 function Form({ headline, close }) {
@@ -26,10 +26,12 @@ function Form({ headline, close }) {
   const [inputDescription, setInputDescription] = useState('')
   const [inputAmount, setInputAmount] = useState('')
   const [expenseTags, setExpenseTags] = useState([])
+  const [isLoading, setLoading] = useState(false)
+  const [clickedIndex, setClickedIndex] = useState()
 
   console.log(selectedGroup.groupTags)
 
-  const showGroupTags = [...getDifference(selectedGroup.groupTags, expenseTags),...getDifference(expenseTags,selectedGroup.groupTags)] //run twice in case first array has less objects than second (seems impossible). See row 58
+  const showGroupTags = [...getDifference(selectedGroup.groupTags, expenseTags), ...getDifference(expenseTags, selectedGroup.groupTags)] //run twice in case first array has less objects than second (seems impossible). See row 58
   const [tagText, setTagText] = useState("");
   const [splitAmongMembersCheck, setSplitAmongMembersCheck] = useState(true)
 
@@ -103,17 +105,17 @@ function Form({ headline, close }) {
     const dbColors = selectedGroup.groupTags.map(groupTag => groupTag.color)
     const filteredColors = colors.filter(x => !dbColors.includes(x)) //colors that are currently not in use in db tags
 
-    if (filteredColors.length !== 0) { //while there are colors still available
+    if (filteredColors.length !== 0 && !isLoading) { //while there are colors still available
+      setLoading(true)
       try {
         const res = await api.post(`/expense/addtag`,
           {
             groupId: selectedGroup._id, //TODO check actual response
             groupTag: { name: tagTextRef.current, color: filteredColors[0] }
           }, { signal: abortControllerRef.current.signal })
+        setLoading(false)
         //console.log(res.data)
         dispatch(setSelectedGroup(res.data))
-
-
       } catch (err) {
         console.dir("Adding tag Err", err)
       } finally {
@@ -138,13 +140,17 @@ function Form({ headline, close }) {
     }
   }
 
-  const handleGroupTagsDelete = async (tag) => {
+  const handleGroupTagsDelete = async (tag, index) => {
+    //TODO Need an if(!isLoading)
+    setClickedIndex(index)
+    setLoading(true)
     try {
       const res = await api.post(`/expense/deletetag`,
         {
           groupId: selectedGroup._id,
           groupTag: { _id: tag._id }
         }, { signal: abortControllerRef.current.signal })
+      setLoading(false)
       dispatch(setSelectedGroup(res.data))
 
     } catch (err) {
@@ -163,26 +169,8 @@ function Form({ headline, close }) {
 
   const addExpense = async () => {
     try {
-      if (trackIndexAndIDmulti.length !== 0) {
-        //TO DO
-        //WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT
-        const res = await api.post(`/expense/addexpense`,
-          {
-            groupId: selectedGroup._id, //does it feed at first render? Need to check
-            sender: sessionData.userId,
-            amount: inputAmount,
-            description: inputDescription,
-            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
-            expenseTags: expenseTags
-          }
-        )
-        setInputAmount('')
-        setInputDescription('')    
-        dispatch(setSelectedGroup(res.data))
-      } else if(splitAmongMembersCheck) {
-                                                          //this might be redundant as all members exist in back end. Not sure how it's going to work yet
-                                                          //but knowing members.length, if nothing has been selected here it could just check this by
-                                                          //doing if members.length-shareWtih.length==1 then all users should be included.
+      if (splitAmongMembersCheck) {
+        //If all members have been chosen
         const res = await api.post(`/expense/addexpense`,
           {
             groupId: selectedGroup._id, //does it feed at first render? Need to check
@@ -196,7 +184,24 @@ function Form({ headline, close }) {
         setInputAmount('')
         setInputDescription('')
         dispatch(setSelectedGroup(res.data))
-      } else{
+
+      } else if (trackIndexAndIDmulti.length !== 0) {
+        //else if a member has been chosen
+        const res = await api.post(`/expense/addexpense`,
+          {
+            groupId: selectedGroup._id, //does it feed at first render? Need to check
+            sender: sessionData.userId,
+            amount: inputAmount,
+            description: inputDescription,
+            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+            expenseTags: expenseTags
+          }
+        )
+        setInputAmount('')
+        setInputDescription('')
+        dispatch(setSelectedGroup(res.data))
+      } else {
+        //if no member has been chose at all
         return //do nothing if trackIndexAndIDmulti.length == 0 and not all users are selected
       }
     }
@@ -220,9 +225,10 @@ function Form({ headline, close }) {
 
   //remove {children} and add functions here (like in GroupSelector) so everything happens in this component
   return (
-    <SlidingBox close={close} >
-      {headline && <div className='form-headline'>{headline}</div>}
-      <div className='input-field-section'>
+    <SlidingBox close={close} className='addExpense-selector top-radius' >
+      {headline && <div className='flex row t05 justcont-center alignitems-center padding4'>{headline}</div>}
+      <div className='separator-0'/>
+      <div className='flex column padding4'>
         <InputField
           value={inputAmount}
           allowTags={false}
@@ -266,6 +272,9 @@ function Form({ headline, close }) {
           handleGroupTagsDelete={handleGroupTagsDelete}
           newtagRef={newtagRef}
           colors={colors}
+          isLoading={isLoading}
+          setClickedIndex={setClickedIndex}
+          clickedIndex={clickedIndex}
         />
       </div>
       <div className='submit-button' onClick={submitAndClose}>Submit</div>
@@ -276,7 +285,7 @@ function Form({ headline, close }) {
 function InputField({ value, label, maxLength,
   required, onChange, clear,
   placeholder, allowTags, expenseTags,
-  setExpenseTags}) {
+  setExpenseTags }) {
 
   const inputFieldRef = useRef(null)
 
@@ -448,30 +457,30 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       </div>
 
 
-   {!splitAmongMembersCheck ?  //CHECK WHETHER TO SHOW MEMBERS TO BE SELECTED OR NOT
+      {!splitAmongMembersCheck ?  //CHECK WHETHER TO SHOW MEMBERS TO BE SELECTED OR NOT
 
-    <div className='multiselectbox'>
-        {optionsArray.map((option, index) =>
-          <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
-            <span className='avatar'>
-              <div className='firstLetter'>
-                {option.nickname.charAt(0)}
-              </div>
-              {value.findIndex(item => item.index === index) == -1 ? "" :
-                <div className='circleOfCircle'>
-                  <div className='tick-circle'>
-                    <i className='check icon avatarcheck'></i>
-                  </div>
+        <div className='multiselectbox'>
+          {optionsArray.map((option, index) =>
+            <div className='flex column profilecircle' key={index} onClick={() => onSubmitFunction(allowMultiSelections, option, index)} >
+              <span className='avatar'>
+                <div className='firstLetter'>
+                  {option.nickname.charAt(0)}
                 </div>
-              }
-            </span>
-            <div className='avatar-description'>{option.nickname}</div>
-          </div>
-        )}
-      </div> :""
+                {value.findIndex(item => item.index === index) == -1 ? "" :
+                  <div className='circleOfCircle'>
+                    <div className='tick-circle'>
+                      <i className='check icon avatarcheck'></i>
+                    </div>
+                  </div>
+                }
+              </span>
+              <div className='avatar-description'>{option.nickname}</div>
+            </div>
+          )}
+        </div> : ""
 
       }
-   
+
 
     </div>
   )
@@ -479,7 +488,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
 
 
-function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete }) {
+function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLength, onChange, handleKeyDown, handleBlur, newtagRef, colors, handleGroupTagsDelete, isLoading, clickedIndex }) {
 
   const [showTrash, setShowTrash] = useState(false)
 
@@ -497,6 +506,7 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
   const handleGroupTagsClick = (tag) => {
     //setGroupTags(groupTags.filter(item => item.name !== tag.name))
     setExpenseTags(prevTag => [...prevTag, tag])
+
   }
 
   // const handleDownTagsClick = (tag) => {
@@ -509,17 +519,21 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
       <div className='tags-header'>
         Select <i className="tag icon newtagIcon"></i>
       </div>
+
       {!showTrash ?
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag) =>
+          {groupTags.map((tag, index) =>
             <Tag
               key={tag._id}
               showClose={false}
               text={tag.name}
               color={tag.color}
-              onBodyClick={() => handleGroupTagsClick(tag)} />
+              onBodyClick={() => handleGroupTagsClick(tag, index)}
+            />
           )}
+
+          {isLoading ? <IonIcon name='sync' className='t3 spin' /> : ""}
 
           {expenseTags.length + groupTags.length !== colors.length ?
             <div className='h-flex tag-section newtag-section'>
@@ -544,14 +558,17 @@ function ExpenseTags({ groupTags, expenseTags, setExpenseTags, tagText, maxLengt
         :
         <div className='multiselectbox tobeSelectedTags'>
 
-          {groupTags.map((tag) =>
+          {groupTags.map((tag, index) =>
             <Tag
               key={tag._id}
               showClose={false}
               showTrash={true}
               text={tag.name}
               color={tag.color}
-              onDeleteClick={() => handleGroupTagsDelete(tag)} />
+              onDeleteClick={() => handleGroupTagsDelete(tag, index)}
+              index={index}
+              isLoading={isLoading}
+              clickedIndex={clickedIndex} />
           )}
 
           <div className='checkTagSection' onClick={() => setShowTrash(!true)}>
