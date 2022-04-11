@@ -15,7 +15,7 @@ html, body, select {
   height: 100vh;
   white-space: nowrap;
 
-  --base-color: #406abf;
+  /* --base-color: #406abf;
   --base-color-1: #4563A1;
   --tag-color-1: #c3dd86;
   --tag-color-2: #86dda0;
@@ -27,7 +27,30 @@ html, body, select {
   --layer-3-color: #47484B;
   --layer-4-color: #555659;
   --layer-5-color: #626366;
-  --layer-6-color: #6E6F72;
+  --layer-6-color: #6E6F72; */
+
+  --base-color: #406abf;
+  --base-color-1: #4563A1;
+  --tag-color-1: #c3dd86;
+  --tag-color-2: #86dda0;
+  --base-dark-color: #121212;
+  --light-color: #f5f5f5;
+  --layer-0-color: #171717;
+  --layer-1-color: #1f1f22;
+  --layer-2-color: #37383C;
+  --layer-3-color: #47484B;
+  --layer-4-color: #555659;
+  --layer-5-color: #737373;
+  --layer-6-color: #a3a3a3;
+  --layer-7-color: #737373;
+
+  --weekday-1: #F07F75;
+  --weekday-2: #E0D185;
+  --weekday-3: #E085C2;
+  --weekday-4: #ACD98C;
+  --weekday-5: #BA85E0;
+  --weekday-6: #8594E0;
+  --weekday-7: #85D9E0;
 
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
@@ -56,7 +79,7 @@ html, body, select {
   --text:#26272B;
 
 
-  color: var(--inactiveColor);
+  color: var(--layer-6-color);
   background-color: var(--layer-0-color);
 }
 
@@ -250,12 +273,12 @@ html, body, select {
 }
 
 .separator-0 {
-  border-bottom: 1px solid;
+  border-bottom: 2px solid;
   border-color: var(--layer-0-color);
 }
 
 .separator-1 {
-  border-bottom: 1px solid;
+  border-bottom: 2px solid;
   border-color: var(--layer-1-color);
 }
 
@@ -297,7 +320,7 @@ html, body, select {
   width: fit-content;
   border-style: solid;
   border-width: 1px;
-  opacity: 80%;
+  /* opacity: 80%; */
 }
 
 .figma-main {
@@ -362,7 +385,7 @@ html, body, select {
 }
 
 .expenses-tab {
-  background-color: var(--layer-0-color);
+  background-color: var(--layer-1-color);
   border-style: solid;
   border-width: 1px;
   border-color: var(--layer-1-color);

@@ -49,7 +49,7 @@ const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }
   return (
     <SlidingBox close={close} className='group-selector top-radius'>
       <div className='flex row t05 justcont-center alignitems-center padding4'>Group</div>
-      <div className='separator-0'/>
+      {/* <div className='separator-0'/> */}
       <div className='flex column gap4 padding4'>
         {groupList?.map((group, index) => (
             <div
