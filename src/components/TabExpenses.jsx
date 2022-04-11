@@ -10,20 +10,16 @@ dayjs.extend(relativeTime)
 dayjs.extend(calendar)
 
 const calendarConfig = {
-  // sameDay: 'HH:mm',
-  // sameDay: 'YYYY MMM DD HH:mm',
-  sameDay: '[Today] HH:mm',
-  // nextDay: '[Tomorrow]',
-  // nextWeek: 'dddd',
-  lastDay: '[Yesterday] HH:mm',
-  // lastDay: 'MMM DD HH:mm',
-  // lastWeek: '[Last] dddd',
-  sameElse: 'MMM DD HH:mm'
+  sameDay: '[Today]',
+  nextDay: '[Tomorrow]',
+  nextWeek: 'dddd',
+  lastDay: '[Yesterday]',
+  lastWeek: 'MMM DD',
+  sameElse: 'MMM DD'
 }
 
 
 const TabExpense = ({ expenses, members }) => {
-
   const dispatch = useDispatch()
 
   const Expense = ({ expense }) => {
@@ -91,10 +87,13 @@ const TabExpense = ({ expenses, members }) => {
     )
   }
 
-  const Pill = ({ icon, text, onClick, color, borderColor }) => {
+  const Pill = ({ icon, text, onClick, color, backgroundColor, borderColor }) => {
     return(
-      <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, borderColor: borderColor }} onClick={onClick}>
-      {/* <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: 'var(--layer-0-color)', backgroundColor: color, borderColor: color }} onClick={onClick}> */}
+      // <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, borderColor: borderColor }} onClick={onClick}>
+      //   {icon && <IonIcon name={icon}/>}
+      //   {text}
+      // </div>
+      <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, backgroundColor: backgroundColor, borderColor: borderColor }} onClick={onClick}>
         {icon && <IonIcon name={icon}/>}
         {text}
       </div>
@@ -105,11 +104,20 @@ const TabExpense = ({ expenses, members }) => {
 
     const [showTags, setShowTags] = useState(true)
 
+    const openExpenseOptions = (expense) => {
+      dispatch(setSelectedExpense(expense))
+      dispatch(setCurrentMenu('expenseOptions'))
+    }
+
     return(
       <div className='expense flex column justcont-spacebetween gap8'>
         <div className='flex row justcont-spacebetween semibold t6' style={{alignItems: 'flex-end'}}>
-          <div className='bold' style={{color: '#4891C7'}}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
-          <div className='flex row pointer'>
+          <div className='flex row'>
+            <div className='bold' style={{color: `var(--weekday-${dayjs(expense.createdAt).day()})`}}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
+            &nbsp;
+            <div className='bold'>{dayjs(expense.createdAt).format('HH:mm')}</div>
+          </div>
+          <div className='flex row pointer' onClick={() => openExpenseOptions(expense)}>
             <IonIcon name='ellipsis-vertical' className='t4 expense-options-icon'/>
           </div>
         </div>
@@ -121,7 +129,8 @@ const TabExpense = ({ expenses, members }) => {
           <div className='flex row gap6'>
             <Pill icon='card' text={expense.sender.nickname} color='var(--light-color)' borderColor={'#898A8C'}/>
             {showTags && expense.expenseTags?.map(tag => (
-              <Pill key={tag._id} text={tag.name} color={tag.color} borderColor={tag.color}/>
+              <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'}/>
+              // <Pill key={tag._id} text={tag.name} backgroundColor={'var(--layer-1-color)'} borderColor={tag.color} color={tag.color}/>
             ))}
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <Pill key={participant} text={participant.slice(18)} color={'var(--light-color)'} borderColor={'#898A8C'}/>
