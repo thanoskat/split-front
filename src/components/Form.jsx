@@ -14,6 +14,9 @@ import IonIcon from '@reacticons/ionicons'
 // 4. Turn profiles into pills
 // 5. timestamp on submit expense //DONE
 // 6. WHAT HAPPENS WHEN USER HAS DECIDED NOT TO SHARE WITH ALL, DOESN'T CHOOSE ANYONE AND CLICK SUBMIT row 168 DONE
+// 7. up-down border radius for description
+// 8. abort controller for input doesn't re-render page
+// 9. slow down submit expense and check whether submit loading makes sense (might be redundant)
 
 
 function Form({ headline, close }) {
@@ -27,6 +30,7 @@ function Form({ headline, close }) {
   const [inputAmount, setInputAmount] = useState('')
   const [expenseTags, setExpenseTags] = useState([])
   const [isLoading, setLoading] = useState(false)
+  const [submitisLoading, setSubmitLoading] = useState(false)
   const [clickedIndex, setClickedIndex] = useState()
 
   console.log(selectedGroup.groupTags)
@@ -168,7 +172,7 @@ function Form({ headline, close }) {
   }
 
   const addExpense = async () => {
-    if (!inputAmount) return
+    setSubmitLoading(true)
     try {
       if (splitAmongMembersCheck) {
         //If all members have been chosen
@@ -180,8 +184,9 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
             expenseTags: expenseTags
-          },{ signal: abortControllerRef.current.signal }
+          }
         )
+        setSubmitLoading(false)
         setInputAmount('')
         setInputDescription('')
         dispatch(setSelectedGroup(res.data))
@@ -196,8 +201,9 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
             expenseTags: expenseTags
-          },{ signal: abortControllerRef.current.signal }
+          }
         )
+        setSubmitLoading(false)
         setInputAmount('')
         setInputDescription('')
         dispatch(setSelectedGroup(res.data))
@@ -220,8 +226,11 @@ function Form({ headline, close }) {
   const submitAndClose = () => {
     // submit()
     // closeBox()
+    if (!inputAmount) return
     addExpense()
     dispatch(closeSlidingBox())
+
+
   }
 
   //remove {children} and add functions here (like in GroupSelector) so everything happens in this component
@@ -277,12 +286,16 @@ function Form({ headline, close }) {
           splitAmongMembersCheck={splitAmongMembersCheck}
           setSplitAmongMembersCheck={setSplitAmongMembersCheck}
           allowMultiSelections={true} />
-        
+
         <div className='submit-button-container v-flex alignitems-center justcont-center'>
-        <div className={`submit-button ${inputAmount? "active":null} h-flex justcont-spacearound `} onClick={submitAndClose}>Submit</div>
+          <div
+            className={`submit-button ${inputAmount ? "active" : null} h-flex justcont-spacearound `}
+            onClick={submitAndClose}>
+              {submitisLoading? <IonIcon name='sync' className='t3 spin' />: "Submit"}
+          </div>
+        </div>
       </div>
-      </div>
-     
+
     </SlidingBox>
   );
 }

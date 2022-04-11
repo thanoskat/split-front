@@ -82,6 +82,7 @@
 }
 
 
+
 .submit-button {
   position: relative;
  border-radius: 4px;
@@ -92,21 +93,38 @@
   width: 100%;
   cursor: pointer;
   color: var(--text);
-  background-color:#f0f0f0;
+  background-color:#3a3b3c;
+  font-size:16px;
+  
+}
+.submit-button.active {
+  position: relative;
+ border-radius: 4px;
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  padding: 0.5rem;
+  
+  width: 100%;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #f0f0f0;
   font-size:16px;
   
 }
 
+
+
 .submit-button:hover {
   opacity: 1;
   cursor: not-allowed;
-  background-color: #3a3b3c;
+  
 }
 
 .submit-button.active:hover{
   opacity: 0.75;
   cursor: pointer;
-  
+  transition: 0.2s ease all;
+ 
 }
 
 .submit-button-icon {
