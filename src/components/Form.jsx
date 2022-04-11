@@ -223,11 +223,11 @@ function Form({ headline, close }) {
     }
   }
 
-  const submitAndClose = () => {
+  const submitAndClose = async () => {
     // submit()
     // closeBox()
     if (!inputAmount) return
-    addExpense()
+    await addExpense()
     dispatch(closeSlidingBox())
 
 
