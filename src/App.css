@@ -15,7 +15,7 @@ html, body, select {
   height: 100vh;
   white-space: nowrap;
 
-  --base-color: #406abf;
+  /* --base-color: #406abf;
   --base-color-1: #4563A1;
   --tag-color-1: #c3dd86;
   --tag-color-2: #86dda0;
@@ -27,7 +27,38 @@ html, body, select {
   --layer-3-color: #47484B;
   --layer-4-color: #555659;
   --layer-5-color: #626366;
-  --layer-6-color: #6E6F72;
+  --layer-6-color: #6E6F72; */
+
+  --base-color: #406abf;
+  --base-color-1: #4563A1;
+  --tag-color-1: #c3dd86;
+  --tag-color-2: #86dda0;
+  --base-dark-color: #121212;
+  --light-color: #f5f5f5;
+  --layer-0-color: #171717;
+  --layer-1-color: #1f1f22;
+  --layer-2-color: #37383C;
+  --layer-3-color: #47484B;
+  --layer-4-color: #555659;
+  --layer-5-color: #737373;
+  --layer-6-color: #a3a3a3;
+  --layer-7-color: #737373;
+
+  /* --weekday-1: #F07F75;
+  --weekday-2: #E0D185;
+  --weekday-3: #ACD98C;
+  --weekday-4: #85D9E0;
+  --weekday-5: #8594E0;
+  --weekday-6: #BA85E0;
+  --weekday-7: #E085C2; */
+
+  --weekday-1: #D17D75;
+  --weekday-2: #D1C275;
+  --weekday-3: #9BD175;
+  --weekday-4: #75C9D1;
+  --weekday-5: #3D4B8F;
+  --weekday-6: #7584D1;
+  --weekday-7: #AB75D1;
 
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
@@ -56,7 +87,7 @@ html, body, select {
   --text:#26272B;
 
 
-  color: var(--inactiveColor);
+  color: var(--layer-6-color);
   background-color: var(--layer-0-color);
 }
 
@@ -114,6 +145,10 @@ html, body, select {
   font-size: 22px
 }
 
+.t25 {
+  font-size: 20px
+}
+
 .t3 {
   font-size: 18px
 }
@@ -128,6 +163,18 @@ html, body, select {
 
 .t6 {
   font-size: 12px
+}
+
+.t65 {
+  font-size: 11px
+}
+
+.t7 {
+  font-size: 10px
+}
+
+.t8 {
+  font-size: 8px
 }
 
 .regular {
@@ -160,6 +207,10 @@ html, body, select {
 
 .gap8 {
   gap: 8px
+}
+
+.gap10 {
+  gap: 10px
 }
 
 .light-color {
@@ -249,12 +300,12 @@ html, body, select {
 }
 
 .separator-0 {
-  border-bottom: 1px solid;
+  border-bottom: 2px solid;
   border-color: var(--layer-0-color);
 }
 
 .separator-1 {
-  border-bottom: 1px solid;
+  border-bottom: 2px solid;
   border-color: var(--layer-1-color);
 }
 
@@ -285,6 +336,19 @@ html, body, select {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.pill {
+  align-self: center;
+  justify-content: center;
+  padding: 4px 6px;
+  gap: 6px;
+  border-radius: 4px;
+  width: fit-content;
+  border-style: solid;
+  border-width: 1px;
+  min-width: 20px;
+  /* opacity: 80%; */
 }
 
 .figma-main {
@@ -345,17 +409,22 @@ html, body, select {
 }
 
 .top-radius {
-  border-radius: 14px 14px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
 }
 
 .expenses-tab {
   background-color: var(--layer-1-color);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--layer-1-color);
+  box-sizing: content-box;
 }
 
 .expense {
   box-sizing: border-box;
-  padding: 14px 14px 14px 14px;
-  height: 120px;
+  padding: 10px 14px;
+  /* height: 100px; */
+  height: fit-content;
 }
 
 .floating-button {
@@ -382,6 +451,10 @@ html, body, select {
 
 .padding1812 {
   padding: 18px 12px
+}
+
+.padding0014 {
+  margin: 0px 14px
 }
 
 .button-11 {
@@ -456,7 +529,7 @@ html, body, select {
 
 /* Webkit scrollbar */
 ::-webkit-scrollbar {
-  width: 14px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -466,25 +539,11 @@ html, body, select {
   background-color: var(--layer-3-color);
 }
 
+/* No delete */
 ::-webkit-scrollbar-track {
   /* margin-block: 3px; */
-  margin-top: 3px;
+  margin-top: 0px;
 }
-
-/* ::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background: #3F6AC0;
-}
-::-webkit-scrollbar-track {
-  margin-top: 0px
-  margin-block: 10px;
-  background: transparent
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background: transparent
-}*/
 
 @font-face {
   font-family: 'Inter';

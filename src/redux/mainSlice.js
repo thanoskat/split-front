@@ -6,10 +6,7 @@ export const mainSlice = createSlice({
     currentMenu: 'none',
     groupList: [],
     selectedGroup: null,
-    groupTags: [], //new
-    activeIndex: 0, //new,
-    isLoading: false,
-    clickedIndex: null
+    selectedExpense: null
   },
 
 
@@ -23,18 +20,11 @@ export const mainSlice = createSlice({
     setSelectedGroup: (state, action) => {
       state.selectedGroup = action.payload
     },
-    setActiveIndex: (state, action) => {
-      state.activeIndex = action.payload
+    setSelectedExpense: (state, action) => {
+      state.selectedExpense = action.payload
     },
-    setLoading: (state, action) => {
-      state.activeIndex = action.payload
-    },
-    setClickedIndex: (state, action) => {
-      state.activeIndex = action.payload
-    }
   }
 })
 
-export const { setCurrentMenu, setGroupList, setSelectedGroup, setActiveIndex,setLoading,setClickedIndex } = mainSlice.actions
-
+export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense } = mainSlice.actions
 export default mainSlice.reducer

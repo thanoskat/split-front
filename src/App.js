@@ -8,38 +8,38 @@ import './semantic-icons.css'
 
 function App() {
 
-  const pathname = window.location.pathname
-  console.log(pathname)
+  // const pathname = window.location.pathname
+  // console.log(pathname)
 
   return (
-      <GlobalStateContextProvider>
-        <BrowserRouter>
-          <div className="App">
-            <UserBar/>
-            <NavigationBar2/>
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/login" component={Login} />
-                <Route path="/about" component={About} />
-                <Route path="/v/:token" component={VerifyLink} />
-                <Route path="/signup" component={SignUp} />
-                {/* <PrivateRoute exact path="/group/:groupid"component={Group}/> */}
-                <PrivateRoute path="/figmamain" component={FigmaMain} />
-                <PrivateRoute path="/mygroups" component={MyGroups} />
-                <PrivateRoute path="/group/:groupid" component={Group} />
-                <PrivateRoute exact path="/test" component={Test}/>
-                <PrivateRoute exact path="/maintest" component={MainTest}/>
-                <PrivateRoute exact path="/users" component={Users} />
-                <PrivateRoute exact path="/profile" component={Profile} />
-                <PrivateRoute path="/user/:id" component={User} />
-                <PrivateRoute path="/notifications" component={Notifications} />
-                <PrivateRoute exact path="/main" component={MainPage} />
-                <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
-              </Switch>
-          </div>
-        </BrowserRouter>
-        <Menus/>
-      </GlobalStateContextProvider>
+    <GlobalStateContextProvider>
+      <BrowserRouter>
+        <div className="App">
+          {/* <UserBar/> */}
+          {/* <NavigationBar2/> */}
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/login" component={Login} />
+              <Route path="/about" component={About} />
+              <Route path="/v/:token" component={VerifyLink} />
+              <Route path="/signup" component={SignUp} />
+              {/* <PrivateRoute exact path="/group/:groupid"component={Group}/> */}
+              <PrivateRoute path="/figmamain" component={FigmaMain} />
+              <PrivateRoute path="/mygroups" component={MyGroups} />
+              <PrivateRoute path="/group/:groupid" component={Group} />
+              <PrivateRoute exact path="/test" component={Test}/>
+              <PrivateRoute exact path="/maintest" component={MainTest}/>
+              <PrivateRoute exact path="/users" component={Users} />
+              <PrivateRoute exact path="/profile" component={Profile} />
+              <PrivateRoute path="/user/:id" component={User} />
+              <PrivateRoute path="/notifications" component={Notifications} />
+              <PrivateRoute exact path="/main" component={MainPage} />
+              <PrivateRoute exact path="/mygroups/creategroup" component={MyGroupsCreateGroup }/>
+            </Switch>
+        </div>
+      </BrowserRouter>
+      <Menus/>
+    </GlobalStateContextProvider>
   );
 }
 

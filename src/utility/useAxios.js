@@ -47,9 +47,9 @@ const useAxios = () => {
     const originalRequest = error.config
     const errorStatus = error.response.status
 
-    console.log(`errorStatus === ${errorStatus}`)
+    // console.log(`errorStatus === ${errorStatus}`)
     if (errorStatus === 401) {
-      console.log(`isRefreshing === ${refresh.isRefreshing}`)
+      // console.log(`isRefreshing === ${refresh.isRefreshing}`)
       if(!refresh.isRefreshing) {
         refresh.isRefreshing = true
         // Getting new access token

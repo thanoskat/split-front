@@ -23,7 +23,7 @@ function SlidingBox({ close, children, className }) {
     <div onAnimationEnd={checkIfOutAndClose}>
       <div onClick={() => dispatch(closeSlidingBox())} className='out-area'/>
       {/* <div className={'sliding-box'} style={{animation: `${animation}AnimationSlidingBox 80ms linear`}}> */}
-      <div className={`sliding-box ${className}`} style={{animation: `${animation}AnimationSlidingBox 80ms linear`}}>
+      <div className={`sliding-box ${className}`} style={{animation: `${animation}AnimationSlidingBox 100ms linear`}}>
         {children}
       </div>
     </div>
