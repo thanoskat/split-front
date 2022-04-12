@@ -1,9 +1,25 @@
 import 'font-awesome/css/font-awesome.min.css';
 import IonIcon from '@reacticons/ionicons';
+import { useState } from 'react';
+//import store from '../redux/store'
+import { useDispatch} from 'react-redux'
+import { setCurrentMenu } from '../redux/mainSlice'
 
 const TabExpense = ({ expenses }) => {
 
+  //const [isLoading, setLoading] = useState(false)
   console.log("TabExpense rendered.")
+  const dispatch = useDispatch()
+
+  const openExpenseSelector = () => {
+  //  if(!isLoading) {
+      //setLoading(true)
+      dispatch(setCurrentMenu('addExpense'))
+     // setLoading(false)
+      // setShowSelect(true)
+     // setLoading(false)
+    //}
+  }
 
   const Expense = ({ description, amount, tags, spender, participants, timestamp }) => {
     return(
@@ -48,7 +64,7 @@ const TabExpense = ({ expenses }) => {
   }
 
   return (
-    <div className='expenses-tab t5 flex flex-1 column overflow-hidden'>
+    <div className='expenses-tab t5 flex flex-1 column overflow-hidden' >
       <div className='overflow-auto'>
         {expenses?.map(expense => (
           <div key={expense._id}>
@@ -63,9 +79,9 @@ const TabExpense = ({ expenses }) => {
         ))}
       <div className='expense'/>
       </div>
-      <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
+      <div className='floating-button pointer flex row shadow justcont-center alignitems-center ' onClick={openExpenseSelector}>
         <IonIcon name='add' className='floating-button-icon'/>
-        <div className='floating-button-text'>New</div>
+        <div className='floating-button-text' >New</div>
       </div>
     </div>
   )

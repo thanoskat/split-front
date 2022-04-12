@@ -1,7 +1,10 @@
+import IonIcon from '@reacticons/ionicons'
 
 
+const Tag = ({ text, color, onCloseClick, showClose, showTrash, onDeleteClick, onBodyClick,index,clickedIndex,isLoading}) => {
 
-const Tag = ({ text, color, onCloseClick, showClose, showTrash, onDeleteClick, onBodyClick }) => {
+  console.log("Tag rendered")
+  //console.log(index, clickedIndex)
   return (
     <div className='t5 expense-tag flex row shadow pointer gap6' onClick={onBodyClick} style={{ backgroundColor: `${color}` }}>
       {text}
@@ -12,14 +15,18 @@ const Tag = ({ text, color, onCloseClick, showClose, showTrash, onDeleteClick, o
         </div> : ""}
 
       {showTrash ?
-        <div className='tag-section-option shaker'
+      // /https://unused-css.com/blog/css-shake-animation/
+      
+        <div className='tag-section-option shaker'  
           onClick={onDeleteClick}>
-          <i className="trash alternate icon"></i>
+        {isLoading &&index==clickedIndex? <IonIcon name='sync' className='t3 spin'/>:<i className="trash alternate icon"></i>}      
         </div> : ""}
-
+        
     </div>
 
   )
 }
+
+
 
 export default Tag

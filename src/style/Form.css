@@ -24,10 +24,11 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin: 20px 20px 20px 20px;
+  margin: 10px 10px 10px 10px;
 }
 
 .input-field {
+  border-radius: 4px;
   padding: 0px 40px 0px 10px;
   font-size: 22px;
   height: 40px;
@@ -76,25 +77,54 @@
 .input-right-label {
   margin-left: auto;
 }
+.submit-button-container{
+  margin: 10px 15px 10px 15px;
+}
+
+
 
 .submit-button {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  gap: 2rem;
-
+  position: relative;
+ border-radius: 4px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
-  padding: 20px;
+  padding: 0.5rem;
+  
+  width: 100%;
   cursor: pointer;
-  color: var(--activeColor);
-  background-color: var(--secondaryBackgroundColor);
+  color: var(--text);
+  background-color:#3a3b3c;
+  font-size:16px;
+  
 }
+.submit-button.active {
+  position: relative;
+ border-radius: 4px;
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  padding: 0.5rem;
+  
+  width: 100%;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #f0f0f0;
+  font-size:16px;
+  
+}
+
+
 
 .submit-button:hover {
   opacity: 1;
-  background-color: #3a3b3c;
+  cursor: not-allowed;
+  
+}
+
+.submit-button.active:hover{
+  opacity: 0.75;
+  cursor: pointer;
+  transition: 0.2s ease all;
+ 
 }
 
 .submit-button-icon {
@@ -111,8 +141,8 @@
   display: flex;
   flex-wrap: wrap;
   border-radius: 4px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   gap: 10px;
   padding-top: 10px;
   padding-bottom: 5px;
@@ -195,48 +225,54 @@
 }
 
 .multiselect-description {
+
   display: flex;
-  gap:8px;
-  margin-left: 20px;
+  gap: 8px;
+  margin-left: 10px;
   font-size: small;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 .label {
-align-self: center;
+ 
+  align-self: center;
+  font-size: 15px;
+
 }
 
-.headercheck{
+.headercheck {
   position: absolute;
-  font-size:xx-large;
+  font-size: xx-large;
   bottom: 0px;
 }
 
-.tick-cube{
+.tick-cube {
   position: relative;
-  height:25px;
+  height: 25px;
   width: 25px;
-  background-color:var(--inactiveColor);
+  min-width: 25px;
+  background-color: var(--inactiveColor);
   border-radius: 3px;
   cursor: pointer;
- 
+
 }
 
 
 /* Tags */
 .multiselectbox.selectedTags {
-  margin: 0px 20px 20px 20px;
+  margin: 0px 10px 10px 10px;
 }
 
 .multiselectbox.tobeSelectedTags {
-  margin: 0px 20px 0px 10px;
-  background-color: var(--menuFrameColor);
+  margin: 0px 0px 0px 0px;
+  background-color: var(--text);
   padding-top: 5px;
   /* background-color: aliceblue; */
 }
 
 .tags-header {
-  margin: 20px 20px 0px 20px;
+  margin: 10px 10px 0px 10px;
   font-size: small;
 }
 
@@ -282,12 +318,12 @@ align-self: center;
 
 .newtagIcon {
   color: var(--inactiveColor);
+  background-color:var(--menuFrameColor);
   align-self: center;
 }
 
-.shaker{
-  animation: shake-animation 4.72s ease ;
-  transform-origin: 20% 20%;
+.selectTag{
+  background-color:var(--text)
 }
 
 .trash.alternate.icon {
@@ -299,15 +335,15 @@ align-self: center;
   align-self: flex-end;
 }
 
-.deleteTagButton,.checkTagButton{
+.deleteTagButton, .checkTagButton {
   align-self: center;
   justify-self: center;
   cursor: pointer;
- 
+
 }
 
-.deleteTagButton,.checkTagButton{
-  color:#ffffff !important;
+.deleteTagButton, .checkTagButton {
+  color: #ffffff !important;
   font-size: larger;
 }
 
@@ -326,7 +362,7 @@ align-self: center;
 }
 
 .split-among-text {
-  margin-left: 20px;
+  margin-left: 10px;
 
 }
 
@@ -334,13 +370,41 @@ align-self: center;
   margin-bottom: 5px;
 }
 
+.shaker {
+  animation: shake-animation 4.72s ease;
+  transform-origin: 20% 20%;
+}
+
 @keyframes shake-animation {
-  0% { transform:translate(0,0) }
- 1.78571% { transform:translate(2px,0) }
- 3.57143% { transform:translate(0,0) }
- 5.35714% { transform:translate(5px,0) }
- 7.14286% { transform:translate(0,0) }
- 8.92857% { transform:translate(2px,0) }
- 10.71429% { transform:translate(0,0) }
- 100% { transform:translate(0,0) }
+  0% {
+    transform: translate(0, 0)
+  }
+
+  1.78571% {
+    transform: translate(2px, 0)
+  }
+
+  3.57143% {
+    transform: translate(0, 0)
+  }
+
+  5.35714% {
+    transform: translate(2px, 0)
+  }
+
+  7.14286% {
+    transform: translate(0, 0)
+  }
+
+  8.92857% {
+    transform: translate(2px, 0)
+  }
+
+  10.71429% {
+    transform: translate(0, 0)
+  }
+
+  100% {
+    transform: translate(0, 0)
+  }
 }
