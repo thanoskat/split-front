@@ -44,13 +44,21 @@ html, body, select {
   --layer-6-color: #a3a3a3;
   --layer-7-color: #737373;
 
-  --weekday-1: #F07F75;
-  --weekday-2: #E0D185;
-  --weekday-3: #E085C2;
-  --weekday-4: #ACD98C;
-  --weekday-5: #BA85E0;
-  --weekday-6: #8594E0;
-  --weekday-7: #85D9E0;
+  --weekday-1: #F07F7560;
+  --weekday-2: #E0D18560;
+  --weekday-3: #ACD98C60;
+  --weekday-4: #85D9E060;
+  --weekday-5: #8594E060;
+  --weekday-6: #BA85E060;
+  --weekday-7: #E085C260;
+
+  /* --weekday-1: #90453E80;
+  --weekday-2: #8F813D80;
+  --weekday-3: #5F8F3D80;
+  --weekday-4: #3D888F80;
+  --weekday-5: #3D4B8F80;
+  --weekday-6: #6D3D8F80;
+  --weekday-7: #8F3D7480; */
 
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
@@ -155,6 +163,10 @@ html, body, select {
 
 .t6 {
   font-size: 12px
+}
+
+.t65 {
+  font-size: 11px
 }
 
 .t7 {
@@ -314,12 +326,13 @@ html, body, select {
 .pill {
   align-self: center;
   justify-content: center;
-  padding: 2px 6px;
+  padding: 4px 6px;
   gap: 6px;
   border-radius: 4px;
   width: fit-content;
   border-style: solid;
   border-width: 1px;
+  min-width: 20px;
   /* opacity: 80%; */
 }
 
@@ -501,7 +514,7 @@ html, body, select {
 
 /* Webkit scrollbar */
 ::-webkit-scrollbar {
-  width: 14px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -511,25 +524,11 @@ html, body, select {
   background-color: var(--layer-3-color);
 }
 
+/* No delete */
 ::-webkit-scrollbar-track {
   /* margin-block: 3px; */
-  margin-top: 2px;
+  margin-top: 0px;
 }
-
-/* ::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background: #3F6AC0;
-}
-::-webkit-scrollbar-track {
-  margin-top: 0px
-  margin-block: 10px;
-  background: transparent
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background: transparent
-}*/
 
 @font-face {
   font-family: 'Inter';

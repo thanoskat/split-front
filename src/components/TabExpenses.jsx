@@ -93,7 +93,7 @@ const TabExpense = ({ expenses, members }) => {
       //   {icon && <IonIcon name={icon}/>}
       //   {text}
       // </div>
-      <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, backgroundColor: backgroundColor, borderColor: borderColor }} onClick={onClick}>
+      <div className='pill flex row shadow pointer t5 alignitems-center regular' style={{ color: color, backgroundColor: backgroundColor, borderColor: borderColor }} onClick={onClick}>
         {icon && <IonIcon name={icon}/>}
         {text}
       </div>
@@ -131,6 +131,7 @@ const TabExpense = ({ expenses, members }) => {
             {showTags && expense.expenseTags?.map(tag => (
               <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'}/>
               // <Pill key={tag._id} text={tag.name} backgroundColor={'var(--layer-1-color)'} borderColor={tag.color} color={tag.color}/>
+              // <Pill key={tag._id} text={tag.name} backgroundColor={'var(--layer-1-color)'} borderColor={'var(--light-color)'} color={tag.color}/>
             ))}
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <Pill key={participant} text={participant.slice(18)} color={'var(--light-color)'} borderColor={'#898A8C'}/>
