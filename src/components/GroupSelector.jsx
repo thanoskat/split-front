@@ -5,7 +5,7 @@ import { SlidingBox } from './'
 import store from '../redux/store'
 import { useDispatch } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
-import { setSelectedGroup,setActiveIndex } from '../redux/mainSlice'
+import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
 
@@ -36,10 +36,9 @@ const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }
       try {
         const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id }, { signal: abortControllerRef.current.signal })
         // setDisplayedGroup(res.data)
-       
+
         setLoading(false)
         dispatch(setSelectedGroup(res.data))
-        dispatch(setActiveIndex(index))
         dispatch(closeSlidingBox())
       }
       catch(error) {

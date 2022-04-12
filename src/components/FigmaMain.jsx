@@ -78,12 +78,12 @@ function FigmaMain() {
   }
 
   useEffect(() => {
-    getFirstGroup() 
+    getFirstGroup()
   }, [])
 
   const openGroupSelector = async () => {
     if(!isLoading) {
-      await getGroups() 
+      await getGroups()
     }
   }
 
@@ -111,7 +111,7 @@ function FigmaMain() {
       </Switch>
       <div
       className='floating-button pointer flex row shadow justcont-center alignitems-center'
-      onClick={() => dispatch(setCurrentMenu('new'))}>
+      onClick={() => dispatch(setCurrentMenu('addExpense'))}>
         <IonIcon name='add' className='floating-button-icon'/>
         <div className='floating-button-text'>New</div>
       </div>
