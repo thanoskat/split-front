@@ -193,6 +193,10 @@ html, body, select {
   font-weight: 700
 }
 
+.gap1{
+  gap:1px;
+}
+
 .gap4 {
   gap: 4px
 }
@@ -272,10 +276,21 @@ html, body, select {
   justify-content: center
 }
 
+.justself-center{
+  justify-self: center;
+}
+
+.alignself-center{
+  align-self: center;
+}
+
 .justcont-spacebetween {
   justify-content: space-between
 }
 
+.justcont-spacearound{
+  justify-content: space-around;
+}
 .justcont-flexstart {
   justify-content: flex-start
 }
@@ -353,7 +368,7 @@ html, body, select {
   color: var(--layer-6-color);
 }
 
-.group-selector {
+.group-selector,.addExpense-selector {
   color: var(--light-color);
   background-color: var(--layer-1-color);
 }

@@ -17,6 +17,7 @@ function FigmaMain() {
   // const [groupList, setGroupList] = useState()
   const [showSelect, setShowSelect] = useState(false)
   const [isLoading, setLoading] = useState(false)
+  //const sessionData = store.getState().authReducer.sessionData
 
   const groupList = useRef()
 
@@ -77,14 +78,15 @@ function FigmaMain() {
   }
 
   useEffect(() => {
-    getFirstGroup()
+    getFirstGroup() 
   }, [])
 
   const openGroupSelector = async () => {
     if(!isLoading) {
-      await getGroups()
+      await getGroups() 
     }
   }
+
 
   return (
     <div className='flex column overflow-auto figma-main'>

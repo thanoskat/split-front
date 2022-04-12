@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MenuExpenseOptions, GroupSelector, MenuNew } from '.'
+import { MenuExpenseOptions, Form, GroupSelector, MenuNew } from '.'
 import { useState, useEffect } from 'react'
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,13 +12,14 @@ const Menus = () => {
   const groupList = store.getState().mainReducer.groupList
   const selectedGroup = store.getState().mainReducer.selectedGroup
 
+
   useEffect(() => {
   }, [])
 
   switch (menu) {
     case 'none':
       return null
-      break
+      // break
     case 'groupSelector':
       return(
         <GroupSelector
@@ -37,6 +38,17 @@ const Menus = () => {
       return(
         <MenuExpenseOptions
           close = {() => dispatch(setCurrentMenu('none'))}
+          groupList={groupList}
+          highlightedGroup={selectedGroup}
+        />
+      )
+    case 'addExpense':
+      return (
+        <Form
+          close={() => dispatch(setCurrentMenu('none'))}
+          headline="Add expense"
+          groupList={groupList}
+          selectedGroup={selectedGroup}
         />
       )
   }

@@ -32,6 +32,10 @@ const TabExpense = ({ expenses, members }) => {
       dispatch(setCurrentMenu('expenseOptions'))
     }
 
+  const openExpenseSelector = () => {
+    dispatch(setCurrentMenu('addExpense'))
+  }
+
     return(
       <div className='expense flex column justcont-spacebetween'>
         <div className='flex row justcont-spacebetween'>

@@ -8,6 +8,8 @@ export const mainSlice = createSlice({
     selectedGroup: null,
     selectedExpense: null
   },
+
+
   reducers: {
     setCurrentMenu: (state, action) => {
       state.currentMenu = action.payload
@@ -25,5 +27,4 @@ export const mainSlice = createSlice({
 })
 
 export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense } = mainSlice.actions
-
 export default mainSlice.reducer
