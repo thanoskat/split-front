@@ -127,7 +127,7 @@ const TabExpense = ({ expenses, members }) => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6'>
-            <Pill icon='card' text={expense.sender.nickname} color='var(--light-color)' borderColor={'#898A8C'}/>
+            <Pill text={expense.sender.nickname} color='var(--light-color)' borderColor={'#898A8C'}/>
             {showTags && expense.expenseTags?.map(tag => (
               <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'}/>
               // <Pill key={tag._id} text={tag.name} backgroundColor={'var(--layer-1-color)'} borderColor={tag.color} color={tag.color}/>

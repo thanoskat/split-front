@@ -44,21 +44,21 @@ html, body, select {
   --layer-6-color: #a3a3a3;
   --layer-7-color: #737373;
 
-  --weekday-1: #F07F7560;
-  --weekday-2: #E0D18560;
-  --weekday-3: #ACD98C60;
-  --weekday-4: #85D9E060;
-  --weekday-5: #8594E060;
-  --weekday-6: #BA85E060;
-  --weekday-7: #E085C260;
+  /* --weekday-1: #F07F75;
+  --weekday-2: #E0D185;
+  --weekday-3: #ACD98C;
+  --weekday-4: #85D9E0;
+  --weekday-5: #8594E0;
+  --weekday-6: #BA85E0;
+  --weekday-7: #E085C2; */
 
-  /* --weekday-1: #90453E80;
-  --weekday-2: #8F813D80;
-  --weekday-3: #5F8F3D80;
-  --weekday-4: #3D888F80;
-  --weekday-5: #3D4B8F80;
-  --weekday-6: #6D3D8F80;
-  --weekday-7: #8F3D7480; */
+  --weekday-1: #D17D75;
+  --weekday-2: #D1C275;
+  --weekday-3: #9BD175;
+  --weekday-4: #75C9D1;
+  --weekday-5: #3D4B8F;
+  --weekday-6: #7584D1;
+  --weekday-7: #AB75D1;
 
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
