@@ -33,7 +33,7 @@ function Form({ headline, close }) {
   const [submitisLoading, setSubmitLoading] = useState(false)
   const [clickedIndex, setClickedIndex] = useState()
 
-  console.log(selectedGroup.groupTags)
+  //console.log(selectedGroup.groupTags)
 
   const showGroupTags = [...getDifference(selectedGroup.groupTags, expenseTags), ...getDifference(expenseTags, selectedGroup.groupTags)] //run twice in case first array has less objects than second (seems impossible). See row 58
   const [tagText, setTagText] = useState("");
@@ -133,6 +133,7 @@ function Form({ headline, close }) {
   const handleKeyDown = async (event) => {
 
     const re = /[a-zA-Z0-9]+/g
+    console.log(event)
     if (!re.test(event.key)) {
       event.preventDefault();
       return
@@ -172,6 +173,7 @@ function Form({ headline, close }) {
   }
 
   const addExpense = async () => {
+    if (!inputAmount) return
     setSubmitLoading(true)
     try {
       if (splitAmongMembersCheck) {
@@ -184,7 +186,7 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
             expenseTags: expenseTags
-          }
+          },{ signal: abortControllerRef.current.signal }
         )
         setSubmitLoading(false)
         setInputAmount('')
@@ -201,7 +203,7 @@ function Form({ headline, close }) {
             description: inputDescription,
             tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
             expenseTags: expenseTags
-          }
+          },{ signal: abortControllerRef.current.signal }
         )
         setSubmitLoading(false)
         setInputAmount('')
@@ -215,6 +217,7 @@ function Form({ headline, close }) {
     catch (error) {
       console.log(error)
     }
+    dispatch(closeSlidingBox())
   }
 
   const filterIDfromMembers = (value) => { //removes userID from members
@@ -223,15 +226,15 @@ function Form({ headline, close }) {
     }
   }
 
-  const submitAndClose = async () => {
-    // submit()
-    // closeBox()
-    if (!inputAmount) return
-    await addExpense()
-    dispatch(closeSlidingBox())
+  // const submitAndClose = async () => {
+  //   // submit()
+  //   // closeBox()
+  //   if (!inputAmount) return
+  //   await addExpense()
+  //   dispatch(closeSlidingBox())
 
 
-  }
+  // }
 
   //remove {children} and add functions here (like in GroupSelector) so everything happens in this component
   return (
@@ -242,6 +245,7 @@ function Form({ headline, close }) {
         <InputField
           value={inputAmount}
           allowTags={false}
+          numbersOnly={true}
           placeholder={"Amount"}
           // maxLength={20}
           // required={true}
@@ -251,6 +255,7 @@ function Form({ headline, close }) {
         <InputField
           value={inputDescription}
           allowTags={true}
+          numbersOnly={false}
           setExpenseTags={setExpenseTags}
           //setGroupTags={setShowGroupTags}
           expenseTags={expenseTags}
@@ -290,7 +295,7 @@ function Form({ headline, close }) {
         <div className='submit-button-container v-flex alignitems-center justcont-center'>
           <div
             className={`submit-button ${inputAmount ? "active" : null} h-flex justcont-spacearound `}
-            onClick={submitAndClose}>
+            onClick={addExpense}>
               {submitisLoading? <IonIcon name='sync' className='t3 spin' />: "Submit"}
           </div>
         </div>
@@ -303,11 +308,14 @@ function Form({ headline, close }) {
 function InputField({ value, label, maxLength,
   required, onChange, clear,
   placeholder, allowTags, expenseTags,
-  setExpenseTags }) {
+  setExpenseTags,numbersOnly }) {
 
   const inputFieldRef = useRef(null)
 
+ 
   const checkLengthAndChange = (e) => {
+    
+    
     if (maxLength) {
       if (e.target.value.length <= maxLength) {
         return onChange(e)
@@ -334,7 +342,7 @@ function InputField({ value, label, maxLength,
         className='input-field'
         placeholder={placeholder}
         value={value}
-        onChange={checkLengthAndChange}
+        onChange={(e)=>checkLengthAndChange(e)}
         spellCheck='false'
         ref={inputFieldRef}
       />
