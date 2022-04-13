@@ -64,6 +64,7 @@ function Form({ headline, close }) {
   //run twice in case first array has less objects than second
   //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
   //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+  
   function getDifference(array1, array2) {
     return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
       return !array2.some(object2 => {

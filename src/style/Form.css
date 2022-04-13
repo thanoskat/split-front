@@ -293,6 +293,7 @@
 
 .newtag-section {
   border-style: solid;
+  border-width: 1px;
   color: var(--inactiveColor);
   padding: 1px 1px 1px 0px;
   border-radius: 4px;

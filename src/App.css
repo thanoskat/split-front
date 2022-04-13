@@ -268,6 +268,9 @@ html, body, select {
   flex-direction: column
 }
 
+.row-reverse{
+  flex-direction: row-reverse
+}
 .alignitems-center {
   align-items: center
 }
@@ -545,6 +548,10 @@ html, body, select {
   margin-top: 0px;
 }
 
+
+.top-labels{
+  padding: 0px 14px 3px 14px;
+}
 @font-face {
   font-family: 'Inter';
   src: local('Inter'), url(./fonts/Inter/Inter-Thin.ttf) format('truetype');
