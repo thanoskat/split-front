@@ -24,10 +24,12 @@ const TabExpense = ({ expenses, members }) => {
   const dispatch = useDispatch()
   const [filterTags, setFilterTags] = useState([])
   const [filterSender,setFilterSender] = useState([])
-  //const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  console.log(expenses)
-  console.log(filterSender)
-  console.log(filterTags)
+ 
+  //console.log("expenses",expenses)
+  
+  //console.log("sender",filterSender)
+  console.log("tags",filterTags)
+  console.log("expenses", expenses)
   
 
   const Pill = ({ icon, text, onClick, color, backgroundColor, borderColor }) => {
@@ -108,6 +110,17 @@ const TabExpense = ({ expenses, members }) => {
   //   )
   // }
 
+  function getSimilar(array1, array2) {
+    return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
+      return array2.some(object2 => {
+        return object1._id === object2._id;
+      });
+    });
+  }
+
+//console.log("similar",getSimilar(expenses?.[7].expenseTags,filterTags))
+//console.log("expenses",expenses?.map(exp=>exp.expenseTags))
+//console.log("expenses",expenses)
 
   const removeFilterTag = (tag) => {
     setFilterTags(filterTags.filter(item => item._id !== tag._id))
@@ -116,6 +129,14 @@ const TabExpense = ({ expenses, members }) => {
   const removeFilterSender = (sender)=>{
     setFilterSender(filterSender.filter(item => item._id !== sender._id))
   }
+
+  //need all objects in the filterTags to be in the expenseTags
+  const filterExpenses = (expenses,arr)=>{
+  return expenses?.filter(exp=>getSimilar(exp.expenseTags,arr).length===arr.length) //potential issue -need to check flipping
+  }
+
+
+  // filterExpenses(expenses,filterTags)
 
   return (
     <div className='flex flex-1 column overflow-hidden'>
@@ -131,7 +152,13 @@ const TabExpense = ({ expenses, members }) => {
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
         <div className='overflow-auto'>
-          {expenses?.map(expense => (
+          { filterExpenses(expenses,filterTags)==0? expenses.map(expense => (
+            <div key={expense._id}>
+              <Expense expense={expense} />
+              <div className='separator-2 padding0014' />
+            </div>
+          )).reverse():
+          filterExpenses(expenses,filterTags)?.map(expense => (
             <div key={expense._id}>
               <Expense expense={expense} />
               <div className='separator-2 padding0014' />
