@@ -124,24 +124,44 @@ const TabExpense = ({ expenses, members }) => {
   }
 
   //need all objects in the filterTags to be in the expenseTags
-  const filterExpenses = (expenses, filterTags,filterSender) => {
+  const filterExpenses = (expenses, filterTags, filterSender) => {
 
     const filteredSenders = expenses?.filter(expense => (
       filterSender.some(sender => (
         sender._id === expense.sender._id
       ))
     ))
-   const filteredTags= expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length)
-    
-  //console.log(filteredSenders, filteredTags)
-  //console.log("final",getSimilar(filteredSenders, filteredTags))
-  //console.log("filtered Tags",expenses?.map(exp=>getSimilar(exp.expenseTags,filterTags)))
-  //console.log(expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length))
-      
-  //return expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length) //potential issue -need to check flipping
-  return getSimilar(filteredSenders, filteredTags)
+    const filteredTags = expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length)
+
+    console.log(filteredSenders, filteredTags)
+    console.log("final", getSimilar(filteredSenders, filteredTags))
+    //console.log("filtered Tags",expenses?.map(exp=>getSimilar(exp.expenseTags,filterTags)))
+    //console.log(expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length))
+
+    //return expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length) //potential issue -need to check flipping
+    if (filteredSenders?.length == 0) { //no need to add user in filter
+      return expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length) //potential issue -need to check flipping
+    } else {
+      return getSimilar(filteredSenders, filteredTags) //keep user with available tags
+    }
+
   }
 
+  const filterSenders = (expenses, filterSender) => {
+
+    console.log("filtered Senders",
+      expenses?.filter(expense => (
+        filterSender.some(sender => (
+          sender._id === expense.sender._id
+        ))
+      ))
+    )
+
+  }
+
+  //filterSenders(expenses, filterSender)
+
+  //filterExpenses(expenses,filterTags)
 
   return (
     <div className='flex flex-1 column overflow-hidden'>
@@ -157,13 +177,13 @@ const TabExpense = ({ expenses, members }) => {
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
         <div className='overflow-auto'>
-          {filterExpenses(expenses, filterTags,filterSender) == 0 ? expenses.map(expense => (
+          {filterExpenses(expenses, filterTags, filterSender) == 0 ? expenses.map(expense => (
             <div key={expense._id}>
               <Expense expense={expense} />
               <div className='separator-2 padding0014' />
             </div>
           )).reverse() :
-            filterExpenses(expenses, filterTags,filterSender)?.map(expense => (
+            filterExpenses(expenses, filterTags, filterSender)?.map(expense => (
               <div key={expense._id}>
                 <Expense expense={expense} />
                 <div className='separator-2 padding0014' />
