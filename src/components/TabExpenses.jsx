@@ -143,11 +143,12 @@ const TabExpense = ({ expenses, members }) => {
   }
 
   const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
+  //console.log(filteredExpenses.filteredExpenses?.length!==expenses?.length)
 
   return (
     <div className='flex flex-1 column overflow-hidden '>
 
-      <div className='h-flex justcont-spacebetween'>
+      <div className='t4 flex row justcont-spacebetween'>
         <div className='top-labels flex row gap6 overflow-auto'>
           <div className='flex gap6'>
             {filterTags.map(tag => (
@@ -158,25 +159,22 @@ const TabExpense = ({ expenses, members }) => {
             ))}
           </div>
         </div>
-        <div className=''>
-          {filteredExpenses.sum}
-        </div>
+        {filteredExpenses.filteredExpenses?.length===expenses?.length ? "" :
+          <div className='filteredSum t25 white'>
+            $ {Math.round((filteredExpenses.sum + Number.EPSILON) * 100) / 100}
+          </div>}
       </div>
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
         <div className='overflow-auto'>
-          {filteredExpenses.filteredExpenses === 0 ? expenses.map(expense => (
-            <div key={expense._id}>
-              <Expense expense={expense} />
-              <div className='separator-2 padding0014' />
-            </div>
-          )).reverse() :
+          {
             filteredExpenses.filteredExpenses?.map(expense => (
               <div key={expense._id}>
                 <Expense expense={expense} />
                 <div className='separator-2 padding0014' />
               </div>
-            )).reverse()}
+            )).reverse()
+          }
           <div style={{ height: '120px' }} />
         </div>
       </div>
