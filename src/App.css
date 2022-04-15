@@ -106,7 +106,7 @@ html, body, select {
   overflow: auto;
 
   /* chrome */
-  overflow: overlay;
+  /* overflow: overlay; */
 }
 
 .overflow-hidden {
@@ -257,7 +257,7 @@ html, body, select {
 
 .h-flex {
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .row {

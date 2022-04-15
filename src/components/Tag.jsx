@@ -19,7 +19,7 @@ const Tag = ({ text, color, onCloseClick, showClose, showTrash, onDeleteClick, o
       
         <div className='tag-section-option shaker'  
           onClick={onDeleteClick}>
-        {isLoading &&index==clickedIndex? <IonIcon name='sync' className='t3 spin'/>:<i className="trash alternate icon"></i>}      
+        {isLoading &&index===clickedIndex? <IonIcon name='sync' className='t3 spin'/>:<i className="trash alternate icon"></i>}      
         </div> : ""}
         
     </div>

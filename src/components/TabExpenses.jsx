@@ -3,6 +3,8 @@ import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
+import { useRef } from 'react'
+
 var dayjs = require('dayjs')
 var relativeTime = require('dayjs/plugin/relativeTime')
 var calendar = require('dayjs/plugin/calendar')
@@ -59,8 +61,9 @@ const TabExpense = ({ expenses, members }) => {
     }
 
     return (
-      <div className='expense flex column justcont-spacebetween gap8'>
-        <div className='flex row justcont-spacebetween semibold t6' style={{ alignItems: 'flex-end' }}>
+
+      <div className='expense flex column justcont-spacebetween gap8 '>
+        <div className='flex row justcont-spacebetween semibold t6 ' style={{ alignItems: 'flex-end' }}>
           <div className='flex row'>
             <div className='bold' style={{ color: `var(--weekday-${dayjs(expense.createdAt).day()})` }}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
             &nbsp;
@@ -74,8 +77,8 @@ const TabExpense = ({ expenses, members }) => {
           <div className=''>{expense.description}</div>
           <div className='medium'>{`$ ${expense.amount}`}</div>
         </div>
-        <div className='flex row justcont-spacebetween alignitems-center'>
-          <div className='flex row gap6'>
+        <div className='flex row justcont-spacebetween alignitems-center overflow-auto'>
+          <div className='flex row gap6 '>
             <Pill text={expense.sender.nickname} color='var(--light-color)' borderColor={'#898A8C'} onClick={() => addFilterSender(expense.sender)} />
             {showTags && expense.expenseTags?.map(tag => (
               <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'} onClick={() => addFilterTag(tag)} />
@@ -95,14 +98,6 @@ const TabExpense = ({ expenses, members }) => {
     )
   }
 
-  // const ExpenseTag = ({ text, color }) => {
-  //   return (
-  //     <div className='t5 expense-tag flex row shadow pointer' style={{ backgroundColor: `${color}` }}>
-  //       {text}
-  //     </div>
-  //   )
-  // }
-
   function getSimilar(array1, array2) {
     return array1?.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
       return array2?.some(object2 => {
@@ -110,10 +105,6 @@ const TabExpense = ({ expenses, members }) => {
       });
     });
   }
-
-  //console.log("similar",getSimilar(expenses?.[7].expenseTags,filterTags))
-  //console.log("expenses",expenses?.map(exp=>exp.expenseTags))
-  //console.log("expenses",expenses)
 
   const removeFilterTag = (tag) => {
     setFilterTags(filterTags.filter(item => item._id !== tag._id))
@@ -132,58 +123,55 @@ const TabExpense = ({ expenses, members }) => {
       ))
     ))
     const filteredTags = expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length)
-
-    console.log(filteredSenders, filteredTags)
-    console.log("final", getSimilar(filteredSenders, filteredTags))
+    // console.log(filteredSenders, filteredTags)
+    // console.log("final", getSimilar(filteredSenders, filteredTags))
     //console.log("filtered Tags",expenses?.map(exp=>getSimilar(exp.expenseTags,filterTags)))
-    //console.log(expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length))
+    //participantArray.reduce((prevValue, currValue) => prevValue + currValue
+    console.log("final", filteredTags)
+    //console.log(filteredTags?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
+    //console.log("final",getSimilar(filteredSenders, filteredTags))
+    //console.log(getSimilar(filteredSenders, filteredTags)?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
 
-    //return expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length) //potential issue -need to check flipping
-    if (filteredSenders?.length == 0) { //no need to add user in filter
-      return expenses?.filter(exp => getSimilar(exp.expenseTags, filterTags).length === filterTags.length) //potential issue -need to check flipping
+    if (filteredSenders?.length === 0) { //no need to add user in filter
+      const sum = filteredTags?.map(tag => tag.amount).reduce((prevValue, currValue) => prevValue + currValue)
+      return { filteredExpenses: filteredTags, sum: sum } //potential issue -need to check flipping
     } else {
-      return getSimilar(filteredSenders, filteredTags) //keep user with available tags
+      const sum = getSimilar(filteredSenders, filteredTags)?.map(tag => tag.amount).reduce((prevValue, currValue) => prevValue + currValue)
+
+      return { filteredExpenses: getSimilar(filteredSenders, filteredTags), sum: sum } //only keep user with available tags
     }
-
   }
 
-  const filterSenders = (expenses, filterSender) => {
-
-    console.log("filtered Senders",
-      expenses?.filter(expense => (
-        filterSender.some(sender => (
-          sender._id === expense.sender._id
-        ))
-      ))
-    )
-
-  }
-
-  //filterSenders(expenses, filterSender)
-
-  //filterExpenses(expenses,filterTags)
+  const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
 
   return (
-    <div className='flex flex-1 column overflow-hidden'>
+    <div className='flex flex-1 column overflow-hidden '>
 
-      <div className='top-labels flex row-reverse gap6'>
-        {filterTags.map(tag => (
-          <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'} onClick={() => removeFilterTag(tag)} />
-        ))}
-        {filterSender.map(sender => (
-          <Pill key={sender._id} text={sender.nickname} color='var(--light-color)' borderColor={'#898A8C'} onClick={() => removeFilterSender(sender)} />
-        ))}
+      <div className='h-flex justcont-spacebetween'>
+        <div className='top-labels flex row gap6 overflow-auto'>
+          <div className='flex gap6'>
+            {filterTags.map(tag => (
+              <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'} onClick={() => removeFilterTag(tag)} />
+            ))}
+            {filterSender.map(sender => (
+              <Pill key={sender._id} text={sender.nickname} color='var(--light-color)' borderColor={'#898A8C'} onClick={() => removeFilterSender(sender)} />
+            ))}
+          </div>
+        </div>
+        <div className=''>
+          {filteredExpenses.sum}
+        </div>
       </div>
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
         <div className='overflow-auto'>
-          {filterExpenses(expenses, filterTags, filterSender) == 0 ? expenses.map(expense => (
+          {filteredExpenses.filteredExpenses === 0 ? expenses.map(expense => (
             <div key={expense._id}>
               <Expense expense={expense} />
               <div className='separator-2 padding0014' />
             </div>
           )).reverse() :
-            filterExpenses(expenses, filterTags, filterSender)?.map(expense => (
+            filteredExpenses.filteredExpenses?.map(expense => (
               <div key={expense._id}>
                 <Expense expense={expense} />
                 <div className='separator-2 padding0014' />
