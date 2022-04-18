@@ -1,12 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import store from '../redux/store'
-
+import { setCurrentMenu,setSelectedPendingTX } from '../redux/mainSlice'
 
 const TabSettleUp = () => {
-
-  const sessionData = store.getState().authReducer.sessionData
-  const selectedGroup = store.getState().mainReducer.selectedGroup
 
   const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
     if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
@@ -14,32 +11,66 @@ const TabSettleUp = () => {
     }
   }
 
+  const dispatch = useDispatch()
+  const sessionData = store.getState().authReducer.sessionData
+  const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const personalTXs = selectedGroup?.pendingTransactions?.filter(filterIDforPersonalTransactions)
+  
+ // console.log(personalTXs)
 
-  const personalTXs = selectedGroup?.pendingTransactions.filter(filterIDforPersonalTransactions)
-  console.log(personalTXs)
-  console.log(selectedGroup?.pendingTransactions)
+  // const total = (personalTXs) => {
+  //   let sum = 0 //on refresh shows zero which is an issue
+  //   personalTXs?.map(tx => {
+  //     if (tx.receiver._id === sessionData.userId) {
+  //       sum += tx.amount
+  //     } else {
+  //       sum -= tx.amount
+  //     }
+  //   })
+  //   return sum
+  // }
 
-  const SettleUp = ({ transaction }) => {
+  //const totalSum = total(personalTXs)
+
+  const handleClick = (_id,transaction)=>{
+    
+    dispatch(setSelectedPendingTX(transaction))
+    dispatch(setCurrentMenu('recordPayment'))
+  }
+
+  const SettleUp2 = ({ transaction }) => {
     return (
-      <div className='settleUp flex column justcont-spacebetween gap8'>
+      <div>
+        {transaction.sender._id === sessionData.userId ?
+          <div className='settleUp flex column justcont-spacebetween gap8 pointer'
+          onClick={()=>handleClick(transaction.receiver._id,transaction)}>
+            <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '20px 4px 20px 4px' }}>
 
-        <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '20px 4px 20px 4px' }}>
-          {transaction.sender._id === sessionData.userId ?
-            <div className='main-text flex row gap6 alignitems-center'>
-              <i style={{ width: "30px" }} className='arrow circle right icon'></i>
-              <strong>You</strong>owe
-              <strong>{transaction.receiver.nickname}</strong>
-            </div> :
-            <div className='main-text flex row gap6 alignitems-center'>
-              <i style={{ width: "30px" }} className='arrow circle left icon'></i>
-              <strong>{transaction.sender.nickname}
-              </strong> owes <strong>You</strong></div>}
-          <div className={transaction.sender._id !== sessionData.userId ? "amountSection-green medium" : "amountSection-red medium"}>{`$ ${transaction.amount}`}</div>
-        </div>
+              <div className='main-text flex row gap6 alignitems-center'>
+                <i style={{ width: "30px" }} className='arrow circle right icon'></i>
+                <strong>You</strong>owe
+                <strong>{transaction.receiver.nickname}</strong>
+              </div>
+              <div className="amountSection-red medium">{`$ ${transaction.amount}`}</div>
+            </div>
+          </div>
+          :
+          <div className='settleUp flex column justcont-spacebetween gap8'
+             >
+            <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '20px 4px 20px 4px' }}>
+
+              <div className='main-text flex row gap6 alignitems-center'>
+                <i style={{ width: "30px" }} className='arrow circle left icon'></i>
+                <strong>{transaction.sender.nickname}
+                </strong> owes <strong>You</strong>
+                </div>
+                <div className="amountSection-green medium">{`$ ${transaction.amount}`}</div>
+            </div>
+          </div>
+        }
       </div>
     )
   }
-
 
 
   return (
@@ -51,22 +82,25 @@ const TabSettleUp = () => {
         <div className='overflow-auto'>
           {personalTXs?.map((transaction, index) =>
             <div key={index}>
-              <SettleUp
+              <SettleUp2
+                index={index}
                 transaction={transaction} />
               <div className='separator-2 padding0014' />
             </div>
           )}
-          <div className='settleTotal flex column justcont-spacebetween gap8'>
-            <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '0px 4px 0px 4px' }}>
-              <div className='flex column justcont-spacebetween gap8'> Total</div>
-              <div className='amountSection'>$ 102.39</div>
-            </div>
-          </div>
+          {/* {personalTXs?.length <= 1 ? "" :
+            <div className='settleTotal flex column justcont-spacebetween gap8'>
+              <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '0px 4px 0px 4px' }}>
+                <div className='flex column justcont-spacebetween gap8'> Total</div>
+                <div className={totalSum >= 0 ? "amountSection-green medium" : "amountSection-red medium"}>$ 120</div> 
+              </div>
+            </div>} */}
+
           <div style={{ height: '120px' }} />
         </div>
       </div>
     </div>
   );
 }
-
+//{Math.abs(totalSum)}
 export default TabSettleUp;

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
-import { useRef } from 'react'
+
 
 var dayjs = require('dayjs')
 var relativeTime = require('dayjs/plugin/relativeTime')
@@ -133,11 +133,16 @@ const TabExpense = ({ expenses, members }) => {
     //console.log(getSimilar(filteredSenders, filteredTags)?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
 
     if (filteredSenders?.length === 0) { //no need to add user in filter
-      const sum = filteredTags?.map(tag => tag.amount).reduce((prevValue, currValue) => prevValue + currValue)
+      let sum = 0;
+      filteredTags?.map(tag => {
+        sum += tag.amount
+      })
       return { filteredExpenses: filteredTags, sum: sum } //potential issue -need to check flipping
     } else {
-      const sum = getSimilar(filteredSenders, filteredTags)?.map(tag => tag.amount).reduce((prevValue, currValue) => prevValue + currValue)
-
+      let sum = 0;
+      getSimilar(filteredSenders, filteredTags)?.map(tag => {
+        sum += tag.amount
+      })
       return { filteredExpenses: getSimilar(filteredSenders, filteredTags), sum: sum } //only keep user with available tags
     }
   }
@@ -159,7 +164,7 @@ const TabExpense = ({ expenses, members }) => {
             ))}
           </div>
         </div>
-        {filteredExpenses.filteredExpenses?.length===expenses?.length ? "" :
+        {filteredExpenses.filteredExpenses?.length === expenses?.length ? "" :
           <div className='filteredSum t25 white'>
             $ {Math.round((filteredExpenses.sum + Number.EPSILON) * 100) / 100}
           </div>}

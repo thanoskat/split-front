@@ -9,14 +9,14 @@ import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
 
-const GroupSelector = ({ close, groupList, setDisplayedGroup, highlightedGroup }) => {
+const GroupSelector = ({ close, groupList, highlightedGroup }) => {
   console.log('GroupSelector rendered.', highlightedGroup)
   const dispatch = useDispatch()
 
   const api = useAxios()
   const [isLoading, setLoading] = useState(false)
   const [clickedIndex, setClickedIndex] = useState()
-  const [highlightedIndex, setHighlightedIndex] = useState()
+  // const [highlightedIndex, setHighlightedIndex] = useState()
   // const { closeBox } = useContext(SlidingBoxContext)
 
   const abortControllerRef = useRef(null)

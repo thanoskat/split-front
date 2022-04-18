@@ -15,7 +15,7 @@ function App() {
     <GlobalStateContextProvider>
       <BrowserRouter>
         <div className="App">
-          {/* <UserBar/>  */}
+          <UserBar/> 
           {/* <NavigationBar2/> */}
             <Switch>
               <Route exact path="/" component={Home} />
