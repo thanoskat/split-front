@@ -248,7 +248,6 @@ function Form({ headline, close }) {
         <InputField
           value={inputAmount}
           allowTags={false}
-          numbersOnly={true}
           placeholder={"0"}
           showCurrency={true}
           // maxLength={20}
@@ -259,7 +258,6 @@ function Form({ headline, close }) {
         <InputField
           value={inputDescription}
           allowTags={true}
-          numbersOnly={false}
           setExpenseTags={setExpenseTags}
           showCurrency={false}
           //setGroupTags={setShowGroupTags}
@@ -354,8 +352,9 @@ function InputField({ value, label, maxLength,
         spellCheck='false'
         ref={inputFieldRef}
        
-        
+        style={value.length>0? {padding:"0px 40px 0px 10px"}:{padding:"0px 10px 0px 10px"}}
       />
+
       {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
 
       {allowTags && expenseTags.length !== 0 ?

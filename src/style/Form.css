@@ -33,7 +33,7 @@
 
 .input-field-currency {
   border-radius: 4px;
-  padding: 0px 40px 0px 200px;
+  
   font-size: 22px;
   height: 40px;
   outline: none;
@@ -49,7 +49,6 @@
 
 .input-field {
   border-radius: 4px;
-  padding: 0px 40px 0px 10px;
   font-size: 22px;
   height: 40px;
   outline: none;
