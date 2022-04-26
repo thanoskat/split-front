@@ -3,6 +3,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
 import { useDispatch } from 'react-redux'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
+import currency from 'currency.js'
 
 
 var dayjs = require('dayjs')
@@ -75,7 +76,7 @@ const TabExpense = ({ expenses, members }) => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '0px 4px 0px 4px' }}>
           <div className=''>{expense.description}</div>
-          <div className='medium'>{`$ ${expense.amount}`}</div>
+          <div className='medium'>{`${currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center overflow-auto'>
           <div className='flex row gap6 '>
@@ -133,22 +134,27 @@ const TabExpense = ({ expenses, members }) => {
     //console.log(getSimilar(filteredSenders, filteredTags)?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
 
     if (filteredSenders?.length === 0) { //no need to add user in filter
-      let sum = 0;
+      let sum = currency(0);
+      //console.log("filtered tags",filteredTags)
+      
       filteredTags?.map(tag => {
-        sum += tag.amount
+        sum =sum.add(tag.amount) 
+        //console.log(sum)
       })
-      return { filteredExpenses: filteredTags, sum: sum } //potential issue -need to check flipping
+      return { filteredExpenses: filteredTags, sum: sum.value } //TODO potential issue -need to check flipping
     } else {
-      let sum = 0;
+      let sum = currency(0);
       getSimilar(filteredSenders, filteredTags)?.map(tag => {
-        sum += tag.amount
+        sum =sum.add(tag.amount)
+        //console.log(sum)
       })
-      return { filteredExpenses: getSimilar(filteredSenders, filteredTags), sum: sum } //only keep user with available tags
+      return { filteredExpenses: getSimilar(filteredSenders, filteredTags), sum: sum.value } //only keep user with available tags
     }
   }
 
   const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
   //console.log(filteredExpenses.filteredExpenses?.length!==expenses?.length)
+
 
   return (
     <div className='flex flex-1 column overflow-hidden '>
@@ -166,7 +172,7 @@ const TabExpense = ({ expenses, members }) => {
         </div>
         {filteredExpenses.filteredExpenses?.length === expenses?.length ? "" :
           <div className='filteredSum t25 white'>
-            $ {Math.round((filteredExpenses.sum + Number.EPSILON) * 100) / 100}
+           { currency(filteredExpenses.sum, { symbol: '€', decimal: ',', separator: '.' }).format() }
           </div>}
       </div>
 
