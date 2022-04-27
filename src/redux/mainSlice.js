@@ -9,7 +9,6 @@ export const mainSlice = createSlice({
     selectedExpense: null
   },
 
-
   reducers: {
     setCurrentMenu: (state, action) => {
       state.currentMenu = action.payload

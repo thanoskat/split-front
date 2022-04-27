@@ -11,7 +11,7 @@ export default function Dropdown({ placeholder, mouse, setValue, mapTo, id, util
   const [query, setQuery] = useState("")
   const [dummyState, setDummyState] = useState(false)
   const [item, setItem] = useState(false)
-  
+
   const ref = useRef(null)
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Dropdown({ placeholder, mouse, setValue, mapTo, id, util
   }
 
   function filter(options) {
-    
+
     return options.filter(option =>
       option[mapTo]?.toLowerCase().indexOf(query?.toLowerCase()) > -1)
   }
@@ -92,7 +92,7 @@ export default function Dropdown({ placeholder, mouse, setValue, mapTo, id, util
                     // console.log("tobeRemovedOption after ", utilities.tobeRemovedOption)
                     // console.log("tobeRetrievedOption after", utilities.tobeRetrievedOption)
                     setDummyState(prev => !prev)
-                    if (utilities.tobeRetrievedOption.length == 0) {
+                    if (utilities.tobeRetrievedOption.length === 0) {
                       setItem(false)
                     }
                   }}>

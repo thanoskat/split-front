@@ -1,5 +1,5 @@
 import './App.css';
-import { Menus, FigmaMain, MainTest, Group, Test, Notifications, UserBar, NavigationBar2, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage,MyGroupsCreateGroup } from './components'
+import { Menus, FigmaMain, MainTest, Group, Test, Notifications, About, Users, User, Login, SignUp, VerifyLink, Profile, MyGroups, PrivateRoute, MainPage, MyGroupsCreateGroup } from './components'
 // import { AuthenticationContextProvider } from './contexts/AuthenticationContext'
 import { GlobalStateContextProvider } from './contexts/GlobalStateContext'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'

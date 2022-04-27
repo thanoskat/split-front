@@ -51,7 +51,7 @@ function Form({ headline, close }) {
   // }, [splitAmongMembersCheck])
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController();
     return () => {
       abortControllerRef.current.abort()
     }
@@ -139,7 +139,7 @@ function Form({ headline, close }) {
       return
     }
     if (event.key === "Enter") { // && event.target == newtagRef.current
-      if (selectedGroup.groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
+      if (selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1 && tagTextRef !== "") { //if nametag doesn't already exist in bd
         await onCreateTag()
       }
     }
@@ -167,7 +167,7 @@ function Form({ headline, close }) {
   }
 
   const handleBlur = async () => {
-    if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
+    if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1) {
       await onCreateTag()
     }
   }
@@ -312,10 +312,10 @@ function InputField({ value, label, maxLength,
 
   const inputFieldRef = useRef(null)
 
- 
+
   const checkLengthAndChange = (e) => {
-    
-    
+
+
     if (maxLength) {
       if (e.target.value.length <= maxLength) {
         return onChange(e)
@@ -378,7 +378,7 @@ function InputField({ value, label, maxLength,
         {maxLength &&
           <div
             className='input-right-label'
-            style={required && value.length == 0 ? { color: 'red' } : {}}
+            style={required && value.length === 0 ? { color: 'red' } : {}}
           >
             {`${value.length}/${maxLength}`}
           </div>
@@ -446,7 +446,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
     if (allowMultiSelections) {
       setSplitAmongMembersCheck(false)
       const tracker = value.findIndex(item => item._id === option._id)
-      if (tracker == -1) { //if ID is not in the array, push it
+      if (tracker === -1) { //if ID is not in the array, push it
         setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
 
       } else {
@@ -454,7 +454,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
       }
     } else {
       const tracker = value.findIndex(item => item._id === option._id)
-      if (tracker == -1) { //if ID is not in the array, push it
+      if (tracker === -1) { //if ID is not in the array, push it
         setTrackIndexAndID([{ _id: option._id, index: index }])
       } else { //else remove it
         setTrackIndexAndID(value.filter(item => item._id !== option._id))
@@ -492,7 +492,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
                 <div className='firstLetter'>
                   {option.nickname.charAt(0)}
                 </div>
-                {value.findIndex(item => item.index === index) == -1 ? "" :
+                {value.findIndex(item => item.index === index) === -1 ? "" :
                   <div className='circleOfCircle'>
                     <div className='tick-circle'>
                       <i className='check icon avatarcheck'></i>
