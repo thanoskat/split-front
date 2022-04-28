@@ -7,6 +7,9 @@ import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/Form.css"
 import { setSelectedGroup } from '../redux/mainSlice'
 import IonIcon from '@reacticons/ionicons'
+import currency from 'currency.js'
+
+
 //TODO LIST
 // 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result //DONE
 // 2. populate add expense routers and dispatch selected group //DONE
@@ -25,7 +28,7 @@ function Form({ headline, close }) {
   const api = useAxios()
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [trackIndexAndIDmulti, setTrackIndexAndIDmulti] = useState([])
+  const [trackIDmulti, setTrackIDmulti] = useState([])
   const [inputDescription, setInputDescription] = useState('')
   const [inputAmount, setInputAmount] = useState('')
   const [expenseTags, setExpenseTags] = useState([])
@@ -33,7 +36,13 @@ function Form({ headline, close }) {
   const [submitisLoading, setSubmitLoading] = useState(false)
   const [clickedIndex, setClickedIndex] = useState()
 
-  //console.log(selectedGroup.groupTags)
+  console.log(inputAmount)
+
+  function numberWithCommas2(x) {
+    return Number(x).toLocaleString()
+  }
+
+  console.log(numberWithCommas2(inputAmount))
 
   const showGroupTags = [...getDifference(selectedGroup.groupTags, expenseTags), ...getDifference(expenseTags, selectedGroup.groupTags)] //run twice in case first array has less objects than second (seems impossible). See row 58
   const [tagText, setTagText] = useState("");
@@ -57,6 +66,8 @@ function Form({ headline, close }) {
     }
   }, [])
 
+
+
   //some returns true if the condition is satisfied at least once.
   //if the id we're interested in is found at least once in the second array it returns true (found).
   //this id is not what we need though so it is filtered out.
@@ -64,6 +75,7 @@ function Form({ headline, close }) {
   //run twice in case first array has less objects than second
   //example: first array only has one object. This will be filtered out (as filter is applied on first array only) leaving an empty filtered array
   //https://bobbyhadz.com/blog/javascript-get-difference-between-two-arrays-of-objects
+
   function getDifference(array1, array2) {
     return array1.filter(object1 => { //(filter keeps whatever the function inside it tell it to keep)
       return !array2.some(object2 => {
@@ -182,28 +194,28 @@ function Form({ headline, close }) {
           {
             groupId: selectedGroup._id, //does it feed at first render? Need to check
             sender: sessionData.userId,
-            amount: inputAmount,
+            amount: removeCommas(inputAmount),
             description: inputDescription,
             tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
             expenseTags: expenseTags
-          },{ signal: abortControllerRef.current.signal }
+          }, { signal: abortControllerRef.current.signal }
         )
         setSubmitLoading(false)
         setInputAmount('')
         setInputDescription('')
         dispatch(setSelectedGroup(res.data))
 
-      } else if (trackIndexAndIDmulti.length !== 0) {
+      } else if (trackIDmulti.length !== 0) {
         //else if a member has been chosen
         const res = await api.post(`/expense/addexpense`,
           {
             groupId: selectedGroup._id, //does it feed at first render? Need to check
             sender: sessionData.userId,
-            amount: inputAmount,
+            amount: removeCommas(inputAmount),
             description: inputDescription,
-            tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+            tobeSharedWith: [...trackIDmulti, sessionData.userId], //only feed selected ids,
             expenseTags: expenseTags
-          },{ signal: abortControllerRef.current.signal }
+          }, { signal: abortControllerRef.current.signal }
         )
         setSubmitLoading(false)
         setInputAmount('')
@@ -236,6 +248,15 @@ function Form({ headline, close }) {
 
   // }
 
+  const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const removeCommas = num => num.replace(/\,/g,'');
+  const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
+
+  const number = "123456.78999";
+  console.log(new Intl.NumberFormat().format(number));
+  //https://stackoverflow.com/questions/63091317/thousand-separator-input-with-react-hooks
+  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+
   //remove {children} and add functions here (like in GroupSelector) so everything happens in this component
   return (
     <SlidingBox close={close} className='addExpense-selector top-radius' >
@@ -245,18 +266,18 @@ function Form({ headline, close }) {
         <InputField
           value={inputAmount}
           allowTags={false}
-          numbersOnly={true}
-          placeholder={"Amount"}
+          placeholder={"0"}
+          showCurrency={true}
           // maxLength={20}
           // required={true}
-          onChange={e => setInputAmount(e.target.value)}
+          onChange={e => setInputAmount(addCommas(removeNonNumeric(e.target.value)))}
           clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
         />
         <InputField
           value={inputDescription}
           allowTags={true}
-          numbersOnly={false}
           setExpenseTags={setExpenseTags}
+          showCurrency={false}
           //setGroupTags={setShowGroupTags}
           expenseTags={expenseTags}
           placeholder={"Description"}
@@ -284,8 +305,8 @@ function Form({ headline, close }) {
           clickedIndex={clickedIndex}
         />
         <MultiSelect
-          setTrackIndexAndID={setTrackIndexAndIDmulti}
-          value={trackIndexAndIDmulti}
+          setTrackID={setTrackIDmulti}
+          value={trackIDmulti}
           optionsArray={selectedGroup.members.filter(filterIDfromMembers)} //filters out user's ID from showing as option. Debatable
           label="split between you and all members"
           splitAmongMembersCheck={splitAmongMembersCheck}
@@ -296,7 +317,7 @@ function Form({ headline, close }) {
           <div
             className={`submit-button ${inputAmount ? "active" : null} h-flex justcont-spacearound `}
             onClick={addExpense}>
-              {submitisLoading? <IonIcon name='sync' className='t3 spin' />: "Submit"}
+            {submitisLoading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
           </div>
         </div>
       </div>
@@ -308,14 +329,12 @@ function Form({ headline, close }) {
 function InputField({ value, label, maxLength,
   required, onChange, clear,
   placeholder, allowTags, expenseTags,
-  setExpenseTags,numbersOnly }) {
+  setExpenseTags, showCurrency }) {
 
   const inputFieldRef = useRef(null)
 
- 
   const checkLengthAndChange = (e) => {
-    
-    
+
     if (maxLength) {
       if (e.target.value.length <= maxLength) {
         return onChange(e)
@@ -335,17 +354,25 @@ function InputField({ value, label, maxLength,
     //setGroupTags(prevTag => [...prevTag, tag])
   }
 
-
   return (
     <div className='single-input-section'>
+      {showCurrency ? <div className='currency-ticker-section'>
+        <i className='angle down icon'></i>
+        <div className='currency-ticker'>EUR </div>
+      </div> : ""}
+
       <input
-        className='input-field'
+        type="text"
+        className={showCurrency ? 'input-field-currency' : "input-field"}
         placeholder={placeholder}
         value={value}
-        onChange={(e)=>checkLengthAndChange(e)}
+        onChange={(e) => checkLengthAndChange(e)}
         spellCheck='false'
         ref={inputFieldRef}
+
+        style={value.length > 0 ? { padding: "0px 40px 0px 10px" } : { padding: "0px 10px 0px 10px" }}
       />
+
       {value && <i className='input-clear-icon times icon' onClick={clearAndFocus} />}
 
       {allowTags && expenseTags.length !== 0 ?
@@ -440,24 +467,36 @@ function MembersTags({ optionsArray, allowMultiSelections }) {
 
 
 
-function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, label, value, splitAmongMembersCheck, setSplitAmongMembersCheck }) {
+function MultiSelect({ optionsArray, setTrackID, allowMultiSelections, label, value, splitAmongMembersCheck, setSplitAmongMembersCheck }) {
 
-  const onSubmitFunction = (allowMultiSelections, option, index) => {
-    if (allowMultiSelections) {
-      setSplitAmongMembersCheck(false)
-      const tracker = value.findIndex(item => item._id === option._id)
-      if (tracker == -1) { //if ID is not in the array, push it
-        setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
+  // const onSubmitFunction = (allowMultiSelections, option, index) => {
+  //   if (allowMultiSelections) {
+  //     setSplitAmongMembersCheck(false)
+  //     const tracker = value.findIndex(item => item._id === option._id)
+  //     if (tracker == -1) { //if ID is not in the array, push it
+  //       setTrackIndexAndID(oldArr => [...oldArr, { _id: option._id, index: index }])
 
-      } else {
-        setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
-      }
+  //     } else {
+  //       setTrackIndexAndID(value.filter(item => item._id !== option._id)) //else remove it
+  //     }
+  //   } else {
+  //     const tracker = value.findIndex(item => item._id === option._id)
+  //     if (tracker == -1) { //if ID is not in the array, push it
+  //       setTrackIndexAndID([{ _id: option._id, index: index }])
+  //     } else { //else remove it
+  //       setTrackIndexAndID(value.filter(item => item._id !== option._id))
+  //     }
+  //   }
+  // }
+
+  const onSubmitFunction = (allowMultiSelections, option) => {
+    if (value?.includes(option._id)) { //if ID is not in the array, push it
+      setTrackID(value.filter(item => item !== option._id))
     } else {
-      const tracker = value.findIndex(item => item._id === option._id)
-      if (tracker == -1) { //if ID is not in the array, push it
-        setTrackIndexAndID([{ _id: option._id, index: index }])
-      } else { //else remove it
-        setTrackIndexAndID(value.filter(item => item._id !== option._id))
+      if (allowMultiSelections) {
+        setTrackID([...value, option._id])
+      } else {
+        setTrackID([option._id])
       }
     }
   }
@@ -465,7 +504,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
 
   const handleTickBox = () => {
     setSplitAmongMembersCheck(prev => !prev)
-    setTrackIndexAndID([])
+    setTrackID([])
   }
 
   // value.findIndex(item => item.index === index) == -1
@@ -492,7 +531,7 @@ function MultiSelect({ optionsArray, setTrackIndexAndID, allowMultiSelections, l
                 <div className='firstLetter'>
                   {option.nickname.charAt(0)}
                 </div>
-                {value.findIndex(item => item.index === index) == -1 ? "" :
+                {!value?.includes(option._id) ? "" :
                   <div className='circleOfCircle'>
                     <div className='tick-circle'>
                       <i className='check icon avatarcheck'></i>

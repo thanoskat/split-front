@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MenuExpenseOptions, Form, GroupSelector, MenuNew } from '.'
+import { MenuExpenseOptions, Form, GroupSelector, MenuNew, RecordPayment } from '.'
 import { useState, useEffect } from 'react'
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,32 +12,31 @@ const Menus = () => {
   const groupList = store.getState().mainReducer.groupList
   const selectedGroup = store.getState().mainReducer.selectedGroup
 
-
-  useEffect(() => {
-  }, [])
+  // useEffect(() => {
+  // }, [])
 
   switch (menu) {
     case 'none':
       return null
-      // break
+    // break
     case 'groupSelector':
-      return(
+      return (
         <GroupSelector
-          groupList = {groupList}
-          highlightedGroup = {selectedGroup}
-          close = {() => dispatch(setCurrentMenu('none'))}
+          groupList={groupList}
+          highlightedGroup={selectedGroup}
+          close={() => dispatch(setCurrentMenu('none'))}
         />
       )
     case 'new':
-      return(
+      return (
         <MenuNew
-          close = {() => dispatch(setCurrentMenu('none'))}
+          close={() => dispatch(setCurrentMenu('none'))}
         />
       )
     case 'expenseOptions':
-      return(
+      return (
         <MenuExpenseOptions
-          close = {() => dispatch(setCurrentMenu('none'))}
+          close={() => dispatch(setCurrentMenu('none'))}
           groupList={groupList}
           highlightedGroup={selectedGroup}
         />
@@ -47,8 +46,13 @@ const Menus = () => {
         <Form
           close={() => dispatch(setCurrentMenu('none'))}
           headline="Add expense"
-          groupList={groupList}
-          selectedGroup={selectedGroup}
+        />
+      )
+    case 'recordPayment':
+      return (
+        <RecordPayment
+          close={() => dispatch(setCurrentMenu('none'))}
+          headline="Record payment"
         />
       )
   }
