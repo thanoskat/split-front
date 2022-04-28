@@ -10,7 +10,7 @@
 
 html, body, select {
   font-family: 'Inter', sans-serif;
-  /* font-size: 14px; */
+  font-size: 14px;
   user-select: none;
   height: 100vh;
   white-space: nowrap;
@@ -99,6 +99,15 @@ html, body, select {
   --color2: #F29A7E;
   --color3: #FFE897;
   --text:#26272B;
+  --label-color-0: #F07F75;
+  --label-color-1: #ABE085;
+  --label-color-2: #85D9E0;
+  --label-color-3: #BA85E0;
+  --label-color-4: #E0D185;
+  --label-color-5: #85E0A3;
+  --label-color-6: #8594E0;
+  --label-color-7: #E085C2;
+
 
 
   color: var(--layer-6-color);
@@ -367,7 +376,6 @@ html, body, select {
   animation: spin-animation 1s linear infinite;
 }
 
-
 @keyframes spin-animation {
   0% {
     transform: rotate(0deg);
@@ -375,6 +383,18 @@ html, body, select {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.shake {
+  animation: tilt-n-move-shaking 0.3s linear infinite;
+}
+
+@keyframes tilt-n-move-shaking {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(1px, 1px) rotate(1deg); }
+  50% { transform: translate(0, 0) rotate(0deg); }
+  75% { transform: translate(-1px, 1px) rotate(-1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 .pill {
@@ -389,12 +409,22 @@ html, body, select {
   width: fit-content;
   border-style: solid;
   border-width: 1px;
+  /* color: var(--layer-0-color); */
   /* min-width: 20px; */
   /* opacity: 80%; */
 }
 
+.pill.filled {
+  color: var(--layer-0-color);
+  /* border-color: currentColor; */
+}
+
 .pill.empty {
-  background-color: var(--layer-0-color)
+  background-color: var(--layer-0-color);
+  /* border-color: currentColor; */
+}
+
+.pill.new-label {
 }
 
 .label {
@@ -406,8 +436,6 @@ html, body, select {
   width: fit-content;
   border-style: solid;
   border-width: 1px;
-  /* min-width: 20px; */
-  /* opacity: 80%; */
 }
 
 .label.selected {
@@ -424,6 +452,7 @@ html, body, select {
   padding: 3px 7px;
   min-width: 1px;
 }
+
 
 .hide {
   position: absolute;
@@ -456,6 +485,16 @@ html, body, select {
 
 .addExpense-selector {
   height: 100%;
+}
+
+.addexpense-input {
+  border-radius: 4px;
+  padding: 6px 8px;
+  outline: none;
+  color: white;
+  background-color: #121214;
+  border-style: none;
+  font-family: 'Inter';
 }
 
 .tab-switcher {
