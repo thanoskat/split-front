@@ -18,25 +18,11 @@ const calendarConfig = {
   sameElse: 'MMM DD'
 }
 
-const Pill = ({ icon, text, onClick, color, backgroundColor, borderColor }) => {
-  return(
-    // <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, borderColor: borderColor }} onClick={onClick}>
-    //   {icon && <IonIcon name={icon}/>}
-    //   {text}
-    // </div>
-    <div className='pill flex row shadow pointer t5 alignitems-center regular' style={{ color: color, backgroundColor: backgroundColor, borderColor: borderColor }} onClick={onClick}>
-      {icon && <IonIcon name={icon}/>}
-      {text}
-    </div>
-  )
-}
-
 const TabExpenses = ({ expenses, members }) => {
   const dispatch = useDispatch()
+
   const Expense = ({ expense }) => {
-
     const [showTags, setShowTags] = useState(true)
-
     const openExpenseOptions = (expense) => {
       dispatch(setSelectedExpense(expense))
       dispatch(setCurrentMenu('expenseOptions'))
@@ -44,34 +30,56 @@ const TabExpenses = ({ expenses, members }) => {
 
     return(
       <div className='expense flex column justcont-spacebetween gap8'>
-        <div className='flex row justcont-spacebetween semibold t6' style={{alignItems: 'flex-end'}}>
-          <div className='flex row'>
-            <div className='bold' style={{color: `var(--weekday-${dayjs(expense.createdAt).day()})`}}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
-            &nbsp;
-            <div className='bold'>{dayjs(expense.createdAt).format('HH:mm')}</div>
-          </div>
-          <div className='flex row pointer' onClick={() => openExpenseOptions(expense)}>
-            <IonIcon name='ellipsis-vertical' className='t4 expense-options-icon'/>
-          </div>
+        <div className='flex row justcont-center semibold t6' style={{alignItems: 'flex-end'}}>
+          <div className='bold' style={{color: `var(--weekday-${dayjs(expense.createdAt).day()})`}}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
+          &nbsp;
+          <div className='bold'>{dayjs(expense.createdAt).format('HH:mm')}</div>
         </div>
-        <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{padding: '0px 4px 0px 4px'}}>
-          <div className=''>{expense.description}</div>
-          <div className='medium'>{`$ ${expense.amount}`}</div>
+        <div className='flex row justcont-spacebetween alignitems-center'>
+        <div className='flex row gap8 alignitems-center'>
+          {expense.expenseTags?.map(tag => (
+            <div key={tag._id} className='pill pointer'
+            style={{ backgroundColor: tag.color, borderColor: tag.color, color: 'var(--layer-1-color)' }}>
+              {tag.name}
+            </div>
+          ))}
+          <div className='t3 white'>{expense.description}</div>
+        </div>
+        <div className='medium t25 white'>{`$ ${expense.amount}`}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6'>
-            <Pill text={expense.sender.nickname} color='var(--light-color)' borderColor={'#898A8C'}/>
-            {showTags && expense.expenseTags?.map(tag => (
-              <Pill key={tag._id} text={tag.name} backgroundColor={tag.color} borderColor={tag.color} color={'var(--layer-1-color)'}/>
-            ))}
+            <div className='pill empty pointer' style={{ color:'var(--light-color)', borderColor:'var(--layer-5-color)'}}>
+              {expense.sender.nickname}
+            </div>
+            {/* {showTags && expense.expenseTags?.map(tag => (
+              <div key={tag._id} className='pill pointer'
+              style={{ backgroundColor: tag.color, borderColor: tag.color, color: 'var(--layer-1-color)' }}>
+                {tag.name}
+              </div>
+            ))} */}
             {!showTags && expense.tobeSharedWith?.map(participant => (
-              <Pill key={participant} text={participant.slice(18)} color={'var(--light-color)'} borderColor={'#898A8C'}/>
+              <div key={participant} className='pill empty'
+              style={{ color: 'var(--light-color)', borderColor: 'var(--layer-5-color)' }}>
+                {participant.slice(18)}
+              </div>
             ))}
+            {showTags && expense.tobeSharedWith.length < members.length &&
+            <div className='pill empty pointer' onClick={() => setShowTags(false)}
+            style={{ color: 'var(--light-color)', borderColor: '#898A8C' }}>
+              <IonIcon name='people-sharp'/>
+              {expense.tobeSharedWith.length}
+            </div>}
+            {!showTags &&
+            <div className='pill empty pointer' onClick={() => setShowTags(true)}
+            style={{ color: 'var(--light-color)', borderColor: '#898A8C' }}>
+              <IonIcon name='pricetags'/>
+              {expense.expenseTags.length}
+            </div>}
           </div>
-          {showTags && expense.tobeSharedWith.length < members.length &&
-          <Pill icon='people-sharp' text={expense.tobeSharedWith.length} color='var(--light-color)' borderColor={'#898A8C'} onClick={() => setShowTags(false)}/>}
-          {!showTags &&
-          <Pill icon='pricetags' text={expense.expenseTags.length} color='var(--light-color)' borderColor={'#898A8C'} onClick={() => setShowTags(true)}/>}
+          <div className='flex row pointer' onClick={() => openExpenseOptions(expense)}>
+            <IonIcon name='ellipsis-vertical' className='t3 expense-options-icon'/>
+          </div>
         </div>
       </div>
     )
@@ -86,7 +94,7 @@ const TabExpenses = ({ expenses, members }) => {
   }
 
   return (
-    <div className='expenses-tab t5 flex flex-1 column overflow-hidden top-radius'>
+    <div className='expenses-tab flex flex-1 column overflow-hidden top-radius'>
       <div className='overflow-auto'>
         {expenses?.map(expense => (
           <div key={expense._id}>
@@ -100,5 +108,5 @@ const TabExpenses = ({ expenses, members }) => {
   )
 }
 
-TabExpenses.Pill = Pill
+// TabExpenses.Pill = Pill
 export default TabExpenses
