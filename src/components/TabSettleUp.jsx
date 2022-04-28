@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import store from '../redux/store'
 import { setCurrentMenu,setSelectedPendingTX } from '../redux/mainSlice'
+import currency from 'currency.js'
 
 const TabSettleUp = () => {
 
@@ -51,7 +52,7 @@ const TabSettleUp = () => {
                 <strong>You</strong>owe
                 <strong>{transaction.receiver.nickname}</strong>
               </div>
-              <div className="amountSection-red medium">{`$ ${transaction.amount}`}</div>
+              <div className="amountSection-red medium">{` ${currency(transaction.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
             </div>
           </div>
           :
@@ -64,7 +65,7 @@ const TabSettleUp = () => {
                 <strong>{transaction.sender.nickname}
                 </strong> owes <strong>You</strong>
                 </div>
-                <div className="amountSection-green medium">{`$ ${transaction.amount}`}</div>
+                <div className="amountSection-green medium">{`${currency(transaction.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
             </div>
           </div>
         }
