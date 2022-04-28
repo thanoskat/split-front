@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.24.0",
+    "currency.js": "^2.0.4",
     "dayjs": "^1.11.0",
     "font-awesome": "^4.7.0",
     "jsonwebtoken": "^8.5.1",

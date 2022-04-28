@@ -48,7 +48,7 @@ const FigmaMain = () => {
 
   return (
     <div className='flex column overflow-auto figma-main'>
-      <UserBar/>
+     
       <div className='separator-1'/>
       <div className='t1 group-info-frame medium flex row alignitems-center'>
         <div className='flex row alignitems-center gap8 pointer' onClick={openGroupSelector}>

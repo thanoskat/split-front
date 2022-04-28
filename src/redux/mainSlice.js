@@ -6,7 +6,8 @@ export const mainSlice = createSlice({
     currentMenu: 'none',
     groupList: [],
     selectedGroup: null,
-    selectedExpense: null
+    selectedExpense: null,
+    selectedPendingTX: null,    
   },
 
   reducers: {
@@ -22,8 +23,11 @@ export const mainSlice = createSlice({
     setSelectedExpense: (state, action) => {
       state.selectedExpense = action.payload
     },
+    setSelectedPendingTX:(state,action)=>{
+      state.selectedPendingTX=action.payload
+    }
   }
 })
 
-export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense } = mainSlice.actions
+export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense,setSelectedPendingTX} = mainSlice.actions
 export default mainSlice.reducer

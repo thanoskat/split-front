@@ -25,11 +25,30 @@
   flex-direction: column;
   box-sizing: border-box;
   margin: 10px 10px 10px 10px;
+  justify-content: space-evenly;
+ 
+  
+}
+
+
+.input-field-currency {
+  border-radius: 4px;
+  
+  font-size: 22px;
+  height: 40px;
+  outline: none;
+  color: white;
+  background-color: #121214;
+  border-style: none;
+  border-width: 1px;  
+  text-align: right;
+  /* border-radius: 2px; */
+  /* border-color: #3e4042; */
+  /* line-height: 1px; */
 }
 
 .input-field {
   border-radius: 4px;
-  padding: 0px 40px 0px 10px;
   font-size: 22px;
   height: 40px;
   outline: none;
@@ -62,6 +81,20 @@
   padding: 0px 40px 0px 10px;
 }
 
+.currency-ticker-section{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 13px;
+  font-size: 20px;
+  gap:8px;
+  
+}
+.currency-option{
+
+}
 
 .input-clear-icon {
   position: absolute;
@@ -97,6 +130,7 @@
   font-size:16px;
 
 }
+
 .submit-button.active {
   position: relative;
  border-radius: 4px;
@@ -111,8 +145,6 @@
   font-size:16px;
 
 }
-
-
 
 .submit-button:hover {
   opacity: 1;
@@ -293,6 +325,7 @@
 
 .newtag-section {
   border-style: solid;
+  border-width: 1px;
   color: var(--inactiveColor);
   padding: 1px 1px 1px 0px;
   border-radius: 4px;

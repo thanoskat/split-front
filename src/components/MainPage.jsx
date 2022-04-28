@@ -157,6 +157,7 @@ function MainPage() {
       return value;
     }
   }
+  
   const filterIDfromMembers = (value) => { //removes userID from members
     if (String(value._id) !== sessionData.userId) {
       return value;

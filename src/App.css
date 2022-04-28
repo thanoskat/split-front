@@ -129,7 +129,7 @@ html, body, select {
   overflow: auto;
 
   /* chrome */
-  overflow: overlay;
+  /* overflow: overlay; */
 }
 
 .overflow-hidden {
@@ -280,7 +280,7 @@ html, body, select {
 
 .h-flex {
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .row {
@@ -291,6 +291,9 @@ html, body, select {
   flex-direction: column
 }
 
+.row-reverse{
+  flex-direction: row-reverse
+}
 .alignitems-center {
   align-items: center
 }
@@ -395,6 +398,10 @@ html, body, select {
   50% { transform: translate(0, 0) rotate(0deg); }
   75% { transform: translate(-1px, 1px) rotate(-1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.filteredSum{
+  padding: 4px 18px
 }
 
 .pill {
@@ -536,7 +543,7 @@ html, body, select {
   border-radius: 12px 12px 0px 0px;
 }
 
-.expenses-tab {
+.expenses-tab,.settleUp-tab {
   background-color: var(--layer-1-color);
   border-style: solid;
   border-width: 1px;
@@ -544,7 +551,7 @@ html, body, select {
   box-sizing: content-box;
 }
 
-.expense {
+.expense,.settleUp,.member,.settleTotal {
   box-sizing: border-box;
   padding: 10px 14px;
   /* height: 100px; */
@@ -583,6 +590,13 @@ html, body, select {
 
 .padding1010 {
   padding: 10px 10px;
+
+.amountSection-green {
+  color:var(--green)
+}
+
+.amountSection-red {
+  color:red
 }
 
 .button-11 {
@@ -673,6 +687,10 @@ html, body, select {
   margin-top: 0px;
 }
 
+
+.top-labels{
+  padding: 0px 14px 3px 14px;
+}
 @font-face {
   font-family: 'Inter';
   src: local('Inter'), url(./fonts/Inter/Inter-Thin.ttf) format('truetype');
