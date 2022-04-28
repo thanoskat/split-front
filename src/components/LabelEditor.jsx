@@ -100,7 +100,7 @@ const LabelItem = ({ labelId }) => {
         type='text'
         value={content}
         className='label editable t5 shadow'
-        style={{ width, color: 'var(--layer-1-color)', backgroundColor: label.color, borderColor: label.color }}
+        style={{ width, color: 'var(--layer-1-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})` }}
         autoFocus
         onChange={(e) => setContent(e.target.value)}/>}
       {!editMode && !deleteMode &&
