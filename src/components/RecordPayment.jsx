@@ -11,11 +11,11 @@ import IonIcon from '@reacticons/ionicons'
 function RecordPayment({ headline, close}) {
 
   console.log("Form Rendered")
- 
+
   const api = useAxios()
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const selectedPendingTX = store.getState().mainReducer.selectedPendingTX  
+  const selectedPendingTX = store.getState().mainReducer.selectedPendingTX
 
   const [trackIDsingle, setTrackIDsingle] = useState([selectedPendingTX.receiver._id])
   const [inputDescription, setInputDescription] = useState("Settle payment")
@@ -27,7 +27,7 @@ function RecordPayment({ headline, close}) {
   console.log(inputAmount==="")
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }
@@ -183,7 +183,7 @@ function InputField({ value, label, maxLength,
 
   return (
     <div className='single-input-section'>
-     
+
       <input
         className='input-field'
         placeholder={placeholder}

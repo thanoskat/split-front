@@ -1,13 +1,6 @@
-import { useState, useEffect, useRef, useContext } from 'react'
 import { SlidingBox } from './'
-// import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
-// import { AuthenticationContext } from '../contexts/AuthenticationContext'
-import store from '../redux/store'
 import { useDispatch } from 'react-redux'
-import { closeSlidingBox } from '../redux/slidingSlice'
 import { setCurrentMenu } from '../redux/mainSlice'
-import useAxios from '../utility/useAxios'
-import IonIcon from '@reacticons/ionicons'
 
 const GroupOptions = ({ close }) => {
   const dispatch = useDispatch()

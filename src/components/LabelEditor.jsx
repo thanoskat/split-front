@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
-import { closeSlidingBox } from '../redux/slidingSlice'
 import { setSelectedGroup } from '../redux/mainSlice'
 import populateLabels from '../utility/populateLabels'
 import "../style/Form.css"
@@ -23,7 +22,7 @@ const LabelItem = ({ labelId }) => {
   const dummySpan = useRef()
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController();
     return () => {
       abortControllerRef.current.abort()
     }
@@ -164,7 +163,7 @@ const LabelEditor = ({ close }) => {
   ]
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }

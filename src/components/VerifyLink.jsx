@@ -20,7 +20,7 @@ const VerifyLink = ({ match }) => {
       // signIn(response.data.accessToken, response.data.sessionData)
       dispatch(signIn({accessToken: response.data.accessToken, sessionData: response.data.sessionData}))
       setData('Redirecting !!')
-      history.push('/figmamain');
+      history.push('/');
     }
     catch(error) {
       console.dir(error)

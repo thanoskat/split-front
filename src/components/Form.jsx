@@ -7,8 +7,6 @@ import { closeSlidingBox } from '../redux/slidingSlice'
 import "../style/Form.css"
 import { setSelectedGroup } from '../redux/mainSlice'
 import IonIcon from '@reacticons/ionicons'
-import currency from 'currency.js'
-
 
 //TODO LIST
 // 1. fix ticker box - kick div showing users when ticker is on. Get rid of row 77 as a result //DONE
@@ -85,7 +83,7 @@ function Form({ headline, close }) {
   }
 
 
-  const fetchData = () => {
+  // const fetchData = () => {
 
     //When a tag is created, fetchData runs again updating the groupTags, feeding them into the available options for the user.
     //the line below solves the problem where a user has already chosen a tag and decides to create a new one. By filtering the tag
@@ -96,7 +94,7 @@ function Form({ headline, close }) {
     //not sure that's the right way
     //if (splitAmongMembersCheck) { setTrackIndexAndIDmulti(selectedGroup.members.filter(filterIDfromMembers).map((option, index) => ({ _id: option._id, index: index }))) }
 
-  }
+  // }
 
   const colors = [
     "var(--yellow)",
@@ -179,7 +177,7 @@ function Form({ headline, close }) {
   }
 
   const handleBlur = async () => {
-    if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1) {
+    if (tagText !== "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1) {
       await onCreateTag()
     }
   }
@@ -249,7 +247,7 @@ function Form({ headline, close }) {
   // }
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeCommas = num => num.replace(/\,/g,'');
+  const removeCommas = num => num.replace(/\\,/g,'');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
 
   const number = "123456.78999";
@@ -270,6 +268,7 @@ function Form({ headline, close }) {
           showCurrency={true}
           // maxLength={20}
           // required={true}
+          autoFocus={true}
           onChange={e => setInputAmount(addCommas(removeNonNumeric(e.target.value)))}
           clear={e => setInputAmount('')} //this is for the X button? How does the automatic clearing works on submit?
         />
@@ -329,7 +328,7 @@ function Form({ headline, close }) {
 function InputField({ value, label, maxLength,
   required, onChange, clear,
   placeholder, allowTags, expenseTags,
-  setExpenseTags, showCurrency }) {
+  setExpenseTags, showCurrency, autoFocus }) {
 
   const inputFieldRef = useRef(null)
 
@@ -369,7 +368,7 @@ function InputField({ value, label, maxLength,
         onChange={(e) => checkLengthAndChange(e)}
         spellCheck='false'
         ref={inputFieldRef}
-
+        autoFocus={autoFocus}
         style={value.length > 0 ? { padding: "0px 40px 0px 10px" } : { padding: "0px 10px 0px 10px" }}
       />
 

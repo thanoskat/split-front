@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
 import store from '../redux/store'
 import { setCurrentMenu,setSelectedPendingTX } from '../redux/mainSlice'
 import currency from 'currency.js'
@@ -8,7 +7,7 @@ const TabSettleUp = () => {
 
   const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
     if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
-      return value;
+      return value
     }
   }
 
@@ -16,7 +15,7 @@ const TabSettleUp = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const personalTXs = selectedGroup?.pendingTransactions?.filter(filterIDforPersonalTransactions)
-  
+
  // console.log(personalTXs)
 
   // const total = (personalTXs) => {
@@ -34,7 +33,7 @@ const TabSettleUp = () => {
   //const totalSum = total(personalTXs)
 
   const handleClick = (_id,transaction)=>{
-    
+
     dispatch(setSelectedPendingTX(transaction))
     dispatch(setCurrentMenu('recordPayment'))
   }
@@ -93,7 +92,7 @@ const TabSettleUp = () => {
             <div className='settleTotal flex column justcont-spacebetween gap8'>
               <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '0px 4px 0px 4px' }}>
                 <div className='flex column justcont-spacebetween gap8'> Total</div>
-                <div className={totalSum >= 0 ? "amountSection-green medium" : "amountSection-red medium"}>$ 120</div> 
+                <div className={totalSum >= 0 ? "amountSection-green medium" : "amountSection-red medium"}>$ 120</div>
               </div>
             </div>} */}
 

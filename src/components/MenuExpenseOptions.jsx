@@ -3,7 +3,7 @@ import { SlidingBox } from './'
 import store from '../redux/store'
 import { useDispatch } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
-import { setSelectedGroup, setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
+import { setSelectedGroup, setSelectedExpense } from '../redux/mainSlice'
 import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
@@ -16,7 +16,7 @@ const MenuExpenseOptions = ({ close }) => {
   const api = useAxios()
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }

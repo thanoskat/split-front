@@ -1,4 +1,4 @@
-import { SlidingBox, Label } from './'
+import { SlidingBox } from './'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
@@ -21,6 +21,8 @@ function AddExpense({ close }) {
     labels: [],
     participants: selectedGroup.members.map(member => member._id)
   })
+
+  console.log(newExpense)
 
   useEffect(() => {
     abortControllerRef.current = new AbortController();
@@ -108,8 +110,8 @@ function AddExpense({ close }) {
             <div key={label._id} className={`pill pointer`}
             style={
               newExpense.labels.includes(label._id) ?
-              {color: 'var(--layer-0-color)', backgroundColor: label.color, borderColor: label.color} :
-              {color: label.color, backgroundColor: 'var(--layer-0-color)', borderColor: label.color}}
+              {color: 'var(--layer-0-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`} :
+              {color: `var(--${label.color})`, backgroundColor: 'var(--layer-0-color)', borderColor: `var(--${label.color})`}}
               onClick={() => labelClicked(label._id)
             }>
               {label.name}

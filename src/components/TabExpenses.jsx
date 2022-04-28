@@ -21,23 +21,10 @@ const calendarConfig = {
   sameElse: 'MMM DD'
 }
 
-const TabExpense = ({ expenses, members }) => {
+const TabExpenses = ({ expenses, members }) => {
   const dispatch = useDispatch()
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
-
-  const Pill = ({ icon, text, onClick, color, backgroundColor, borderColor }) => {
-    return (
-      // <div className='pill flex row shadow pointer t4 alignitems-center regular' style={{ color: color, borderColor: borderColor }} onClick={onClick}>
-      //   {icon && <IonIcon name={icon}/>}
-      //   {text}
-      // </div>
-      <div className='pill flex row shadow pointer t5 alignitems-center regular' style={{ color: color, backgroundColor: backgroundColor, borderColor: borderColor }} onClick={onClick}>
-        {icon && <IonIcon name={icon} />}
-        {text}
-      </div>
-    )
-  }
 
   const Expense = ({ expense }) => {
 
@@ -47,7 +34,7 @@ const TabExpense = ({ expenses, members }) => {
       dispatch(setSelectedExpense(expense))
       dispatch(setCurrentMenu('expenseOptions'))
     }
-    
+
     const addFilterTag = (tag) => {
       if (filterTags.some(filteredtag => filteredtag._id === tag._id)) return // don't feed tag that is already in
       setFilterTags(prev => [...prev, tag])
@@ -66,19 +53,23 @@ const TabExpense = ({ expenses, members }) => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
         <div className='flex row gap8 alignitems-center'>
-          {expense.expenseTags?.map(tag => (
-            <div key={tag._id} className='pill pointer'
-            style={{ backgroundColor: tag.color, borderColor: tag.color, color: 'var(--layer-1-color)' }}>
-              {tag.name}
+          {expense.expenseTags?.map(label => (
+            <div key={label._id} className='pill pointer'
+            style={{ backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`, color: 'var(--layer-1-color)' }}
+            onClick={() => addFilterTag(label)}>
+              {label.name}
             </div>
           ))}
           <div className='t3 white'>{expense.description}</div>
         </div>
-        <div className='medium t25 white'>{`$ ${expense.amount}`}</div>
+        <div className='medium t25 white'>{`${currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6'>
-            <div className='pill empty pointer' style={{ color:'var(--light-color)', borderColor:'var(--layer-5-color)'}}>
+            <div className='pill empty pointer'
+              style={{ color:'var(--light-color)', borderColor:'var(--layer-5-color)'}}
+              onClick={() => addFilterSender(expense.sender)}
+            >
               {expense.sender.nickname}
             </div>
             {/* {showTags && expense.expenseTags?.map(tag => (
@@ -152,16 +143,16 @@ const TabExpense = ({ expenses, members }) => {
     if (filteredSenders?.length === 0) { //no need to add user in filter
       let sum = currency(0);
       //console.log("filtered tags",filteredTags)
-      
-      filteredTags?.map(tag => {
-        sum =sum.add(tag.amount) 
+
+      filteredTags?.forEach(tag => {
+        sum = sum.add(tag.amount)
         //console.log(sum)
       })
       return { filteredExpenses: filteredTags, sum: sum.value } //TODO potential issue -need to check flipping
     } else {
       let sum = currency(0);
-      getSimilar(filteredSenders, filteredTags)?.map(tag => {
-        sum =sum.add(tag.amount)
+      getSimilar(filteredSenders, filteredTags)?.forEach(tag => {
+        sum = sum.add(tag.amount)
         //console.log(sum)
       })
       return { filteredExpenses: getSimilar(filteredSenders, filteredTags), sum: sum.value } //only keep user with available tags
@@ -171,14 +162,28 @@ const TabExpense = ({ expenses, members }) => {
   const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
   //console.log(filteredExpenses.filteredExpenses?.length!==expenses?.length)
 
-
   return (
-    <div className='expenses-tab flex flex-1 column overflow-hidden top-radius'>
-      <div className='overflow-auto'>
-        {expenses?.map(expense => (
-          <div key={expense._id}>
-            <Expense key={expense._id} expense={expense}/>
-            <div className='separator-2 padding0014'/>
+    <div className='flex flex-1 column overflow-hidden '>
+
+      <div className='t4 flex row justcont-spacebetween'>
+        <div className='top-labels flex row gap6 overflow-auto'>
+          <div className='flex gap6'>
+            {filterTags.map(label => (
+              <div className='pill' key={label._id}
+                style={{ backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`, color: 'var(--layer-1-color)' }}
+                onClick={() => removeFilterTag(label)}
+              >
+                {label.name}
+              </div>
+            ))}
+            {filterSender.map(sender => (
+              <div className='pill' key={sender._id}
+                style={{ color: 'var(--light-color)', borderColor: '#898A8C' }}
+                onClick={() => removeFilterSender(sender)}
+              >
+                {sender.nickname}
+              </div>
+            ))}
           </div>
         </div>
         {filteredExpenses.filteredExpenses?.length === expenses?.length ? "" :
@@ -202,7 +207,7 @@ const TabExpense = ({ expenses, members }) => {
       </div>
     </div>
   )
+
 }
 
-// TabExpenses.Pill = Pill
 export default TabExpenses

@@ -48,7 +48,7 @@ const FigmaMain = () => {
 
   return (
     <div className='flex column overflow-auto figma-main'>
-     
+      <UserBar/>
       <div className='separator-1'/>
       <div className='t1 group-info-frame medium flex row alignitems-center'>
         <div className='flex row alignitems-center gap8 pointer' onClick={openGroupSelector}>
@@ -61,11 +61,11 @@ const FigmaMain = () => {
       <div className='separator-1'/>
       <TabSwitcher/>
       <Switch>
-        <Route path="/figmamain/expenses">
+        <Route path="/expenses">
           <TabExpenses expenses={displayedGroup?.expenses} members={displayedGroup?.members}/>
         </Route>
-        <Route path="/figmamain/members" component={TabMembers}/>
-        <Route path="/figmamain/settleup" component={TabSettleUp}/>
+        <Route path="/members" component={TabMembers}/>
+        <Route exact path="/settleup" component={TabSettleUp}/>
       </Switch>
       <div
       className='floating-button pointer flex row shadow justcont-center alignitems-center'

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SlidingBox } from './'
 // import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
 // import { AuthenticationContext } from '../contexts/AuthenticationContext'
@@ -20,7 +20,7 @@ const GroupSelector = ({ close, groupList }) => {
   const abortControllerRef = useRef(null)
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController();
     return () => {
       abortControllerRef.current.abort()
     }
@@ -51,10 +51,10 @@ const GroupSelector = ({ close, groupList }) => {
         {groupList?.map((group, index) => (
             <div
             key={index}
-            className={`${group._id == selectedGroup?._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
+            className={`${group._id === selectedGroup?._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
             onClick={() => setDisplayedGroupAndClose(index)}>
               <div>{group.title}</div>
-              {isLoading && clickedIndex == index && <IonIcon name='sync' className='t3 spin'/>}
+              {isLoading && clickedIndex === index && <IonIcon name='sync' className='t3 spin'/>}
               {clickedIndex !== index &&
               <div className='regular flex row t3 gap6 alignitems-center'>
                 <IonIcon name='people-sharp' />

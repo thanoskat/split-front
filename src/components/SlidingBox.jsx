@@ -1,6 +1,3 @@
-import { useContext } from 'react'
-// import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
-import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { openSlidingBox, closeSlidingBox } from '../redux/slidingSlice'
 import "../style/SlidingBox.css"
