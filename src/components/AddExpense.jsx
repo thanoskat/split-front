@@ -107,7 +107,7 @@ function AddExpense({ close }) {
         />
         <div className='flex row wrap gap10'>
           {selectedGroup.groupTags.map(label => (
-            <div key={label._id} className={`pill pointer`}
+            <div key={label._id} className={`pill pointer shadow`}
             style={
               newExpense.labels.includes(label._id) ?
               {color: 'var(--layer-0-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`} :
@@ -124,7 +124,7 @@ function AddExpense({ close }) {
         {!includeAll &&
           <div className='flex row wrap gap10'>
             {selectedGroup.members.map(member => (
-            <div key={member._id} className={`pill pointer`}
+            <div key={member._id} className={`pill pointer shadow`}
             style={
               newExpense.participants.includes(member._id) ?
               {color: 'var(--layer-0-color)', backgroundColor: '#aaaaaa', borderColor: '#aaaaaa'} :
