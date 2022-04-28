@@ -7,22 +7,19 @@ import { useDispatch } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
 import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
+import populateLabels from '../utility/populateLabels'
 import IonIcon from '@reacticons/ionicons'
 
-const GroupSelector = ({ close, groupList, highlightedGroup }) => {
-  console.log('GroupSelector rendered.', highlightedGroup)
-  const dispatch = useDispatch()
+const GroupSelector = ({ close, groupList }) => {
 
+  const dispatch = useDispatch()
   const api = useAxios()
   const [isLoading, setLoading] = useState(false)
   const [clickedIndex, setClickedIndex] = useState()
-  // const [highlightedIndex, setHighlightedIndex] = useState()
-  // const { closeBox } = useContext(SlidingBoxContext)
-
+  const selectedGroup = store.getState().mainReducer.selectedGroup
   const abortControllerRef = useRef(null)
 
   useEffect(() => {
-    console.log(highlightedGroup)
     abortControllerRef.current = new AbortController;
     return () => {
       abortControllerRef.current.abort()
@@ -35,10 +32,9 @@ const GroupSelector = ({ close, groupList, highlightedGroup }) => {
       setLoading(true)
       try {
         const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id }, { signal: abortControllerRef.current.signal })
-        // setDisplayedGroup(res.data)
-
+        const group = populateLabels(window.structuredClone(res.data))
         setLoading(false)
-        dispatch(setSelectedGroup(res.data))
+        dispatch(setSelectedGroup(group))
         dispatch(closeSlidingBox())
       }
       catch(error) {
@@ -55,7 +51,7 @@ const GroupSelector = ({ close, groupList, highlightedGroup }) => {
         {groupList?.map((group, index) => (
             <div
             key={index}
-            className={`${group._id == highlightedGroup._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
+            className={`${group._id == selectedGroup?._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}
             onClick={() => setDisplayedGroupAndClose(index)}>
               <div>{group.title}</div>
               {isLoading && clickedIndex == index && <IonIcon name='sync' className='t3 spin'/>}

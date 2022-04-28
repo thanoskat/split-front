@@ -4,7 +4,7 @@ import { Modal, Dropdown } from "."
 import { useState } from 'react'
 import useAxios from '../utility/useAxios'
 
-{/* <Modal
+/* <Modal
 className="summary"
 showModal={showModalxyz}
 onCloseModal={() => setShowModalxyz(false)}
@@ -12,7 +12,7 @@ handleOnClick={actions}
 ActionButtonMessage={"Hello"}
 HeaderMessage={"Header"}>
 
-</Modal> */}
+</Modal> */
 
 //This is a component that is using the Modal component. It is not a modal itself.
 export default function CreateGroupModal({ showCreate, setShowCreate, utilities, setRefresh }) {
@@ -189,7 +189,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
   const api = useAxios()
 
   const onSubmitFunction = async () => {
-    if (groupName == "") return null; //do nothing if there is no group name
+    if (groupName === "") return null; //do nothing if there is no group name
     let newGroupID;// interestingly const doesn't work here
     try {
       newGroupID = await api.post('/groups/creategroup', { title: groupName}) //creates group and returns its ID
@@ -202,7 +202,7 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
       console.dir("CREATE GROUP ERROR: ", err1);
     }
 
-    if (utilities.tobeRetrievedOption.length == 0) return null; //do not proceed to sending requests if no such option from user
+    if (utilities.tobeRetrievedOption.length === 0) return null; //do not proceed to sending requests if no such option from user
     const createGroupObj = {
       recipient: utilities.tobeRetrievedOption.map(x => x._id),
       groupToJoin: newGroupID.data
@@ -219,12 +219,12 @@ export default function CreateGroupModal({ showCreate, setShowCreate, utilities,
   }
 
   const isActive = () => {
-    if (groupName == "") return false;
+    if (groupName === "") return false;
     if (groupName !== "") return true;
   }
   //!!!!!!!!!!keep an eye on the onClose and the show names as they
   //!!!!!!!!!!can have conficts with the ModalFrame names.
-  
+
   return (
     <div className='CreateGroup'>
       <Modal

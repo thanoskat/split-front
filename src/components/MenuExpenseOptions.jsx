@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { SlidingBox } from './'
-// import { SlidingBoxContext } from '../contexts/SlidingBoxContext'
-// import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import store from '../redux/store'
 import { useDispatch } from 'react-redux'
 import { closeSlidingBox } from '../redux/slidingSlice'
-import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
+import { setSelectedGroup, setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
+import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
 
@@ -25,16 +24,26 @@ const MenuExpenseOptions = ({ close }) => {
 
   const deleteExpense = async () => {
     setLoading(true)
+    console.log(abortControllerRef.current.signal)
     try {
-      const res = await api.post('/expense/delete', { groupId: store.getState().mainReducer.selectedGroup._id, expense: selectedExpense }, { signal: abortControllerRef.current.signal })
-      console.log(`${selectedExpense.description} deleted!`)
-      console.log(res)
+      const res = await api.post('/expense/remove',
+      {
+        groupId: store.getState().mainReducer.selectedGroup._id,
+        expenseId: selectedExpense._id
+      },
+      { signal: abortControllerRef.current.signal })
+      console.log("after res")
+      dispatch(setSelectedGroup(populateLabels(res.data)))
       setLoading(false)
+      dispatch(closeSlidingBox())
     }
     catch(error) {
+      setLoading(false)
       console.log(error)
     }
-    dispatch(closeSlidingBox())
+    finally {
+      console.log('finally')
+    }
   }
 
   const removeSelectedExpenseAndClose = () => {

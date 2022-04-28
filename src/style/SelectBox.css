@@ -39,7 +39,7 @@
 .select-button {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   gap: 2rem;
 
@@ -105,7 +105,7 @@ border-top-right-radius: 12px; */
 a:-webkit-any-link {
   color: none;
   cursor: pointer;
-  
+
 }
 
 .group-button-active {

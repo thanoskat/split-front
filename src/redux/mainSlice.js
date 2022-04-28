@@ -10,7 +10,6 @@ export const mainSlice = createSlice({
     selectedPendingTX: null,    
   },
 
-
   reducers: {
     setCurrentMenu: (state, action) => {
       state.currentMenu = action.payload

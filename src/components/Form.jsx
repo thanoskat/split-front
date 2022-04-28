@@ -60,7 +60,7 @@ function Form({ headline, close }) {
   // }, [splitAmongMembersCheck])
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController;
+    abortControllerRef.current = new AbortController();
     return () => {
       abortControllerRef.current.abort()
     }
@@ -151,7 +151,7 @@ function Form({ headline, close }) {
       return
     }
     if (event.key === "Enter") { // && event.target == newtagRef.current
-      if (selectedGroup.groupTags.findIndex(item => item.name == tagTextRef.current) == -1 && tagTextRef != "") { //if nametag doesn't already exist in bd
+      if (selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1 && tagTextRef !== "") { //if nametag doesn't already exist in bd
         await onCreateTag()
       }
     }
@@ -179,7 +179,7 @@ function Form({ headline, close }) {
   }
 
   const handleBlur = async () => {
-    if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) == -1) {
+    if (tagText != "" && selectedGroup.groupTags.findIndex(item => item.name === tagTextRef.current) === -1) {
       await onCreateTag()
     }
   }
@@ -405,7 +405,7 @@ function InputField({ value, label, maxLength,
         {maxLength &&
           <div
             className='input-right-label'
-            style={required && value.length == 0 ? { color: 'red' } : {}}
+            style={required && value.length === 0 ? { color: 'red' } : {}}
           >
             {`${value.length}/${maxLength}`}
           </div>
