@@ -22,7 +22,7 @@ const LabelItem = ({ labelId }) => {
   const dummySpan = useRef()
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }
@@ -92,35 +92,42 @@ const LabelItem = ({ labelId }) => {
     <div className='flex row justcont-spacebetween alignitems-center' style={{height: 'fit-content'}}>
       <span className='hide t5' ref={dummySpan}>{content}</span>
       {!editMode &&
-      <div className={`pill t5 shadow ${deleteMode ? 'shake' : ''}`} style={{color: 'var(--layer-0-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`}}>
-        {label.name}
-      </div>}
+      <div className={`pill filled t5 shadow test ${deleteMode ? 'shake' : ''}`}
+        style={{'--pill-color': `var(--${label.color})`}}
+      >{label.name}</div>}
       {editMode &&
       <input
         type='text'
         value={content}
-        className='label editable t5 shadow'
-        style={{ width, color: 'var(--layer-1-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})` }}
+        className='pill filled editable t5 shadow'
+        style={{width, '--pill-color': `var(--${label.color})`}}
         autoFocus
         onChange={(e) => setContent(e.target.value)}/>}
       {!editMode && !deleteMode &&
       <div className='flex row gap10'>
         {!isUsed(labelId) &&
-        <div className='pill t5 empty pointer shadow' style={{color: `${isUsed(labelId) ? 'grey' : '#D16666'}`}} onClick={() => setDeleteMode(true)}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': `#D16666`}} onClick={() => setDeleteMode(true)}
+        >
           Delete
         </div>}
-        <div className='pill t5 empty pointer shadow' style={{color: 'var(--base-color-1)'}} onClick={() => setEditMode(true)}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': 'var(--base-color-1)'}} onClick={() => setEditMode(true)}
+        >
           Edit
         </div>
-      </div>
-      }
+      </div>}
       {editMode &&
       <div className='flex row gap10'>
         {!loading &&
-        <div className='pill t5 empty pointer shadow' style={{color: 'gray'}} onClick={cancelEdit}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': 'gray'}} onClick={cancelEdit}
+        >
           Discard
         </div>}
-        <div className='pill t5 empty pointer shadow' style={{color: 'lightgreen'}} onClick={submitEdit}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': 'lightgreen'}} onClick={submitEdit}
+        >
           Apply
           {loading && <IonIcon name='sync' className='t5 spin'/>}
         </div>
@@ -128,10 +135,14 @@ const LabelItem = ({ labelId }) => {
       {deleteMode &&
       <div className='flex row gap10'>
         {!loading &&
-        <div className='pill t5 empty pointer shadow' style={{color: 'gray'}} onClick={cancelDelete}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': 'gray'}} onClick={cancelDelete}
+        >
           Cancel
         </div>}
-        <div className='pill t5 empty pointer shadow' style={{color: 'red'}} onClick={submitDelete}>
+        <div className='pill t5 empty pointer shadow'
+          style={{'--pill-color': 'red'}} onClick={submitDelete}
+        >
           Delete!
           {loading && <IonIcon name='sync' className='t5 spin'/>}
         </div>
@@ -198,14 +209,14 @@ const LabelEditor = ({ close }) => {
           <LabelItem labelId={label._id}/>
         ))}
         {!newMode &&
-        <div className='pill t5 empty pointer shadow new-label' onClick={() => setNewMode(true)}>Create new label</div>}
+        <div className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
         {newMode &&
         <div className='flex row justcont-spacebetween'>
           <input
             type='text'
             value={newLabel.name}
-            className='label editable t5 shadow'
-            style={{ width: '100px', color: 'white'}}
+            className='pill empty editable t5 shadow'
+            style={{ width: '100px', '--pill-color': `white`}}
             autoFocus
             onChange={(e) => setNewLabel({...newLabel, name: e.target.value})}
           />

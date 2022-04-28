@@ -20,7 +20,7 @@ const GroupSelector = ({ close, groupList }) => {
   const abortControllerRef = useRef(null)
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }

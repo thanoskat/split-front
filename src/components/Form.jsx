@@ -58,7 +58,7 @@ function Form({ headline, close }) {
   // }, [splitAmongMembersCheck])
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }
@@ -145,7 +145,7 @@ function Form({ headline, close }) {
     const re = /[a-zA-Z0-9]+/g
     console.log(event)
     if (!re.test(event.key)) {
-      event.preventDefault();
+      event.preventDefault()
       return
     }
     if (event.key === "Enter") { // && event.target == newtagRef.current

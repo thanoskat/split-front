@@ -84,7 +84,6 @@ html, body, select {
   --menuFrameColor: #1b1b1d;
   /* --activeColor: #f4f4f4; */
   --inactiveColor: #8f8f91;
-  --sliding-menu-button-size: 1.4rem;
   --darkletterColor: #a1a4a8;
   --lightletterColor: #d3d3d3;
   --hoverHighlightColor: #3a3b3c;
@@ -423,43 +422,23 @@ html, body, select {
 
 .pill.filled {
   color: var(--layer-0-color);
-  /* border-color: currentColor; */
+  background-color: var(--pill-color);
+  border-color: var(--pill-color);
 }
 
 .pill.empty {
+  color: var(--pill-color);
   background-color: var(--layer-0-color);
-  /* border-color: currentColor; */
+  border-color: var(--pill-color);
 }
 
-.pill.new-label {
-}
-
-.label {
-  align-self: center;
-  justify-content: center;
-  padding: 3px 7px;
-  gap: 6px;
-  border-radius: 4px;
-  width: fit-content;
-  border-style: solid;
-  border-width: 1px;
-}
-
-.label.selected {
-  color: var(--layer-0-color)
-}
-
-.label.deselected {
-}
-
-.label.editable {
+.pill.editable {
   outline: none;
-  background-color: var(--layer-1-color);
+  /* background-color: var(--layer-1-color); */
   font-family: "Inter";
-  padding: 3px 7px;
-  min-width: 1px;
+  /* padding: 3px 7px; */
+  /* min-width: 1px; */
 }
-
 
 .hide {
   position: absolute;

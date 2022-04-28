@@ -25,7 +25,7 @@ function AddExpense({ close }) {
   console.log(newExpense)
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
+    abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }
@@ -87,7 +87,7 @@ function AddExpense({ close }) {
   }
 
   return (
-    <SlidingBox close={close} className='top-radius' style={{backgroundColor: 'var(--layer-1-color)'}}>
+    <SlidingBox close={close} className='top-radius'>
       <div className='flex row t1 justcont-center alignitems-center padding4'>New Expense</div>
       <div className='separator-0'/>
       <div className='flex column gap10 padding1010'>
@@ -107,13 +107,10 @@ function AddExpense({ close }) {
         />
         <div className='flex row wrap gap10'>
           {selectedGroup.groupTags.map(label => (
-            <div key={label._id} className={`pill pointer shadow`}
-            style={
-              newExpense.labels.includes(label._id) ?
-              {color: 'var(--layer-0-color)', backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`} :
-              {color: `var(--${label.color})`, backgroundColor: 'var(--layer-0-color)', borderColor: `var(--${label.color})`}}
-              onClick={() => labelClicked(label._id)
-            }>
+            <div className={`pill pointer shadow ${newExpense.labels.includes(label._id) ? 'filled' : 'empty'}`}
+              key={label._id} style={{'--pill-color': `var(--${label.color})`}}
+              onClick={() => labelClicked(label._id)}
+            >
               {label.name}
             </div>))}
         </div>
@@ -122,19 +119,15 @@ function AddExpense({ close }) {
           Split among all members
         </div>
         {!includeAll &&
-          <div className='flex row wrap gap10'>
-            {selectedGroup.members.map(member => (
-            <div key={member._id} className={`pill pointer shadow`}
-            style={
-              newExpense.participants.includes(member._id) ?
-              {color: 'var(--layer-0-color)', backgroundColor: '#aaaaaa', borderColor: '#aaaaaa'} :
-              {color: '#aaaaaa', backgroundColor: 'var(--layer-0-color)', borderColor: '#aaaaaa'}}
-              onClick={() => participantClicked(member._id)
-            }>
-              {member.nickname}
-            </div>))}
-          </div>
-        }
+        <div className='flex row wrap gap10'>
+          {selectedGroup.members.map(member => (
+          <div className={`pill pointer shadow ${newExpense.participants.includes(member._id) ? 'filled' : 'empty'}`}
+            key={member._id} style={{'--pill-color': `gray`}}
+            onClick={() => participantClicked(member._id)}
+          >
+            {member.nickname}
+          </div>))}
+        </div>}
         <div className='flex row justcont-center alignitems-center t2 gap8' onClick={submitExpense}>
           Submit
           {loading && <IonIcon name='sync' className='t2 spin'/>}

@@ -10,7 +10,7 @@ const VerifyLink = ({ match }) => {
 
   const dispatch = useDispatch()
 
-  const history = useHistory();
+  const history = useHistory()
   // const { signIn } = useContext(AuthenticationContext);
   const [data, setData] = useState('')
 

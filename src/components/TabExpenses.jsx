@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
 import currency from 'currency.js'
 
-
 var dayjs = require('dayjs')
 var relativeTime = require('dayjs/plugin/relativeTime')
 var calendar = require('dayjs/plugin/calendar')
@@ -27,7 +26,6 @@ const TabExpenses = ({ expenses, members }) => {
   const [filterSender, setFilterSender] = useState([])
 
   const Expense = ({ expense }) => {
-
     const [showTags, setShowTags] = useState(true)
 
     const openExpenseOptions = (expense) => {
@@ -54,8 +52,8 @@ const TabExpenses = ({ expenses, members }) => {
         <div className='flex row justcont-spacebetween alignitems-center'>
         <div className='flex row gap8 alignitems-center'>
           {expense.expenseTags?.map(label => (
-            <div key={label._id} className='pill pointer'
-            style={{ backgroundColor: `var(--${label.color})`, borderColor: `var(--${label.color})`, color: 'var(--layer-1-color)' }}
+            <div key={label._id} className='pill pointer filled'
+            style={{'--pill-color': `var(--${label.color})`}}
             onClick={() => addFilterTag(label)}>
               {label.name}
             </div>
@@ -67,33 +65,26 @@ const TabExpenses = ({ expenses, members }) => {
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6'>
             <div className='pill empty pointer'
-              style={{ color:'var(--light-color)', borderColor:'var(--layer-5-color)'}}
+              style={{'--pill-color': 'var(--layer-6-color)'}}
               onClick={() => addFilterSender(expense.sender)}
             >
               {expense.sender.nickname}
             </div>
-            {/* {showTags && expense.expenseTags?.map(tag => (
-              <div key={tag._id} className='pill pointer'
-              style={{ backgroundColor: tag.color, borderColor: tag.color, color: 'var(--layer-1-color)' }}>
-                {tag.name}
-              </div>
-            ))} */}
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <div key={participant} className='pill empty'
-              style={{ color: 'var(--light-color)', borderColor: 'var(--layer-5-color)' }}>
+                style={{'--pill-color': 'var(--layer-6-color)'}}>
                 {participant.slice(18)}
               </div>
-
             ))}
             {showTags && expense.tobeSharedWith.length < members.length &&
             <div className='pill empty pointer' onClick={() => setShowTags(false)}
-            style={{ color: 'var(--light-color)', borderColor: '#898A8C' }}>
+              style={{'--pill-color': 'var(--layer-6-color)'}}>
               <IonIcon name='people-sharp'/>
               {expense.tobeSharedWith.length}
             </div>}
             {!showTags &&
             <div className='pill empty pointer' onClick={() => setShowTags(true)}
-            style={{ color: 'var(--light-color)', borderColor: '#898A8C' }}>
+              style={{'--pill-color': 'var(--layer-6-color)'}}>
               <IonIcon name='pricetags'/>
               {expense.expenseTags.length}
             </div>}
