@@ -2,6 +2,7 @@ import { SlidingBox } from './'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
+import { closeSlidingBox } from '../redux/slidingSlice'
 import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
@@ -53,6 +54,7 @@ function AddExpense({ close }) {
         setLoading(false)
       }
     }
+  dispatch(closeSlidingBox())
   }
 
   const labelClicked = (labelClickedId) => {
