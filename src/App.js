@@ -1,6 +1,7 @@
 import './App.css';
 import { Menus, FigmaMain, UserBar, Login, SignUp, VerifyLink, PrivateRoute } from './components'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import './semantic-icons.css'
 
 function App() {
 

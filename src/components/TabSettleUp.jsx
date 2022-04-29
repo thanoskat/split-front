@@ -3,6 +3,7 @@ import store from '../redux/store'
 import { setCurrentMenu,setSelectedPendingTX } from '../redux/mainSlice'
 import currency from 'currency.js'
 
+
 const TabSettleUp = () => {
 
   const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
