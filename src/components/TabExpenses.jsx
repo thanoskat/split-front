@@ -25,6 +25,8 @@ const TabExpenses = ({ expenses, members }) => {
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
 
+  console.log(filterTags, filterSender)
+
   const Expense = ({ expense }) => {
     const [showTags, setShowTags] = useState(true)
 
@@ -42,55 +44,55 @@ const TabExpenses = ({ expenses, members }) => {
       setFilterSender(prev => [...prev, sender])
     }
 
-    return(
+    return (
       <div className='expense flex column justcont-spacebetween gap8'>
-        <div className='flex row justcont-center semibold t6' style={{alignItems: 'flex-end'}}>
-          <div className='bold' style={{color: `var(--weekday-${dayjs(expense.createdAt).day()})`}}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
+        <div className='flex row justcont-center semibold t6' style={{ alignItems: 'flex-end' }}>
+          <div className='bold' style={{ color: `var(--weekday-${dayjs(expense.createdAt).day()})` }}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
           &nbsp;
           <div className='bold'>{dayjs(expense.createdAt).format('HH:mm')}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
-        <div className='flex row gap8 alignitems-center'>
-          {expense.expenseTags?.map(label => (
-            <div key={label._id} className='pill pointer filled'
-            style={{'--pill-color': `var(--${label.color})`}}
-            onClick={() => addFilterTag(label)}>
-              {label.name}
-            </div>
-          ))}
-          <div className='t3 white'>{expense.description}</div>
-        </div>
-        <div className='medium t25 white'>{`${currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
+          <div className='flex row gap8 alignitems-center'>
+            {expense.expenseTags?.map(label => (
+              <div key={label._id} className='pill pointer filled'
+                style={{ '--pill-color': `var(--${label.color})` }}
+                onClick={() => addFilterTag(label)}>
+                {label.name}
+              </div>
+            ))}
+            <div className='t3 white'>{expense.description}</div>
+          </div>
+          <div className='medium t25 white'>{`${currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6'>
             <div className='pill empty pointer'
-              style={{'--pill-color': 'var(--layer-6-color)'}}
+              style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
             >
               {expense.sender.nickname}
             </div>
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <div key={participant} className='pill empty'
-                style={{'--pill-color': 'var(--layer-6-color)'}}>
+                style={{ '--pill-color': 'var(--layer-6-color)' }}>
                 {participant.slice(18)}
               </div>
             ))}
             {showTags && expense.tobeSharedWith.length < members.length &&
-            <div className='pill empty pointer' onClick={() => setShowTags(false)}
-              style={{'--pill-color': 'var(--layer-6-color)'}}>
-              <IonIcon name='people-sharp'/>
-              {expense.tobeSharedWith.length}
-            </div>}
+              <div className='pill empty pointer' onClick={() => setShowTags(false)}
+                style={{ '--pill-color': 'var(--layer-6-color)' }}>
+                <IonIcon name='people-sharp' />
+                {expense.tobeSharedWith.length}
+              </div>}
             {!showTags &&
-            <div className='pill empty pointer' onClick={() => setShowTags(true)}
-              style={{'--pill-color': 'var(--layer-6-color)'}}>
-              <IonIcon name='pricetags'/>
-              {expense.expenseTags.length}
-            </div>}
+              <div className='pill empty pointer' onClick={() => setShowTags(true)}
+                style={{ '--pill-color': 'var(--layer-6-color)' }}>
+                <IonIcon name='pricetags' />
+                {expense.expenseTags.length}
+              </div>}
           </div>
           <div className='flex row pointer' onClick={() => openExpenseOptions(expense)}>
-            <IonIcon name='ellipsis-vertical' className='t3 expense-options-icon'/>
+            <IonIcon name='ellipsis-vertical' className='t3 expense-options-icon' />
           </div>
         </div>
       </div>
@@ -126,7 +128,7 @@ const TabExpenses = ({ expenses, members }) => {
     // console.log("final", getSimilar(filteredSenders, filteredTags))
     //console.log("filtered Tags",expenses?.map(exp=>getSimilar(exp.expenseTags,filterTags)))
     //participantArray.reduce((prevValue, currValue) => prevValue + currValue
-    console.log("final", filteredTags)
+    //console.log("final", filteredTags)
     //console.log(filteredTags?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
     //console.log("final",getSimilar(filteredSenders, filteredTags))
     //console.log(getSimilar(filteredSenders, filteredTags)?.map(tag=>tag.amount).reduce((prevValue, currValue) => prevValue + currValue))
@@ -151,6 +153,8 @@ const TabExpenses = ({ expenses, members }) => {
   }
 
   const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
+  console.log("filtered expenses", filteredExpenses)
+  console.log("expenses", expenses)
   //console.log(filteredExpenses.filteredExpenses?.length!==expenses?.length)
 
   return (
@@ -177,10 +181,13 @@ const TabExpenses = ({ expenses, members }) => {
             ))}
           </div>
         </div>
-        {filteredExpenses.filteredExpenses?.length === expenses?.length ? "" :
-          <div className='filteredSum t25 white'>
-           { currency(filteredExpenses.sum, { symbol: '€', decimal: ',', separator: '.' }).format() }
-          </div>}
+
+        {filterTags.length !== 0 || filterSender.length !== 0 ?  
+        <div className='filteredSum t25 white'>
+            {currency(filteredExpenses.sum, { symbol: '€', decimal: ',', separator: '.' }).format()}
+          </div> :""
+         }
+
       </div>
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
