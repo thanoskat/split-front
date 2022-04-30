@@ -319,6 +319,7 @@ function Form({ headline, close }) {
             {submitisLoading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
           </div>
         </div>
+        
       </div>
 
     </SlidingBox>
