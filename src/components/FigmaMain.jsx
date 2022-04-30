@@ -67,12 +67,14 @@ const FigmaMain = () => {
         <Route path="/members" component={TabMembers}/>
         <Route exact path="/settleup" component={TabSettleUp}/>
       </Switch>
+      
       <div
       className='floating-button pointer flex row shadow justcont-center alignitems-center'
       onClick={() => dispatch(setCurrentMenu('addExpense2'))}>
         <IonIcon name='add' className='floating-button-icon'/>
         <div className='floating-button-text'>New</div>
       </div>
+
     </div>
   );
 }
