@@ -97,72 +97,80 @@ function AddExpense({ close }) {
 
 
   return (
-    <SlidingBox close={close} className='flex column overflow-auto' style={{"height":"100vh","max-height":"90%"}}>
-      <div className='flex row t1 justcont-center alignitems-center padding4'>Add expense</div>
-      <div className='separator-0' />
-      <div className='inputsAndOptions-container flex column gap10 padding1010'>
+    
+    <div className=''>
 
-        <div className='input-amount flex relative column justcont-evenly '>
-          <div className='currency-ticker-section '>
-            <i className='angle down icon'></i>
-            <div className='currency-ticker'>EUR </div>
+      <SlidingBox close={close} className='flex column overflow-auto' style={{ "height": "100vh", "max-height": "90%" }}>
+        <div className='flex row t1 justcont-center alignitems-center padding4'>Add expense</div>
+        <div className='separator-0' />
+
+        <div className='inputsAndOptions-container flex column gap10 padding1010'>
+
+          <div className='input-amount flex relative column justcont-evenly '>
+            <div className='currency-ticker-section '>
+              <i className='angle down icon'></i>
+              <div className='currency-ticker'>EUR </div>
+            </div>
+
+            <input
+              className='addexpense-input t3 text-align-right'
+              type="text"
+              placeholder='0'
+              value={newExpense.amount}
+              onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value)) })}
+              autoFocus={true}
+              spellCheck='false'
+            />
+
           </div>
 
           <input
-            className='addexpense-input t3 text-align-right'
-            type="text"
-            placeholder='0'
-            value={newExpense.amount}
-            onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value)) })}
-            autoFocus={true}
+            className='addexpense-input t3'
+            placeholder='Description (optional)'
+            value={newExpense.description}
+            onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
             spellCheck='false'
+
           />
 
-        </div>
-
-        <input
-          className='addexpense-input t3'
-          placeholder='Description (optional)'
-          value={newExpense.description}
-          onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
-          spellCheck='false'
-
-        />
-        
-        <div className='flex row wrap gap10'>
-          {selectedGroup.groupTags.map(label => (
-            <div className={`pill pointer shadow ${newExpense.labels.includes(label._id) ? 'filled' : 'empty'}`}
-              key={label._id} style={{ '--pill-color': `var(--${label.color})` }}
-              onClick={() => labelClicked(label._id)}
-            >
-              {label.name}
-            </div>))}
-        </div>
-        <div className='t4 medium flex row justcont-start alignitems-center gap6 pointer' onClick={includeAllClick}>
-          <IonIcon className='t3' name={`${includeAll ? 'checkbox' : 'square-outline'}`} />
-          Split among all members
-        </div>
-        {!includeAll &&
           <div className='flex row wrap gap10'>
-            {selectedGroup.members.map(member => (
-              <div className={`pill pointer shadow ${newExpense.participants.includes(member._id) ? 'filled' : 'empty'}`}
-                key={member._id} style={{ '--pill-color': `gray` }}
-                onClick={() => participantClicked(member._id)}
+            {selectedGroup.groupTags.map(label => (
+              <div className={`pill pointer shadow ${newExpense.labels.includes(label._id) ? 'filled' : 'empty'}`}
+                key={label._id} style={{ '--pill-color': `var(--${label.color})` }}
+                onClick={() => labelClicked(label._id)}
               >
-                {member.nickname}
+                {label.name}
               </div>))}
-          </div>}       
+          </div>
+
+          <div className='t4 medium flex row justcont-start alignitems-center gap6 pointer' onClick={includeAllClick}>
+            <IonIcon className='t3' name={`${includeAll ? 'checkbox' : 'square-outline'}`} />
+            Split among all members
+          </div>
+
+          {!includeAll &&
+            <div className='flex row wrap gap10'>
+              {selectedGroup.members.map(member => (
+                <div className={`pill pointer shadow ${newExpense.participants.includes(member._id) ? 'filled' : 'empty'}`}
+                  key={member._id} style={{ '--pill-color': `gray` }}
+                  onClick={() => participantClicked(member._id)}
+                >
+                  {member.nickname}
+                </div>))}
+            </div>}
+
+        </div>
+      </SlidingBox>
+
+      <div className='submit-button-container flex alignitems-center justcont-center shadow'>
+        <div
+          className={`submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
+          onClick={submitExpense}>
+          {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
+        </div>
       </div>
 
-  <div className='submit-button-container v-flex alignitems-center justcont-center shadow'>
-      <div
-        className={`submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
-        onClick={submitExpense}>
-        {loading? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
-      </div>
-  </div>
-
-    </SlidingBox>
+    </div>
   )
 }
 

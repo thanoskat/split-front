@@ -8,7 +8,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
-html, body, select {
+html,
+body,
+select {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   user-select: none;
@@ -59,7 +61,7 @@ html, body, select {
   --weekday-5: hsl(230, 30%, 80%);
   --weekday-6: hsl(275, 30%, 80%);
   --weekday-0: hsl(320, 30%, 80%);
-/*
+  /*
   --weekday-1: #d3eeca;
   --weekday-2: #c9a2a2;
   --weekday-3: #abeff9;
@@ -97,7 +99,7 @@ html, body, select {
   --color1: #6490E5;
   --color2: #F29A7E;
   --color3: #FFE897;
-  --text:#26272B;
+  --text: #26272B;
   --label-color-0: #F07F75;
   --label-color-1: #ABE085;
   --label-color-2: #85D9E0;
@@ -215,8 +217,8 @@ html, body, select {
   font-weight: 700
 }
 
-.gap1{
-  gap:1px;
+.gap1 {
+  gap: 1px;
 }
 
 .gap4 {
@@ -290,9 +292,10 @@ html, body, select {
   flex-direction: column
 }
 
-.row-reverse{
+.row-reverse {
   flex-direction: row-reverse
 }
+
 .alignitems-center {
   align-items: center
 }
@@ -316,6 +319,7 @@ html, body, select {
 .justcont-end {
   justify-content: flex-end
 }
+
 .justcont-evenly {
   justify-content: space-evenly;
 }
@@ -340,7 +344,7 @@ html, body, select {
   justify-content: space-between
 }
 
-.justcont-spacearound{
+.justcont-spacearound {
   justify-content: space-around
 }
 
@@ -385,6 +389,7 @@ html, body, select {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -395,14 +400,28 @@ html, body, select {
 }
 
 @keyframes tilt-n-move-shaking {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(1px, 1px) rotate(1deg); }
-  50% { transform: translate(0, 0) rotate(0deg); }
-  75% { transform: translate(-1px, 1px) rotate(-1deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(1px, 1px) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  75% {
+    transform: translate(-1px, 1px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
 
-.filteredSum{
+.filteredSum {
   padding: 4px 18px
 }
 
@@ -467,7 +486,8 @@ html, body, select {
   color: var(--layer-6-color);
 }
 
-.group-selector,.addExpense-selector {
+.group-selector,
+.addExpense-selector {
   color: var(--light-color);
   background-color: var(--layer-1-color);
 }
@@ -484,10 +504,10 @@ html, body, select {
   background-color: #121214;
   border-style: none;
   font-family: 'Inter';
-  
+
 }
 
-.text-align-right{
+.text-align-right {
   text-align: right;
 }
 
@@ -530,7 +550,8 @@ html, body, select {
   border-radius: 12px 12px 0px 0px;
 }
 
-.expenses-tab,.settleUp-tab {
+.expenses-tab,
+.settleUp-tab {
   background-color: var(--layer-1-color);
   border-style: solid;
   border-width: 1px;
@@ -538,7 +559,10 @@ html, body, select {
   box-sizing: content-box;
 }
 
-.expense,.settleUp,.member,.settleTotal {
+.expense,
+.settleUp,
+.member,
+.settleTotal {
   box-sizing: border-box;
   padding: 10px 14px;
   /* height: 100px; */
@@ -580,11 +604,11 @@ html, body, select {
 }
 
 .amountSection-green {
-  color:var(--green)
+  color: var(--green)
 }
 
 .amountSection-red {
-  color:red
+  color: red
 }
 
 .button-11 {
@@ -676,28 +700,29 @@ html, body, select {
 }
 
 
-.top-labels{
+.top-labels {
   padding: 0px 14px 3px 14px;
 }
 
-.inputsAndOptions-container{
-  
-}
+.inputsAndOptions-container {}
 
-.submit-button-container{
-  position:fixed;
-  width: 20rem;
-  align-self: center;
+.submit-button-container {
+  display: flex;
+  position: fixed;
   /* margin: 10px 15px 10px 15px; */
+  
+  z-index: 2;
+  right: 2rem;
+  left: 2rem;
   bottom: 1rem;
- 
+  
 }
 
 
 
 .submit-button {
   position: relative;
- border-radius: 4px;
+  border-radius: 4px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
   padding: 0.5rem;
@@ -705,14 +730,14 @@ html, body, select {
   width: 100%;
   cursor: pointer;
   color: var(--text);
-  background-color:#3a3b3c;
-  font-size:16px;
+  background-color: #3a3b3c;
+  font-size: 16px;
 
 }
 
 .submit-button.active {
   position: relative;
- border-radius: 4px;
+  border-radius: 4px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
   padding: 0.5rem;
@@ -721,7 +746,7 @@ html, body, select {
   cursor: pointer;
   color: var(--text);
   background-color: #f0f0f0;
-  font-size:16px;
+  font-size: 16px;
 
 }
 
@@ -731,7 +756,7 @@ html, body, select {
 
 }
 
-.submit-button.active:hover{
+.submit-button.active:hover {
   opacity: 0.75;
   cursor: pointer;
   transition: 0.2s ease all;
