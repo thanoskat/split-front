@@ -1,8 +1,8 @@
-import { SlidingBox } from './'
+import { SlidingLeftBox } from './'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
-import { closeSlidingBox } from '../redux/slidingSlice'
+import { closeSlidingLeftBox } from '../redux/slidingLeftSlice'
 import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
@@ -26,19 +26,27 @@ function AddExpense({ close }) {
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num.toString().replace(/\,/g, '');
-  const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "");
-  console.log(newExpense)
-
-
+  const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
+  // console.log(newExpense)
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
+    window.addEventListener('popstate',handleBack); 
     return () => {
       abortControllerRef.current.abort()
+      window.removeEventListener('popstate',handleBack)
     }
   }, [])
 
+  const handleBack = (e)=>{
+    console.log("popstate event detected")
+    //e.preventDefault();
+    window.history.go(1)//same as history.forward() ->goes forward one page
+    dispatch(closeSlidingLeftBox())
+  }
+
   const submitExpense = async () => {
+    if (!newExpense.amount) return
     if (!loading) {
       setLoading(true)
       try {
@@ -60,7 +68,7 @@ function AddExpense({ close }) {
         setLoading(false)
       }
     }
-    dispatch(closeSlidingBox())
+    dispatch(closeSlidingLeftBox())
   }
 
   const labelClicked = (labelClickedId) => {
@@ -96,16 +104,21 @@ function AddExpense({ close }) {
 
 
 
-  return (
+  return (  
     
-    <div className=''>
+      <SlidingLeftBox close={close} className='flex column overflow-auto' style={{ "height": "100vh", "maxHeight": "100%" }}>
+        <div className='addExpenseHeader flex row t1  padding1010 gap10'>
+        <div className='cancelIcon alignself-center' onClick={()=>dispatch(closeSlidingLeftBox())}>
+            <i className='arrow left icon t3'></i>
+          </div>
+          <div>
+            Add expense
+          </div> 
+          <div className='separator-0' />
+        </div>
 
-      <SlidingBox close={close} className='flex column overflow-auto' style={{ "height": "100vh", "max-height": "90%" }}>
-        <div className='flex row t1 justcont-center alignitems-center padding4'>Add expense</div>
-        <div className='separator-0' />
 
         <div className='inputsAndOptions-container flex column gap10 padding1010'>
-
           <div className='input-amount flex relative column justcont-evenly '>
             <div className='currency-ticker-section '>
               <i className='angle down icon'></i>
@@ -117,7 +130,7 @@ function AddExpense({ close }) {
               type="text"
               placeholder='0'
               value={newExpense.amount}
-              onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value)) })}
+              onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el,i)=>i?el.split("").slice(0,2).join(""):el).join("."))) })}
               autoFocus={true}
               spellCheck='false'
             />
@@ -159,18 +172,16 @@ function AddExpense({ close }) {
                 </div>))}
             </div>}
 
-        </div>
-      </SlidingBox>
 
-      <div className='submit-button-container flex alignitems-center justcont-center shadow'>
+        </div>
+        <div className='submit-button-container flex shadow padding1010'>
         <div
           className={`submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
           onClick={submitExpense}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </div>
       </div>
-
-    </div>
+      </SlidingLeftBox>  
   )
 }
 
