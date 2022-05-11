@@ -1,31 +1,39 @@
 import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useHistory, useLocation, Link } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
 import useAxios from '../utility/useAxios'
 import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
+import AddExpense2 from './AddExpense2';
+import {
+  TransitionGroup,
+  CSSTransition
+} from "react-transition-group";
 
 const FigmaMain = () => {
 
   const dispatch = useDispatch()
   const api = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  //console.log(displayedGroup)
   const [isLoading, setLoading] = useState(false)
-  const [mainIsLoading, setMainIsLoading]=useState(false)
+  const [mainIsLoading, setMainIsLoading] = useState(false)
   const abortControllerRef = useRef(new AbortController())
+  const history = useHistory()
+  const location = useLocation()
 
   const getFirstGroup = async () => {
-    try{
+    try {
       setMainIsLoading(true)
-      const response = await api.get('/groups', { signal: abortControllerRef.current.signal });
+      const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      console.log("/groups", response.data)
       setMainIsLoading(false)
       dispatch(setSelectedGroup(populateLabels(response.data[0])))
-    }catch(err){
+    } catch (err) {
       setMainIsLoading(false)
     }
-   
   }
 
   const getGroups = async () => {
@@ -34,9 +42,11 @@ const FigmaMain = () => {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
       const res = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      console.log("/groups/mygroups", res.data)
       dispatch(setGroupList(res.data))
       dispatch(setCurrentMenu('groupSelector'))
       setLoading(false)
+
     }
     catch (error) {
       setLoading(false)
@@ -54,6 +64,12 @@ const FigmaMain = () => {
     }
   }
 
+  const newClickHandler = () => {
+
+    dispatch(setCurrentMenu('addExpense2'))
+  }
+
+
   return (
 
     <div className='flex column overflow-auto figma-main'>
@@ -62,7 +78,7 @@ const FigmaMain = () => {
           <IonIcon name='sync' className='spin' size={50} />
         </div>
         :
-        <div>
+        <div className='flex column overflow-auto figma-main'>
           <UserBar />
           <div className='separator-1' />
           <div className='t1 group-info-frame medium flex row alignitems-center'>
@@ -82,17 +98,39 @@ const FigmaMain = () => {
             <Route path="/members" component={TabMembers} />
             <Route exact path="/settleup" component={TabSettleUp} />
           </Switch>
+          <Switch location={location}>
+            <Route path="*/slidemenu">
+              <div className='fixed'>hello</div>
+            </Route>
+          </Switch>
 
-          <div
-            className='floating-button pointer flex row shadow justcont-center alignitems-center'
-            onClick={() => dispatch(setCurrentMenu('addExpense2'))}>
-            <IonIcon name='add' className='floating-button-icon' />
-            <div className='floating-button-text'>New</div>
-          </div>
-        </div>}
+          <Link to="/expenses/new">
+            <div
+              className='floating-button pointer flex row shadow justcont-center alignitems-center'
+            >
+              <IonIcon name='add' className='floating-button-icon' />
+              <div className='floating-button-text'>New</div>
+            </div>
+          </Link>
 
+          
+            <TransitionGroup>
+              <CSSTransition
+                key={location.pathname}
+                timeout={90}
+                classNames="slider" >
+                <Switch location={location}>
+                  <Route path="/expenses/new">
+                    <AddExpense2 />
+                  </Route>
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+        </div>
+      }
     </div>
   );
 }
 
 export default FigmaMain;
+// New should be a link to whatever (like navlink)

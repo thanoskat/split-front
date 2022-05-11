@@ -25,7 +25,7 @@ const TabExpenses = ({ expenses, members }) => {
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
 
-  console.log(filterTags, filterSender)
+  //console.log(filterTags, filterSender)
 
   const Expense = ({ expense }) => {
     const [showTags, setShowTags] = useState(true)
@@ -153,8 +153,8 @@ const TabExpenses = ({ expenses, members }) => {
   }
 
   const filteredExpenses = filterExpenses(expenses, filterTags, filterSender)
-  console.log("filtered expenses", filteredExpenses)
-  console.log("expenses", expenses)
+  //console.log("filtered expenses", filteredExpenses)
+  //console.log("expenses", expenses)
   //console.log(filteredExpenses.filteredExpenses?.length!==expenses?.length)
 
   return (

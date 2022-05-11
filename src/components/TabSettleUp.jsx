@@ -17,6 +17,7 @@ const TabSettleUp = () => {
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const personalTXs = selectedGroup?.pendingTransactions?.filter(filterIDforPersonalTransactions)
 
+  console.log(selectedGroup)
  // console.log(personalTXs)
 
   // const total = (personalTXs) => {

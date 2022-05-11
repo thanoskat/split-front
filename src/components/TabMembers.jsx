@@ -2,10 +2,10 @@ const TabMembers = () => {
 
 
 
-  const Member = ()=>{
+  const Member = ({name})=>{
     return(
       <div className='member flex column justcont-spacebetween gap8'>
-       Member
+      {name}
       </div>
     )
   }
@@ -20,10 +20,10 @@ const TabMembers = () => {
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
         <div className='overflow-auto'>
  
-               <Member/>
+               <Member name={"Christos"}/>
                 <div className='separator-2 padding0014' />
 
-                <Member/>
+                <Member name={"Stratos"}/>
                 <div className='separator-2 padding0014' />
 
           <div style={{ height: '120px' }} />
