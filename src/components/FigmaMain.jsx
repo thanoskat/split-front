@@ -98,12 +98,7 @@ const FigmaMain = () => {
             <Route path="/members" component={TabMembers} />
             <Route exact path="/settleup" component={TabSettleUp} />
           </Switch>
-          <Switch location={location}>
-            <Route path="*/slidemenu">
-              <div className='fixed'>hello</div>
-            </Route>
-          </Switch>
-
+  
           <Link to="/expenses/new">
             <div
               className='floating-button pointer flex row shadow justcont-center alignitems-center'
