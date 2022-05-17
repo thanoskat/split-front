@@ -137,6 +137,9 @@ select {
   overflow: hidden
 }
 
+.overflow-visible {
+  overflow: visible
+}
 .relative {
   position: relative
 }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
+import IonIcon from '@reacticons/ionicons'
 
 const TabMembers = () => {
 
@@ -39,11 +40,11 @@ const TabMembers = () => {
       selectedGroup.pendingTransactions.map((tx) => {
         if (tx.sender._id === member._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
-          toFrom.push({_id:tx.receiver._id,name:tx.receiver.nickname, amount:tx.amount})
+          toFrom.push({ _id: tx.receiver._id, name: tx.receiver.nickname, amount: tx.amount })
           isSenderReceiverSettled = 1 //sender->1
         } else if (tx.receiver._id === member._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
-          toFrom.push({_id:tx.sender._id,name:tx.sender.nickname, amount:tx.amount})
+          toFrom.push({ _id: tx.sender._id, name: tx.sender.nickname, amount: tx.amount })
           isSenderReceiverSettled = 2 //receiver->2
         }
       })
@@ -59,14 +60,15 @@ const TabMembers = () => {
     return (members)
   }
 
-  console.log(memberInfoConstructor(selectedGroup))
- 
-  const Member = ({ name, amount, total }) => {
+  const memberInfo = memberInfoConstructor(selectedGroup)
+  console.log(memberInfo)
+
+  const Member = ({ name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
     return (
       <div className='member flex column justcont-spacebetween gap8'>
         <div className="nameIDandTotal flex row justcont-spacebetween">
-          <div className="name-ID flex row gap8 ">
-            <div className="name">
+          <div className="name-ID flex row gap8 alignitems-center ">
+            <div className="name medium t25 white">
               {name}
             </div>
             <div className="memberID">
@@ -77,16 +79,43 @@ const TabMembers = () => {
             Total spent
           </div>
         </div>
-        <div className="owesOwed flex row justcont-spacebetween">
-          <div className="description">
-            owes {"$40"} to 4
-          </div>
-          <div className="totalSpent">
-            {"$19"}
+        <div className="owesOwed flex row justcont-spacebetween alignitems-center">
+          {isSenderReceiverSettled === 1 ?
+            <div className="description flex row alignitems-center">
+              owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div> to &nbsp;
+              <div className='pill empty pointer justcont-center' onClick={() => console.log("")}
+                style={{ '--pill-color': 'var(--layer-6-color)' }}>
+                <IonIcon name='people-sharp' />
+                {toFrom?.length}
+              </div>&nbsp;
+            </div> : isSenderReceiverSettled === 2 ?
+              <div className="description flex row alignitems-center">
+                is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>from &nbsp;
+                <div className='pill empty pointer justcont-center' onClick={() => console.log("")}
+                  style={{ '--pill-color': 'var(--layer-6-color)' }}>
+                  <IonIcon name='people-sharp' />
+                  {toFrom?.length}
+                </div>&nbsp;
+              </div> :
+              <div className="description">
+                is settled
+              </div>}
+
+          <div className="totalSpent medium t25 white">
+            {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-
+<div>
+  sdf
+</div>
+<div>
+  sdf
+</div>
+<div>
+  sdf
+</div>
       </div>
+
     )
   }
 
@@ -96,17 +125,18 @@ const TabMembers = () => {
       <div className='t4 flex row justcont-spacebetween'>
       </div>
 
-      <div className='expenses-tab t5  top-radius flex flex-1 column overflow-hidden'>
-        <div className='overflow-auto'>
-
-          <Member name={"Christos"} />
-          <div className='separator-2 padding0014' />
-
-          <Member name={"Stratos"} />
-          <div className='separator-2 padding0014' />
-
-          <div style={{ height: '120px' }} />
-        </div>
+      <div className='expenses-tab t5  top-radius flex flex-1 column overflow-auto'>
+        {memberInfo.map(member => (
+          <div className='overflow-visible'>
+            <Member
+              name={member.name}
+              isSenderReceiverSettled={member.isSenderReceiverSettled}
+              toFrom={member.toFrom}
+              pendingTotalAmount={member.pendingTotalAmount}
+              totalSpent={member.totalSpent} />
+            <div className='separator-2 padding0014' />
+          </div>
+        ))}
       </div>
 
 
