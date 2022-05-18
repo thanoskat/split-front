@@ -723,7 +723,6 @@ select {
   padding: 0px 14px 3px 14px;
 }
 
-.inputsAndOptions-container {}
 
 .submit-button-container {
   display: flex;
@@ -882,4 +881,47 @@ select {
 
 .slider-exit.slider-exit-active{
   transform: translateX(-100%);
+}
+
+
+.tree{
+  border-radius: 7px;
+}
+.tree, .tree ul, .tree li {
+  position:  relative;
+}
+
+
+.tree ul{
+  list-style: none;
+  padding-left: 15px;
+  
+}
+.tree li::before, .tree li::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+}
+
+.tree li::before {
+  border-top: 2.5px solid rgb(148, 146, 146);
+  top: 9px;
+  width: 8px;
+  height: 0;
+  border-bottom-left-radius: 15px;
+}
+
+.tree li::after {
+  border-left: 2.5px solid rgb(148, 146, 146);
+  height: 260%;
+  width: 0px;
+  top: -10px; /*increase - decrease horizontal line length*/
+}
+
+.tree ul > li:last-child::after {
+  height: 20px;
+}
+
+li:not(:last-child) { 
+  margin-bottom: 8px;  /*increase - decrease distance between li items*/
 }

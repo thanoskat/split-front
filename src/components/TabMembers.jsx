@@ -22,8 +22,9 @@ const TabMembers = () => {
     //need to rerender for calculations to appear
   }
   //end of - to be deleted
+  const [showTreeID, setShowTreeID] = useState([])
   console.log(selectedGroup)
-
+  console.log(showTreeID)
   const memberInfoConstructor = (selectedGroup) => {
     let members = []
 
@@ -63,7 +64,32 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   console.log(memberInfo)
 
-  const Member = ({ name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
+  const Tree = ({ toFrom, isSenderReceiverSettled }) => {
+    return (
+      <div className='tree' style={{ bottom: "10px" }}>
+        <ul>
+          {toFrom?.map(member => (
+            <li key={toFrom._id}>
+              {isSenderReceiverSettled === 1 ?
+                <div className='flex row'><div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> to {member.name}</div>
+                : isSenderReceiverSettled === 2 ?
+                  <div className='flex row'><div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> from {member.name}</div> : ""}
+            </li>))}
+        </ul>
+      </div>
+    )
+  }
+
+  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
+    
+    const showTreefcnt = (id) => {
+      if (showTreeID.includes(id)) {
+        setShowTreeID(showTreeID.filter(treeID => treeID !== id))
+      } else {
+        setShowTreeID([...showTreeID, id])
+      }
+    }
+
     return (
       <div className='member flex column justcont-spacebetween gap8'>
         <div className="nameIDandTotal flex row justcont-spacebetween">
@@ -83,7 +109,7 @@ const TabMembers = () => {
           {isSenderReceiverSettled === 1 ?
             <div className="description flex row alignitems-center">
               owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div> to &nbsp;
-              <div className='pill empty pointer justcont-center' onClick={() => console.log("")}
+              <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                 style={{ '--pill-color': 'var(--layer-6-color)' }}>
                 <IonIcon name='people-sharp' />
                 {toFrom?.length}
@@ -91,7 +117,7 @@ const TabMembers = () => {
             </div> : isSenderReceiverSettled === 2 ?
               <div className="description flex row alignitems-center">
                 is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>from &nbsp;
-                <div className='pill empty pointer justcont-center' onClick={() => console.log("")}
+                <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                   style={{ '--pill-color': 'var(--layer-6-color)' }}>
                   <IonIcon name='people-sharp' />
                   {toFrom?.length}
@@ -105,17 +131,15 @@ const TabMembers = () => {
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-<div>
-  sdf
-</div>
-<div>
-  sdf
-</div>
-<div>
-  sdf
-</div>
-      </div>
+        
+      
+        <Tree
+        toFrom={toFrom}
+        isSenderReceiverSettled={isSenderReceiverSettled} />
+    
+        
 
+      </div>
     )
   }
 
@@ -126,9 +150,11 @@ const TabMembers = () => {
       </div>
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-auto'>
-        {memberInfo.map(member => (
+        {memberInfo.map((member) => (
           <div className='overflow-visible'>
             <Member
+              key={member._id}
+              id={member._id}
               name={member.name}
               isSenderReceiverSettled={member.isSenderReceiverSettled}
               toFrom={member.toFrom}
