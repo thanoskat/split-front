@@ -3,7 +3,7 @@ import axios from 'axios'
 // import { AuthenticationContext } from '../contexts/AuthenticationContext'
 import store from '../redux/store'
 
-const baseURL = 'http://localhost:4000'
+const baseURL = `${process.env.REACT_APP_APIURL}`
 
 const useAxiosOld = () => {
 

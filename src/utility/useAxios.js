@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { refreshAccessToken } from '../redux/authSlice'
 import store from '../redux/store'
 
-const baseURL = 'http://localhost:4000'
+const baseURL = `${process.env.REACT_APP_APIURL}`
 
 const refresh = {
   refreshSubscribers: [],

@@ -16,7 +16,7 @@ const SignUp = () => {
     // })
     try {
       setLoading(true)
-      const res = await axios.post('http://localhost:4000/auth/signup', { email: email, nickname: nickname })
+      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/signup`, { email: email, nickname: nickname })
       console.dir(res)
       setEmailError(false)
       setNicknameError(false)

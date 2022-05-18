@@ -16,7 +16,7 @@ const VerifyLink = ({ match }) => {
 
   const verifyLinkToken = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/auth/v/${match.params.token}`, { withCredentials: true })
+      const response = await axios.get(`${process.env.REACT_APP_APIURL}/auth/v/${match.params.token}`, { withCredentials: true })
       // signIn(response.data.accessToken, response.data.sessionData)
       dispatch(signIn({accessToken: response.data.accessToken, sessionData: response.data.sessionData}))
       setData('Redirecting !!')

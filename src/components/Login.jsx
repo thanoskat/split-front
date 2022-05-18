@@ -12,7 +12,7 @@ const Login = () => {
   const formSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:4000/auth/sendlink', { email: email })
+      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sendlink`, { email: email })
       if(res && res.data && res.data.link) {
         if(res.data === "Cannot read property '_id' of null") {
           setMessage("Email is not correct!")
