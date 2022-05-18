@@ -1,4 +1,4 @@
-import { SlidingLeftBox } from './'
+import { SlidingLeftBox } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
@@ -10,7 +10,7 @@ import IonIcon from '@reacticons/ionicons'
 import currency from 'currency.js'
 
 
-function AddExpense({ close }) {
+function AddExpense2({ close }) {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -22,13 +22,13 @@ function AddExpense({ close }) {
     amount: '',
     description: '',
     labels: [],
-    participants: selectedGroup.members.map(member => member._id)
+    participants: selectedGroup?.members.map(member => member._id)
   })
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num.toString().replace(/\,/g, '');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
-  
+
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     window.addEventListener('popstate', handleBack);
@@ -46,8 +46,8 @@ function AddExpense({ close }) {
   }
 
   const handleCloseSlidingLeft = () => {
-    //window.history.go(-1)
-    //dispatch(closeSlidingLeftBox())
+    window.history.go(-1)
+    dispatch(closeSlidingLeftBox())
   }
 
 
@@ -74,7 +74,8 @@ function AddExpense({ close }) {
         setLoading(false)
       }
     }
-    dispatch(closeSlidingLeftBox())
+    //dispatch(closeSlidingLeftBox())
+    window.history.go(-1) //close menu
   }
 
   const labelClicked = (labelClickedId) => {
@@ -112,7 +113,7 @@ function AddExpense({ close }) {
 
   return (
 
-    <SlidingLeftBox close={close} className='flex column overflow-auto' style={{ "height": "100vh", "maxHeight": "100%" }}>
+    <div className='addExpenseBox'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
         <div className='cancelIcon alignself-center' onClick={handleCloseSlidingLeft}>
           <i className='arrow left icon t3'></i>
@@ -153,7 +154,7 @@ function AddExpense({ close }) {
         />
 
         <div className='flex row wrap gap10'>
-          {selectedGroup.groupTags.map(label => (
+          {selectedGroup?.groupTags.map(label => (
             <div className={`pill pointer shadow ${newExpense.labels.includes(label._id) ? 'filled' : 'empty'}`}
               key={label._id} style={{ '--pill-color': `var(--${label.color})` }}
               onClick={() => labelClicked(label._id)}
@@ -179,15 +180,15 @@ function AddExpense({ close }) {
           </div>}
 
       </div>
-      <div className='submit-button-container flex shadow padding1010'>
+      <div className='submit-button-container flex  padding1010'>
         <div
-          className={`submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
+          className={`shadow submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
           onClick={submitExpense}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </div>
       </div>
-    </SlidingLeftBox>
+    </div>
   )
 }
 
-export default AddExpense
+export default AddExpense2

@@ -8,7 +8,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
-html, body, select {
+html,
+body,
+select {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   user-select: none;
@@ -59,7 +61,7 @@ html, body, select {
   --weekday-5: hsl(230, 30%, 80%);
   --weekday-6: hsl(275, 30%, 80%);
   --weekday-0: hsl(320, 30%, 80%);
-/*
+  /*
   --weekday-1: #d3eeca;
   --weekday-2: #c9a2a2;
   --weekday-3: #abeff9;
@@ -97,7 +99,7 @@ html, body, select {
   --color1: #6490E5;
   --color2: #F29A7E;
   --color3: #FFE897;
-  --text:#26272B;
+  --text: #26272B;
   --label-color-0: #F07F75;
   --label-color-1: #ABE085;
   --label-color-2: #85D9E0;
@@ -135,6 +137,9 @@ html, body, select {
   overflow: hidden
 }
 
+.overflow-visible {
+  overflow: visible
+}
 .relative {
   position: relative
 }
@@ -215,8 +220,8 @@ html, body, select {
   font-weight: 700
 }
 
-.gap1{
-  gap:1px;
+.gap1 {
+  gap: 1px;
 }
 
 .gap4 {
@@ -290,9 +295,10 @@ html, body, select {
   flex-direction: column
 }
 
-.row-reverse{
+.row-reverse {
   flex-direction: row-reverse
 }
+
 .alignitems-center {
   align-items: center
 }
@@ -317,6 +323,10 @@ html, body, select {
   justify-content: flex-end
 }
 
+.justcont-evenly {
+  justify-content: space-evenly;
+}
+
 .justself-center {
   justify-self: center
 }
@@ -337,7 +347,7 @@ html, body, select {
   justify-content: space-between
 }
 
-.justcont-spacearound{
+.justcont-spacearound {
   justify-content: space-around
 }
 
@@ -349,6 +359,9 @@ html, body, select {
   flex: 1;
 }
 
+.z-index2{
+  z-index:2 ;
+}
 .separator-0 {
   border-bottom: 2px solid;
   border-color: var(--layer-0-color);
@@ -377,11 +390,25 @@ html, body, select {
   /* animation: spin-animation 1s infinite; */
   animation: spin-animation 1s linear infinite;
 }
+.addExpenseHeader{
+  background-color: var(--layer-1-color);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 
+}
+
+.cancelIcon{
+  display: flex;
+  justify-self: center;
+  align-self: center;
+}
 @keyframes spin-animation {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -392,14 +419,28 @@ html, body, select {
 }
 
 @keyframes tilt-n-move-shaking {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(1px, 1px) rotate(1deg); }
-  50% { transform: translate(0, 0) rotate(0deg); }
-  75% { transform: translate(-1px, 1px) rotate(-1deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(1px, 1px) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  75% {
+    transform: translate(-1px, 1px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
 
-.filteredSum{
+.filteredSum {
   padding: 4px 18px
 }
 
@@ -464,7 +505,8 @@ html, body, select {
   color: var(--layer-6-color);
 }
 
-.group-selector,.addExpense-selector {
+.group-selector,
+.addExpense-selector {
   color: var(--light-color);
   background-color: var(--layer-1-color);
 }
@@ -481,6 +523,11 @@ html, body, select {
   background-color: #121214;
   border-style: none;
   font-family: 'Inter';
+
+}
+
+.text-align-right {
+  text-align: right;
 }
 
 .tab-switcher {
@@ -522,7 +569,8 @@ html, body, select {
   border-radius: 12px 12px 0px 0px;
 }
 
-.expenses-tab,.settleUp-tab {
+.expenses-tab,
+.settleUp-tab {
   background-color: var(--layer-1-color);
   border-style: solid;
   border-width: 1px;
@@ -530,7 +578,10 @@ html, body, select {
   box-sizing: content-box;
 }
 
-.expense,.settleUp,.member,.settleTotal {
+.expense,
+.settleUp,
+.member,
+.settleTotal {
   box-sizing: border-box;
   padding: 10px 14px;
   /* height: 100px; */
@@ -572,11 +623,11 @@ html, body, select {
 }
 
 .amountSection-green {
-  color:var(--green)
+  color: var(--green)
 }
 
 .amountSection-red {
-  color:red
+  color: red
 }
 
 .button-11 {
@@ -668,9 +719,76 @@ html, body, select {
 }
 
 
-.top-labels{
+.top-labels {
   padding: 0px 14px 3px 14px;
 }
+
+
+.submit-button-container {
+  display: flex;
+  margin-top: auto;
+  /* position:absolute; */
+  /* margin: 10px 15px 10px 15px; */
+  /* z-index: 2; */
+  /* right: 2rem; */
+  /* left: 2rem; */
+  /* bottom: 1rem; */
+
+}
+
+.mainIsLoading{
+  padding-top: 2rem;
+  font-size: 120%;
+}
+
+
+.submit-button {
+  position: relative;
+  border-radius: 4px;
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  padding: 0.5rem;
+
+  width: 100%;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #3a3b3c;
+  font-size: 16px;
+
+}
+
+.submit-button.active {
+  position: relative;
+  border-radius: 4px;
+  font-size: var(--sliding-menu-button-size);
+  user-select: none;
+  padding: 0.5rem;
+
+  width: 100%;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #f0f0f0;
+  font-size: 16px;
+
+}
+
+.submit-button:hover {
+  opacity: 1;
+  cursor: not-allowed;
+
+}
+
+.submit-button.active:hover {
+  opacity: 0.75;
+  cursor: pointer;
+  transition: 0.2s ease all;
+
+}
+
+.submit-button-icon {
+  min-width: var(--sliding-menu-button-size);
+}
+
 @font-face {
   font-family: 'Inter';
   src: local('Inter'), url(./fonts/Inter/Inter-Thin.ttf) format('truetype');
@@ -732,4 +850,78 @@ html, body, select {
   src: local('Inter'), url(./fonts/Inter/Inter-Black.ttf) format('truetype');
   font-weight: 900;
   font-style: normal;
+}
+
+.addExpenseBox{
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  height: 100vh;
+  max-height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: var(--layer-1-color);
+}
+
+
+.slider-enter{
+  transform: translateX(-100%);
+}
+
+.slider-enter.slider-enter-active{
+  transform: translateX(0);
+  transition:all 90ms;
+}
+
+.slider-exit{
+  transform: translateX(0);
+  transition:all 90ms;
+}
+
+.slider-exit.slider-exit-active{
+  transform: translateX(-100%);
+}
+
+
+.tree{
+  border-radius: 7px;
+}
+.tree, .tree ul, .tree li {
+  position:  relative;
+}
+
+
+.tree ul{
+  list-style: none;
+  padding-left: 15px;
+  
+}
+.tree li::before, .tree li::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+}
+
+.tree li::before {
+  border-top: 2.5px solid rgb(148, 146, 146);
+  top: 9px;
+  width: 8px;
+  height: 0;
+  border-bottom-left-radius: 15px;
+}
+
+.tree li::after {
+  border-left: 2.5px solid rgb(148, 146, 146);
+  height: 260%;
+  width: 0px;
+  top: -10px; /*increase - decrease horizontal line length*/
+}
+
+.tree ul > li:last-child::after {
+  height: 20px;
+}
+
+li:not(:last-child) { 
+  margin-bottom: 8px;  /*increase - decrease distance between li items*/
 }

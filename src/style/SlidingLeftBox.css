@@ -27,26 +27,25 @@
   }
 } */
 
-@keyframes inAnimationSlidingBox {
+@keyframes inLeftAnimationSlidingBox {
   from {
-    bottom: -300px;
+    left: -300px;
   }
 
   to {
-    bottom: -0px;
+    left: -0px;
   }
 }
 
-@keyframes outAnimationSlidingBox {
+@keyframes outLeftAnimationSlidingBox {
   from {
-    bottom: -0px;
+    left: -0px;
   }
 
   to {
-    bottom: -300px;
+    left: -300px;
   }
 }
-
 
 
 .out-area {
