@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { refreshAccessToken } from '../redux/authSlice'
+import { refreshAccessToken, signOut } from '../redux/authSlice'
 import store from '../redux/store'
 
 const baseURL = `${process.env.REACT_APP_APIURL}`
@@ -46,6 +46,7 @@ const useAxios = () => {
   async (error) => {
     const originalRequest = error.config
     const errorStatus = error.response.status
+    console.log(errorStatus, error.response.data)
 
     // console.log(`errorStatus === ${errorStatus}`)
     if (errorStatus === 401) {
@@ -59,11 +60,11 @@ const useAxios = () => {
           refresh.isRefreshing = false
           onRrefreshed(store.getState().authReducer.accessToken)
         }).catch(error => {
-          console.log("Error while refreshing")
           refresh.isRefreshing = false
           onRrefreshed(store.getState().authReducer.accessToken)
           refresh.refreshSubscribers = []
-          console.log(error)
+          console.log(error.response.status, error.response.data)
+          dispatch(signOut())
         })
       }
 
@@ -72,7 +73,7 @@ const useAxios = () => {
           originalRequest.headers['Authorization'] = 'Bearer ' + token
           resolve(axios(originalRequest))
         });
-      }).catch(error => console.log(error));
+      }).catch(error => console.log(error.message));
       return retryOriginalRequest;
     }
     else {

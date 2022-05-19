@@ -24,7 +24,6 @@ const MenuExpenseOptions = ({ close }) => {
 
   const deleteExpense = async () => {
     setLoading(true)
-    console.log(abortControllerRef.current.signal)
     try {
       const res = await api.post('/expense/remove',
       {
@@ -32,16 +31,15 @@ const MenuExpenseOptions = ({ close }) => {
         expenseId: selectedExpense._id
       },
       { signal: abortControllerRef.current.signal })
-      console.log("after res")
+      console.log("res.data = ", res.data)
       dispatch(setSelectedGroup(populateLabels(res.data)))
-      setLoading(false)
-      dispatch(closeSlidingBox())
     }
     catch(error) {
-      setLoading(false)
-      console.log(error)
+      console.log(error.message)
     }
     finally {
+      setLoading(false)
+      dispatch(closeSlidingBox())
       console.log('finally')
     }
   }
