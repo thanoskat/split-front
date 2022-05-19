@@ -10,7 +10,7 @@ import IonIcon from '@reacticons/ionicons'
 import currency from 'currency.js'
 
 
-function AddExpense2({ close }) {
+function AddExpense2() {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -28,6 +28,13 @@ function AddExpense2({ close }) {
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num.toString().replace(/\,/g, '');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
+  const process=( input )=> {
+    const index = input.indexOf( '.' );
+    if ( index > -1 ) {
+        input = input.substr( 0, index + 1 ) + input.slice( index ).replace( /\./g, '' );
+    }
+    return input;
+}
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -134,14 +141,14 @@ function AddExpense2({ close }) {
 
           <input
             className='addexpense-input t3 text-align-right'
-            type="text"
+            type='tel' 
             placeholder='0'
+            step="0.01"
             value={newExpense.amount}
-            onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))) })}
+            onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
             autoFocus={true}
             spellCheck='false'
           />
-
         </div>
 
         <input
@@ -182,7 +189,7 @@ function AddExpense2({ close }) {
       </div>
       <div className='submit-button-container flex  padding1010'>
         <div
-          className={`shadow submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
+          className={`shadow submit-button ${newExpense.amount && Number(newExpense.amount)!==0 ? "active" : null} h-flex justcont-spacearound `}
           onClick={submitExpense}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </div>
