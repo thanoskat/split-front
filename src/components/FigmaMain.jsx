@@ -50,7 +50,7 @@ const FigmaMain = () => {
     }
     catch (error) {
       setLoading(false)
-      console.log(error)
+      console.log(error.message)
     }
   }
 
@@ -98,7 +98,7 @@ const FigmaMain = () => {
             <Route path="/members" component={TabMembers} />
             <Route exact path="/settleup" component={TabSettleUp} />
           </Switch>
-  
+
           <Link to="/expenses/new">
             <div
               className='floating-button pointer flex row shadow justcont-center alignitems-center'
@@ -108,7 +108,7 @@ const FigmaMain = () => {
             </div>
           </Link>
 
-          
+
             <TransitionGroup>
               <CSSTransition
                 key={location.pathname}
