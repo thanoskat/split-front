@@ -54,7 +54,7 @@ function AddExpense2() {
 
   const handleCloseSlidingLeft = () => {
     window.history.go(-1)
-    dispatch(closeSlidingLeftBox())
+    // dispatch(closeSlidingLeftBox())
   }
 
 
@@ -141,7 +141,7 @@ function AddExpense2() {
 
           <input
             className='addexpense-input t3 text-align-right'
-            type='tel' 
+            type='tel'
             placeholder='0'
             step="0.01"
             value={newExpense.amount}

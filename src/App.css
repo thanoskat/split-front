@@ -390,14 +390,6 @@ select {
   /* animation: spin-animation 1s infinite; */
   animation: spin-animation 1s linear infinite;
 }
-.addExpenseHeader{
-  background-color: var(--layer-1-color);
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-
-}
 
 .cancelIcon{
   display: flex;
@@ -523,7 +515,6 @@ select {
   background-color: #121214;
   border-style: none;
   font-family: 'Inter';
-
 }
 
 .text-align-right {
@@ -723,7 +714,6 @@ select {
   padding: 0px 14px 3px 14px;
 }
 
-
 .submit-button-container {
   display: flex;
   margin-top: auto;
@@ -741,7 +731,6 @@ select {
   font-size: 120%;
 }
 
-
 .submit-button {
   position: relative;
   border-radius: 4px;
@@ -754,7 +743,6 @@ select {
   color: var(--text);
   background-color: #3a3b3c;
   font-size: 16px;
-
 }
 
 .submit-button.active {
@@ -769,20 +757,17 @@ select {
   color: var(--text);
   background-color: #f0f0f0;
   font-size: 16px;
-
 }
 
 .submit-button:hover {
   opacity: 1;
   cursor: not-allowed;
-
 }
 
 .submit-button.active:hover {
   opacity: 0.75;
   cursor: pointer;
   transition: 0.2s ease all;
-
 }
 
 .submit-button-icon {
@@ -852,50 +837,54 @@ select {
   font-style: normal;
 }
 
-.addExpenseBox{
+.addExpenseBox {
   display: flex;
   flex-direction: column;
   position: fixed;
   bottom: 0;
   height: 100vh;
-  max-height: 100%;
   width: 100%;
   overflow: auto;
   background-color: var(--layer-1-color);
 }
 
+.addExpenseHeader{
+  background-color: var(--layer-1-color);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
 
-.slider-enter{
+.slider-enter {
   transform: translateX(-100%);
 }
 
-.slider-enter.slider-enter-active{
+.slider-enter.slider-enter-active {
   transform: translateX(0);
-  transition:all 90ms;
+  transition: all 90ms;
 }
 
-.slider-exit{
+.slider-exit {
   transform: translateX(0);
-  transition:all 90ms;
+  transition: all 90ms;
 }
 
-.slider-exit.slider-exit-active{
+.slider-exit.slider-exit-active {
   transform: translateX(-100%);
 }
 
-
-.tree{
+.tree {
   border-radius: 7px;
 }
 .tree, .tree ul, .tree li {
   position:  relative;
 }
 
-
-.tree ul{
+.tree ul {
   list-style: none;
   padding-left: 15px;
-  
+
 }
 .tree li::before, .tree li::after {
   content: "";
@@ -922,6 +911,6 @@ select {
   height: 20px;
 }
 
-li:not(:last-child) { 
+li:not(:last-child) {
   margin-bottom: 8px;  /*increase - decrease distance between li items*/
 }

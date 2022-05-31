@@ -81,7 +81,7 @@ const TabMembers = () => {
   }
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-    
+
     const showTreefcnt = (id) => {
       if (showTreeID.includes(id)) {
         setShowTreeID(showTreeID.filter(treeID => treeID !== id))
@@ -131,13 +131,13 @@ const TabMembers = () => {
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-        
-      
+
+
         <Tree
         toFrom={toFrom}
         isSenderReceiverSettled={isSenderReceiverSettled} />
-    
-        
+
+
 
       </div>
     )
@@ -151,7 +151,7 @@ const TabMembers = () => {
 
       <div className='expenses-tab t5  top-radius flex flex-1 column overflow-auto'>
         {memberInfo.map((member) => (
-          <div className='overflow-visible'>
+          <div key={member._id} className='overflow-visible'>
             <Member
               key={member._id}
               id={member._id}
