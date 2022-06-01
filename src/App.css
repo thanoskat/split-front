@@ -933,6 +933,7 @@ li:not(:last-child) {
 }
 .appDescr{
   padding-bottom: 5rem;
+  white-space: initial;
 }
 
 .loginBox{
@@ -956,7 +957,7 @@ li:not(:last-child) {
 input.inputErr,
 input:focus.inputErr{
   outline: none;
-  box-shadow: 0 0 0 1px red;
+  box-shadow: 0 0 0 1px var(--pink);
 }
 
 .login-button{
@@ -994,7 +995,7 @@ input:focus.inputErr{
 }
 
 .signUp-button{
-
+  
   border-radius: 4px;
   user-select: none;
   padding: 0.5rem;
@@ -1022,6 +1023,7 @@ input:focus.inputErr{
 
 .signUpMsg{
   padding-bottom: 1rem;
+  white-space: initial;
 }
 
 .mailbox{

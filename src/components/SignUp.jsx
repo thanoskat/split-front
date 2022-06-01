@@ -64,28 +64,6 @@ const SignUp = () => {
 
     </div>
 
-    // <Form onSubmit={formSubmit} loading={loading}>
-    //   <Form.Field
-    //     fluid
-    //     control={Input}
-    //     label='Email'
-    //     placeholder='Email'
-    //     onChange={e => setEmail(e.target.value)}
-    //     error={emailError}>
-    //   </Form.Field>
-    //   <Form.Field
-    //     fluid
-    //     control={Input}
-    //     label='Nickname'
-    //     placeholder='Nickname'
-    //     onChange={e => setNickname(e.target.value)}
-    //     error={nicknameError}>
-    //   </Form.Field>
-    //   <Form.Field>
-    //     <Checkbox label='I agree to the Terms and Conditions'/>
-    //   </Form.Field>
-    //   <Button type='submit' color="green">Sign Up</Button>
-    // </Form>
   )
 }
 
