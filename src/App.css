@@ -939,6 +939,7 @@ li:not(:last-child) {
   padding-bottom: 3rem;
   white-space: initial;
   text-align: center;
+  font-size: 18px;
 }
 
 .loginBox{
@@ -1032,7 +1033,7 @@ input:focus.inputErr{
 }
 
 .mailbox{
-  padding-bottom: 1.5rem;
+  padding: 0 0 1.5rem 0;
 }
 
 #loginpage{ 
