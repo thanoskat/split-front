@@ -115,9 +115,6 @@ const FigmaMain = () => {
                 <Route path="/*/invitation">
                   <Invitation />
                 </Route>
-                <Route path="/expenses?invitation=1">
-                  <Invitation />
-                </Route>
               </Switch>
             </CSSTransition>
           </TransitionGroup>
