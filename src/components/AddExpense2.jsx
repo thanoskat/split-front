@@ -54,11 +54,12 @@ function AddExpense2() {
 
   const handleCloseSlidingLeft = () => {
     window.history.go(-1)
-    dispatch(closeSlidingLeftBox())
+    //dispatch(closeSlidingLeftBox())
   }
 
 
   const submitExpense = async () => {
+    console.log("sdfdsfg")
     if (!newExpense.amount) return
     if (!loading) {
       setLoading(true)
@@ -131,7 +132,6 @@ function AddExpense2() {
         <div className='separator-0' />
       </div>
 
-
       <div className='inputsAndOptions-container flex column gap10 padding1010'>
         <div className='input-amount flex relative column justcont-evenly '>
           <div className='currency-ticker-section '>
@@ -140,19 +140,19 @@ function AddExpense2() {
           </div>
 
           <input
-            className='addexpense-input t3 text-align-right'
+            className='styledInput t3 text-align-right'
             type='tel' 
             placeholder='0'
             step="0.01"
             value={newExpense.amount}
-            onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
+            onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))})}
             autoFocus={true}
             spellCheck='false'
           />
         </div>
 
         <input
-          className='addexpense-input t3'
+          className='styledInput t3'
           placeholder='Description (optional)'
           value={newExpense.description}
           onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
@@ -185,14 +185,14 @@ function AddExpense2() {
                 {member.nickname}
               </div>))}
           </div>}
-
       </div>
-      <div className='submit-button-container flex  padding1010'>
-        <div
+      <div className='submit-button-container flex padding1010'>
+        <button
           className={`shadow submit-button ${newExpense.amount && Number(newExpense.amount)!==0 ? "active" : null} h-flex justcont-spacearound `}
-          onClick={submitExpense}>
+          onClick={submitExpense}
+          disabled={newExpense.amount && Number(newExpense.amount)!==0 ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
-        </div>
+        </button>
       </div>
     </div>
   )

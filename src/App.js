@@ -11,8 +11,8 @@ function App() {
         {/* <UserBar/> */}
           <Switch>
             <Route path="/login" component={Login}/>
+            <Route path="/signup" component={Login}/>
             <Route path="/v/:token" component={VerifyLink}/>
-            <Route path="/signup" component={SignUp}/>
             <Route path="/addexp" component={AddExpense2}/>
             <PrivateRoute path="/" component={FigmaMain}/>
           </Switch>

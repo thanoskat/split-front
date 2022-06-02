@@ -113,7 +113,7 @@ const FigmaMain = () => {
               <CSSTransition
                 key={location.pathname}
                 timeout={90}
-                classNames="slider" >
+                classNames="slider">
                 <Switch location={location}>
                   <Route path="/expenses/new">
                     <AddExpense2 />
@@ -121,6 +121,7 @@ const FigmaMain = () => {
                 </Switch>
               </CSSTransition>
             </TransitionGroup>
+
         </div>
       }
     </div>

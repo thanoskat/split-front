@@ -155,7 +155,9 @@ select {
 .selectable {
   user-select: text
 }
-
+.t66{
+  font-size: 66px
+}
 .t05 {
   font-size: 36px
 }
@@ -237,7 +239,7 @@ select {
 }
 
 .gap10 {
-  gap: 10px
+  gap:10px
 }
 
 .light-color {
@@ -341,6 +343,10 @@ select {
 
 .wrap {
   flex-wrap: wrap
+}
+
+.break-word{
+  word-wrap: break-all;
 }
 
 .justcont-spacebetween {
@@ -515,19 +521,17 @@ select {
   height: 100%;
 }
 
-.addexpense-input {
-  border-radius: 4px;
-  padding: 6px 8px;
-  outline: none;
-  color: white;
-  background-color: #121214;
-  border-style: none;
-  font-family: 'Inter';
-
-}
 
 .text-align-right {
   text-align: right;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center{
+  text-align: center;
 }
 
 .tab-switcher {
@@ -605,7 +609,9 @@ select {
   border-width: 1px;
   border-style: solid;
 }
-
+.padding15{
+  padding: 15px
+}
 .padding4 {
   padding: 4px
 }
@@ -748,7 +754,7 @@ select {
   font-size: var(--sliding-menu-button-size);
   user-select: none;
   padding: 0.5rem;
-
+  border:none;
   width: 100%;
   cursor: pointer;
   color: var(--text);
@@ -924,4 +930,122 @@ select {
 
 li:not(:last-child) { 
   margin-bottom: 8px;  /*increase - decrease distance between li items*/
+}
+
+.appName{
+  padding-top: 2rem;
+}
+.appDescr{
+  padding-bottom: 3rem;
+  white-space: initial;
+  text-align: center;
+  font-size: 18px;
+}
+
+.loginBox{
+ 
+  padding: 1rem 0.8rem 1rem 0.8rem ;
+  border-radius: 10px;
+  
+}
+
+.styledInput{
+  border-radius: 4px;
+  padding: 0.8rem;
+  outline: none;
+  color: white;
+  background-color: #121214;
+  border-style: none;
+  font-family: 'Inter';
+  font-size:18px;
+}
+
+input.inputErr,
+input:focus.inputErr{
+  outline: none;
+  box-shadow: 0 0 0 1px var(--pink);
+}
+
+.login-button{
+  border:none;
+  border-radius: 4px;
+  user-select: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #3a3b3c;
+  font-size: 16px;
+  
+}
+
+.login-button.active {
+  position: relative;
+  border-radius: 4px;
+  user-select: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #f0f0f0;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.login-button.active:hover {
+  opacity: 0.75;
+  cursor: pointer;
+  transition: 0.2s ease all;
+}
+
+.signUp-button{
+  
+  border-radius: 4px;
+  user-select: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: var(--label-color-6);
+  font-size: 16px;
+}
+
+.or {
+  color:var(--layer-6-color);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.or:after,
+.or:before {
+    content: "";
+    display: block;
+    background-color: var(--layer-6-color);
+    width: 100%;
+    height:1px;
+    margin: 0 10px;
+}
+
+.signUpMsg{
+  padding-bottom: 1rem;
+  white-space: initial;
+}
+
+.mailbox{
+  padding: 0 0 1.5rem 0;
+}
+
+#loginpage{ 
+ height: 100vh;
+ margin: 0rem 2rem 0rem 2rem
+}
+
+.mailmsg{
+  white-space: initial;
+  color:var(--pink)
+}
+
+.whiteSpace-initial{
+  white-space: initial;
 }

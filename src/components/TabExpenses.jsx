@@ -65,13 +65,15 @@ const TabExpenses = ({ expenses, members }) => {
           <div className='medium t25 white'>{`${currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
-          <div className='flex row gap6'>
+          <div className='flex row gap6 alignitems-center'>
+            Created by 
             <div className='pill empty pointer'
               style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
             >
               {expense.sender.nickname}
             </div>
+            and split with
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <div key={participant} className='pill empty'
                 style={{ '--pill-color': 'var(--layer-6-color)' }}>
