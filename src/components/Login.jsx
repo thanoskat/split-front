@@ -14,7 +14,7 @@ const Login = () => {
           The tool for organising your shared finances.
         </div>
       </div>
-      <LoginOrSignup />
+      <SignUp />
     </div>
   );
 }

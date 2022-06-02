@@ -530,6 +530,10 @@ select {
   text-align: left;
 }
 
+.text-align-center{
+  text-align: center;
+}
+
 .tab-switcher {
   height: 48px;
   box-sizing: border-box;
@@ -929,10 +933,10 @@ li:not(:last-child) {
 }
 
 .appName{
-  padding-top: 3rem;
+  padding-top: 2rem;
 }
 .appDescr{
-  padding-bottom: 5rem;
+  padding-bottom: 3rem;
   white-space: initial;
   text-align: center;
 }
@@ -1032,10 +1036,15 @@ input:focus.inputErr{
 }
 
 #loginpage{ 
- margin: 0rem 3rem 0rem 3rem
+ height: 100vh;
+ margin: 0rem 2rem 0rem 2rem
 }
 
 .mailmsg{
   white-space: initial;
   color:var(--pink)
+}
+
+.whiteSpace-initial{
+  white-space: initial;
 }
