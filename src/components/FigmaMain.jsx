@@ -1,4 +1,4 @@
-import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar } from '.'
+import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar, Invitation } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Switch, Route, useHistory, useLocation, Link } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
@@ -14,10 +14,10 @@ import {
 
 const FigmaMain = () => {
 
+  const currentPath = `${useLocation().pathname}`
   const dispatch = useDispatch()
   const api = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  //console.log(displayedGroup)
   const [isLoading, setLoading] = useState(false)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const abortControllerRef = useRef(new AbortController())
@@ -46,7 +46,6 @@ const FigmaMain = () => {
       dispatch(setGroupList(res.data))
       dispatch(setCurrentMenu('groupSelector'))
       setLoading(false)
-
     }
     catch (error) {
       setLoading(false)
@@ -64,14 +63,7 @@ const FigmaMain = () => {
     }
   }
 
-  const newClickHandler = () => {
-
-    dispatch(setCurrentMenu('addExpense2'))
-  }
-
-
   return (
-
     <div className='flex column overflow-auto figma-main'>
       {mainIsLoading ?
         <div className='mainIsLoading flex alignself-center'>
@@ -87,7 +79,12 @@ const FigmaMain = () => {
               {!isLoading && <IonIcon name='caret-down' className='t2' />}
               {isLoading && <IonIcon name='sync' className='t2 spin' />}
             </div>
-            <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
+            <div className='flex row gap10 alignitems-center'>
+              <Link to={`${currentPath}/invitation`}>
+                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
+              </Link>
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
+            </div>
           </div>
           <div className='separator-1' />
           <TabSwitcher />
@@ -96,37 +93,35 @@ const FigmaMain = () => {
               <TabExpenses expenses={displayedGroup?.expenses} members={displayedGroup?.members} />
             </Route>
             <Route path="/members" component={TabMembers} />
-            <Route exact path="/settleup" component={TabSettleUp} />
+            <Route path="/settleup" component={TabSettleUp} />
           </Switch>
 
-          <Link to="/expenses/new">
-            <div
-              className='floating-button pointer flex row shadow justcont-center alignitems-center'
-            >
+          <Link to={`${currentPath}/new`}>
+            <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
               <div className='floating-button-text'>New</div>
             </div>
           </Link>
 
-
-            <TransitionGroup>
-              <CSSTransition
-                key={location.pathname}
-                timeout={90}
-                classNames="slider">
-                <Switch location={location}>
-                  <Route path="/expenses/new">
-                    <AddExpense2 />
-                  </Route>
-                </Switch>
-              </CSSTransition>
-            </TransitionGroup>
-
+          <TransitionGroup>
+            <CSSTransition
+              key={location.pathname}
+              timeout={90}
+              classNames="slider" >
+              <Switch location={location}>
+                <Route exact path="/*/new">
+                  <AddExpense2/>
+                </Route>
+                <Route path="/*/invitation">
+                  <Invitation />
+                </Route>
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
         </div>
       }
     </div>
-  );
+  )
 }
 
 export default FigmaMain;
-// New should be a link to whatever (like navlink)

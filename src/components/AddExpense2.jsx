@@ -54,7 +54,6 @@ function AddExpense2() {
 
   const handleCloseSlidingLeft = () => {
     window.history.go(-1)
-    //dispatch(closeSlidingLeftBox())
   }
 
 
