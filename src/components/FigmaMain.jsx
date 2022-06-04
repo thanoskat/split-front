@@ -106,7 +106,7 @@ const FigmaMain = () => {
       <CSSTransition
         onClick={() => setSearchParams({})}
         in={(searchParams.get('menu'))}
-        timeout={300}
+        timeout={0}
         unmountOnExit
       >
         <div style={{position: 'fixed', height: '100vh', width: '100%', backgroundColor: 'black', opacity: '0.7'}} />
