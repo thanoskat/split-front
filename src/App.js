@@ -1,5 +1,5 @@
 import './App.css';
-import { Menus, FigmaMain, TabExpenses, UserBar, Login, SignUp, VerifyLink, Invitation, VerifyInvitation, PrivateRoutes, AddExpense2, TabMembers, TabSettleUp, } from './components'
+import { Menus, Main, TabExpenses, UserBar, Login, SignUp, VerifyLink, Invitation, VerifyInvitation, PrivateRoutes, AddExpense2, TabMembers, TabSettleUp, } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
 
@@ -15,13 +15,12 @@ function App() {
           <Route path="/v/:token" element={<VerifyLink />} />
           <Route path="/addexp" element={<AddExpense2 />} />
           <Route element={<PrivateRoutes />}>
+            <Route path='/' element={<div>Welcome</div>} />
             <Route path='/i/:invitationCode' element={<VerifyInvitation />} />
-            <Route path='/' element={<FigmaMain />}>
-              <Route path='/expenses' element={<TabExpenses />} />
-              <Route path='/members' element={<TabMembers />} />
-              <Route path='/settleup' element={<TabSettleUp />} />
-              <Route exact ='/expenses/new' element={<AddExpense2 />} />
-              <Route path='/*/invitation' element={<Invitation />} />
+            <Route path='/:groupid' element={< Main />}>
+              <Route path='/:groupid/expenses' element={<TabExpenses />} />
+              <Route path='/:groupid/members' element={<TabMembers />} />
+              <Route path='/:groupid/settleup' element={<TabSettleUp />} />
             </Route>
           </Route>
         </Routes>

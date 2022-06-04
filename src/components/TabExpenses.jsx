@@ -2,6 +2,7 @@ import { useState } from 'react'
 import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
 import currency from 'currency.js'
 
@@ -29,10 +30,9 @@ const TabExpenses = () => {
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
 
-  //console.log(filterTags, filterSender)
-
   const Expense = ({ expense }) => {
     const [showTags, setShowTags] = useState(true)
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const openExpenseOptions = (expense) => {
       dispatch(setSelectedExpense(expense))
@@ -97,7 +97,7 @@ const TabExpenses = () => {
                 {expense.expenseTags.length}
               </div>}
           </div>
-          <div className='flex row pointer' onClick={() => openExpenseOptions(expense)}>
+          <div className='flex row pointer' onClick={() => setSearchParams({menu: 'deleteexpense', id: expense._id})}>
             <IonIcon name='ellipsis-vertical' className='t3 expense-options-icon' />
           </div>
         </div>

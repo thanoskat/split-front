@@ -1,61 +1,44 @@
-import { TabSwitcher, UserBar, GroupSelector2, AddExpense2 } from '.'
+import { TabSwitcher, UserBar, GroupSelector2, AddExpense2, DeleteExpense, Invitation } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { useLocation, Link, Outlet, useSearchParams } from 'react-router-dom'
-import IonIcon from '@reacticons/ionicons';
+import { useLocation, Link, Outlet, useSearchParams, useParams } from 'react-router-dom'
+import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
-const FigmaMain = () => {
+const Main = () => {
 
   const currentPath = `${useLocation().pathname}`
   const dispatch = useDispatch()
   const api = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const params = useParams()
   const [isLoading, setLoading] = useState(false)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const abortControllerRef = useRef(new AbortController())
 
-  const getFirstGroup = async () => {
-    try {
-      setMainIsLoading(true)
-      const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      console.log("/groups", response.data)
-      setMainIsLoading(false)
-      dispatch(setSelectedGroup(populateLabels(response.data[0])))
-    } catch (err) {
-      setMainIsLoading(false)
-    }
-  }
-
-  const getGroups = async () => {
-    try {
-      setLoading(true)
-      abortControllerRef.current.abort()
-      abortControllerRef.current = new AbortController()
-      const res = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      console.log("/groups/mygroups", res.data)
-      dispatch(setGroupList(res.data))
-      dispatch(setCurrentMenu('groupSelector'))
-      setLoading(false)
-    }
-    catch (error) {
-      setLoading(false)
-      console.log(error.message)
-    }
-  }
-
   useEffect(() => {
-    getFirstGroup()
+    abortControllerRef.current = new AbortController()
+    console.log('figma useeffect', params.groupid)
+    getGroup(params.groupid)
+    return() => {
+      abortControllerRef.current.abort()
+    }
   // eslint-disable-next-line
-  }, [])
+  }, [params.groupid])
 
-  const openGroupSelector = async () => {
-    if (!isLoading) {
-      await getGroups()
+  const getGroup = async (id) => {
+    try {
+      const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
+      console.log(res.data)
+      const group = populateLabels(window.structuredClone(res.data))
+      dispatch(setSelectedGroup(group))
+    }
+    catch(error) {
+      console.log('/groups/getgroup', error)
     }
   }
 
@@ -70,30 +53,21 @@ const FigmaMain = () => {
           <UserBar />
           <div className='separator-1' />
           <div className='t1 group-info-frame medium flex row alignitems-center'>
-            <div className='flex row alignitems-center gap8 pointer' onClick={openGroupSelector}>
+            <div className='flex row alignitems-center gap8 pointer' onClick={() => setSearchParams({menu: 'groups'})}>
               <span>{displayedGroup?.title}</span>
-              {!isLoading && <IonIcon name='caret-down' className='t2' />}
-              {isLoading && <IonIcon name='sync' className='t2 spin' />}
+              <IonIcon name='caret-down' className='t2' />
             </div>
             <div className='flex row gap10 alignitems-center'>
-              <Link to={`${currentPath}/invitation`}>
+              <div onClick={() => setSearchParams({menu: 'invitation'})}>
                 <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
-              </Link>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({menu: 'groups'})} />
+              </div>
               <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
             </div>
           </div>
           <div className='separator-1' />
           <TabSwitcher />
-          {/* <Routes>
-            <Route path="/expenses" element={
-              <TabExpenses expenses={displayedGroup?.expenses} members={displayedGroup?.members} />
-            }>
-            </Route>
-            <Route path="/members" element={<TabMembers />} />
-            <Route path="/settleup" element={<TabSettleUp />} />
-          </Routes> */}
-          <Outlet />
+
+          {(displayedGroup !== null) && <Outlet />}
 
           <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
@@ -127,8 +101,24 @@ const FigmaMain = () => {
       >
         <AddExpense2 />
       </CSSTransition>
+      <CSSTransition
+        in={(searchParams.get('menu') === 'invitation')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <Invitation />
+      </CSSTransition>
+      <CSSTransition
+        in={(searchParams.get('menu') === 'deleteexpense')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <DeleteExpense />
+      </CSSTransition>
     </div>
   )
 }
 
-export default FigmaMain;
+export default Main;

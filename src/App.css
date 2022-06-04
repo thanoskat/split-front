@@ -654,6 +654,7 @@ select {
 }
 
 .group-selector-button {
+  text-decoration: none;
   border-radius: 4px;
   box-sizing: border-box;
   color: var(--light-color);
