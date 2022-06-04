@@ -1,4 +1,4 @@
-import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar, Invitation } from '.'
+import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar, Invitation, GroupSelector2 } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Switch, Route, useHistory, useLocation, Link } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
@@ -7,6 +7,7 @@ import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
 import AddExpense2 from './AddExpense2';
+import store from '../redux/store'
 import {
   TransitionGroup,
   CSSTransition
@@ -24,9 +25,12 @@ const FigmaMain = () => {
   const history = useHistory()
   const location = useLocation()
 
+
   const getFirstGroup = async () => {
     try {
       setMainIsLoading(true)
+      abortControllerRef.current.abort()
+      abortControllerRef.current = new AbortController()
       const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
       console.log("/groups", response.data)
       setMainIsLoading(false)
@@ -53,13 +57,39 @@ const FigmaMain = () => {
     }
   }
 
+  const getGroups2 = async () => {
+    try {
+      //setLoading(true)
+      setMainIsLoading(true)
+      abortControllerRef.current.abort()
+      abortControllerRef.current = new AbortController()
+      const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      console.log("/groups/mygroups", response.data)
+      setMainIsLoading(false)
+      dispatch(setSelectedGroup(populateLabels(response.data[0])))
+      dispatch(setGroupList(response.data))
+      //dispatch(setCurrentMenu('groupSelector'))
+      //setLoading(false)
+    }
+    catch (error) {
+      setMainIsLoading(false)
+      console.log(error.message)
+    }
+  }
+
   useEffect(() => {
-    getFirstGroup()
+    //getFirstGroup()
+    getGroups2()
   }, [])
 
+  const groupList = useSelector(state => state.mainReducer.groupList)
+  console.log(groupList)
+
   const openGroupSelector = async () => {
+    console.log("paok")
     if (!isLoading) {
-      await getGroups()
+      await getGroups2()
+
     }
   }
 
@@ -74,14 +104,21 @@ const FigmaMain = () => {
           <UserBar />
           <div className='separator-1' />
           <div className='t1 group-info-frame medium flex row alignitems-center'>
-            <div className='flex row alignitems-center gap8 pointer' onClick={openGroupSelector}>
+            {/* <div className='flex row alignitems-center gap8 pointer' onClick={openGroupSelector}>
               <span>{displayedGroup?.title}</span>
               {!isLoading && <IonIcon name='caret-down' className='t2' />}
               {isLoading && <IonIcon name='sync' className='t2 spin' />}
-            </div>
+            </div> */}
+            <Link to={`${currentPath}/selectgroup`}>
+              <div className='flex row alignitems-center gap8 pointer'>
+                <span>{displayedGroup?.title}</span>
+                {!isLoading && <IonIcon name='caret-down' className='t2' />}
+                {isLoading && <IonIcon name='sync' className='t2 spin' />}
+              </div>
+            </Link>
             <div className='flex row gap10 alignitems-center'>
               <Link to={`${currentPath}/invitation`}>
-                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
+                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
               </Link>
               <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
             </div>
@@ -110,7 +147,7 @@ const FigmaMain = () => {
               classNames="slider" >
               <Switch location={location}>
                 <Route exact path="/*/new">
-                  <AddExpense2/>
+                  <AddExpense2 />
                 </Route>
                 <Route path="/*/invitation">
                   <Invitation />
@@ -118,6 +155,22 @@ const FigmaMain = () => {
               </Switch>
             </CSSTransition>
           </TransitionGroup>
+
+          
+            <TransitionGroup>
+              <CSSTransition
+                key={location.pathname}
+                timeout={90}
+                classNames="groupSelectorSlider">
+                <Switch location={location}>
+                  <Route path="/*/selectgroup">
+                    <GroupSelector2
+                      groupList={groupList} />
+                  </Route>
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+         
         </div>
       }
     </div>

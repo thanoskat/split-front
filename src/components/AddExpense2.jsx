@@ -1,13 +1,11 @@
-import { SlidingLeftBox } from '.'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
-import { closeSlidingLeftBox } from '../redux/slidingLeftSlice'
 import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import currency from 'currency.js'
+import {useLocation, useHistory} from 'react-router-dom' //useHistory to be replaced with useNavigate in V6
 
 
 function AddExpense2() {
@@ -25,6 +23,10 @@ function AddExpense2() {
     participants: selectedGroup?.members.map(member => member._id)
   })
 
+  const location = useLocation()
+  const navigate = useHistory()
+  
+
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num.toString().replace(/\,/g, '');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
@@ -36,29 +38,29 @@ function AddExpense2() {
     return input;
 }
 
-  useEffect(() => {
-    abortControllerRef.current = new AbortController()
-    window.addEventListener('popstate', handleBack);
-    return () => {
-      abortControllerRef.current.abort()
-      window.removeEventListener('popstate', handleBack)
-    }
-  }, [])
+  // useEffect(() => {
+  //   abortControllerRef.current = new AbortController()
+  //   window.addEventListener('popstate', handleBack);
+  //   return () => {
+  //     abortControllerRef.current.abort()
+  //     window.removeEventListener('popstate', handleBack)
+  //   }
+  // }, [])
 
-  const handleBack = (e) => {
-    console.log("popstate event detected")
-    //e.preventDefault();
-    //window.history.go(1)//same as history.forward() ->goes forward one page
-    dispatch(closeSlidingLeftBox())
-  }
+  // const handleBack = (e) => {
+  //   console.log("popstate event detected")
+  //   e.preventDefault();
+  //   window.history.go(1)//same as history.forward() ->goes forward one page
+  //   dispatch(closeSlidingLeftBox())
+  // }
 
   const handleCloseSlidingLeft = () => {
-    window.history.go(-1)
+    const part = location.pathname.split(/[/]/g)[1];
+    navigate.push("/"+part)
   }
 
 
   const submitExpense = async () => {
-    console.log("sdfdsfg")
     if (!newExpense.amount) return
     if (!loading) {
       setLoading(true)
@@ -82,7 +84,7 @@ function AddExpense2() {
       }
     }
     //dispatch(closeSlidingLeftBox())
-    window.history.go(-1) //close menu
+    navigate.push("/"+location.pathname.split(/[/]/g)[1]) //close menu
   }
 
   const labelClicked = (labelClickedId) => {

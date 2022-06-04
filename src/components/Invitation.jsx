@@ -3,6 +3,7 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import { QRCodeSVG } from 'qrcode.react';
+import {useHistory, useLocation} from 'react-router-dom' //useHistory to be replaced with useNavigate
 
 function Invitation() {
 
@@ -12,6 +13,8 @@ function Invitation() {
   const abortControllerRef = useRef(new AbortController())
   const [isLoading, setLoading] = useState(false)
   const [invitationLink, setInvitationLink] = useState('')
+  const navigate = useHistory() 
+  const location =useLocation()
 
   const getInvitation = async () => {
     setLoading(true)
@@ -62,7 +65,7 @@ function Invitation() {
   }, [])
 
   const closeWindow = () => {
-    window.history.go(-1)
+    navigate.push("/"+location.pathname.split(/[/]/g)[1])
   }
 
   return (

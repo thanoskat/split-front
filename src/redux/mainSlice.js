@@ -29,5 +29,6 @@ export const mainSlice = createSlice({
   }
 })
 
+
 export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense,setSelectedPendingTX} = mainSlice.actions
 export default mainSlice.reducer

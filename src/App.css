@@ -850,6 +850,50 @@ select {
   font-style: normal;
 }
 
+.groupSelectorBox{
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  background-color: var(--layer-1-color);
+  overflow: auto;
+  max-height: 50%;
+  width: 100%;
+}
+
+.out-area {
+  background-color: #000000;
+  opacity: 0.7;
+  position: fixed;
+  z-index: 0;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+}
+
+.groupSelectorSlider-enter{
+  transform: translateX(-100%);
+}
+
+.groupSelectorSlider-enter.groupSelectorSlider-enter-active{
+  transform: translateX(0);
+  transition: all 90ms;
+  
+}
+
+.groupSelectorSlider-exit{
+  transform: translateX(0);
+  transition: all 90ms;
+  
+}
+
+.groupSelectorSlider-exit.groupSelectorSlider-exit-active{
+  transform: translateX(-100%);
+}
+
+
 .addExpenseBox {
   display: flex;
   flex-direction: column;
