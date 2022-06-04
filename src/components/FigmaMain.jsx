@@ -114,7 +114,7 @@ const FigmaMain = () => {
       <CSSTransition
         in={(searchParams.get('menu') === 'groups')}
         timeout={300}
-        classNames='slider'
+        classNames='bottomslide'
         unmountOnExit
       >
         <GroupSelector2 />
@@ -122,7 +122,7 @@ const FigmaMain = () => {
       <CSSTransition
         in={(searchParams.get('menu') === 'newexpense')}
         timeout={300}
-        classNames='slider'
+        classNames='leftslide'
         unmountOnExit
       >
         <AddExpense2 />

@@ -507,7 +507,9 @@ select {
 
 .group-selector,
 .addExpense-selector {
-  color: var(--light-color);
+  bottom: 0;
+  width: 100%;
+  position: fixed;
   background-color: var(--layer-1-color);
 }
 
@@ -871,21 +873,42 @@ select {
   z-index: 2;
 }
 
-.slider-enter {
+
+.bottomslide-enter {
+  transform: translateY(100%);
+}
+
+.bottomslide-enter.bottomslide-enter-active {
+  transform: translateY(0);
+  transition: all 300ms;
+}
+
+.bottomslide-exit {
+  transform: translateY(0);
+  transition: all 300ms;
+}
+
+.bottomslide-exit.bottomslide-exit-active {
+  transform: translateY(100%);
+}
+
+
+
+.leftslide-enter {
   transform: translateX(-100%);
 }
 
-.slider-enter.slider-enter-active {
+.leftslide-enter.leftslide-enter-active {
   transform: translateX(0);
   transition: all 300ms;
 }
 
-.slider-exit {
+.leftslide-exit {
   transform: translateX(0);
   transition: all 300ms;
 }
 
-.slider-exit.slider-exit-active {
+.leftslide-exit.leftslide-exit-active {
   transform: translateX(-100%);
 }
 
