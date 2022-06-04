@@ -17,9 +17,9 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path='/i/:invitationCode' element={<VerifyInvitation />} />
             <Route path='/' element={<FigmaMain />}>
-              <Route path="/expenses" element={<TabExpenses />} />
-              <Route path="/members" element={<TabMembers />} />
-              <Route path="/settleup" element={<TabSettleUp />} />
+              <Route path='/expenses' element={<TabExpenses />} />
+              <Route path='/members' element={<TabMembers />} />
+              <Route path='/settleup' element={<TabSettleUp />} />
               <Route exact ='/expenses/new' element={<AddExpense2 />} />
               <Route path='/*/invitation' element={<Invitation />} />
             </Route>

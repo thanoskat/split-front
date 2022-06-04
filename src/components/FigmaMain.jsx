@@ -1,15 +1,12 @@
-import { TabSwitcher, UserBar } from '.'
+import { TabSwitcher, UserBar, GroupSelector2, AddExpense2 } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { useLocation, Link, Outlet } from 'react-router-dom'
+import { useLocation, Link, Outlet, useSearchParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
 import useAxios from '../utility/useAxios'
 import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
-// import {
-//   TransitionGroup,
-//   CSSTransition
-// } from "react-transition-group";
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 const FigmaMain = () => {
 
@@ -19,6 +16,7 @@ const FigmaMain = () => {
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [isLoading, setLoading] = useState(false)
   const [mainIsLoading, setMainIsLoading] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
   const abortControllerRef = useRef(new AbortController())
 
   const getFirstGroup = async () => {
@@ -81,6 +79,7 @@ const FigmaMain = () => {
               <Link to={`${currentPath}/invitation`}>
                 <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
               </Link>
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({menu: 'groups'})} />
               <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
             </div>
           </div>
@@ -96,14 +95,30 @@ const FigmaMain = () => {
           </Routes> */}
           <Outlet />
 
-          <Link to={`${currentPath}/new`}>
+          <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
               <div className='floating-button-text'>New</div>
             </div>
-          </Link>
+          </div>
         </div>
       }
+      <CSSTransition
+        in={(searchParams.get('menu') === 'groups')}
+        timeout={3000}
+        classNames='slider'
+        unmountOnExit
+      >
+        <GroupSelector2 />
+      </CSSTransition>
+      <CSSTransition
+        in={(searchParams.get('menu') === 'newexpense')}
+        timeout={3000}
+        classNames='slider'
+        unmountOnExit
+      >
+        <AddExpense2 />
+      </CSSTransition>
     </div>
   )
 }
