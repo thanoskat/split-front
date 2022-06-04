@@ -1,26 +1,22 @@
 import { useState, useEffect } from 'react'
+import { Navigate, useParams } from 'react-router-dom';
 import axios from 'axios'
-// import { AuthenticationContext } from '../contexts/AuthenticationContext'
-import { useHistory } from "react-router-dom";
 
 import { useDispatch } from 'react-redux'
 import { signIn } from '../redux/authSlice'
 
-const VerifyLink = ({ match }) => {
+const VerifyLink = () => {
 
   const dispatch = useDispatch()
-
-  const history = useHistory()
-  // const { signIn } = useContext(AuthenticationContext);
+  const { token } = useParams()
   const [data, setData] = useState('')
 
   const verifyLinkToken = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_APIURL}/auth/v/${match.params.token}`, { withCredentials: true })
-      // signIn(response.data.accessToken, response.data.sessionData)
+      const response = await axios.get(`${process.env.REACT_APP_APIURL}/auth/v/${token}`, { withCredentials: true })
       dispatch(signIn({accessToken: response.data.accessToken, sessionData: response.data.sessionData}))
       setData('Redirecting !!')
-      history.push('/expenses');
+      setData(<Navigate to='/' />)
     }
     catch(error) {
       console.dir(error)

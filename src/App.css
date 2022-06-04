@@ -155,9 +155,11 @@ select {
 .selectable {
   user-select: text
 }
+
 .t66{
   font-size: 66px
 }
+
 .t05 {
   font-size: 36px
 }
@@ -940,10 +942,10 @@ li:not(:last-child) {
 }
 
 .loginBox{
- 
+
   padding: 1rem 0.8rem 1rem 0.8rem ;
   border-radius: 10px;
-  
+
 }
 
 .styledInput {
@@ -1031,7 +1033,7 @@ input:focus.inputErr {
   padding: 0 0 1.5rem 0;
 }
 
-#loginpage{ 
+#loginpage{
  height: 100vh;
  margin: 0rem 2rem 0rem 2rem
 }

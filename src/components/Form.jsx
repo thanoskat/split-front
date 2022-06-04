@@ -319,7 +319,7 @@ function Form({ headline, close }) {
             {submitisLoading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
           </div>
         </div>
-        
+
       </div>
 
     </SlidingBox>
@@ -433,37 +433,37 @@ function InputField({ value, label, maxLength,
 //   )
 // }
 
-function MembersTags({ optionsArray, allowMultiSelections }) {
+// function MembersTags({ optionsArray, allowMultiSelections }) {
 
-  const handleMembersClick = (option) => {
+//   const handleMembersClick = (option) => {
 
-  }
+//   }
 
-  return (
-    <div className='split v-flex'>
-      <div className='multiselectbox tobeSelectedTags'>
-        {optionsArray.map((option) =>
-          <Tag
-            key={option._id}
-            onBodyClick={() => handleMembersClick(option)}
-            showClose={false}
-            text={option.nickname}
-            color="var(--inactiveColor)"
-          />)}
+//   return (
+//     <div className='split v-flex'>
+//       <div className='multiselectbox tobeSelectedTags'>
+//         {optionsArray.map((option) =>
+//           <Tag
+//             key={option._id}
+//             onBodyClick={() => handleMembersClick(option)}
+//             showClose={false}
+//             text={option.nickname}
+//             color="var(--inactiveColor)"
+//           />)}
 
-      </div>
+//       </div>
 
-      <div className='splitamongAllChecker h-flex'>
-        <div className='checkBox'>
-          <input type="checkbox" />
-        </div>
-        <div className='checkBox-text '>
-          split among all members
-        </div>
-      </div>
-    </div>
-  )
-}
+//       <div className='splitamongAllChecker h-flex'>
+//         <div className='checkBox'>
+//           <input type="checkbox" />
+//         </div>
+//         <div className='checkBox-text '>
+//           split among all members
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
 
 
 

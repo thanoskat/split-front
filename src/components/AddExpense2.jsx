@@ -1,4 +1,3 @@
-import { SlidingLeftBox } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
@@ -7,8 +6,6 @@ import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import currency from 'currency.js'
-
 
 function AddExpense2() {
   const api = useAxios()
@@ -26,7 +23,7 @@ function AddExpense2() {
   })
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeCommas = num => num.toString().replace(/\,/g, '');
+  const removeCommas = num => num.toString().replace(/,/g, '');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
   const process=( input )=> {
     const index = input.indexOf( '.' );
@@ -43,6 +40,7 @@ function AddExpense2() {
       abortControllerRef.current.abort()
       window.removeEventListener('popstate', handleBack)
     }
+  // eslint-disable-next-line
   }, [])
 
   const handleBack = (e) => {
@@ -140,7 +138,7 @@ function AddExpense2() {
 
           <input
             className='styledInput t3 text-align-right'
-            type='tel' 
+            type='tel'
             placeholder='0'
             step="0.01"
             value={newExpense.amount}

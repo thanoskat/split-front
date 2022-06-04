@@ -59,6 +59,7 @@ function Invitation() {
 
   useEffect(() => {
     getInvitation()
+  // eslint-disable-next-line
   }, [])
 
   const closeWindow = () => {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
@@ -69,7 +70,7 @@ const TabMembers = () => {
       <div className='tree' style={{ bottom: "10px" }}>
         <ul>
           {toFrom?.map(member => (
-            <li key={toFrom._id}>
+            <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
                 <div className='flex row'><div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> to {member.name}</div>
                 : isSenderReceiverSettled === 2 ?
@@ -143,7 +144,6 @@ const TabMembers = () => {
     )
   }
 
-
   return (
     <div className='flex flex-1 column overflow-hidden '>
       <div className='t4 flex row justcont-spacebetween'>
@@ -177,7 +177,7 @@ const TabMembers = () => {
           placeholder='group ID address ' />
         <button type="submit">Add User to Group</button>
       </form>
-
+      <Outlet />
     </div>
   );
 }

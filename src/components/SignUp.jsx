@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import isEmail from 'validator/lib/isEmail';
 import IonIcon from '@reacticons/ionicons'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 //import { get } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
 
 const SignUp = () => {

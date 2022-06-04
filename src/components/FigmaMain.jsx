@@ -1,16 +1,15 @@
-import { TabSwitcher, TabExpenses, TabMembers, TabSettleUp, UserBar, Invitation } from '.'
+import { TabSwitcher, UserBar } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { Switch, Route, useHistory, useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, Outlet } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons';
 import useAxios from '../utility/useAxios'
 import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
-import AddExpense2 from './AddExpense2';
-import {
-  TransitionGroup,
-  CSSTransition
-} from "react-transition-group";
+// import {
+//   TransitionGroup,
+//   CSSTransition
+// } from "react-transition-group";
 
 const FigmaMain = () => {
 
@@ -21,8 +20,6 @@ const FigmaMain = () => {
   const [isLoading, setLoading] = useState(false)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const abortControllerRef = useRef(new AbortController())
-  const history = useHistory()
-  const location = useLocation()
 
   const getFirstGroup = async () => {
     try {
@@ -55,6 +52,7 @@ const FigmaMain = () => {
 
   useEffect(() => {
     getFirstGroup()
+  // eslint-disable-next-line
   }, [])
 
   const openGroupSelector = async () => {
@@ -88,13 +86,15 @@ const FigmaMain = () => {
           </div>
           <div className='separator-1' />
           <TabSwitcher />
-          <Switch>
-            <Route path="/expenses">
+          {/* <Routes>
+            <Route path="/expenses" element={
               <TabExpenses expenses={displayedGroup?.expenses} members={displayedGroup?.members} />
+            }>
             </Route>
-            <Route path="/members" component={TabMembers} />
-            <Route path="/settleup" component={TabSettleUp} />
-          </Switch>
+            <Route path="/members" element={<TabMembers />} />
+            <Route path="/settleup" element={<TabSettleUp />} />
+          </Routes> */}
+          <Outlet />
 
           <Link to={`${currentPath}/new`}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
@@ -102,22 +102,6 @@ const FigmaMain = () => {
               <div className='floating-button-text'>New</div>
             </div>
           </Link>
-
-          <TransitionGroup>
-            <CSSTransition
-              key={location.pathname}
-              timeout={90}
-              classNames="slider" >
-              <Switch location={location}>
-                <Route exact path="/*/new">
-                  <AddExpense2/>
-                </Route>
-                <Route path="/*/invitation">
-                  <Invitation />
-                </Route>
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup>
         </div>
       }
     </div>

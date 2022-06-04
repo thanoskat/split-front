@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
 import currency from 'currency.js'
+
 
 var dayjs = require('dayjs')
 var relativeTime = require('dayjs/plugin/relativeTime')
@@ -20,7 +21,10 @@ const calendarConfig = {
   sameElse: 'MMM DD'
 }
 
-const TabExpenses = ({ expenses, members }) => {
+const TabExpenses = () => {
+  const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const expenses = selectedGroup.expenses
+  const members = selectedGroup.members
   const dispatch = useDispatch()
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
@@ -66,7 +70,7 @@ const TabExpenses = ({ expenses, members }) => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6 alignitems-center'>
-            Created by 
+            Created by
             <div className='pill empty pointer'
               style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
@@ -184,7 +188,7 @@ const TabExpenses = ({ expenses, members }) => {
           </div>
         </div>
 
-        {filterTags.length !== 0 || filterSender.length !== 0 ?  
+        {filterTags.length !== 0 || filterSender.length !== 0 ?
         <div className='filteredSum t25 white'>
             {currency(filteredExpenses.sum, { symbol: '€', decimal: ',', separator: '.' }).format()}
           </div> :""

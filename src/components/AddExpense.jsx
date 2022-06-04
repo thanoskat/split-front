@@ -7,8 +7,6 @@ import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import currency from 'currency.js'
-
 
 function AddExpense({ close }) {
   const api = useAxios()
@@ -26,9 +24,9 @@ function AddExpense({ close }) {
   })
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeCommas = num => num.toString().replace(/\,/g, '');
+  const removeCommas = num => num.toString().replace(/,/g, '');
   const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
-  
+
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     window.addEventListener('popstate', handleBack);
@@ -36,6 +34,7 @@ function AddExpense({ close }) {
       abortControllerRef.current.abort()
       window.removeEventListener('popstate', handleBack)
     }
+    // eslint-disable-next-line
   }, [])
 
   const handleBack = (e) => {

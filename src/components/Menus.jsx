@@ -2,7 +2,6 @@ import { MenuExpenseOptions, Form, GroupSelector, MenuNew, GroupOptions, LabelEd
 import store from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu } from '../redux/mainSlice'
-import { Switch, Route } from 'react-router-dom'
 const Menus = () => {
 
   const dispatch = useDispatch()
@@ -44,7 +43,7 @@ const Menus = () => {
         <AddExpense
           close={() => dispatch(setCurrentMenu('none'))}
         />
-    
+
       )
     case 'groupOptions':
       return (
