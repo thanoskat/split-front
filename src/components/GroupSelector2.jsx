@@ -11,16 +11,18 @@ const GroupSelector2 = () => {
 
   const dispatch = useDispatch()
   const api = useAxios()
-  const [isLoading, setLoading] = useState(false)
-  const [clickedIndex, setClickedIndex] = useState()
+  const abortControllerRef = useRef(null)
+
   const selectedGroup = store.getState().mainReducer.selectedGroup
 
+  const [isLoading, setLoading] = useState(false)
+  const [clickedIndex, setClickedIndex] = useState()
   const [searchParams, setSearchParams] = useSearchParams()
   const [groupList, setGroupList] = useState()
 
   const getGroups = async () => {
     try {
-      const response = await api.get('/groups/mygroups');
+      const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
       console.log("/groups/mygroups", response.data)
       setGroupList(response.data)
     }
@@ -30,9 +32,10 @@ const GroupSelector2 = () => {
   }
 
   useEffect(() => {
-    console.log('useEffect()')
+    abortControllerRef.current = new AbortController()
     getGroups()
     return () => {
+      abortControllerRef.current.abort()
     }
   },[])
 
@@ -41,7 +44,7 @@ const GroupSelector2 = () => {
       setClickedIndex(index)
       setLoading(true)
       try {
-        const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id })
+        const res = await api.post('/groups/getgroup', { groupid: groupList[index]._id }, { signal: abortControllerRef.current.signal })
         const group = populateLabels(window.structuredClone(res.data))
         setLoading(false)
         dispatch(setSelectedGroup(group))

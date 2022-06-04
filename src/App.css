@@ -877,12 +877,12 @@ select {
 
 .slider-enter.slider-enter-active {
   transform: translateX(0);
-  transition: all 3000ms;
+  transition: all 300ms;
 }
 
 .slider-exit {
   transform: translateX(0);
-  transition: all 3000ms;
+  transition: all 300ms;
 }
 
 .slider-exit.slider-exit-active {
