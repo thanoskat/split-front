@@ -104,6 +104,14 @@ const FigmaMain = () => {
         </div>
       }
       <CSSTransition
+        onClick={() => setSearchParams({})}
+        in={(searchParams.get('menu'))}
+        timeout={300}
+        unmountOnExit
+      >
+        <div style={{position: 'fixed', height: '100vh', width: '100%', backgroundColor: 'black', opacity: '0.7'}} />
+      </CSSTransition>
+      <CSSTransition
         in={(searchParams.get('menu') === 'groups')}
         timeout={300}
         classNames='slider'

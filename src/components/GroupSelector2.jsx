@@ -57,7 +57,7 @@ const GroupSelector2 = () => {
   }
 
   return (
-    <div className='group-selector top-radius'>
+    <div className='group-selector top-radius' style={{zIndex: '2'}}>
       <div className='flex row t05 justcont-center alignitems-center padding4'>Group</div>
       {/* <div className='separator-0'/> */}
       <div className='flex column gap4 padding4'>
