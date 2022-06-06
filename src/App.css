@@ -662,6 +662,7 @@ select {
   border-color: var(--layer-2-color);
   border-width: 1px;
   border-style: solid;
+ 
 }
 
 .group-selector-button.highlighted-group {
@@ -1031,6 +1032,19 @@ input:focus.inputErr {
   background-color: var(--label-color-6);
   font-size: 16px;
 }
+.createnewgroup-button{
+  border-radius: 4px;
+  user-select: none;
+  padding: 2rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: var(--label-color-6);
+  font-size: 16px;
+  height: 0;
+  color:rgb(248, 248, 248);
+  font-weight: bold;
+
+}
 
 .or {
   color:var(--layer-6-color);
@@ -1062,6 +1076,11 @@ input:focus.inputErr {
  margin: 0rem 2rem 0rem 2rem
 }
 
+#homepage{
+ height: 100vh;
+ margin: 0rem 2rem 0rem 2rem;
+}
+
 .mailmsg{
   white-space: initial;
   color:var(--pink)
@@ -1069,4 +1088,9 @@ input:focus.inputErr {
 
 .whiteSpace-initial{
   white-space: initial;
+}
+
+.welcomemsg{
+  font-size: 15px;
+  padding: 2.5rem 0 2.5rem 0;
 }
