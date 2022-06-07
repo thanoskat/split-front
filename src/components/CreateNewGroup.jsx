@@ -12,6 +12,10 @@ export default function CreateNewGroup({ setSearchParams }) {
   const api = useAxios()
   const sessionData = store.getState().authReducer.sessionData
   const navigate = useNavigate()
+  const [newMode, setNewMode] = useState(false)
+  const [labelName, setLabelName] = useState("")
+  const [newLabel, setNewLabel] = useState([])
+
 
   const createGroup = async () => {
     console.log("ran")
@@ -20,7 +24,7 @@ export default function CreateNewGroup({ setSearchParams }) {
       const group = await api.post("/groups/creategroup", {
         creatorID: sessionData.userId,
         title: groupName,
-        groupTags: [{ name: "sdad", color: "sdafsdf" }]
+        groupTags: newLabel
       })
       console.log(group)
       setLoading(false)
@@ -30,6 +34,52 @@ export default function CreateNewGroup({ setSearchParams }) {
       setLoading(false)
       console.dir(err)
     }
+  }
+
+  const cancelNewMode = () => {
+    setNewLabel([...newLabel])
+    setLabelName("")
+    setNewMode(false)
+  }
+
+
+  const createNewLabel = () => {
+    const existingNames = (newLabel?.map(label => label.name))
+    if (existingNames?.includes(labelName)) return
+    const defaultColors = [
+      'label-color-0',
+      'label-color-1',
+      'label-color-2',
+      'label-color-3',
+      'label-color-4',
+      'label-color-5',
+      'label-color-6',
+      'label-color-7',
+    ]
+    const defaultColorsUsed = newLabel?.map(label => label.color)
+    const firstAvailableColor = defaultColors.filter(color => !defaultColorsUsed.includes(color))[0]
+    setNewLabel([...newLabel, { name: labelName, color: firstAvailableColor }])
+    setLabelName("")
+  }
+
+  const deleteLabel = (label) => {
+    setNewLabel(newLabel.filter(newlabel => newlabel.name !== label.name))
+  }
+
+  const LabelItem = ({ label }) => {
+    return (
+      <div className='flex row justcont-spacebetween alignitems-center' style={{ height: 'fit-content' }}>
+        <div className={`pill filled t5 shadow test `}
+          style={{ '--pill-color': `var(--${label.color})` }}
+        >{label.name}</div>
+        <div className='flex row gap10'>
+        </div>
+        <div style={{ fontSize: "25px", cursor: "pointer" }} onClick={() => deleteLabel(label)}>
+          <i className='icon delete' ></i>
+        </div>
+
+      </div>
+    )
   }
 
   return (
@@ -51,12 +101,38 @@ export default function CreateNewGroup({ setSearchParams }) {
           onChange={e => setGroupName(e.target.value)}
           spellCheck='false'
         />
-        <div>
-          Group currency
+        <div style={{ marginTop: "10px", fontSize: "20px" }}>
+          Create labels
         </div>
-        <div>
-          create labels
+        <div className="whiteSpace-initial" style={{ margin: "0px 0px 15px 0px" }}>
+          Labels can help you group, filter and organise your expenses.
         </div>
+
+        {newLabel?.map((label) => (
+          <LabelItem label={label} />
+        ))}
+
+        {!newMode &&
+          <div style={{color:"var(--light-color)",borderColor:"var(--label-color-6)",backgroundColor:"var(--label-color-6)"}} className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
+        {newMode &&
+          <div className='flex row justcont-spacebetween'>
+            <input
+              type='text'
+              value={labelName}
+              className='pill empty editable t5 shadow'
+              style={{ width: '100px', '--pill-color': `white` }}
+              autoFocus
+              onChange={(e) => setLabelName(e.target.value)}
+            />
+            <div className='flex row gap10 pointer'>
+              <div className='pill t5' onClick={cancelNewMode}>Cancel</div>
+              <div className='pill t5' onClick={() => createNewLabel()}>
+                Create
+              </div>
+            </div>
+          </div>
+        }
+
 
       </div>
 

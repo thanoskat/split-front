@@ -70,7 +70,7 @@ const TabExpenses = () => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6 alignitems-center'>
-            Created by
+          
             <div className='pill empty pointer'
               style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
