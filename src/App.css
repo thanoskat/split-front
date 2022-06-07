@@ -856,10 +856,8 @@ select {
   font-style: normal;
 }
 
-.addExpenseBox {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
+
+.addExpenseBox,.createnewgroupBox {
   bottom: 0;
   height: 100vh;
   width: 100%;
@@ -867,9 +865,8 @@ select {
   background-color: var(--layer-1-color);
 }
 
-.addExpenseHeader{
+.addExpenseHeader,.createnewgroupHeader{
   background-color: var(--layer-1-color);
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 2;

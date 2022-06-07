@@ -7,7 +7,7 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 
-function AddExpense2() {
+function AddExpense2({setSearchParams}) {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -33,26 +33,26 @@ function AddExpense2() {
     return input;
 }
 
-  useEffect(() => {
-    abortControllerRef.current = new AbortController()
-    window.addEventListener('popstate', handleBack);
-    return () => {
-      abortControllerRef.current.abort()
-      window.removeEventListener('popstate', handleBack)
-    }
-  // eslint-disable-next-line
-  }, [])
+  // useEffect(() => {
+  //   abortControllerRef.current = new AbortController()
+  //   window.addEventListener('popstate', handleBack);
+  //   return () => {
+  //     abortControllerRef.current.abort()
+  //     window.removeEventListener('popstate', handleBack)
+  //   }
+  // // eslint-disable-next-line
+  // }, [])
 
-  const handleBack = (e) => {
-    console.log("popstate event detected")
-    //e.preventDefault();
-    //window.history.go(1)//same as history.forward() ->goes forward one page
-    dispatch(closeSlidingLeftBox())
-  }
+  // const handleBack = (e) => {
+  //   console.log("popstate event detected")
+  //   //e.preventDefault();
+  //   //window.history.go(1)//same as history.forward() ->goes forward one page
+  //   dispatch(closeSlidingLeftBox())
+  // }
 
-  const handleCloseSlidingLeft = () => {
-    window.history.go(-1)
-  }
+  // const handleCloseSlidingLeft = () => {
+  //   window.history.go(-1)
+  // }
 
 
   const submitExpense = async () => {
@@ -80,7 +80,7 @@ function AddExpense2() {
       }
     }
     //dispatch(closeSlidingLeftBox())
-    window.history.go(-1) //close menu
+    setSearchParams({}) //close menu
   }
 
   const labelClicked = (labelClickedId) => {
@@ -118,9 +118,9 @@ function AddExpense2() {
 
   return (
 
-    <div className='addExpenseBox'>
+    <div className='addExpenseBox flex column fixed'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center' onClick={handleCloseSlidingLeft}>
+        <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
           <i className='arrow left icon t3'></i>
         </div>
         <div>

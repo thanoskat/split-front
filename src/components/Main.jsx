@@ -99,7 +99,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <AddExpense2 />
+        <AddExpense2 setSearchParams={setSearchParams}/>
       </CSSTransition>
       <CSSTransition
         in={(searchParams.get('menu') === 'invitation')}
