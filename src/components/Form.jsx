@@ -501,7 +501,6 @@ function MultiSelect({ optionsArray, setTrackID, allowMultiSelections, label, va
     }
   }
 
-
   const handleTickBox = () => {
     setSplitAmongMembersCheck(prev => !prev)
     setTrackID([])

@@ -5,7 +5,7 @@ const TabSwitcher = () => {
   const params = useParams()
   const TabButton = ({ to, text }) => {
     return(
-      <NavLink to={to} className={isActive => (isActive ? 'tab-button-active' : 'tab-button-inactive')}>
+      <NavLink to={to} className={({isActive}) => (isActive ? 'tab-button-active' : 'tab-button-inactive')}>
         {text}
       </NavLink>
     )

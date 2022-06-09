@@ -78,13 +78,13 @@ const Main = () => {
         </div>
       }
       <CSSTransition
-        onClick={() => setSearchParams({})}
-        in={(searchParams.get('menu'))}
+        onClick={() => setSearchParams({})} //this simply adds dark background
+        in={(searchParams.get('menu'))} 
         timeout={0}
-        unmountOnExit
-      >
+        unmountOnExit>
         <div style={{position: 'fixed', height: '100vh', width: '100%', backgroundColor: 'black', opacity: '0.7'}} />
       </CSSTransition>
+
       <CSSTransition
         in={(searchParams.get('menu') === 'groups')}
         timeout={300}
@@ -99,7 +99,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <AddExpense2 />
+        <AddExpense2 setSearchParams={setSearchParams}/>
       </CSSTransition>
       <CSSTransition
         in={(searchParams.get('menu') === 'invitation')}
