@@ -109,20 +109,20 @@ const TabMembers = () => {
         <div className="owesOwed flex row justcont-spacebetween alignitems-center">
           {isSenderReceiverSettled === 1 ?
             <div className="description flex row alignitems-center">
-              owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div> to &nbsp;
-              <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
+              owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div> in total &nbsp;
+              {/* <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                 style={{ '--pill-color': 'var(--layer-6-color)' }}>
                 <IonIcon name='people-sharp' />
                 {toFrom?.length}
-              </div>&nbsp;
+              </div>&nbsp; */}
             </div> : isSenderReceiverSettled === 2 ?
               <div className="description flex row alignitems-center">
-                is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>from &nbsp;
-                <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
+                is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>in total&nbsp;
+                {/* <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                   style={{ '--pill-color': 'var(--layer-6-color)' }}>
                   <IonIcon name='people-sharp' />
                   {toFrom?.length}
-                </div>&nbsp;
+                </div>&nbsp; */}
               </div> :
               <div className="description">
                 is settled

@@ -63,13 +63,14 @@ const TabExpenses = () => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6 alignitems-center'>
-            Created by
+          
             <div className='pill empty pointer'
               style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
             >
               {expense.sender.nickname}
             </div>
+            
             and split with
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <div key={participant} className='pill empty'
@@ -77,6 +78,7 @@ const TabExpenses = () => {
                 {participant.slice(18)}
               </div>
             ))}
+
             {showTags && expense.tobeSharedWith.length < members.length &&
               <div className='pill empty pointer' onClick={() => setShowTags(false)}
                 style={{ '--pill-color': 'var(--layer-6-color)' }}>

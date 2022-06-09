@@ -450,7 +450,7 @@ select {
   align-self: center;
   align-items: center;
   justify-content: center;
-  padding: 3px 7px;
+  padding: 10px 20px;
   gap: 6px;
   border-radius: 4px;
   width: fit-content;
@@ -662,6 +662,7 @@ select {
   border-color: var(--layer-2-color);
   border-width: 1px;
   border-style: solid;
+ 
 }
 
 .group-selector-button.highlighted-group {
@@ -855,10 +856,8 @@ select {
   font-style: normal;
 }
 
-.addExpenseBox {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
+
+.addExpenseBox,.createnewgroupBox {
   bottom: 0;
   height: 100vh;
   width: 100%;
@@ -866,9 +865,8 @@ select {
   background-color: var(--layer-1-color);
 }
 
-.addExpenseHeader{
+.addExpenseHeader,.createnewgroupHeader{
   background-color: var(--layer-1-color);
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -1031,6 +1029,19 @@ input:focus.inputErr {
   background-color: var(--label-color-6);
   font-size: 16px;
 }
+.createnewgroup-button{
+  border-radius: 4px;
+  user-select: none;
+  padding: 2rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: var(--label-color-6);
+  font-size: 16px;
+  height: 0;
+  color:rgb(248, 248, 248);
+  font-weight: bold;
+
+}
 
 .or {
   color:var(--layer-6-color);
@@ -1062,6 +1073,11 @@ input:focus.inputErr {
  margin: 0rem 2rem 0rem 2rem
 }
 
+#homepage{
+ height: 100vh;
+ margin: 0rem 2rem 0rem 2rem;
+}
+
 .mailmsg{
   white-space: initial;
   color:var(--pink)
@@ -1087,4 +1103,9 @@ input:focus.inputErr {
 @keyframes slideupp {
   from {max-height: 0;}
   to {max-height: 100vh;}
+}
+
+.welcomemsg {
+  font-size: 15px;
+  padding: 2.5rem 0 2.5rem 0;
 }
