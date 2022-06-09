@@ -1070,3 +1070,21 @@ input:focus.inputErr {
 .whiteSpace-initial{
   white-space: initial;
 }
+
+.my-animation {
+  animation: slideupp .3s 1 ease-in-out both;
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideupp {
+  from {max-height: 0;}
+  to {max-height: 100vh;}
+}
