@@ -169,9 +169,8 @@ function AddExpense2({setSearchParams}) {
 
         <div className='t4 medium flex row justcont-start alignitems-center gap6 pointer' onClick={includeAllClick}>
           <IonIcon className='t3' name={`${includeAll ? 'checkbox' : 'square-outline'}`} />
-          Split among all members
+          Split equally among all members
         </div>
-
         {!includeAll &&
           <div className='flex row wrap gap10'>
             {selectedGroup.members.map(member => (

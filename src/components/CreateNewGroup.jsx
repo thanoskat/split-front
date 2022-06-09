@@ -101,6 +101,15 @@ export default function CreateNewGroup({ setSearchParams }) {
           onChange={e => setGroupName(e.target.value)}
           spellCheck='false'
         />
+        <div className="flex column" style={{ marginTop: "15px" }}>
+          <div className="whiteSpace-initial" style={{ margin: "0px 0px 15px 0px", fontSize: "20px" }}>Select currency</div>
+          <div style={{ backgroundColor: "#121214", padding: "0.8rem" , borderRadius:"4px", width:"5rem", cursor:"pointer" }}>
+            <div className='currency-ticker-section' style={{ position: "relative", justifyContent: "flex-start", left: "0px" }}>
+              <i className='angle down icon'></i>
+              <div className='currency-ticker'>EUR </div>
+            </div>
+          </div>
+        </div>
         <div style={{ marginTop: "10px", fontSize: "20px" }}>
           Create labels
         </div>
@@ -113,7 +122,8 @@ export default function CreateNewGroup({ setSearchParams }) {
         ))}
 
         {!newMode &&
-          <div style={{color:"var(--light-color)",borderColor:"var(--label-color-6)",backgroundColor:"var(--label-color-6)"}} className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
+          <div style={{ color: "var(--light-color)", borderColor: "var(--label-color-6)", backgroundColor: "var(--label-color-6)", alignSelf:"auto" }} 
+          className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
         {newMode &&
           <div className='flex row justcont-spacebetween'>
             <input
