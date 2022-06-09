@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import 'font-awesome/css/font-awesome.min.css'
 import IonIcon from '@reacticons/ionicons'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { setCurrentMenu, setSelectedExpense } from '../redux/mainSlice'
 import currency from 'currency.js'
 
 
@@ -26,18 +25,12 @@ const TabExpenses = () => {
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const expenses = selectedGroup.expenses
   const members = selectedGroup.members
-  const dispatch = useDispatch()
   const [filterTags, setFilterTags] = useState([])
   const [filterSender, setFilterSender] = useState([])
 
   const Expense = ({ expense }) => {
     const [showTags, setShowTags] = useState(true)
-    const [searchParams, setSearchParams] = useSearchParams()
-
-    const openExpenseOptions = (expense) => {
-      dispatch(setSelectedExpense(expense))
-      dispatch(setCurrentMenu('expenseOptions'))
-    }
+    const [, setSearchParams] = useSearchParams()
 
     const addFilterTag = (tag) => {
       if (filterTags.some(filteredtag => filteredtag._id === tag._id)) return // don't feed tag that is already in

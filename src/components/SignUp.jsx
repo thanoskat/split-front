@@ -12,7 +12,6 @@ const SignUp = () => {
   const [emailError, setEmailError] = useState("")
   const [usernameError, setUsernameError] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [link, setLink] = useState('')
   const [showMsg, setShowMsg] = useState(false)
   //const [searchParams, setSearchParams] = useSearchParams()
 
@@ -41,7 +40,6 @@ const SignUp = () => {
       setLoading(true)
       const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/signup`, { email: email, nickname: username })
       console.dir(res)
-      setLink(res.data.link)
       setLoading(false)
       // setSearchParams({ filter: "active" })
       setShowMsg(true)

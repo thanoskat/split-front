@@ -29,17 +29,17 @@ const TabMembers = () => {
   const memberInfoConstructor = (selectedGroup) => {
     let members = []
 
-    selectedGroup?.members.map((member) => {
+    selectedGroup?.members.forEach((member) => {
       let pendingTotalAmount = currency(0);
       let total = currency(0)
       let toFrom = []
       let isSenderReceiverSettled
-      selectedGroup.expenses.map(expense => {
+      selectedGroup.expenses.forEach(expense => {
         if (expense.sender._id === member._id) {
           total = total.add(expense.amount)
         }
       })
-      selectedGroup.pendingTransactions.map((tx) => {
+      selectedGroup.pendingTransactions.forEach((tx) => {
         if (tx.sender._id === member._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
           toFrom.push({ _id: tx.receiver._id, name: tx.receiver.nickname, amount: tx.amount })
