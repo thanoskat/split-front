@@ -1,24 +1,22 @@
 import { TabSwitcher, UserBar, GroupSelector2, AddExpense2, DeleteExpense, Invitation } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { useLocation, Link, Outlet, useSearchParams, useParams } from 'react-router-dom'
+import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentMenu, setGroupList, setSelectedGroup } from '../redux/mainSlice'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { setCurrentMenu, setSelectedGroup } from '../redux/mainSlice'
+import { CSSTransition } from 'react-transition-group'
 
 const Main = () => {
 
-  const currentPath = `${useLocation().pathname}`
-  const dispatch = useDispatch()
   const api = useAxios()
-  const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const dispatch = useDispatch()
   const params = useParams()
-  const [isLoading, setLoading] = useState(false)
+  const abortControllerRef = useRef(new AbortController())
+  const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
-  const abortControllerRef = useRef(new AbortController())
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -33,7 +31,6 @@ const Main = () => {
   const getGroup = async (id) => {
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      console.log(res.data)
       const group = populateLabels(window.structuredClone(res.data))
       dispatch(setSelectedGroup(group))
     }
@@ -79,7 +76,7 @@ const Main = () => {
       }
       <CSSTransition
         onClick={() => setSearchParams({})}
-        in={(searchParams.get('menu'))}
+        in={Boolean(searchParams.get('menu'))}
         timeout={0}
         unmountOnExit
       >
