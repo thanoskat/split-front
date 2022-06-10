@@ -592,7 +592,7 @@ select {
 .member,
 .settleTotal {
   box-sizing: border-box;
-  padding: 10px 14px;
+  padding: 14px 14px;
   /* height: 100px; */
   height: fit-content;
 }

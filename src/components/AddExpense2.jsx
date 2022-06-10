@@ -171,6 +171,10 @@ function AddExpense2({setSearchParams}) {
           <IonIcon className='t3' name={`${includeAll ? 'checkbox' : 'square-outline'}`} />
           Split equally among all members
         </div>
+        
+        <div className='shadow flex relative ' style={{borderRadius:"4px", padding:"0.5rem", border:"none", cursor:"pointer", color:"var(--text)", fontSize:"16px" ,backgroundColor:"#3a3b3c"}}>Split among all</div>
+        <div className='shadow flex relative ' style={{borderRadius:"4px", padding:"0.5rem", border:"none", cursor:"pointer", color:"var(--text)", fontSize:"16px" ,backgroundColor:"#3a3b3c"}}>Split equally</div>
+
         {!includeAll &&
           <div className='flex row wrap gap10'>
             {selectedGroup.members.map(member => (
