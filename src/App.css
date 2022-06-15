@@ -942,7 +942,7 @@ select {
 
 .tree li::before {
   border-top: 2.5px solid rgb(148, 146, 146);
-  top: 9px;
+  top: 10px; /*increase - moves horizontal line up or down*/
   width: 8px;
   height: 0;
   border-bottom-left-radius: 15px;
