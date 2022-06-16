@@ -24,7 +24,12 @@ function AddExpense2({ setSearchParams }) {
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "" }))
   })
 
-  console.log(newExpense)
+  let totalContributed = 0
+  newExpense.participants?.map((participant) => {
+    totalContributed = currency(totalContributed).add(participant?.contributionAmount)
+  })
+
+  //console.log(newExpense.amount === "" || Number(newExpense.amount) === 0)
   //filters array of objects and only keeps those members that were clicked 
   const filteredGroupMembers = selectedGroup?.members.filter(
     function (e) {
@@ -34,17 +39,25 @@ function AddExpense2({ setSearchParams }) {
   );
 
 
-  const changeMemberContributionAmount = (e, participantClickedId) => {
+  const changeMemberContributionAmount = (e, participantClickedId, isPct) => {
+    let amount
+    console.log(e.target.value)
+    if (isPct) { //if user enters %age, calculate amount
+      amount = currency(newExpense.amount).multiply(e.target.value / 100).value
+      
+    } else { //else use amount entered
+      amount = e.target.value
+    }
+  
     const index = newExpense.participants?.findIndex(participant => participant.memberId === participantClickedId)
     setNewExpense({
       ...newExpense,
       participants: [
         ...newExpense.participants?.slice(0, index),
-        Object.assign({}, newExpense.participants[index], { contributionAmount: e.target.value }),
+        Object.assign({}, newExpense.participants[index], { contributionAmount: amount }),
         ...newExpense.participants?.slice(index + 1)
       ]
     })
-    //console.log(index)
   }
 
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -90,7 +103,7 @@ function AddExpense2({ setSearchParams }) {
           {
             groupId: selectedGroup._id,
             sender: sessionData.userId,
-            splitEqually:newExpense.splitEqually,
+            splitEqually: newExpense.splitEqually,
             amount: removeCommas(newExpense.amount),
             description: newExpense.description,
             tobeSharedWith: newExpense.participants,
@@ -137,7 +150,6 @@ function AddExpense2({ setSearchParams }) {
     else {
       setNewExpense({ ...newExpense, participants: [...selectedGroup.members.map(member => ({ memberId: member._id }))] })
       setIncludeAll(true)
-
     }
   }
 
@@ -146,14 +158,12 @@ function AddExpense2({ setSearchParams }) {
       if (includeAll) {
         setNewExpense({ ...newExpense, splitEqually: false, participants: [...selectedGroup.members.map(member => ({ memberId: member._id }))] })
       } else {
-        setNewExpense({ ...newExpense, splitEqually: false})
+        setNewExpense({ ...newExpense, splitEqually: false })
       }
       setSplitEqually(false)
-      
+
     }
-    
     else {
-     
       setNewExpense({ ...newExpense, splitEqually: true })
       setSplitEqually(true)
     }
@@ -249,7 +259,7 @@ function AddExpense2({ setSearchParams }) {
               {/* {beginning of tree} */}
               <div className='tree' style={{ bottom: "5px", margin: "0 0 -15px 0" }}>
                 <div className='flex row justcont-spacebetween'>
-                  <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px" }}>{currency(removeCommas(newExpense.amount), { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
+                  <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px" }}>{removeCommas(newExpense.amount)}</div>
                   <div className='flex' style={{ marginLeft: "50px", fontSize: "13px" }}> Split by amount</div>
                   <span className='flex ' style={{ fontSize: "13px" }}>Split by %</span>
                 </div>
@@ -279,30 +289,43 @@ function AddExpense2({ setSearchParams }) {
                             style={{ maxWidth: "55px" }}
                             className='t3 text-align-right'
                             type='tel'
-                            placeholder='0'
+                            //placeholder={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
                             step="0.01"
-                            //value={participantArr.find(participant => participant._id === member._id)?.amount}
-                            // onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
-                            //onChange={(e) => changeMemberSplitAmount(e, member._id)}
-                            //autoFocus={true}
+                            placeholder='0'
+                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
+                            onChange={(e) => changeMemberContributionAmount(e, member._id, true)}
                             spellCheck='false'
                           />
                         </div>
+                     
                       </div>
                     </li>))}
                 </ul>
               </div>
               {/* {end of tree} */}
+              <div className='flex row justcont-spacebetween'>
+                <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px", marginTop: "0.7rem" }}></div>
+                <div className='flex' style={{ marginLeft: "82px", fontSize: "13px", marginTop: "0.7rem" }}>
 
+                  {currency(removeCommas(newExpense.amount)).subtract(totalContributed.value).value} remaining
+
+                </div>
+                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>30% remaining</span>
+              </div>
             </div>
           }
-        </div>
 
+        </div>
       </div>
       <div className='submit-button-container flex padding1010'>
         <button
           style={{ padding: "0.8rem" }}
-          className={`shadow submit-button ${newExpense.amount && Number(newExpense.amount) !== 0 ? "active" : null} h-flex justcont-spacearound `}
+          className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually ? "active"
+            :
+            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount)).subtract(totalContributed.value).value === 0 ?
+              "active"
+              :
+              null} h-flex justcont-spacearound `}
           onClick={submitExpense}
           disabled={newExpense.amount && Number(newExpense.amount) !== 0 ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
