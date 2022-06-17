@@ -22,7 +22,7 @@ function AddExpense2({ setSearchParams }) {
     amount: '',
     description: '',
     labels: [],
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, downPaymentAmount: "", downPaymentPercent: "" }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
   })
 
   let totalContributed = 0
@@ -39,7 +39,7 @@ function AddExpense2({ setSearchParams }) {
   );
 
 
-  //  const [dummy, setDummy] = useState({ downPaymentPercent: "", downPaymentAmount: "" })
+  //  const [dummy, setDummy] = useState({ percentage: "", contributionAmount: "" })
   const handleInputChange = (e) => {
     const { target: { name, value } } = e
     setDummy({ [name]: value })
@@ -47,13 +47,13 @@ function AddExpense2({ setSearchParams }) {
     console.log(e.target.value)
     switch (name) {
 
-      case 'downPaymentPercent':
+      case 'percentage':
         const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
-        setDummy({ downPaymentAmount: newAmount })
+        setDummy({ contributionAmount: newAmount })
         break
-      case 'downPaymentAmount':
+      case 'contributionAmount':
         const newPercent = (value * 100) / newExpense.amount
-        setDummy({ downPaymentPercent: newPercent })
+        setDummy({ percentage: newPercent })
         break
       default:
         break
@@ -71,24 +71,24 @@ function AddExpense2({ setSearchParams }) {
 
     switch (name) {
 
-      case 'downPaymentPercent':
+      case 'percentage':
         const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
         setNewExpense({
           ...newExpense,
           participants: [
             ...newExpense.participants?.slice(0, index),
-            Object.assign({}, newExpense.participants[index], { downPaymentAmount: newAmount }),
+            Object.assign({}, newExpense.participants[index], { contributionAmount: newAmount, percentage: value }),
             ...newExpense.participants?.slice(index + 1)
           ]
         })
         break
-      case 'downPaymentAmount':
+      case 'contributionAmount':
         const newPercent = (value * 100) / newExpense.amount
         setNewExpense({
           ...newExpense,
           participants: [
             ...newExpense.participants?.slice(0, index),
-            Object.assign({}, newExpense.participants[index], { downPaymentPercent: newPercent }),
+            Object.assign({}, newExpense.participants[index], { contributionAmount: value, percentage: newPercent }),
             ...newExpense.participants?.slice(index + 1)
           ]
         })
@@ -322,11 +322,11 @@ function AddExpense2({ setSearchParams }) {
                             //onChange={(e) => changeMemberContributionAmount(e, member._id)}
                             //autoFocus={true}
                             spellCheck='false'
-                            name="downPaymentAmount"
-                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.downPaymentAmount}
-                            //value={dummy.downPaymentAmount }
+                            name="contributionAmount"
+                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount}
+                            //value={dummy.contributionAmount }
                             onChange={e => changeMemberContributionAmount(e, member._id)}
-                            //onChange={e => handleInputChange(e)}
+                          //onChange={e => handleInputChange(e)}
                           />
                         </div>
                         <div className=''>
@@ -341,11 +341,11 @@ function AddExpense2({ setSearchParams }) {
                             //value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''}
                             //onChange={(e) => changeMemberContributionAmount(e, member._id, true)}
                             spellCheck='false'
-                            name="downPaymentPercent"
-                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.downPaymentPercent}
-                            //value={dummy.downPaymentPercent}
+                            name="percentage"
+                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.percentage}
+                            //value={dummy.percentage}
                             onChange={e => changeMemberContributionAmount(e, member._id)}
-                            //onChange={e => handleInputChange(e)}
+                          //onChange={e => handleInputChange(e)}
                           />
                         </div>
 
