@@ -16,12 +16,13 @@ function AddExpense2({ setSearchParams }) {
   const [loading, setLoading] = useState(false)
   const [includeAll, setIncludeAll] = useState(true)
   const [splitEqually, setSplitEqually] = useState(true)
+  const [dummy, setDummy] = useState({ downPaymentPercent: "", downPaymentAmount: "" })
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
     amount: '',
     description: '',
     labels: [],
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "" }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, downPaymentAmount: "", downPaymentPercent: "" }))
   })
 
   let totalContributed = 0
@@ -29,8 +30,7 @@ function AddExpense2({ setSearchParams }) {
     totalContributed = currency(totalContributed).add(participant?.contributionAmount)
   })
 
-  //console.log(newExpense.amount === "" || Number(newExpense.amount) === 0)
-  //filters array of objects and only keeps those members that were clicked 
+  console.log(newExpense)
   const filteredGroupMembers = selectedGroup?.members.filter(
     function (e) {
       return this?.indexOf(e._id) > -1;
@@ -39,25 +39,65 @@ function AddExpense2({ setSearchParams }) {
   );
 
 
-  const changeMemberContributionAmount = (e, participantClickedId, isPct) => {
-    let amount
+  //  const [dummy, setDummy] = useState({ downPaymentPercent: "", downPaymentAmount: "" })
+  const handleInputChange = (e) => {
+    const { target: { name, value } } = e
+    setDummy({ [name]: value })
+
     console.log(e.target.value)
-    if (isPct) { //if user enters %age, calculate amount
-      amount = currency(newExpense.amount).multiply(e.target.value / 100).value
-      
-    } else { //else use amount entered
-      amount = e.target.value
+    switch (name) {
+
+      case 'downPaymentPercent':
+        const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
+        setDummy({ downPaymentAmount: newAmount })
+        break
+      case 'downPaymentAmount':
+        const newPercent = (value * 100) / newExpense.amount
+        setDummy({ downPaymentPercent: newPercent })
+        break
+      default:
+        break
     }
-  
+  }
+
+
+  const changeMemberContributionAmount = (e, participantClickedId, isPct) => {
     const index = newExpense.participants?.findIndex(participant => participant.memberId === participantClickedId)
-    setNewExpense({
-      ...newExpense,
-      participants: [
-        ...newExpense.participants?.slice(0, index),
-        Object.assign({}, newExpense.participants[index], { contributionAmount: amount }),
-        ...newExpense.participants?.slice(index + 1)
-      ]
-    })
+    const { target: { name, value } } = e
+    setNewExpense({ ...newExpense, participants: { [name]: value } })
+
+    console.log(e.target.value)
+
+
+    switch (name) {
+
+      case 'downPaymentPercent':
+        const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
+        setNewExpense({
+          ...newExpense,
+          participants: [
+            ...newExpense.participants?.slice(0, index),
+            Object.assign({}, newExpense.participants[index], { downPaymentAmount: newAmount }),
+            ...newExpense.participants?.slice(index + 1)
+          ]
+        })
+        break
+      case 'downPaymentAmount':
+        const newPercent = (value * 100) / newExpense.amount
+        setNewExpense({
+          ...newExpense,
+          participants: [
+            ...newExpense.participants?.slice(0, index),
+            Object.assign({}, newExpense.participants[index], { downPaymentPercent: newPercent }),
+            ...newExpense.participants?.slice(index + 1)
+          ]
+        })
+        break
+      default:
+        break
+    }
+
+
   }
 
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -277,11 +317,16 @@ function AddExpense2({ setSearchParams }) {
                             type='tel'
                             placeholder='0'
                             step="0.01"
-                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''} //otherwise it complains for uncontrolled input due to undefined selectedGroup on 1st render
+                            //value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''} //otherwise it complains for uncontrolled input due to undefined selectedGroup on 1st render
                             // onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
-                            onChange={(e) => changeMemberContributionAmount(e, member._id)}
+                            //onChange={(e) => changeMemberContributionAmount(e, member._id)}
                             //autoFocus={true}
                             spellCheck='false'
+                            name="downPaymentAmount"
+                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.downPaymentAmount}
+                            //value={dummy.downPaymentAmount }
+                            onChange={e => changeMemberContributionAmount(e, member._id)}
+                            //onChange={e => handleInputChange(e)}
                           />
                         </div>
                         <div className=''>
@@ -292,12 +337,18 @@ function AddExpense2({ setSearchParams }) {
                             //placeholder={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
                             step="0.01"
                             placeholder='0'
-                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
-                            onChange={(e) => changeMemberContributionAmount(e, member._id, true)}
+                            //value={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
+                            //value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''}
+                            //onChange={(e) => changeMemberContributionAmount(e, member._id, true)}
                             spellCheck='false'
+                            name="downPaymentPercent"
+                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.downPaymentPercent}
+                            //value={dummy.downPaymentPercent}
+                            onChange={e => changeMemberContributionAmount(e, member._id)}
+                            //onChange={e => handleInputChange(e)}
                           />
                         </div>
-                     
+
                       </div>
                     </li>))}
                 </ul>

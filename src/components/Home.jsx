@@ -70,7 +70,7 @@ export default function Home() {
       </div>
       <div className="or flex justcont-center alignitems-center" style={{ color: "var(--light-color)" }}>OR</div>
       <div style={{ padding: "0 0 2rem 0" }}>
-        <div class="shadow createnewgroup-button flex justcont-center relative alignitems-center" onClick={() => setSearchParams({ menu: 'createnewgroup' })}>Create new group</div>
+        <div className="shadow createnewgroup-button flex justcont-center relative alignitems-center" onClick={() => setSearchParams({ menu: 'createnewgroup' })}>Create new group</div>
       </div>
 
       <CSSTransition
