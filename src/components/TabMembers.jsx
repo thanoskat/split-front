@@ -20,7 +20,7 @@ const TabMembers = () => {
       let toFrom = []
       let isSenderReceiverSettled
       selectedGroup.expenses.forEach(expense => {
-        if (expense.sender._id === member._id) {
+        if (expense.spender._id === member._id) {
           total = total.add(expense.amount)
         }
       })

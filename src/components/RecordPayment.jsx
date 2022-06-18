@@ -1,4 +1,4 @@
-import { SlidingBox } from './'
+// import { SlidingBox } from './'
 import { useRef, useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
@@ -74,7 +74,7 @@ function RecordPayment({ headline, close}) {
   //             sender: sessionData.userId,
   //             amount: inputAmount,
   //             description: inputDescription,
-  //             tobeSharedWith: [...selectedGroup.members.map(member => member._id)],//feed all ids tobeSharedWith: [...selectedGroup.members.map(member => member._id), sessionData.userId]
+  //             participants: [...selectedGroup.members.map(member => member._id)],//feed all ids participants: [...selectedGroup.members.map(member => member._id), sessionData.userId]
   //             expenseTags: expenseTags
   //           },{ signal: abortControllerRef.current.signal }
   //         )
@@ -91,7 +91,7 @@ function RecordPayment({ headline, close}) {
   //             sender: sessionData.userId,
   //             amount: inputAmount,
   //             description: inputDescription,
-  //             tobeSharedWith: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
+  //             participants: [...trackIndexAndIDmulti.map(tracker => tracker._id), sessionData.userId], //only feed selected ids,
   //             expenseTags: expenseTags
   //           },{ signal: abortControllerRef.current.signal }
   //         )

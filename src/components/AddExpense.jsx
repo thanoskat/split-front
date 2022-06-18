@@ -1,14 +1,12 @@
-import { SlidingLeftBox } from './'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
-import { closeSlidingLeftBox } from '../redux/slidingLeftSlice'
-import populateLabels from '../utility/populateLabels'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
+import currency from 'currency.js'
 
-function AddExpense({ close }) {
+function AddExpense({ setSearchParams }) {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -16,39 +14,139 @@ function AddExpense({ close }) {
   const abortControllerRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const [includeAll, setIncludeAll] = useState(true)
+  const [splitEqually, setSplitEqually] = useState(true)
+  const precision = 4;
   const [newExpense, setNewExpense] = useState({
+    splitEqually: true,
     amount: '',
     description: '',
-    labels: [],
-    participants: selectedGroup.members.map(member => member._id)
+    label: null,
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
   })
 
-  const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeCommas = num => num.toString().replace(/,/g, '');
-  const removeNonNumeric = num => num.toString().replace(/[^0-9.]/g, "")
+  const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const removeCommas = num => num?.toString().replace(/,/g, '');
+  const removeNonNumeric = num => num?.toString().replace(/[^0-9.]/g, "")
+  const process = (input) => {
+    const index = input.indexOf('.');
+    if (index > -1) {
+      input = input.substr(0, index + 1) + input.slice(index).replace(/\./g, '');
+    }
+    return input;
+  }
+
+  let totalContributed = 0
+  let totalpercentage = 0
+  newExpense.participants?.map((participant) => {
+    totalContributed = currency(totalContributed).add(participant?.contributionAmount)
+    totalpercentage = currency(totalpercentage).add(participant?.percentage)
+  })
+
+  const remaining = () => {
+    const remainingAmount = currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value
+    const remainingPercentage = currency(100, { precision }).subtract(totalpercentage.value).value
+    const participants = newExpense.participants?.filter(participant => typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number" && (participant.contributionAmount !==0 && participant.percentage!==0))
+    //console.log(numberofparticipants)
+    if (remainingAmount === 0 && remainingPercentage !== 0) {
+      console.log("entered remaining %")
+      const distrArr = currency(remainingPercentage).distribute(participants.length)
+      const distrArrValues = distrArr?.map(element => element.value)
+      console.log("distributed array", distrArrValues)
+      let tempParticipantsArr = [...newExpense.participants]
+      console.log("state tbu", tempParticipantsArr)
+      console.log("participants with cells", participants)
+      let counter = 0
+      tempParticipantsArr?.map((tempParticipant) => {
+        participants?.map((participant) => {
+          if (participant.memberId === tempParticipant.memberId) {
+            tempParticipant.percentage = currency(tempParticipant.percentage).add(distrArrValues[counter]).value
+            counter = counter + 1
+            console.log(counter)
+          }
+        })
+      })
+    } else {
+      if (remainingAmount !== 0 && remainingPercentage === 0) {
+        console.log("entered remaining amount")
+        console.log("remainingAmount inside if", remainingAmount)
+        const distrArr = currency(remainingAmount).distribute(participants.length)
+        const distrArrValues = distrArr?.map(element => element.value)
+        console.log("distributed array", distrArrValues)
+        let tempParticipantsArr = [...newExpense.participants]
+        console.log("state tbu", tempParticipantsArr)
+        console.log("participants with cells", participants)
+        let counter = 0
+        tempParticipantsArr?.map((tempParticipant) => {
+          participants?.map((participant) => {
+            if (participant.memberId === tempParticipant.memberId) {
+              tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArrValues[counter]).value
+              counter = counter + 1
+            }
+          })
+        })
+      }
+    }
+    //console.log("remainingAmount", remainingAmount)
+    return { remainingAmount, remainingPercentage }
+  }
+
+  const filteredGroupMembers = selectedGroup?.members.filter(
+    function (e) {
+      return this?.indexOf(e._id) > -1;
+    },
+    newExpense.participants?.map(participant => participant.memberId)
+  );
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
-    window.addEventListener('popstate', handleBack);
     return () => {
       abortControllerRef.current.abort()
-      window.removeEventListener('popstate', handleBack)
     }
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   }, [])
 
-  const handleBack = (e) => {
-    console.log("popstate event detected")
-    //e.preventDefault();
-    //window.history.go(1)//same as history.forward() ->goes forward one page
-    dispatch(closeSlidingLeftBox())
+  const changeMemberContributionAmount = (e, participantClickedId) => {
+    if ((newExpense.amount === "" || Number(newExpense.amount) === 0)) return
+    const index = newExpense.participants?.findIndex(participant => participant.memberId === participantClickedId)
+    const { target: { name, value } } = e
+    setNewExpense({ ...newExpense, participants: { [name]: value } })
+
+    switch (name) {
+      case 'percentage':
+        const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value   // Assuming fullAmount set in state
+        // console.log("newAmount", newAmount)
+        setNewExpense({
+          ...newExpense,
+          participants: [
+            ...newExpense.participants?.slice(0, index),
+            Object.assign({}, newExpense.participants[index], { contributionAmount: newAmount, percentage: value }),
+            ...newExpense.participants?.slice(index + 1)
+          ]
+        })
+        break
+      case 'contributionAmount':
+        const newPercent = currency(value, { precision }).multiply(100).divide(newExpense.amount).value
+        // console.log("newPercent", newPercent)
+        setNewExpense({
+          ...newExpense,
+          participants: [
+            ...newExpense.participants?.slice(0, index),
+            Object.assign({}, newExpense.participants[index], { contributionAmount: value, percentage: newPercent }),
+            ...newExpense.participants?.slice(index + 1)
+          ]
+        })
+        break
+      default:
+        break
+    }
   }
 
-  const handleCloseSlidingLeft = () => {
-    //window.history.go(-1)
-    //dispatch(closeSlidingLeftBox())
+  const updateAmount = (e) => {
+    setNewExpense({
+      ...newExpense,
+      amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
+    })
   }
-
 
   const submitExpense = async () => {
     if (!newExpense.amount) return
@@ -58,14 +156,15 @@ function AddExpense({ close }) {
         const res = await api.post('expense/add',
           {
             groupId: selectedGroup._id,
-            sender: sessionData.userId,
+            spender: sessionData.userId,
+            splitEqually: newExpense.splitEqually,
             amount: removeCommas(newExpense.amount),
             description: newExpense.description,
-            tobeSharedWith: newExpense.participants,
-            expenseTags: newExpense.labels,
+            participants: newExpense.participants,
+            label: newExpense.label,
           },
           { signal: abortControllerRef.current.signal })
-        dispatch(setSelectedGroup(populateLabels(res.data)))
+        dispatch(setSelectedGroup(res.data))
         setLoading(false)
       }
       catch (error) {
@@ -73,26 +172,25 @@ function AddExpense({ close }) {
         setLoading(false)
       }
     }
-    dispatch(closeSlidingLeftBox())
+    //dispatch(closeSlidingLeftBox())
+    setSearchParams({}) //close menu
   }
 
   const labelClicked = (labelClickedId) => {
-    if (newExpense.labels.includes(labelClickedId)) {
-      setNewExpense({ ...newExpense, labels: newExpense.labels.filter(label => label !== labelClickedId) })
+    if (newExpense.label === labelClickedId) {
+      setNewExpense({ ...newExpense, label: null })
     }
     else {
-      setNewExpense({ ...newExpense, labels: [...newExpense.labels, labelClickedId] })
-      // Uncomment if only one label is allowed
-      // setNewExpense({...newExpense, labels: [labelClickedId]})
+      setNewExpense({ ...newExpense, label: labelClickedId })
     }
   }
 
   const participantClicked = (participantClickedId) => {
-    if (newExpense.participants.includes(participantClickedId)) {
-      setNewExpense({ ...newExpense, participants: newExpense.participants.filter(participant => participant !== participantClickedId) })
+    if (newExpense.participants.map(participants => participants.memberId).includes(participantClickedId)) {
+      setNewExpense({ ...newExpense, participants: newExpense.participants.filter(participant => participant.memberId !== participantClickedId) })
     }
     else {
-      setNewExpense({ ...newExpense, participants: [...newExpense.participants, participantClickedId] })
+      setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId }] })
     }
   }
 
@@ -102,18 +200,31 @@ function AddExpense({ close }) {
       setIncludeAll(false)
     }
     else {
-      setNewExpense({ ...newExpense, participants: [...selectedGroup.members.map(member => member._id)] })
+      setNewExpense({ ...newExpense, participants: [...selectedGroup.members.map(member => ({ memberId: member._id }))] })
       setIncludeAll(true)
     }
   }
 
+  const splitEquallyClick = () => {
+    if (splitEqually) {
+      if (includeAll) {
+        setNewExpense({ ...newExpense, splitEqually: false, participants: [...selectedGroup.members.map(member => ({ memberId: member._id }))] })
+      } else {
+        setNewExpense({ ...newExpense, splitEqually: false })
+      }
+      setSplitEqually(false)
 
+    }
+    else {
+      setNewExpense({ ...newExpense, splitEqually: true })
+      setSplitEqually(true)
+    }
+  }
 
   return (
-
-    <SlidingLeftBox close={close} className='flex column overflow-auto' style={{ "height": "100vh", "maxHeight": "100%" }}>
+    <div className='addExpenseBox flex column fixed'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center' onClick={handleCloseSlidingLeft}>
+        <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
           <i className='arrow left icon t3'></i>
         </div>
         <div>
@@ -121,7 +232,6 @@ function AddExpense({ close }) {
         </div>
         <div className='separator-0' />
       </div>
-
 
       <div className='inputsAndOptions-container flex column gap10 padding1010'>
         <div className='input-amount flex relative column justcont-evenly '>
@@ -131,29 +241,28 @@ function AddExpense({ close }) {
           </div>
 
           <input
-            className='addexpense-input t3 text-align-right'
-            type="text"
+            className='styledInput t3 text-align-right'
+            type='tel'
             placeholder='0'
+            step="0.01"
             value={newExpense.amount}
-            onChange={e => setNewExpense({ ...newExpense, amount: addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))) })}
+            onChange={(e) => updateAmount(e)}
             autoFocus={true}
             spellCheck='false'
           />
-
         </div>
 
         <input
-          className='addexpense-input t3'
+          className='styledInput t3'
           placeholder='Description (optional)'
           value={newExpense.description}
           onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
           spellCheck='false'
-
         />
 
         <div className='flex row wrap gap10'>
-          {selectedGroup.groupTags.map(label => (
-            <div className={`pill pointer shadow ${newExpense.labels.includes(label._id) ? 'filled' : 'empty'}`}
+          {selectedGroup?.groupLabels.map(label => (
+            <div className={`pill pointer shadow ${newExpense.label === label._id ? 'filled' : 'empty'}`}
               key={label._id} style={{ '--pill-color': `var(--${label.color})` }}
               onClick={() => labelClicked(label._id)}
             >
@@ -161,31 +270,119 @@ function AddExpense({ close }) {
             </div>))}
         </div>
 
-        <div className='t4 medium flex row justcont-start alignitems-center gap6 pointer' onClick={includeAllClick}>
+        {/* <div className='t4 medium flex row justcont-start alignitems-center gap6 pointer' onClick={includeAllClick}>
           <IonIcon className='t3' name={`${includeAll ? 'checkbox' : 'square-outline'}`} />
-          Split among all members
+          Split equally among all members
+        </div> */}
+
+        <div style={{ borderRadius: "4px", padding: "0.8rem", border: "none", color: "var(--light-color)", fontSize: "16px", backgroundColor: "#3a3b3c" }}>
+          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
+            <div style={{ alignSelf: "center" }}>Split among all</div>
+            <div className='tick-cube' onClick={includeAllClick}> {includeAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "var(--label-color-1)" }} className='check icon absolute'></i> : ""} </div>
+          </div>
+
+          {!includeAll &&
+            <div style={{ marginTop: "10px" }}>
+              <div style={{ marginBottom: "10px", fontSize: "12px" }}>Select members to split expense with.</div>
+              <div className='flex row wrap gap10'>
+                {selectedGroup.members.map(member => (
+                  <div className={`pill pointer shadow ${newExpense?.participants.map(participants => participants.memberId).includes(member._id) ? 'filled' : 'empty'}`}
+                    key={member._id} style={{ '--pill-color': `gray` }}
+                    onClick={() => participantClicked(member._id)}
+                  >
+                    {member.nickname}
+                  </div>))}
+              </div>
+            </div>}
         </div>
 
-        {!includeAll &&
-          <div className='flex row wrap gap10'>
-            {selectedGroup.members.map(member => (
-              <div className={`pill pointer shadow ${newExpense.participants.includes(member._id) ? 'filled' : 'empty'}`}
-                key={member._id} style={{ '--pill-color': `gray` }}
-                onClick={() => participantClicked(member._id)}
-              >
-                {member.nickname}
-              </div>))}
-          </div>}
 
+        <div style={{ borderRadius: "4px", padding: "0.8rem", border: "none", color: "var(--light-color)", fontSize: "16px", backgroundColor: "#3a3b3c" }}>
+          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
+            <div style={{ alignSelf: "center" }}>Split equally</div>
+            <div className='tick-cube' onClick={splitEquallyClick}> {splitEqually ? <i style={{ fontSize: "29px", bottom: "0px", color: "var(--label-color-1)" }} className='check icon absolute'></i> : ""} </div>
+          </div>
+          {!splitEqually &&
+            <div style={{ marginTop: "18px" }}>
+              {/* {beginning of tree} */}
+              <div className='tree' style={{ bottom: "5px", margin: "0 0 -15px 0" }}>
+                <div className='flex row justcont-spacebetween'>
+                  <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px" }}>{removeCommas(newExpense.amount)}</div>
+                  <div className='flex' style={{ marginLeft: "50px", fontSize: "13px" }}> Split by amount</div>
+                  <span className='flex ' style={{ fontSize: "13px" }}>Split by %</span>
+                </div>
+                <ul style={{ marginLeft: "5px" }} >
+                  {(includeAll ? selectedGroup?.members : filteredGroupMembers)?.map(member => (
+                    <li key={member._id}>
+                      <div className='flex justcont-spacebetween alignitems-center' >
+                        <div style={{ maxWidth: "40px" }}>
+                          {member.nickname}
+                        </div>
+                        <div className=''>
+                          <input
+                            style={{ maxWidth: "55px" }}
+                            className='styledInput t3 text-align-right'
+                            type='tel'
+                            placeholder='0'
+                            step="0.01"
+                            spellCheck='false'
+                            name="contributionAmount"
+                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "" : newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''}
+                            //value={dummy.contributionAmount }
+                            onChange={e => changeMemberContributionAmount(e, member._id)}
+                          //onChange={e => handleInputChange(e)}
+                          />
+                        </div>
+                        <div className=''>
+                          <input
+                            style={{ maxWidth: "55px" }}
+                            className='styledInput t3 text-align-right'
+                            type='tel'
+                            step="0.01"
+                            placeholder='0'
+                            spellCheck='false'
+                            name="percentage"
+                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "" : newExpense.participants.find(participant => participant.memberId === member._id)?.percentage || ''}
+                            //value={dummy.percentage}
+                            onChange={e => changeMemberContributionAmount(e, member._id)}
+                          //onChange={e => handleInputChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </li>))}
+                </ul>
+              </div>
+              {/* {end of tree} */}
+              <div className='flex row justcont-spacebetween'>
+                <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px", marginTop: "0.7rem" }}></div>
+                <div className='flex' style={{ marginLeft: "82px", fontSize: "13px", marginTop: "0.7rem" }}>
+
+                  {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : remaining().remainingAmount} remaining
+
+                </div>
+                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : remaining().remainingPercentage}% remaining</span>
+
+              </div>
+            </div>
+          }
+
+        </div>
       </div>
-      <div className='submit-button-container flex shadow padding1010'>
-        <div
-          className={`submit-button ${newExpense.amount ? "active" : null} h-flex justcont-spacearound `}
-          onClick={submitExpense}>
+      <div className='submit-button-container flex padding1010'>
+        <button
+          style={{ padding: "0.8rem" }}
+          className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually ? "active"
+            :
+            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 && currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
+              "active"
+              :
+              null} h-flex justcont-spacearound `}
+          onClick={submitExpense}
+          disabled={newExpense.amount && Number(newExpense.amount) !== 0 ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
-        </div>
+        </button>
       </div>
-    </SlidingLeftBox>
+    </div>
   )
 }
 

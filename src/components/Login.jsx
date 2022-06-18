@@ -18,8 +18,8 @@ const Login = () => {
           The tool for organising your shared finances.
         </div>
       </div>
-      {location.pathname==="/login"?<LoginOrSignup /> : location.pathname==="/signup"? <SignUp/> :"" }
-      
+      {location.pathname === '/login'?<LoginOrSignup /> : location.pathname==='/signup'? <SignUp/> :'' }
+
     </div>
   );
 }

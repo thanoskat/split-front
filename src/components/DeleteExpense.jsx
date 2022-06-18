@@ -3,7 +3,6 @@ import store from '../redux/store'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
-import populateLabels from '../utility/populateLabels'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -56,8 +55,7 @@ const DeleteExpense = () => {
   const getGroup = async (id) => {
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      const group = populateLabels(window.structuredClone(res.data))
-      dispatch(setSelectedGroup(group))
+      dispatch(setSelectedGroup(res.data))
     }
     catch(error) {
       console.log('/groups/getgroup', error)

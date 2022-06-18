@@ -25,9 +25,9 @@ const Expenses = () => {
   const filteredExpenses = selectedGroup.expenses.filter(expense => {
     if(filters.length === 0) return true
     if(filters.length === 1) {
-      if(filters.includes(expense.sender._id) || filters.includes(expense.expenseTags[0]?._id)) return true
+      if(filters.includes(expense.spender._id) || filters.includes(expense.label)) return true
     }
-    if(filters.includes(expense.sender._id) && filters.includes(expense.expenseTags[0]?._id)) return true
+    if(filters.includes(expense.spender._id) && filters.includes((expense.label))) return true
     return false
   })
 
@@ -52,10 +52,10 @@ const Expenses = () => {
             id='expense-pill'
             className='pointer'
             onClick={() => removeFilter(filter)}
-            style={{ color: `var(--${selectedGroup.groupTags.find(label => label._id === filter)?.color})`}}
+            style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})`}}
           >
             {selectedGroup.members.find(member => member._id === filter)?.nickname}
-            {selectedGroup.groupTags.find(label => label._id === filter)?.name}
+            {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
             <IonIcon name='close' />
           </div>
         ))}
@@ -67,7 +67,7 @@ const Expenses = () => {
           <div key={expense._id} id='expense' className='flex column'>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row'>
-                <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
+                {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
                 <div id='expense-time'>{dayjs(expense.createdAt).format('HH:mm')}</div>
               </div>
               <IonIcon
@@ -82,23 +82,20 @@ const Expenses = () => {
             </div>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row alignitems-center' style={{ gap: '8px' }}>
-                {expense.expenseTags?.map(label => (
-                  <div key={label._id}
-                    // onClick={() => setFilter({...filter, label: label._id})}
-                    onClick={() => addFilter(label._id)}
+                {expense.label &&
+                  <div
+                    onClick={() => addFilter(expense.label)}
                     id='expense-pill' className='pointer shadow'
-                    style={{ color: `var(--${label.color})` }}
+                    style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === expense.label).color})` }}
                   >
-                    {label.name}
-                  </div>
-                ))}
+                    {selectedGroup.groupLabels.find(label => label._id === expense.label).name}
+                  </div>}
                 <div style={{ fontSize: '12px', fontWeight: '700'}}>PAID BY</div>
                 <div
                   id='expense-pill' className='shadow pointer'
-                  // onClick={() => setFilter({...filter, spender: expense.sender._id})}
-                  onClick={() => addFilter(expense.sender._id)}
+                  onClick={() => addFilter(expense.spender._id)}
                 >
-                  {expense.sender.nickname}
+                  {expense.spender.nickname}
                 </div>
               </div>
               <IonIcon

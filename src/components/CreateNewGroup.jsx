@@ -24,7 +24,7 @@ export default function CreateNewGroup({ setSearchParams }) {
       const group = await api.post("/groups/creategroup", {
         creatorID: sessionData.userId,
         title: groupName,
-        groupTags: newLabel
+        groupLabels: newLabel
       })
       console.log(group)
       setLoading(false)
@@ -122,7 +122,7 @@ export default function CreateNewGroup({ setSearchParams }) {
         ))}
 
         {!newMode &&
-          <div style={{ color: "var(--light-color)", borderColor: "var(--label-color-6)", backgroundColor: "var(--label-color-6)", alignSelf:"auto" }} 
+          <div style={{ color: "var(--light-color)", borderColor: "var(--label-color-6)", backgroundColor: "var(--label-color-6)", alignSelf:"auto" }}
           className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
         {newMode &&
           <div className='flex row justcont-spacebetween'>

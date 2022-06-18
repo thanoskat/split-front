@@ -1,9 +1,8 @@
-import { TabSwitcher, UserBar, GroupSelector2, AddExpense2, DeleteExpense, Invitation, TabSelector } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, TabSelector, LabelEditor } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
-import populateLabels from '../utility/populateLabels'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentMenu, setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
@@ -31,8 +30,8 @@ const Main = () => {
   const getGroup = async (id) => {
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      const group = populateLabels(window.structuredClone(res.data))
-      dispatch(setSelectedGroup(group))
+      console.log(res.data)
+      dispatch(setSelectedGroup(res.data))
     }
     catch(error) {
       console.log('/groups/getgroup', error)
@@ -58,7 +57,7 @@ const Main = () => {
               <div onClick={() => setSearchParams({menu: 'invitation'})}>
                 <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
               </div>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => dispatch(setCurrentMenu('groupOptions'))} />
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({menu: 'groupoptions'})} />
             </div>
           </div>
           <div className='separator-1' />
@@ -89,7 +88,7 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <GroupSelector2 />
+        <GroupSelector />
       </CSSTransition>
 
       <CSSTransition
@@ -98,7 +97,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <AddExpense2 setSearchParams={setSearchParams}/>
+        <AddExpense setSearchParams={setSearchParams}/>
       </CSSTransition>
 
       <CSSTransition
@@ -117,6 +116,15 @@ const Main = () => {
         unmountOnExit
       >
         <DeleteExpense />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'groupoptions')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <LabelEditor />
       </CSSTransition>
     </div>
   )
