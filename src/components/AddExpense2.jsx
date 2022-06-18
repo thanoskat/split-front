@@ -16,7 +16,7 @@ function AddExpense2({ setSearchParams }) {
   const [loading, setLoading] = useState(false)
   const [includeAll, setIncludeAll] = useState(true)
   const [splitEqually, setSplitEqually] = useState(true)
-  const [dummy, setDummy] = useState({ downPaymentPercent: "", downPaymentAmount: "" })
+  const precision = 5;
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
     amount: '',
@@ -26,11 +26,15 @@ function AddExpense2({ setSearchParams }) {
   })
 
   let totalContributed = 0
+  let totalpercentage = 0
   newExpense.participants?.map((participant) => {
     totalContributed = currency(totalContributed).add(participant?.contributionAmount)
+    totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
 
+  // console.log(totalpercentage)
   console.log(newExpense)
+
   const filteredGroupMembers = selectedGroup?.members.filter(
     function (e) {
       return this?.indexOf(e._id) > -1;
@@ -40,39 +44,37 @@ function AddExpense2({ setSearchParams }) {
 
 
   //  const [dummy, setDummy] = useState({ percentage: "", contributionAmount: "" })
-  const handleInputChange = (e) => {
-    const { target: { name, value } } = e
-    setDummy({ [name]: value })
+  // const handleInputChange = (e) => {
+  //   const { target: { name, value } } = e
+  //   setDummy({ [name]: value })
 
-    console.log(e.target.value)
-    switch (name) {
+  //   console.log(e.target.value)
+  //   switch (name) {
 
-      case 'percentage':
-        const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
-        setDummy({ contributionAmount: newAmount })
-        break
-      case 'contributionAmount':
-        const newPercent = (value * 100) / newExpense.amount
-        setDummy({ percentage: newPercent })
-        break
-      default:
-        break
-    }
-  }
+  //     case 'percentage':
+  //       const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
+  //       setDummy({ contributionAmount: newAmount })
+  //       break
+  //     case 'contributionAmount':
+  //       const newPercent = (value * 100) / newExpense.amount
+  //       setDummy({ percentage: newPercent })
+  //       break
+  //     default:
+  //       break
+  //   }
+  // }
 
-
-  const changeMemberContributionAmount = (e, participantClickedId, isPct) => {
+  const changeMemberContributionAmount = (e, participantClickedId) => {
+    if ((newExpense.amount === "" || Number(newExpense.amount) === 0)) return
     const index = newExpense.participants?.findIndex(participant => participant.memberId === participantClickedId)
     const { target: { name, value } } = e
     setNewExpense({ ...newExpense, participants: { [name]: value } })
 
-    console.log(e.target.value)
-
-
     switch (name) {
 
       case 'percentage':
-        const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
+        const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value   // Assuming fullAmount set in state
+        console.log("newAmount", newAmount)
         setNewExpense({
           ...newExpense,
           participants: [
@@ -83,7 +85,8 @@ function AddExpense2({ setSearchParams }) {
         })
         break
       case 'contributionAmount':
-        const newPercent = (value * 100) / newExpense.amount
+        const newPercent = currency(value, { precision }).multiply(100).divide(newExpense.amount).value
+        console.log("newPercent", newPercent)
         setNewExpense({
           ...newExpense,
           participants: [
@@ -96,8 +99,6 @@ function AddExpense2({ setSearchParams }) {
       default:
         break
     }
-
-
   }
 
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -131,6 +132,14 @@ function AddExpense2({ setSearchParams }) {
   // const handleCloseSlidingLeft = () => {
   //   window.history.go(-1)
   // }
+
+const updateAmount = (e)=>{
+
+setNewExpense({ ...newExpense,
+   amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))),
+   participants:  [{  contributionAmount: "", percentage: "" }]
+   })
+}
 
 
   const submitExpense = async () => {
@@ -209,10 +218,7 @@ function AddExpense2({ setSearchParams }) {
     }
   }
 
-
-
   return (
-
     <div className='addExpenseBox flex column fixed'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
         <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
@@ -237,7 +243,7 @@ function AddExpense2({ setSearchParams }) {
             placeholder='0'
             step="0.01"
             value={newExpense.amount}
-            onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
+            onChange={(e)=>updateAmount(e)}
             autoFocus={true}
             spellCheck='false'
           />
@@ -249,7 +255,6 @@ function AddExpense2({ setSearchParams }) {
           value={newExpense.description}
           onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
           spellCheck='false'
-
         />
 
         <div className='flex row wrap gap10'>
@@ -313,17 +318,13 @@ function AddExpense2({ setSearchParams }) {
                         <div className=''>
                           <input
                             style={{ maxWidth: "55px" }}
-                            className='t3 text-align-right'
+                            className='styledInput t3 text-align-right'
                             type='tel'
                             placeholder='0'
                             step="0.01"
-                            //value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''} //otherwise it complains for uncontrolled input due to undefined selectedGroup on 1st render
-                            // onChange={e => setNewExpense({ ...newExpense, amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))) })}
-                            //onChange={(e) => changeMemberContributionAmount(e, member._id)}
-                            //autoFocus={true}
                             spellCheck='false'
                             name="contributionAmount"
-                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount}
+                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "" : newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''}
                             //value={dummy.contributionAmount }
                             onChange={e => changeMemberContributionAmount(e, member._id)}
                           //onChange={e => handleInputChange(e)}
@@ -332,23 +333,18 @@ function AddExpense2({ setSearchParams }) {
                         <div className=''>
                           <input
                             style={{ maxWidth: "55px" }}
-                            className='t3 text-align-right'
+                            className='styledInput t3 text-align-right'
                             type='tel'
-                            //placeholder={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
                             step="0.01"
                             placeholder='0'
-                            //value={(newExpense.amount === "" || Number(newExpense.amount) === 0 )? "" : currency(newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount).divide(newExpense.amount).value * 100 || ''}
-                            //value={newExpense.participants.find(participant => participant.memberId === member._id)?.contributionAmount || ''}
-                            //onChange={(e) => changeMemberContributionAmount(e, member._id, true)}
                             spellCheck='false'
                             name="percentage"
-                            value={newExpense.participants.find(participant => participant.memberId === member._id)?.percentage}
+                            value={(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "" : newExpense.participants.find(participant => participant.memberId === member._id)?.percentage || ''}
                             //value={dummy.percentage}
                             onChange={e => changeMemberContributionAmount(e, member._id)}
                           //onChange={e => handleInputChange(e)}
                           />
                         </div>
-
                       </div>
                     </li>))}
                 </ul>
@@ -358,10 +354,11 @@ function AddExpense2({ setSearchParams }) {
                 <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px", marginTop: "0.7rem" }}></div>
                 <div className='flex' style={{ marginLeft: "82px", fontSize: "13px", marginTop: "0.7rem" }}>
 
-                  {currency(removeCommas(newExpense.amount)).subtract(totalContributed.value).value} remaining
+                  {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : currency(removeCommas(newExpense.amount), { precision}).subtract(totalContributed.value).value} remaining
 
                 </div>
-                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>30% remaining</span>
+                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : currency(100, { precision }).subtract(totalpercentage.value).value}% remaining</span>
+
               </div>
             </div>
           }
@@ -373,7 +370,7 @@ function AddExpense2({ setSearchParams }) {
           style={{ padding: "0.8rem" }}
           className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually ? "active"
             :
-            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount)).subtract(totalContributed.value).value === 0 ?
+            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount), { precision}).subtract(totalContributed.value).value === 0 && currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
               "active"
               :
               null} h-flex justcont-spacearound `}
