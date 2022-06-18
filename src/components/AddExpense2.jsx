@@ -16,7 +16,7 @@ function AddExpense2({ setSearchParams }) {
   const [loading, setLoading] = useState(false)
   const [includeAll, setIncludeAll] = useState(true)
   const [splitEqually, setSplitEqually] = useState(true)
-  const precision = 5;
+  const precision = 4;
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
     amount: '',
@@ -25,6 +25,17 @@ function AddExpense2({ setSearchParams }) {
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
   })
 
+  const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const removeCommas = num => num?.toString().replace(/,/g, '');
+  const removeNonNumeric = num => num?.toString().replace(/[^0-9.]/g, "")
+  const process = (input) => {
+    const index = input.indexOf('.');
+    if (index > -1) {
+      input = input.substr(0, index + 1) + input.slice(index).replace(/\./g, '');
+    }
+    return input;
+  }
+
   let totalContributed = 0
   let totalpercentage = 0
   newExpense.participants?.map((participant) => {
@@ -32,8 +43,53 @@ function AddExpense2({ setSearchParams }) {
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
 
-  // console.log(totalpercentage)
-  console.log(newExpense)
+  const remaining = () => {
+    const remainingAmount = currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value
+    const remainingPercentage = currency(100, { precision }).subtract(totalpercentage.value).value
+    const participants = newExpense.participants?.filter(participant => typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number" && (participant.contributionAmount !==0 && participant.percentage!==0))
+    //console.log(numberofparticipants)
+    if (remainingAmount === 0 && remainingPercentage !== 0) {
+      console.log("entered remaining %")
+      const distrArr = currency(remainingPercentage).distribute(participants.length)
+      const distrArrValues = distrArr?.map(element => element.value)
+      console.log("distributed array", distrArrValues)
+      let tempParticipantsArr = [...newExpense.participants]
+      console.log("state tbu", tempParticipantsArr)
+      console.log("participants with cells", participants)
+      let counter = 0
+      tempParticipantsArr?.map((tempParticipant) => {
+        participants?.map((participant) => {
+          if (participant.memberId === tempParticipant.memberId) {
+            tempParticipant.percentage = currency(tempParticipant.percentage).add(distrArrValues[counter]).value
+            counter = counter + 1
+            console.log(counter)
+          }
+        })
+      })
+    } else {
+      if (remainingAmount !== 0 && remainingPercentage === 0) {
+        console.log("entered remaining amount")
+        console.log("remainingAmount inside if", remainingAmount)
+        const distrArr = currency(remainingAmount).distribute(participants.length)
+        const distrArrValues = distrArr?.map(element => element.value)
+        console.log("distributed array", distrArrValues)
+        let tempParticipantsArr = [...newExpense.participants]
+        console.log("state tbu", tempParticipantsArr)
+        console.log("participants with cells", participants)
+        let counter = 0
+        tempParticipantsArr?.map((tempParticipant) => {
+          participants?.map((participant) => {
+            if (participant.memberId === tempParticipant.memberId) {
+              tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArrValues[counter]).value
+              counter = counter + 1
+            }
+          })
+        })
+      }
+    }
+    //console.log("remainingAmount", remainingAmount)
+    return { remainingAmount, remainingPercentage }
+  }
 
   const filteredGroupMembers = selectedGroup?.members.filter(
     function (e) {
@@ -74,7 +130,7 @@ function AddExpense2({ setSearchParams }) {
 
       case 'percentage':
         const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value   // Assuming fullAmount set in state
-        console.log("newAmount", newAmount)
+        // console.log("newAmount", newAmount)
         setNewExpense({
           ...newExpense,
           participants: [
@@ -86,7 +142,7 @@ function AddExpense2({ setSearchParams }) {
         break
       case 'contributionAmount':
         const newPercent = currency(value, { precision }).multiply(100).divide(newExpense.amount).value
-        console.log("newPercent", newPercent)
+        // console.log("newPercent", newPercent)
         setNewExpense({
           ...newExpense,
           participants: [
@@ -99,18 +155,10 @@ function AddExpense2({ setSearchParams }) {
       default:
         break
     }
+
   }
 
-  const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeCommas = num => num?.toString().replace(/,/g, '');
-  const removeNonNumeric = num => num?.toString().replace(/[^0-9.]/g, "")
-  const process = (input) => {
-    const index = input.indexOf('.');
-    if (index > -1) {
-      input = input.substr(0, index + 1) + input.slice(index).replace(/\./g, '');
-    }
-    return input;
-  }
+
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -133,13 +181,13 @@ function AddExpense2({ setSearchParams }) {
   //   window.history.go(-1)
   // }
 
-const updateAmount = (e)=>{
+  const updateAmount = (e) => {
 
-setNewExpense({ ...newExpense,
-   amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join(".")))),
-   participants:  [{  contributionAmount: "", percentage: "" }]
-   })
-}
+    setNewExpense({
+      ...newExpense,
+      amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
+    })
+  }
 
 
   const submitExpense = async () => {
@@ -243,7 +291,7 @@ setNewExpense({ ...newExpense,
             placeholder='0'
             step="0.01"
             value={newExpense.amount}
-            onChange={(e)=>updateAmount(e)}
+            onChange={(e) => updateAmount(e)}
             autoFocus={true}
             spellCheck='false'
           />
@@ -354,10 +402,10 @@ setNewExpense({ ...newExpense,
                 <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px", marginTop: "0.7rem" }}></div>
                 <div className='flex' style={{ marginLeft: "82px", fontSize: "13px", marginTop: "0.7rem" }}>
 
-                  {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : currency(removeCommas(newExpense.amount), { precision}).subtract(totalContributed.value).value} remaining
+                  {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : remaining().remainingAmount} remaining
 
                 </div>
-                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : currency(100, { precision }).subtract(totalpercentage.value).value}% remaining</span>
+                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : remaining().remainingPercentage}% remaining</span>
 
               </div>
             </div>
@@ -370,7 +418,7 @@ setNewExpense({ ...newExpense,
           style={{ padding: "0.8rem" }}
           className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually ? "active"
             :
-            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount), { precision}).subtract(totalContributed.value).value === 0 && currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
+            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 && currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
               "active"
               :
               null} h-flex justcont-spacearound `}
