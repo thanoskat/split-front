@@ -11,7 +11,8 @@ import {
   AddExpense2,
   TabMembers,
   TabSettleUp,
-  Expenses
+  Expenses,
+  Home
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'

@@ -17,6 +17,7 @@ const Main = () => {
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+  const nodeRef = useRef(null)
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()

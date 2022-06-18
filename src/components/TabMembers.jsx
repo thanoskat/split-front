@@ -1,28 +1,13 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
-import IonIcon from '@reacticons/ionicons'
+
 
 const TabMembers = () => {
 
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  //to be deleted
-  const [UserIDtoBeAdded, SetUserIDtoBeAdded] = useState("")
-  const [GroupIDtoAddUser, SetGroupIDtoAddUser] = useState("")
-  const api = useAxios()
-  const onSubmitAddUserToGroup = async (e) => {
-    const IDs = {
-      userID: UserIDtoBeAdded,
-      groupID: GroupIDtoAddUser
-    }
 
-    await api.post('groups/addUserToGroup', IDs)
-    //e.target.reset()
-    //need to rerender for calculations to appear
-  }
-  //end of - to be deleted
   const [showTreeID, setShowTreeID] = useState([])
   console.log(selectedGroup)
   console.log(showTreeID)
@@ -63,18 +48,18 @@ const TabMembers = () => {
   }
 
   const memberInfo = memberInfoConstructor(selectedGroup)
-  console.log(memberInfo)
+  //console.log(memberInfo)
 
   const Tree = ({ toFrom, isSenderReceiverSettled }) => {
     return (
-      <div className='tree' style={{ bottom: "10px" }}>
+      <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
         <ul>
           {toFrom?.map(member => (
             <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
                 <div className='flex row'><div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> to {member.name}</div>
                 : isSenderReceiverSettled === 2 ?
-                  <div className='flex row'><div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> from {member.name}</div> : ""}
+                  <div className='flex row'><div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> from {member.name}</div> : <></>}
             </li>))}
         </ul>
       </div>
@@ -109,22 +94,24 @@ const TabMembers = () => {
         <div className="owesOwed flex row justcont-spacebetween alignitems-center">
           {isSenderReceiverSettled === 1 ?
             <div className="description flex row alignitems-center">
-              owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div> in total &nbsp;
+              owes<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
+              {toFrom.length === 1 ? <div>to {toFrom[0].name} &nbsp;</div> : <div>in total &nbsp;</div>}
               {/* <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                 style={{ '--pill-color': 'var(--layer-6-color)' }}>
                 <IonIcon name='people-sharp' />
                 {toFrom?.length}
               </div>&nbsp; */}
             </div> : isSenderReceiverSettled === 2 ?
-              <div className="description flex row alignitems-center">
-                is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>in total&nbsp;
+              <div className="description flex row alignitems-center" style={{margin:"0 0 15px 0"}}>
+                is owed<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
+                {toFrom.length === 1 ? <div>from {toFrom[0].name} &nbsp;</div> : <div>in total &nbsp;</div>}
                 {/* <div className='pill empty pointer justcont-center' onClick={() => showTreefcnt(id)}
                   style={{ '--pill-color': 'var(--layer-6-color)' }}>
                   <IonIcon name='people-sharp' />
                   {toFrom?.length}
                 </div>&nbsp; */}
               </div> :
-              <div className="description">
+              <div className="description flex row alignitems-center">
                 is settled
               </div>}
 
@@ -134,9 +121,11 @@ const TabMembers = () => {
         </div>
 
 
-        <Tree
-        toFrom={toFrom}
-        isSenderReceiverSettled={isSenderReceiverSettled} />
+        {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
+          <Tree
+            toFrom={toFrom}
+            isSenderReceiverSettled={isSenderReceiverSettled} />
+        }
 
 
 
@@ -165,18 +154,6 @@ const TabMembers = () => {
         ))}
       </div>
 
-
-      <form
-        onSubmit={e => onSubmitAddUserToGroup(e)}
-      >
-        <input
-          onChange={event => SetUserIDtoBeAdded(event.target.value)}
-          placeholder='User ID' />
-        <input
-          onChange={event => SetGroupIDtoAddUser(event.target.value)}
-          placeholder='group ID address ' />
-        <button type="submit">Add User to Group</button>
-      </form>
       <Outlet />
     </div>
   );
