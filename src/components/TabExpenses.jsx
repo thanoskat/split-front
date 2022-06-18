@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import currency from 'currency.js'
 
-
 var dayjs = require('dayjs')
 var relativeTime = require('dayjs/plugin/relativeTime')
 var calendar = require('dayjs/plugin/calendar')
@@ -42,7 +41,7 @@ const TabExpenses = () => {
     }
 
     return (
-      <div className='expense flex column justcont-spacebetween gap8'>
+      <div className='expense flex column justcont-spacebetween gap8' style={{gap: '12px'}}>
         <div className='flex row justcont-center semibold t6' style={{ alignItems: 'flex-end' }}>
           <div className='bold' style={{ color: `var(--weekday-${dayjs(expense.createdAt).day()})` }}>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}</div>
           &nbsp;
@@ -63,14 +62,14 @@ const TabExpenses = () => {
         </div>
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div className='flex row gap6 alignitems-center'>
-          
+
             <div className='pill empty pointer'
               style={{ '--pill-color': 'var(--layer-6-color)' }}
               onClick={() => addFilterSender(expense.sender)}
             >
               {expense.sender.nickname}
             </div>
-            
+
             and split with
             {!showTags && expense.tobeSharedWith?.map(participant => (
               <div key={participant} className='pill empty'

@@ -98,27 +98,13 @@ function AddExpense2({ setSearchParams }) {
     newExpense.participants?.map(participant => participant.memberId)
   );
 
-
-  //  const [dummy, setDummy] = useState({ percentage: "", contributionAmount: "" })
-  // const handleInputChange = (e) => {
-  //   const { target: { name, value } } = e
-  //   setDummy({ [name]: value })
-
-  //   console.log(e.target.value)
-  //   switch (name) {
-
-  //     case 'percentage':
-  //       const newAmount = value / 100 * newExpense.amount  // Assuming fullPrice set in state
-  //       setDummy({ contributionAmount: newAmount })
-  //       break
-  //     case 'contributionAmount':
-  //       const newPercent = (value * 100) / newExpense.amount
-  //       setDummy({ percentage: newPercent })
-  //       break
-  //     default:
-  //       break
-  //   }
-  // }
+  useEffect(() => {
+    abortControllerRef.current = new AbortController()
+    return () => {
+      abortControllerRef.current.abort()
+    }
+  // eslint-disable-next-line
+  }, [])
 
   const changeMemberContributionAmount = (e, participantClickedId) => {
     if ((newExpense.amount === "" || Number(newExpense.amount) === 0)) return
@@ -127,7 +113,6 @@ function AddExpense2({ setSearchParams }) {
     setNewExpense({ ...newExpense, participants: { [name]: value } })
 
     switch (name) {
-
       case 'percentage':
         const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value   // Assuming fullAmount set in state
         // console.log("newAmount", newAmount)
@@ -155,34 +140,9 @@ function AddExpense2({ setSearchParams }) {
       default:
         break
     }
-
   }
 
-
-
-  useEffect(() => {
-    abortControllerRef.current = new AbortController()
-
-    return () => {
-      abortControllerRef.current.abort()
-
-    }
-    // eslint-disable-next-line
-  }, [])
-
-  // const handleBack = (e) => {
-  //   console.log("popstate event detected")
-  //   //e.preventDefault();
-  //   //window.history.go(1)//same as history.forward() ->goes forward one page
-  //   dispatch(closeSlidingLeftBox())
-  // }
-
-  // const handleCloseSlidingLeft = () => {
-  //   window.history.go(-1)
-  // }
-
   const updateAmount = (e) => {
-
     setNewExpense({
       ...newExpense,
       amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
@@ -191,7 +151,6 @@ function AddExpense2({ setSearchParams }) {
 
 
   const submitExpense = async () => {
-    console.log("submitted")
     if (!newExpense.amount) return
     if (!loading) {
       setLoading(true)

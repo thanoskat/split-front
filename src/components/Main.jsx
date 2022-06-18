@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector2, AddExpense2, DeleteExpense, Invitation } from '.'
+import { TabSwitcher, UserBar, GroupSelector2, AddExpense2, DeleteExpense, Invitation, TabSelector } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -21,7 +21,6 @@ const Main = () => {
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
-    console.log('figma useeffect', params.groupid)
     getGroup(params.groupid)
     return() => {
       abortControllerRef.current.abort()
@@ -64,6 +63,7 @@ const Main = () => {
           </div>
           <div className='separator-1' />
           <TabSwitcher />
+          {/* <TabSelector /> */}
 
           {(displayedGroup !== null) && <Outlet />}
 
@@ -91,6 +91,7 @@ const Main = () => {
       >
         <GroupSelector2 />
       </CSSTransition>
+
       <CSSTransition
         in={(searchParams.get('menu') === 'newexpense')}
         timeout={300}
@@ -99,6 +100,7 @@ const Main = () => {
       >
         <AddExpense2 setSearchParams={setSearchParams}/>
       </CSSTransition>
+
       <CSSTransition
         in={(searchParams.get('menu') === 'invitation')}
         timeout={300}
@@ -107,6 +109,7 @@ const Main = () => {
       >
         <Invitation />
       </CSSTransition>
+
       <CSSTransition
         in={(searchParams.get('menu') === 'deleteexpense')}
         timeout={300}
