@@ -123,6 +123,16 @@ select {
   height: inherit
 }
 
+.tick-cube {
+  position: relative;
+  height: 25px;
+  width: 25px;
+  min-width: 25px;
+  background-color: var(--inactiveColor);
+  border-radius: 3px;
+  cursor: pointer;
+
+}
 .overflow-auto {
   /* firefox */
   scrollbar-color: #858585 transparent;
@@ -932,7 +942,7 @@ select {
 
 .tree li::before {
   border-top: 2.5px solid rgb(148, 146, 146);
-  top: 9px;
+  top: 10px; /*increase - moves horizontal line up or down*/
   width: 8px;
   height: 0;
   border-bottom-left-radius: 15px;
@@ -950,7 +960,7 @@ select {
 }
 
 li:not(:last-child) {
-  margin-bottom: 8px;  /*increase - decrease distance between li items*/
+  margin-bottom: 24px;  /*increase - decrease distance between li items 13*/
 }
 
 .appName{
