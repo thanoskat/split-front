@@ -4,7 +4,6 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
-import populateLabels from '../utility/populateLabels'
 import "../style/Form.css"
 import IonIcon from '@reacticons/ionicons'
 
@@ -14,7 +13,7 @@ const LabelItem = ({ labelId }) => {
   const dispatch = useDispatch()
   const abortControllerRef = useRef(null)
   const [loading, setLoading] = useState(false)
-  const label = useSelector(state => state.mainReducer.selectedGroup.groupTags.find(label => label._id === labelId), shallowEqual)
+  const label = useSelector(state => state.mainReducer.selectedGroup.groupLabels.find(label => label._id === labelId), shallowEqual)
   const [editMode, setEditMode] = useState(false)
   const [deleteMode, setDeleteMode] = useState(false)
   const [content, setContent] = useState(label?.name)
@@ -47,7 +46,7 @@ const LabelItem = ({ labelId }) => {
             id: label._id,
             text: content
           }, { signal: abortControllerRef.current.signal })
-          dispatch(setSelectedGroup(populateLabels(res.data)))
+          dispatch(setSelectedGroup(res.data))
           setLoading(false)
         }
         catch(error) {
@@ -66,7 +65,7 @@ const LabelItem = ({ labelId }) => {
         groupId: group._id,
         labelId: label._id,
       }, { signal: abortControllerRef.current.signal })
-      dispatch(setSelectedGroup(populateLabels(res.data)))
+      dispatch(setSelectedGroup(res.data))
     }
     catch(error) {
       console.log(error)
@@ -82,8 +81,8 @@ const LabelItem = ({ labelId }) => {
   }
 
   const isUsed = (labelId) => (
-    store.getState().mainReducer.selectedGroup.expenses.some((expense) => (
-      expense.expenseTags.some(expenseLabel => expenseLabel._id === labelId)
+    store.getState().mainReducer.selectedGroup.expenses.some(expense => (
+      expense.label === labelId
     ))
   )
 
@@ -151,7 +150,7 @@ const LabelItem = ({ labelId }) => {
   )
 }
 
-const LabelEditor = ({ close }) => {
+const LabelEditor = () => {
   const api = useAxios()
   const dispatch = useDispatch()
   const abortControllerRef = useRef(null)
@@ -181,7 +180,7 @@ const LabelEditor = ({ close }) => {
   }, [])
 
   const createNewLabel = async () => {
-    const defaultColorsUsed = group.groupTags.map(label => label.color)
+    const defaultColorsUsed = group.groupLabels.map(label => label.color)
     const firstAvailableColor = defaultColors.filter(color => !defaultColorsUsed.includes(color))[0]
     setLoading(true)
     const res = await api.post(`/expense/addtag`,
@@ -190,7 +189,7 @@ const LabelEditor = ({ close }) => {
         groupTag: { name: newLabel.name, color: firstAvailableColor }
       },
       { signal: abortControllerRef.current.signal })
-    dispatch(setSelectedGroup(populateLabels(res.data)))
+    dispatch(setSelectedGroup(res.data))
     setNewLabel({...newLabel, name: ''})
     setLoading(false)
     setNewMode(false)
@@ -202,10 +201,11 @@ const LabelEditor = ({ close }) => {
   }
 
   return (
-    <SlidingBox close={close} className='top-radius' style={{backgroundColor: 'var(--layer-1-color)'}}>
+    // <SlidingBox close={close} className='top-radius' style={{backgroundColor: 'var(--layer-1-color)'}}>
+    <div className='bottom-menu top-radius' style={{zIndex: '2'}}>
       <div className='flex row t1 justcont-center padding4'>Labels</div>
       <div className='flex column gap10 padding1010'>
-        {group.groupTags.map(label => (
+        {group?.groupLabels.map(label => (
           <LabelItem labelId={label._id}/>
         ))}
         {!newMode &&
@@ -230,7 +230,7 @@ const LabelEditor = ({ close }) => {
         </div>
         }
       </div>
-    </SlidingBox>
+    </div>
   )
 }
 
