@@ -1,23 +1,23 @@
 import { useState, useEffect, useRef } from 'react'
 import store from '../redux/store'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
-// import { createBrowserHistory } from 'history'
+import populateLabels from '../utility/populateLabels'
+import { setSelectedGroup } from '../redux/mainSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const DeleteExpense = () => {
 
-  console.log('rendered')
-  // let history = createBrowserHistory()
-  // console.log('history', history)
-  // const url = window.location.href
+  const params = useParams()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const api = useAxios()
   const abortControllerRef = useRef(null)
   const [isLoading, setLoading] = useState(false)
   const [searchParams] = useSearchParams()
-
   const expenseID = searchParams.get('id')
+
 
   useEffect(() => {
     window.addEventListener('popstate', event => console.log(event));
@@ -38,6 +38,8 @@ const DeleteExpense = () => {
         expenseId: expenseID
       },
       { signal: abortControllerRef.current.signal })
+      getGroup(params.groupid)
+      navigate('expenses', { replace: true })
     }
     catch(error) {
       console.log(error.message)
@@ -51,8 +53,19 @@ const DeleteExpense = () => {
     navigate('expenses', { replace: true })
   }
 
+  const getGroup = async (id) => {
+    try {
+      const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
+      const group = populateLabels(window.structuredClone(res.data))
+      dispatch(setSelectedGroup(group))
+    }
+    catch(error) {
+      console.log('/groups/getgroup', error)
+    }
+  }
+
   return (
-    <div className='fixed' style={{zIndex: '2'}}>
+    <div className='bottom-menu top-radius' style={{zIndex: '2'}}>
       <div className='flex row t05 justcont-center alignitems-center padding4'>
         {`Delete?`}
         {isLoading && <IonIcon name='sync' className='t3 spin'/>}

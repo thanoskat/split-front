@@ -1,5 +1,6 @@
 import './App.css';
 import {
+  Home,
   Menus,
   Main,
   TabExpenses,
@@ -10,6 +11,7 @@ import {
   AddExpense2,
   TabMembers,
   TabSettleUp,
+  Expenses
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
@@ -26,11 +28,11 @@ function App() {
           <Route path="/v/:token" element={<VerifyLink />} />
           <Route path="/addexp" element={<AddExpense2 />} />
           <Route element={<PrivateRoutes />}>
-            <Route path='/' element={<div>Welcome</div>} />
+            <Route path='/' element={<Home />} />
             <Route path='i/:invitationCode' element={<VerifyInvitation />} />
-            <Route path=':groupid' element={< Main />}>
-              <Route index element={<TabExpenses />} />
-              <Route path='expenses' element={<TabExpenses />} />
+            <Route path=':groupid' element={<Main />}>
+              <Route index element={<Expenses />} />
+              <Route path='expenses' element={<Expenses />} />
               <Route path='members' element={<TabMembers />} />
               <Route path='settleup' element={<TabSettleUp />} />
             </Route>
@@ -42,4 +44,4 @@ function App() {
   )
 }
 
-export default App;
+export default App

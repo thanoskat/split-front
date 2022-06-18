@@ -33,15 +33,13 @@ function AddExpense2({setSearchParams}) {
     return input;
 }
 
-  // useEffect(() => {
-  //   abortControllerRef.current = new AbortController()
-  //   window.addEventListener('popstate', handleBack);
-  //   return () => {
-  //     abortControllerRef.current.abort()
-  //     window.removeEventListener('popstate', handleBack)
-  //   }
-  // // eslint-disable-next-line
-  // }, [])
+  useEffect(() => {
+    abortControllerRef.current = new AbortController()
+    return () => {
+      abortControllerRef.current.abort()
+    }
+  // eslint-disable-next-line
+  }, [])
 
   // const handleBack = (e) => {
   //   console.log("popstate event detected")
@@ -56,7 +54,7 @@ function AddExpense2({setSearchParams}) {
 
 
   const submitExpense = async () => {
-    console.log("sdfdsfg")
+    console.log(newExpense)
     if (!newExpense.amount) return
     if (!loading) {
       setLoading(true)
