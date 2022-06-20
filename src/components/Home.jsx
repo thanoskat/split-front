@@ -17,7 +17,7 @@ export default function Home() {
   const sessionData = store.getState().authReducer.sessionData
   const [searchParams, setSearchParams] = useSearchParams()
 
-
+  console.log(groupList)
   const getGroups = async () => {
     setIsloading(true)
     try {
@@ -49,9 +49,13 @@ export default function Home() {
         Welcome {sessionData.userNickname}, what would you like to do?
       </div>
       <div className='loginBox flex column ' style={{ backgroundColor: "var(--layer-1-color)", borderColor: "var(--layer-1-color)", borderStyle: "solid" }}>
-        <div style={{ padding: "0 0 1rem 0" }}>
-          Return to a group
-        </div>
+      {groupList?.length===0? <div flex style={{ whiteSpace:"initial", textAlign:"center", alignSelf:"center", justifySelf:"center"  }}>
+          It looks like you are not a member of a group at the moment. Follow the invitation link other members might have sent you or scan their QR code in order to join a group 
+        </div> :
+       <div style={{ padding: "0 0 1rem 0" }}>
+       Return to a group
+     </div> }
+      
         <div className='whiteSpace-initial'>
           <div className='flex column gap4 padding4'>
             {isLoading && <IonIcon name='sync' className='t3 spin alignself-center' />}

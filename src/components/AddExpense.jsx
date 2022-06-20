@@ -5,6 +5,7 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import currency from 'currency.js'
+import { combineReducers } from '@reduxjs/toolkit'
 
 function AddExpense({ setSearchParams }) {
   const api = useAxios()
@@ -12,18 +13,21 @@ function AddExpense({ setSearchParams }) {
   const selectedGroup = store.getState().mainReducer.selectedGroup
   const sessionData = store.getState().authReducer.sessionData
   const abortControllerRef = useRef(null)
+
   const [loading, setLoading] = useState(false)
   const [includeAll, setIncludeAll] = useState(true)
   const [splitEqually, setSplitEqually] = useState(true)
   const precision = 4;
   const [newExpense, setNewExpense] = useState({
+    populatingPercentage: false,
     splitEqually: true,
     amount: '',
     description: '',
     label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: 1, percentage: "" }))
   })
 
+  console.log("new Expense", newExpense.participants)
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num?.toString().replace(/,/g, '');
   const removeNonNumeric = num => num?.toString().replace(/[^0-9.]/g, "")
@@ -34,6 +38,7 @@ function AddExpense({ setSearchParams }) {
     }
     return input;
   }
+  const rounding = value => currency(value, { increment: .05 });
 
   let totalContributed = 0
   let totalpercentage = 0
@@ -42,50 +47,121 @@ function AddExpense({ setSearchParams }) {
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
 
+
+  //console.log("total % outside",totalpercentage.value)
   const remaining = () => {
+
     const remainingAmount = currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value
     const remainingPercentage = currency(100, { precision }).subtract(totalpercentage.value).value
-    const participants = newExpense.participants?.filter(participant => typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number" && (participant.contributionAmount !==0 && participant.percentage!==0))
-    //console.log(numberofparticipants)
-    if (remainingAmount === 0 && remainingPercentage !== 0) {
-      console.log("entered remaining %")
-      const distrArr = currency(remainingPercentage).distribute(participants.length)
-      const distrArrValues = distrArr?.map(element => element.value)
-      console.log("distributed array", distrArrValues)
-      let tempParticipantsArr = [...newExpense.participants]
-      console.log("state tbu", tempParticipantsArr)
-      console.log("participants with cells", participants)
-      let counter = 0
-      tempParticipantsArr?.map((tempParticipant) => {
-        participants?.map((participant) => {
-          if (participant.memberId === tempParticipant.memberId) {
-            tempParticipant.percentage = currency(tempParticipant.percentage).add(distrArrValues[counter]).value
-            counter = counter + 1
-            console.log(counter)
-          }
-        })
-      })
-    } else {
-      if (remainingAmount !== 0 && remainingPercentage === 0) {
-        console.log("entered remaining amount")
-        console.log("remainingAmount inside if", remainingAmount)
-        const distrArr = currency(remainingAmount).distribute(participants.length)
-        const distrArrValues = distrArr?.map(element => element.value)
-        console.log("distributed array", distrArrValues)
-        let tempParticipantsArr = [...newExpense.participants]
-        console.log("state tbu", tempParticipantsArr)
-        console.log("participants with cells", participants)
+    //const participants = newExpense.participants?.filter(participant => (typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number") && (participant.contributionAmount !==0 && participant.percentage!==0))
+    // //console.log(participants)
+    // let stateParticipantsArr = [...newExpense.participants]
+    // const currentParticipants = newExpense.participants?.filter(participant => (typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number") && (participant.contributionAmount !== 0 && participant.percentage !== 0))
+    // const distrArr = currency(remainingAmount).distribute(currentParticipants.length).map(element => element.value)
+    // console.log(distrArr)
+    // //console.log("stateParticipantsArr", stateParticipantsArr)
+    // //console.log("currentParticipants", currentParticipants)
+    // let counter = 0
+    // stateParticipantsArr?.map((stateParticipant) => {
+    //   currentParticipants?.map((participant) => {
+    //     if (participant.memberId === stateParticipant.memberId) {
+    //       //tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArr[counter]).value
+    //       console.log(" before match", rounding(stateParticipant.contributionAmount).value)
+    //       console.log("match", rounding(stateParticipant.contributionAmount + distrArr[counter]).value)
+    //       console.log("state before", newExpense.participants)
+    //       stateParticipant.contributionAmount = stateParticipant.contributionAmount//rounding(stateParticipant.contributionAmount+distrArr[counter]).value //currency(stateParticipant.contributionAmount).add(distrArr[counter]).value
+    //       console.log("state after", newExpense.participants)
+    //       counter = counter + 1
+    //       console.log(counter)
+    //     }
+    //   })
+    // })
+    if (newExpense.populatingPercentage === true) {
+      if (remainingPercentage === 0 && remainingAmount!==0) {
+        let stateParticipantsArr = [...newExpense.participants]
+        const currentParticipants = newExpense.participants?.filter(participant => (typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number") && (participant.contributionAmount !== 0 && participant.percentage !== 0))
+        const distrArr = currency(remainingAmount).distribute(currentParticipants.length).map(element => element.value)
+        console.log(distrArr.map(x=>currency(x, {precision:5}).divide(2).value))
+        const distArrAdjusted = distrArr.map(x=>currency(x, {precision:5}).divide(2).value)//divide by 2 because function runs twice (double render due to 2 cells being updated at the same time). Therefore distributed amount has to be halfed and added twice
         let counter = 0
-        tempParticipantsArr?.map((tempParticipant) => {
-          participants?.map((participant) => {
+        stateParticipantsArr?.map((tempParticipant) => {
+          currentParticipants?.map((participant) => {
             if (participant.memberId === tempParticipant.memberId) {
-              tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArrValues[counter]).value
+              //console.log("before",tempParticipant.contributionAmount)
+              tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount,{precision}).add(distArrAdjusted[counter]).value
+              //console.log("after",tempParticipant.contributionAmount)
+              counter = counter + 1
+            }
+          })
+        })
+      }
+    }else{
+      if (remainingPercentage !== 0 && remainingAmount===0) {
+        let stateParticipantsArr = [...newExpense.participants]
+        const currentParticipants = newExpense.participants?.filter(participant => (typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number") && (participant.contributionAmount !== 0 && participant.percentage !== 0))
+        const distrArr = currency(remainingPercentage).distribute(currentParticipants.length).map(element => element.value)
+        console.log(distrArr.map(x=>currency(x, {precision:5}).divide(2).value))
+        const distArrAdjusted = distrArr.map(x=>currency(x, {precision:5}).divide(2).value)//divide by 2 because function runs twice (double render due to 2 cells being updated at the same time). Therefore distributed amount has to be halfed and added twice
+        let counter = 0
+        stateParticipantsArr?.map((tempParticipant) => {
+          currentParticipants?.map((participant) => {
+            if (participant.memberId === tempParticipant.memberId) {
+              //console.log("before",tempParticipant.percentage)
+              tempParticipant.percentage = currency(tempParticipant.percentage,{precision}).add(distArrAdjusted[counter]).value
+              //console.log("after",tempParticipant.percentage)
               counter = counter + 1
             }
           })
         })
       }
     }
+    // let tempParticipantsArr = [...newExpense.participants]
+    // console.log(tempParticipantsArr)
+    // if(remainingPercentage===0){tempParticipantsArr[0].contributionAmount=5}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    //const participants = newExpense.participants?.filter(participant => typeof participant.contributionAmount === "string" || typeof participant.contributionAmount === "number" && (participant.contributionAmount !==0 && participant.percentage!==0))
+    //console.log(numberofparticipants)
+    // if (remainingAmount === 0 && remainingPercentage !== 0) {
+    //   console.log("entered remaining %")
+    //   const distrArr = currency(remainingPercentage).distribute(participants.length)
+    //   const distrArrValues = distrArr?.map(element => element.value)
+    //   console.log("distributed array", distrArrValues)
+    //   let tempParticipantsArr = [...newExpense.participants]
+    //   console.log("state tbu", tempParticipantsArr)
+    //   console.log("participants with cells", participants)
+    //   let counter = 0
+    //   tempParticipantsArr?.map((tempParticipant) => {
+    //     participants?.map((participant) => {
+    //       if (participant.memberId === tempParticipant.memberId) {
+    //         tempParticipant.percentage = currency(tempParticipant.percentage).add(distrArrValues[counter]).value
+    //         counter = counter + 1
+    //         console.log(counter)
+    //       }
+    //     })
+    //   })
+    // } else {
+    //   //console.log("remaining amount outside if", remainingAmount)
+    //   if (remainingAmount !== 0 && remainingPercentage === 0) {
+    //     console.log("entered remaining amount")
+    //     console.log("remainingAmount inside if", remainingAmount)
+    //     const distrArr = currency(remainingAmount).distribute(participants.length)
+    //     const distrArrValues = distrArr?.map(element => element.value)
+    //     console.log("distributed array", distrArrValues)
+    //     let tempParticipantsArr = [...newExpense.participants]
+    //     console.log("state tbu", tempParticipantsArr)
+    //     console.log("participants with cells", participants)
+    //     let counter = 0
+    //     tempParticipantsArr?.map((tempParticipant) => {
+    //       participants?.map((participant) => {
+    //         if (participant.memberId === tempParticipant.memberId) {
+    //           tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArrValues[counter]).value
+    //           counter = counter + 1
+    //         }
+    //       })
+    //     })
+    //   }
+    // }
+    //finalAdjust(remainingAmount, remainingPercentage)
     //console.log("remainingAmount", remainingAmount)
     return { remainingAmount, remainingPercentage }
   }
@@ -102,33 +178,39 @@ function AddExpense({ setSearchParams }) {
     return () => {
       abortControllerRef.current.abort()
     }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [])
+
 
   const changeMemberContributionAmount = (e, participantClickedId) => {
     if ((newExpense.amount === "" || Number(newExpense.amount) === 0)) return
     const index = newExpense.participants?.findIndex(participant => participant.memberId === participantClickedId)
     const { target: { name, value } } = e
     setNewExpense({ ...newExpense, participants: { [name]: value } })
-
     switch (name) {
       case 'percentage':
-        const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value   // Assuming fullAmount set in state
-        // console.log("newAmount", newAmount)
+
+        const newAmount = rounding(currency(value, { precision }).divide(100).multiply(newExpense.amount).value).value   // Assuming fullAmount set in state
+        //const newAmount = currency(value, { precision }).divide(100).multiply(newExpense.amount).value
+        console.log("newAmount", newAmount)
         setNewExpense({
           ...newExpense,
+          populatingPercentage: true,
           participants: [
             ...newExpense.participants?.slice(0, index),
             Object.assign({}, newExpense.participants[index], { contributionAmount: newAmount, percentage: value }),
             ...newExpense.participants?.slice(index + 1)
           ]
         })
+
         break
       case 'contributionAmount':
-        const newPercent = currency(value, { precision }).multiply(100).divide(newExpense.amount).value
+        const newPercent = rounding(currency(value, { precision }).multiply(100).divide(newExpense.amount).value).value
+       // const newPercent = currency(value, { precision }).multiply(100).divide(newExpense.amount).value
         // console.log("newPercent", newPercent)
         setNewExpense({
           ...newExpense,
+          populatingPercentage: false,
           participants: [
             ...newExpense.participants?.slice(0, index),
             Object.assign({}, newExpense.participants[index], { contributionAmount: value, percentage: newPercent }),
