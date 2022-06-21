@@ -945,6 +945,56 @@ select {
   transform: translateX(-100%);
 }
 
+
+#unequalTree {
+  border-radius: 7px;
+}
+
+#unequalTree, #unequalTree ul, #unequalTree li {
+  position:  relative;
+}
+
+#unequalTree ul {
+  list-style: none;
+  padding-left: 15px;
+
+}
+#unequalTree li::before, #unequalTree li::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+}
+
+#unequalTree li::before {
+  border-top: 2.5px solid rgb(148, 146, 146);
+  top: 22px; /*increase - moves horizontal line up or down*/
+  width: 8px;
+  height: 0;
+  border-bottom-left-radius: 15px;
+}
+
+#unequalTree li::after {
+  border-left: 2.5px solid rgb(148, 146, 146);
+  height: 260%;
+  width: 0px;
+  top: -5px; /*increase - decrease horizontal line length*/
+}
+
+#unequalTree ul > li:last-child::after {
+  height: 28px;
+}
+
+
+#unequalTree li:not(:last-child) {
+  margin-bottom: 42px;  /*increase - decrease distance between li items 13*/
+  
+}
+
+
+
+
+
+
 .tree {
   border-radius: 7px;
 }
@@ -1237,4 +1287,11 @@ input:focus.inputErr {
   border-width: 1px;
   border-radius: 6px;
   border-color: #131519;
+}
+
+#warningBorder{
+  border-style: solid;
+  border-color: var(--pink);
+  border-width: 2px;
+
 }
