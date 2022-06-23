@@ -27,7 +27,8 @@ function AddExpense({ setSearchParams }) {
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: 1, percentage: "" }))
   })
 
-  console.log("participants", newExpense.participants?.length !== 0)
+  //console.log("participants", newExpense.participants?.length !== 0)
+
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = num => num?.toString().replace(/,/g, '');
   const removeNonNumeric = num => num?.toString().replace(/[^0-9.]/g, "")
@@ -46,10 +47,14 @@ function AddExpense({ setSearchParams }) {
     totalContributed = currency(totalContributed).add(participant?.contributionAmount)
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
+  const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
+  console.log("remaining",remainingAmount)
 
   const remaining = () => {
-    const remainingAmount = currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value
+    const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
     const remainingPercentage = currency(100, { precision }).subtract(totalpercentage.value).value
+    //console.log(remainingAmount,remainingPercentage)
+    //console.log(isNaN(removeCommas(newExpense.amount)))
     if (newExpense.populatingPercentage === true) {
       if (remainingPercentage === 0 && remainingAmount !== 0) {
         let stateParticipantsArr = [...newExpense.participants]
@@ -152,7 +157,7 @@ function AddExpense({ setSearchParams }) {
   const updateAmount = (e) => {
     setNewExpense({
       ...newExpense,
-      amount: process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
+      amount:e.target.value //process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
     })
   }
 
