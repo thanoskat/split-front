@@ -38,6 +38,7 @@ function AddExpense({ setSearchParams }) {
     }
     return input;
   }
+
   const rounding = value => currency(value, { increment: .05 });
   let totalContributed = 0
   let totalpercentage = 0
@@ -49,7 +50,6 @@ function AddExpense({ setSearchParams }) {
   const remaining = () => {
     const remainingAmount = currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value
     const remainingPercentage = currency(100, { precision }).subtract(totalpercentage.value).value
-
     if (newExpense.populatingPercentage === true) {
       if (remainingPercentage === 0 && remainingAmount !== 0) {
         let stateParticipantsArr = [...newExpense.participants]
@@ -262,7 +262,7 @@ function AddExpense({ setSearchParams }) {
 
         <input
           className='styledInput t3'
-          placeholder='Description (optional)'
+          placeholder='Description'
           value={newExpense.description}
           onChange={e => setNewExpense({ ...newExpense, description: e.target.value })}
           spellCheck='false'
@@ -314,12 +314,21 @@ function AddExpense({ setSearchParams }) {
               {/* {beginning of tree} */}
               <div id="unequalTree" style={{ bottom: "5px", margin: "0 0 -15px 0" }}>
                 <div className='flex row justcont-spacebetween'>
+
                   <div className='flex' style={{ maxWidth: "0px" }}>
-                    {!newExpense.amount ? <span style={{ marginLeft: "4px" }}>€</span> : <span>€</span>}
-                    {removeCommas(newExpense.amount)}
+                    <div style={{ fontSize: "13px" }}>
+                      Split unequally
+                      <div style={{ marginTop: "5px" }}>
+                        {!newExpense.amount ?
+                          ""
+                          :
+                          <span>€</span>}
+                        <span>{removeCommas(newExpense.amount)}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className='flex' style={{ marginLeft: "50px", fontSize: "13px" }}> Split by amount</div>
-                  <span className='flex ' style={{ fontSize: "13px", marginRight: "8px" }}>Split by %</span>
+                  {/* <div className='flex' style={{ marginLeft: "50px", fontSize: "13px" }}> Split by €</div>
+                  <span className='flex ' style={{ fontSize: "13px", marginRight: "8px" }}>Split by %</span> */}
                 </div>
                 <ul style={{ marginLeft: "5px" }} >
                   {(includeAll ? selectedGroup?.members : filteredGroupMembers)?.map(member => (
@@ -328,9 +337,12 @@ function AddExpense({ setSearchParams }) {
                         <div style={{ maxWidth: "40px" }}>
                           {member.nickname}
                         </div>
-                        <div className=''>
+                        <div className='input-amount flex relative column justcont-evenly '>
+                          <div className='currency-ticker-section ' style={{color:"var(--inactiveColor)"}}>
+                           €
+                          </div>
                           <input
-                            style={{ maxWidth: "55px" }}
+                            style={{ maxWidth: "75px" }}
                             className='styledInput t3 text-align-right'
                             type='tel'
                             placeholder='0'
@@ -343,9 +355,12 @@ function AddExpense({ setSearchParams }) {
                           //onChange={e => handleInputChange(e)}
                           />
                         </div>
-                        <div className=''>
+                        <div className='input-amount flex relative column justcont-evenly '>
+                          <div className='currency-ticker-section ' style={{color:"var(--inactiveColor)"}}>
+                           %
+                          </div>
                           <input
-                            style={{ maxWidth: "55px" }}
+                            style={{ maxWidth: "75px" }}
                             className='styledInput t3 text-align-right'
                             type='tel'
                             step="0.01"
@@ -363,16 +378,16 @@ function AddExpense({ setSearchParams }) {
                 </ul>
               </div>
               {/* {end of tree} */}
-              <div className='flex row justcont-spacebetween'>
-                <div className='flex' style={{ maxWidth: "0px", marginLeft: "5px", marginTop: "0.7rem" }}></div>
-                <div className='flex' style={{ marginLeft: "72px", fontSize: "13px", marginTop: "0.7rem", gap: "3px" }}>
+              <div className='flex row justcont-spacebetween ' style={{marginLeft:"23px"}}>
+                <div className='flex alignitems-center' style={{ width: "40px", marginTop: "0.7rem" }}></div>
+                <div className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem", gap: "3px", padding:"0.8rem",width: "75px" }}>
                   <span>€</span>
                   <span>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : remaining().remainingAmount}</span>
                   <span>remaining</span>
                 </div>
-                <span className='flex ' style={{ fontSize: "13px", marginTop: "0.7rem" }}>
+                <span className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem" ,padding:"0.8rem",width: "75px"}}>
                   {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : remaining().remainingPercentage}
-                  % remaining
+                  %
                 </span>
               </div>
             </div> : splitEqually ? "" :
@@ -380,7 +395,6 @@ function AddExpense({ setSearchParams }) {
                 Select  members to split expense unequally.
               </div>
           }
-
         </div>
       </div>
       <div className='submit-button-container flex padding1010'>
@@ -388,12 +402,17 @@ function AddExpense({ setSearchParams }) {
           style={{ padding: "0.8rem" }}
           className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually && newExpense.participants?.length !== 0 ? "active"
             :
-            Number(newExpense.amount) !== 0 && currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 && currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
+            Number(newExpense.amount) !== 0 &&
+              currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 &&
+              currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
               "active"
               :
               null} h-flex justcont-spacearound `}
           onClick={submitExpense}
-          disabled={newExpense.amount && Number(newExpense.amount) !== 0 && newExpense.participants.length !== 0 ? false : true}>
+          disabled={newExpense.amount &&
+            Number(newExpense.amount) !== 0 &&
+            currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 &&
+            currency(100, { precision }).subtract(totalpercentage.value).value === 0 ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </button>
       </div>

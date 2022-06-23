@@ -18,8 +18,11 @@ const VerifyInvitation = () => {
         code: `${params.invitationCode}`
       },
       { signal: abortControllerRef.current.signal })
-      setData(`You have been invited by ${res.data.inviterNickname} to join ${res.data.groupTitle}`)
+
+      setData(res.data)
+
       console.log('/invitation/verify', res.status, res.data.message)
+      console.log(res.data)
     }
     catch (error) {
       setData(error.response.data)
@@ -36,12 +39,12 @@ const VerifyInvitation = () => {
         code: `${params.invitationCode}`
       },
       { signal: abortControllerRef.current.signal })
-      setData(`You joined ${res.data.groupTitle}`)
+      //setData(`You joined ${res.data.groupTitle}`)
       setInvitationAccepted(true)
       console.log('/invitation/accept', res.status, res.data.message)
     }
     catch (error) {
-      setData(error.response.data)
+     // setData(error.response.data)
       console.log('/invitation/accept', error.response.status, error.response.data)
     }
   }
@@ -53,13 +56,15 @@ const VerifyInvitation = () => {
 
   return (
     <div className='flex column'>
-      {data}
+    
+
       {!invitationAccepted &&
       <button onClick={acceptInvitation}>
         Accept
       </button>}
+
       {invitationAccepted &&
-      <Link to="/expenses">
+      <Link to={`/${data.groupId}/expenses`}>
           Go to main page
       </Link>}
     </div>
