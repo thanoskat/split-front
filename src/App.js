@@ -2,7 +2,6 @@ import './App.css';
 import {
   Home,
   Main,
-  TabExpenses,
   Login,
   VerifyLink,
   VerifyInvitation,
@@ -11,6 +10,7 @@ import {
   TabMembers,
   TabSettleUp,
   Expenses,
+  VerifyToken,
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
@@ -20,11 +20,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        {/* <UserBar/> */}
         <Routes>
+          {/* <Route path="/socket" element={<WebSocketTest />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Login />} />
           <Route path="/v/:token" element={<VerifyLink />} />
+          <Route path="/s/:token" element={<VerifyToken />} />
           <Route path="/addexp" element={<AddExpense />} />
           <Route element={<PrivateRoutes />}>
             <Route path='/' element={<Home />} />
