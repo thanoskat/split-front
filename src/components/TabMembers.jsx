@@ -8,7 +8,7 @@ const TabMembers = () => {
 
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
 
-  const [showTreeID, setShowTreeID] = useState([])
+  const [showTreeID, ] = useState([])
   console.log(selectedGroup)
   console.log(showTreeID)
   const memberInfoConstructor = (selectedGroup) => {
@@ -68,13 +68,13 @@ const TabMembers = () => {
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
 
-    const showTreefcnt = (id) => {
-      if (showTreeID.includes(id)) {
-        setShowTreeID(showTreeID.filter(treeID => treeID !== id))
-      } else {
-        setShowTreeID([...showTreeID, id])
-      }
-    }
+    // const showTreefcnt = (id) => {
+    //   if (showTreeID.includes(id)) {
+    //     setShowTreeID(showTreeID.filter(treeID => treeID !== id))
+    //   } else {
+    //     setShowTreeID([...showTreeID, id])
+    //   }
+    // }
 
     return (
       <div className='member flex column justcont-spacebetween gap8'>

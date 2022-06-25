@@ -37,7 +37,7 @@ function AddExpense({ setSearchParams }) {
 
   let totalContributed = 0
   let totalpercentage = 0
-  newExpense.participants?.map((participant) => {
+  newExpense.participants?.forEach((participant) => {
     totalContributed = currency(totalContributed).add(participant?.contributionAmount)
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
@@ -56,8 +56,8 @@ function AddExpense({ setSearchParams }) {
       console.log("state tbu", tempParticipantsArr)
       console.log("participants with cells", participants)
       let counter = 0
-      tempParticipantsArr?.map((tempParticipant) => {
-        participants?.map((participant) => {
+      tempParticipantsArr?.forEach((tempParticipant) => {
+        participants?.forEach((participant) => {
           if (participant.memberId === tempParticipant.memberId) {
             tempParticipant.percentage = currency(tempParticipant.percentage).add(distrArrValues[counter]).value
             counter = counter + 1
@@ -76,8 +76,8 @@ function AddExpense({ setSearchParams }) {
         console.log("state tbu", tempParticipantsArr)
         console.log("participants with cells", participants)
         let counter = 0
-        tempParticipantsArr?.map((tempParticipant) => {
-          participants?.map((participant) => {
+        tempParticipantsArr?.forEach((tempParticipant) => {
+          participants?.forEach((participant) => {
             if (participant.memberId === tempParticipant.memberId) {
               tempParticipant.contributionAmount = currency(tempParticipant.contributionAmount).add(distrArrValues[counter]).value
               counter = counter + 1

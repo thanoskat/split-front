@@ -1,10 +1,10 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, TabSelector, LabelEditor } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentMenu, setSelectedGroup } from '../redux/mainSlice'
+import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
 
 const Main = () => {
@@ -14,9 +14,8 @@ const Main = () => {
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [mainIsLoading, setMainIsLoading] = useState(false)
+  const [mainIsLoading, ] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
-  const nodeRef = useRef(null)
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -30,7 +29,6 @@ const Main = () => {
   const getGroup = async (id) => {
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      console.log(res.data)
       dispatch(setSelectedGroup(res.data))
     }
     catch(error) {
@@ -62,10 +60,7 @@ const Main = () => {
           </div>
           <div className='separator-1' />
           <TabSwitcher />
-          {/* <TabSelector /> */}
-
           {(displayedGroup !== null) && <Outlet />}
-
           <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
