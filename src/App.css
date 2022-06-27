@@ -102,6 +102,7 @@ select {
   --green: #00ba7c;
   --lightblue: #1da1f3;
   --lightorange: #f88070;
+  --lightpink:#FC47B4;
   --color1: #6490E5;
   --color2: #F29A7E;
   --color3: #FFE897;
@@ -488,6 +489,13 @@ select {
   font-size: 18px;
 }
 
+.expenseFilled {
+  background-color:var(--label-color-6)
+}
+
+.expenseEmpty {
+  background-color: #26272B;
+}
 .pill.filled {
   color: var(--layer-0-color);
   background-color: var(--pill-color);
@@ -667,6 +675,9 @@ select {
   padding: 10px 10px;
 }
 
+.padding3rem3rem{
+  padding: 3rem 0 3rem 0;
+}
 .amountSection-green {
   color: var(--green)
 }
@@ -696,8 +707,20 @@ select {
   border-color: var(--layer-2-color);
   border-width: 1px;
   border-style: solid;
-
 }
+
+.accept-reject {
+  text-decoration: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--light-color);
+  border-color: var(--layer-2-color);
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 5px;
+  
+}
+
 
 .group-selector-button.highlighted-group {
   color: white;
@@ -770,8 +793,8 @@ select {
 }
 
 .submit-button-container {
-  display: flex;
-  margin-top: auto;
+  bottom: -5px;
+  width:90%;
   /* position:absolute; */
   /* margin: 10px 15px 10px 15px; */
   /* z-index: 2; */
@@ -797,6 +820,7 @@ select {
   color: var(--text);
   background-color: #3a3b3c;
   font-size: 16px;
+  
 }
 
 .submit-button.active {
@@ -890,6 +914,13 @@ select {
   font-style: normal;
 }
 
+.gotogroup{
+  bottom: 0;
+  height: 100vh;
+  width: 100%;
+  overflow:auto;
+ 
+}
 
 .addExpenseBox,.createnewgroupBox {
   bottom: 0;
@@ -1208,6 +1239,7 @@ input:focus.inputErr {
   padding: 2.5rem 0 2.5rem 0;
 }
 
+
 #expenses {
   gap: 14px;
   /* padding: 0px 14px; */
@@ -1221,7 +1253,7 @@ input:focus.inputErr {
 #expense {
   gap: 12px;
   padding: 12px 12px;
-  background-color: #26272B;
+ 
   border-radius: 10px;
 }
 

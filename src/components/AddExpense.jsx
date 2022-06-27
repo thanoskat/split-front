@@ -171,7 +171,7 @@ function AddExpense({ setSearchParams }) {
             groupId: selectedGroup._id,
             spender: sessionData.userId,
             splitEqually: newExpense.splitEqually,
-            amount: removeCommas(newExpense.amount),
+            amount: newExpense.amount,
             description: newExpense.description,
             participants: newExpense.participants,
             label: newExpense.label,
@@ -328,7 +328,7 @@ function AddExpense({ setSearchParams }) {
                           ""
                           :
                           <span>€</span>}
-                        <span>{removeCommas(newExpense.amount)}</span>
+                        <span>{newExpense.amount}</span>
                       </div>
                     </div>
                   </div>
@@ -408,7 +408,7 @@ function AddExpense({ setSearchParams }) {
           className={`shadow submit-button ${Number(newExpense.amount) !== 0 && splitEqually && newExpense.participants?.length !== 0 ? "active"
             :
             Number(newExpense.amount) !== 0 &&
-              currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 &&
+              currency(newExpense.amount, { precision }).subtract(totalContributed.value).value === 0 &&
               currency(100, { precision }).subtract(totalpercentage.value).value === 0 ?
               "active"
               :
@@ -416,8 +416,10 @@ function AddExpense({ setSearchParams }) {
           onClick={submitExpense}
           disabled={newExpense.amount &&
             Number(newExpense.amount) !== 0 &&
-            currency(removeCommas(newExpense.amount), { precision }).subtract(totalContributed.value).value === 0 &&
-            currency(100, { precision }).subtract(totalpercentage.value).value === 0 ? false : true}>
+            
+            
+            (!splitEqually? currency(newExpense.amount, { precision }).subtract(totalContributed.value).value === 0 &&
+            currency(100, { precision }).subtract(totalpercentage.value).value === 0 :true) ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </button>
       </div>
