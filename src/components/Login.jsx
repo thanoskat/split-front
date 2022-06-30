@@ -11,7 +11,7 @@ const Login = () => {
       </div>
       <div>{process.env.REACT_APP_APIURL}</div>
       <div>{process.env.REACT_APP_FRONTURL}</div>
-      <div>{process.env.HOST}</div>
+      <div>debug:{process.env.REACT_APP_DEBUGVAR}</div>
       <div className='appName flex column alignitems-center t05'>
         αlphaSplit
         <div className='appDescr t5'>
