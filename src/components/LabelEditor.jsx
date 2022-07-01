@@ -1,4 +1,3 @@
-import { SlidingBox } from './'
 import { useRef, useState, useEffect } from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'

@@ -31,7 +31,7 @@ const VerifyLink = () => {
 
   return (
     <div>
-    {data}
+      {data}
     </div>
   );
 }

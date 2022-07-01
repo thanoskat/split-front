@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+dayjs.extend(calendar)
 
 const Expenses = () => {
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [, setSearchParams] = useSearchParams()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
 
   const [filters, setFilters] = useState([])
-
-  //console.log(selectedGroup)
-
+  
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',
@@ -67,7 +67,7 @@ const Expenses = () => {
           <div key={expense._id} id='expense' className='flex column'>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row'>
-                {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
+                <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
                 <div id='expense-time'>{dayjs(expense.createdAt).format('HH:mm')}</div>
               </div>
               <IonIcon

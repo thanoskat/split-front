@@ -153,7 +153,6 @@ function RecordPayment({ headline, close}) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

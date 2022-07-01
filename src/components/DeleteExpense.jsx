@@ -4,7 +4,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
 import { setSelectedGroup } from '../redux/mainSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const DeleteExpense = () => {
 

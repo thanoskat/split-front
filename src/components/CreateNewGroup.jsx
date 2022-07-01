@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
@@ -18,7 +18,6 @@ export default function CreateNewGroup({ setSearchParams }) {
 
 
   const createGroup = async () => {
-    console.log("ran")
     setLoading(true)
     try {
       const group = await api.post("/groups/creategroup", {

@@ -43,7 +43,7 @@ function AddExpense({ setSearchParams }) {
   const rounding = value => currency(value, { increment: .05 });
   let totalContributed = 0
   let totalpercentage = 0
-  newExpense.participants?.map((participant) => {
+  newExpense.participants?.forEach((participant) => {
     totalContributed = currency(totalContributed).add(participant?.contributionAmount)
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })

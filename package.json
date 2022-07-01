@@ -2,6 +2,7 @@
   "name": "split-front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://splita.xyz/",
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@reacticons/ionicons": "^6.0.2",
@@ -23,6 +24,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
     "react-transition-group": "^4.4.2",
+    "socket.io-client": "^4.5.1",
     "validator": "^13.7.0",
     "web-vitals": "^1.1.2"
   },

@@ -40,6 +40,7 @@ export default function Home() {
     return () => {
       abortControllerRef.current.abort()
     }
+    // eslint-disable-next-line
   }, [])
 
   const logoutClick = async () => {

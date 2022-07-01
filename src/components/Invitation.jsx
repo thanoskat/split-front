@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react'
 
 function Invitation() {
 
@@ -81,11 +81,11 @@ function Invitation() {
           <div>Scan QR</div>
           <QRCodeSVG
             value={invitationLink}
-            size='256'
-            level='Q'
-            bgColor='var(--layer-0-color)'
-            fgColor='var(--light-color)'
-            includeMargin={false}
+            size='386'
+            level='L'
+            bgColor='var(--light-color)'
+            fgColor='var(--layer-0-color)'
+            includeMargin={true}
           />
           <div className='t1'>OR</div>
           <div>Share the invitation link</div>
