@@ -59,8 +59,10 @@ export default App
 // email service !
 // user bar !
 // sum filtered expenses !
+// delete group !
 
 // add member with no account ~!
 
+// kick a user
 // New expense button at bottom
 // correct view in desktop mode
