@@ -63,6 +63,7 @@ export default App
 
 // add member with no account ~!
 
+// LoginOrSignup component fix
 // kick a user
 // New expense button at bottom
 // correct view in desktop mode

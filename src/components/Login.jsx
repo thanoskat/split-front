@@ -9,9 +9,8 @@ const Login = () => {
       <div className='logo t66 flex alignitems-center'>
         α
       </div>
-      <div>{process.env.REACT_APP_APIURL}</div>
-      <div>{process.env.REACT_APP_FRONTURL}</div>
-      <div>debug:{process.env.REACT_APP_DEBUGVAR}</div>
+      <div>api:{process.env.REACT_APP_APIURL}</div>
+      <div>react:{process.env.REACT_APP_FRONTURL}</div>
       <div className='appName flex column alignitems-center t05'>
         αlphaSplit
         <div className='appDescr t5'>

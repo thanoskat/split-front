@@ -29,6 +29,7 @@ const LoginOrSignup = () => {
         else {
           setLoginEmailSent(true)
           setSessionUnique(res.data.unique)
+          setLinkText(res.data.link)
           console.log(res.data.unique)
         }
       }
@@ -89,7 +90,7 @@ const LoginOrSignup = () => {
         <button type='submit' className={`shadow login-button flex justcont-center relative ${email !== '' ? 'active' : null}`} disabled={email === '' ? true : false}>
           Log In
         </button>}
-        <a href={link}>{linkText}</a>
+        {linkText !== '' && <a href={linkText}>email link</a>}
         <div className='or flex justcont-center alignitems-center' style={{ color: 'var(--light-color)' }}>OR</div>
         <Link to='/signup' style={{ textDecoration: 'none' }}>
           <div className='shadow signUp-button flex justcont-center relative' >
