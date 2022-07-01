@@ -118,7 +118,7 @@ function RecordPayment({ headline, close}) {
 
   //remove {children} and add functions here (like in GroupSelector) so everything happens in this component
   return (
-    <>
+    <div className='addExpense-selector top-radius' >
       {headline && <div className='flex row t05 justcont-center alignitems-center padding4'>{headline}</div>}
       <div className='separator-0' />
       <div className='flex column padding4'>
@@ -153,8 +153,7 @@ function RecordPayment({ headline, close}) {
           </div>
         </div>
       </div>
-
-    </>
+    </div>
   );
 }
 

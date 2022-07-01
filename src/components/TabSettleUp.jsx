@@ -45,13 +45,13 @@ const TabSettleUp = () => {
       <div>
         {transaction.sender?._id === sessionData.userId ?
           <div className='settleUp flex column justcont-spacebetween gap8 pointer'
-          onClick={()=>handleClick(transaction.receiver._id,transaction)}>
+          onClick={()=>handleClick(transaction.receiver?._id,transaction)}>
             <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '20px 4px 20px 4px' }}>
 
               <div className='main-text flex row gap6 alignitems-center'>
                 <i style={{ width: "30px" }} className='arrow circle right icon'></i>
                 <strong>You</strong>owe
-                <strong>{transaction.receiver.nickname}</strong>
+                <strong>{transaction.receiver?.nickname}</strong>
               </div>
               <div className="amountSection-red medium">{` ${currency(transaction.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
             </div>

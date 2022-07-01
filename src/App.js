@@ -11,9 +11,11 @@ import {
   TabSettleUp,
   Expenses,
   VerifyToken,
+  ReviewGroups,
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
+
 
 function App() {
 
@@ -30,6 +32,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path='/' element={<Home />} />
             <Route path='i/:invitationCode' element={<VerifyInvitation />} />
+            <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
             <Route path=':groupid' element={<Main />}>
               <Route index element={<Expenses />} />
               <Route path='expenses' element={<Expenses />} />

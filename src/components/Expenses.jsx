@@ -12,7 +12,7 @@ const Expenses = () => {
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
 
   const [filters, setFilters] = useState([])
-
+  
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',

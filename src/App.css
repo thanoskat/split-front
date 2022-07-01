@@ -102,6 +102,7 @@ select {
   --green: #00ba7c;
   --lightblue: #1da1f3;
   --lightorange: #f88070;
+  --lightpink: #FC47B4;
   --color1: #6490E5;
   --color2: #F29A7E;
   --color3: #FFE897;
@@ -139,6 +140,7 @@ select {
   cursor: pointer;
 
 }
+
 .overflow-auto {
   /* firefox */
   scrollbar-color: #858585 transparent;
@@ -156,6 +158,7 @@ select {
 .overflow-visible {
   overflow: visible
 }
+
 .relative {
   position: relative
 }
@@ -172,7 +175,7 @@ select {
   user-select: text
 }
 
-.t66{
+.t66 {
   font-size: 66px
 }
 
@@ -257,7 +260,7 @@ select {
 }
 
 .gap10 {
-  gap:10px
+  gap: 10px
 }
 
 .light-color {
@@ -363,7 +366,7 @@ select {
   flex-wrap: wrap
 }
 
-.break-word{
+.break-word {
   word-wrap: break-all;
 }
 
@@ -383,8 +386,8 @@ select {
   flex: 1;
 }
 
-.z-index2{
-  z-index:2;
+.z-index2 {
+  z-index: 2;
 }
 
 .separator-0 {
@@ -421,11 +424,12 @@ select {
   animation: spin-animation 1s linear infinite;
 }
 
-.cancelIcon{
+.cancelIcon {
   display: flex;
   justify-self: center;
   align-self: center;
 }
+
 @keyframes spin-animation {
   0% {
     transform: rotate(0deg);
@@ -486,6 +490,14 @@ select {
   padding: 8px 16px;
   min-width: 60px;
   font-size: 18px;
+}
+
+.expenseFilled {
+  background-color: var(--label-color-6)
+}
+
+.expenseEmpty {
+  background-color: #26272B;
 }
 
 .pill.filled {
@@ -569,7 +581,7 @@ select {
   text-align: left;
 }
 
-.text-align-center{
+.text-align-center {
   text-align: center;
 }
 
@@ -629,6 +641,7 @@ select {
   padding: 10px 14px;
   /* height: 100px; */
   height: fit-content;
+
 }
 
 .floating-button {
@@ -648,9 +661,11 @@ select {
   border-width: 1px;
   border-style: solid;
 }
-.padding15{
+
+.padding15 {
   padding: 15px
 }
+
 .padding4 {
   padding: 4px
 }
@@ -665,6 +680,10 @@ select {
 
 .padding1010 {
   padding: 10px 10px;
+}
+
+.padding3rem3rem {
+  padding: 3rem 0 3rem 0;
 }
 
 .amountSection-green {
@@ -696,8 +715,20 @@ select {
   border-color: var(--layer-2-color);
   border-width: 1px;
   border-style: solid;
+}
+
+.accept-reject {
+  text-decoration: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--light-color);
+  border-color: var(--layer-2-color);
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 5px;
 
 }
+
 
 .group-selector-button.highlighted-group {
   color: white;
@@ -772,15 +803,14 @@ select {
 .submit-button-container {
   display: flex;
   margin-top: auto;
-  /* position:absolute; */
-  /* margin: 10px 15px 10px 15px; */
-  /* z-index: 2; */
-  /* right: 2rem; */
-  /* left: 2rem; */
-  /* bottom: 1rem; */
 }
 
-.mainIsLoading{
+.submit-button-container-review-group {
+  width: 96%;
+  bottom: 1rem;
+}
+
+.mainIsLoading {
   padding-top: 2rem;
   font-size: 120%;
 }
@@ -791,12 +821,13 @@ select {
   font-size: var(--sliding-menu-button-size);
   user-select: none;
   padding: 0.5rem;
-  border:none;
+  border: none;
   width: 100%;
   cursor: pointer;
   color: var(--text);
   background-color: #3a3b3c;
   font-size: 16px;
+
 }
 
 .submit-button.active {
@@ -890,8 +921,15 @@ select {
   font-style: normal;
 }
 
+.gotogroup {
+  bottom: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
 
-.addExpenseBox,.createnewgroupBox {
+}
+
+.addExpenseBox, .createnewgroupBox {
   bottom: 0;
   height: 100vh;
   width: 100%;
@@ -899,7 +937,7 @@ select {
   background-color: var(--layer-1-color);
 }
 
-.addExpenseHeader,.createnewgroupHeader{
+.addExpenseHeader, .createnewgroupHeader {
   background-color: var(--layer-1-color);
   position: sticky;
   top: 0;
@@ -945,12 +983,66 @@ select {
   transform: translateX(-100%);
 }
 
+
+#unequalTree {
+  border-radius: 7px;
+}
+
+#unequalTree, #unequalTree ul, #unequalTree li {
+  position: relative;
+}
+
+#unequalTree ul {
+  list-style: none;
+  padding-left: 15px;
+
+}
+
+#unequalTree li::before, #unequalTree li::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+}
+
+#unequalTree li::before {
+  border-top: 2.5px solid rgb(148, 146, 146);
+  top: 22px;
+  /*increase - moves horizontal line up or down*/
+  width: 8px;
+  height: 0;
+  border-bottom-left-radius: 15px;
+}
+
+#unequalTree li::after {
+  border-left: 2.5px solid rgb(148, 146, 146);
+  height: 260%;
+  width: 0px;
+  top: -5px;
+  /*increase - decrease horizontal line length*/
+}
+
+#unequalTree ul>li:last-child::after {
+  height: 28px;
+}
+
+
+#unequalTree li:not(:last-child) {
+  margin-bottom: 42px;
+  /*increase - decrease distance between li items 13*/
+
+}
+
+
+
+
+
+
 .tree {
   border-radius: 7px;
 }
 
 .tree, .tree ul, .tree li {
-  position:  relative;
+  position: relative;
 }
 
 .tree ul {
@@ -958,6 +1050,7 @@ select {
   padding-left: 15px;
 
 }
+
 .tree li::before, .tree li::after {
   content: "";
   position: absolute;
@@ -966,7 +1059,8 @@ select {
 
 .tree li::before {
   border-top: 2.5px solid rgb(148, 146, 146);
-  top: 10px; /*increase - moves horizontal line up or down*/
+  top: 10px;
+  /*increase - moves horizontal line up or down*/
   width: 8px;
   height: 0;
   border-bottom-left-radius: 15px;
@@ -976,15 +1070,17 @@ select {
   border-left: 2.5px solid rgb(148, 146, 146);
   height: 260%;
   width: 0px;
-  top: -10px; /*increase - decrease horizontal line length*/
+  top: -10px;
+  /*increase - decrease horizontal line length*/
 }
 
-.tree ul > li:last-child::after {
+.tree ul>li:last-child::after {
   height: 20px;
 }
 
 li:not(:last-child) {
-  margin-bottom: 24px;  /*increase - decrease distance between li items 13*/
+  margin-bottom: 24px;
+  /*increase - decrease distance between li items 13*/
 }
 
 .appName {
@@ -998,9 +1094,9 @@ li:not(:last-child) {
   font-size: 18px;
 }
 
-.loginBox{
+.loginBox {
 
-  padding: 1rem 0.8rem 1rem 0.8rem ;
+  padding: 1rem 0.8rem 1rem 0.8rem;
   border-radius: 10px;
 
 }
@@ -1013,7 +1109,7 @@ li:not(:last-child) {
   background-color: #121214;
   border-style: none;
   font-family: 'Inter';
-  font-size:18px;
+  font-size: 18px;
 }
 
 input.inputErr,
@@ -1023,7 +1119,7 @@ input:focus.inputErr {
 }
 
 .login-button {
-  border:none;
+  border: none;
   border-radius: 4px;
   user-select: none;
   padding: 0.5rem;
@@ -1064,7 +1160,8 @@ input:focus.inputErr {
   background-color: var(--label-color-6);
   font-size: 16px;
 }
-.createnewgroup-button{
+
+.createnewgroup-button {
   border-radius: 4px;
   user-select: none;
   padding: 2rem;
@@ -1073,28 +1170,40 @@ input:focus.inputErr {
   background-color: var(--label-color-6);
   font-size: 16px;
   height: 0;
-  color:rgb(248, 248, 248);
+  color: rgb(248, 248, 248);
   font-weight: bold;
+}
 
+.logout-button {
+  border-radius: 4px;
+  user-select: none;
+  padding: 1.2rem;
+  cursor: pointer;
+  color: var(--text);
+  background-color: var(--label-color-6);
+  font-size: 16px;
+  height: 0;
+  color: rgb(248, 248, 248);
+  font-weight: bold;
 }
 
 .or {
-  color:var(--layer-6-color);
+  color: var(--layer-6-color);
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
 
 .or:after,
 .or:before {
-    content: "";
-    display: block;
-    background-color: var(--layer-6-color);
-    width: 100%;
-    height:1px;
-    margin: 0 10px;
+  content: "";
+  display: block;
+  background-color: var(--layer-6-color);
+  width: 100%;
+  height: 1px;
+  margin: 0 10px;
 }
 
-.signUpMsg{
+.signUpMsg {
   padding-bottom: 1rem;
   white-space: initial;
 }
@@ -1104,18 +1213,18 @@ input:focus.inputErr {
 }
 
 #loginpage {
- height: 100vh;
- margin: 0rem 2rem 0rem 2rem
+  height: 100vh;
+  margin: 0rem 2rem 0rem 2rem
 }
 
 #homepage {
- height: 100vh;
- margin: 0rem 2rem 0rem 2rem;
+  height: 100vh;
+  margin: 0rem 2rem 0rem 2rem;
 }
 
 .mailmsg {
   white-space: initial;
-  color:var(--pink)
+  color: var(--pink)
 }
 
 .whiteSpace-initial {
@@ -1130,20 +1239,27 @@ input:focus.inputErr {
   0% {
     transform: translateY(100%);
   }
+
   100% {
     transform: translateY(0);
   }
 }
 
 @keyframes slideupp {
-  from {max-height: 0;}
-  to {max-height: 100vh;}
+  from {
+    max-height: 0;
+  }
+
+  to {
+    max-height: 100vh;
+  }
 }
 
 .welcomemsg {
   font-size: 15px;
   padding: 2.5rem 0 2.5rem 0;
 }
+
 
 #expenses {
   gap: 14px;
@@ -1159,6 +1275,13 @@ input:focus.inputErr {
   gap: 12px;
   padding: 12px 12px;
   background-color: #26272B;
+  border-radius: 10px;
+}
+
+#reviewedExpense {
+  gap: 12px;
+  padding: 12px 12px;
+
   border-radius: 10px;
 }
 
@@ -1237,4 +1360,11 @@ input:focus.inputErr {
   border-width: 1px;
   border-radius: 6px;
   border-color: #131519;
+}
+
+#warningBorder {
+  border-style: solid;
+  border-color: var(--pink);
+  border-width: 2px;
+
 }
