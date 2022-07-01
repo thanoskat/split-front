@@ -25,13 +25,13 @@ const TabMembers = () => {
         }
       })
       selectedGroup.pendingTransactions.forEach((tx) => {
-        if (tx.sender._id === member._id) {
+        if (tx.sender?._id === member?._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
           toFrom.push({ _id: tx.receiver._id, name: tx.receiver.nickname, amount: tx.amount })
           isSenderReceiverSettled = 1 //sender->1
         } else if (tx.receiver._id === member._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
-          toFrom.push({ _id: tx.sender._id, name: tx.sender.nickname, amount: tx.amount })
+          toFrom.push({ _id: tx.sender?._id, name: tx.sender?.nickname, amount: tx.amount })
           isSenderReceiverSettled = 2 //receiver->2
         }
       })

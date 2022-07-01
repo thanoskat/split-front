@@ -11,7 +11,7 @@ const Expenses = () => {
 
   const [filters, setFilters] = useState([])
 
-  console.log(selectedGroup)
+  //console.log(selectedGroup)
 
   const calendarConfig = {
     sameDay: '[Today]',

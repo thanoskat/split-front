@@ -7,7 +7,7 @@ import currency from 'currency.js'
 const TabSettleUp = () => {
 
   const filterIDforPersonalTransactions = (value) => {//keeps userID for personal TXs
-    if (String(value.sender._id) === sessionData.userId || String(value.receiver._id) === sessionData.userId) {
+    if (String(value.sender?._id) === sessionData.userId || String(value.receiver?._id) === sessionData.userId) {
       return value
     }
   }
@@ -43,15 +43,15 @@ const TabSettleUp = () => {
   const SettleUp2 = ({ transaction }) => {
     return (
       <div>
-        {transaction.sender._id === sessionData.userId ?
+        {transaction.sender?._id === sessionData.userId ?
           <div className='settleUp flex column justcont-spacebetween gap8 pointer'
-          onClick={()=>handleClick(transaction.receiver._id,transaction)}>
+          onClick={()=>handleClick(transaction.receiver?._id,transaction)}>
             <div className='flex row justcont-spacebetween alignitems-center t25 white' style={{ padding: '20px 4px 20px 4px' }}>
 
               <div className='main-text flex row gap6 alignitems-center'>
                 <i style={{ width: "30px" }} className='arrow circle right icon'></i>
                 <strong>You</strong>owe
-                <strong>{transaction.receiver.nickname}</strong>
+                <strong>{transaction.receiver?.nickname}</strong>
               </div>
               <div className="amountSection-red medium">{` ${currency(transaction.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
             </div>
@@ -63,7 +63,7 @@ const TabSettleUp = () => {
 
               <div className='main-text flex row gap6 alignitems-center'>
                 <i style={{ width: "30px" }} className='arrow circle left icon'></i>
-                <strong>{transaction.sender.nickname}
+                <strong>{transaction.sender?.nickname}
                 </strong> owes <strong>You</strong>
                 </div>
                 <div className="amountSection-green medium">{`${currency(transaction.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}</div>
