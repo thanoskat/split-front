@@ -52,7 +52,7 @@ const VerifyInvitation = () => {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
-  
+
     }
     catch (error) {
       // setData(error.response.data)
@@ -81,7 +81,7 @@ const VerifyInvitation = () => {
       <div className='loginBox flex column ' style={{ backgroundColor: "var(--layer-1-color)", borderColor: "var(--layer-1-color)", borderStyle: "solid" }}>
         <div className='whiteSpace-initial'>
           <div className='flex column gap4 padding4'>
-            <div>{data.inviterNickname} has invited you to join <strong>{data?.group.title}</strong></div>
+            <div>{data?.inviterNickname} has invited you to join <strong>{data?.group.title}</strong></div>
             <div className='flex column gap4 padding1812'>
               <div onClick={acceptInvitation} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center">
                 Accept

@@ -47,3 +47,18 @@ function App() {
 }
 
 export default App
+
+// TODO
+
+// members tab css !
+// settle/transfer in members tab !
+// go from group to welcome page !
+// visit invitation without account/login !
+// loadings !
+// try/catch !
+// email service !
+
+// add member with no account ~!
+
+// New expense button at bottom
+// correct view in desktop mode
