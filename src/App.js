@@ -57,6 +57,8 @@ export default App
 // loadings !
 // try/catch !
 // email service !
+// user bar !
+// sum filtered expenses !
 
 // add member with no account ~!
 
