@@ -12,53 +12,83 @@ export default function ReviewGroups() {
   const abortControllerRef = useRef(new AbortController())
   const sessionData = store.getState().authReducer.sessionData
   const [expenses, setExpenses] = useState({
-    groupTitle:"",
-    all:[],
-    filtered:[]
+    groupId: "",
+    groupTitle: "",
+    all: [],
+    filtered: []
   })
+
   const [loading, setLoading] = useState(false)
   const [participateInAll, setParticipateInAll] = useState(true)
 
   //fix going back before submitting any reviews
- // console.log(params)
-  const verifyInvitation = async () => {
+  // console.log(expenses)
+
+  const getGroup = async () => {
+    setLoading(true)
     try {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
-      const res = await api.post('/invitation/verify', {
+      const res = await api.post('/invitation/getgroup', {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
-      const members = res.data.members
-      const expenses = res.data.expenses
+      const members = res.data.group.members
+      const expenses = res.data.group.expenses
+      //console.log(res.data.group)
       let expArr = []
       expenses.map((expense) => {
-        if (expense.splitEqually === true && expense.participants.length === members.length) {
+        if (expense.splitEqually === true && !expense.participants.includes(sessionData.id)) {
           expArr.push(expense)
         }
       })
-      console.log(res.data)
-      setExpenses({all:expArr, filtered:[], groupTitle:res.data.groupTitle})
+      setExpenses({ all: expArr, filtered: [], groupTitle: res.data.group.title, groupId: res.data.group._id })
+      setLoading(false)
       if (members.includes(sessionData.userId)) return
-      console.log("navigate")
-      //navigate(`/i/${params.invitationCode}`)
+      //console.log("navigate")
+      navigate(`/i/${params.invitationCode}`)
     }
+
     catch (error) {
-      console.log('/invitation/verify', error.response?.status, error.response?.data)
+      console.log(error)
     }
   }
 
+  const updateExpenses = async () => {
+    let toBeupdatedExpenses
+    if (participateInAll) {
+      toBeupdatedExpenses = expenses.all
+    } else {
+      toBeupdatedExpenses = expenses.filtered
+    }
+    try {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = new AbortController()
+      const updateExpenses = await api.post('/expense/updateExpenses', {
+        toBeupdatedExpenses: toBeupdatedExpenses,
+        groupId: expenses.groupId
+      },
+        { signal: abortControllerRef.current.signal })
+      console.log(updateExpenses)
+
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   useEffect(() => {
-    verifyInvitation()
+    getGroup()
     // eslint-disable-next-line
   }, [])
 
-  const handleClick = (clickedExpense) =>{
-    if(expenses.filtered?.map(expense=>expense._id).includes(clickedExpense?._id)){
-      setExpenses({...expenses, filtered:expenses.filtered.filter(expense=>expense._id!==clickedExpense._id)})
-    }else{
+  const handleClick = (clickedExpense) => {
+    if (expenses.filtered?.map(expense => expense._id).includes(clickedExpense?._id)) {
+      setExpenses({ ...expenses, filtered: expenses.filtered.filter(expense => expense._id !== clickedExpense._id) })
+    } else {
       //setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId }] })
-      setExpenses({...expenses, filtered:[...expenses.filtered, clickedExpense]})
+      setExpenses({ ...expenses, filtered: [...expenses.filtered, clickedExpense] })
     }
   }
 
@@ -104,7 +134,7 @@ export default function ReviewGroups() {
 
             <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: "1rem" }}>
               {expenses?.all.map(expense => (
-                <div key={expense._id} id='expense' className={`flex column pointer ${expenses.filtered?.map(expense=>expense._id).includes(expense._id)? 'expenseFilled':'expenseEmpty'}`} onClick={()=>handleClick(expense)}>
+                <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${expenses.filtered?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmpty'}`} onClick={() => handleClick(expense)}>
                   <div className='flex row justcont-spacebetween alignitems-center'>
                     <div className='flex row'>
                       {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
@@ -133,18 +163,18 @@ export default function ReviewGroups() {
             </div>
           </div> : ""}
       </div>
-
-      <div className='submit-button-container flex alignself-center padding1010 fixed'>
-        <button
-          style={{ padding: "0.8rem" }}
-          className={`shadow submit-button ${"" ? "active"
-            : null} h-flex justcont-spacearound `}
-          onClick={()=>console.log("")}
-          disabled={"" ? false : true}>
-          {loading ? <IonIcon name='sync' className='t3 spin' /> : "Continue to Group"}
-        </button>
-      </div>
-
+      <Link to={`/${expenses.groupId}/expenses`}>
+        <div className='submit-button-container-review-group flex alignself-center padding1010 fixed'>
+          <button
+            style={{ padding: "0.8rem" }}
+            className={`shadow submit-button ${participateInAll || expenses.filtered.length !== 0 ? "active"
+              : null} h-flex justcont-spacearound `}
+            onClick={() => updateExpenses()}
+            disabled={participateInAll || expenses.filtered.length !== 0 ? false : true}>
+            {loading ? <IonIcon name='sync' className='t3 spin' /> : "Continue to Group"}
+          </button>
+        </div>
+      </Link>
     </div>
   )
 }

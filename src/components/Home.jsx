@@ -35,7 +35,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log("PAOK PAOK")
     abortControllerRef.current = new AbortController()
     getGroups()
     return () => {

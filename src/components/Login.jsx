@@ -19,9 +19,10 @@ const Login = () => {
         </div>
       </div>
       {location.pathname === '/login'?<LoginOrSignup /> : location.pathname==='/signup'? <SignUp/> :'' }
-
     </div>
   );
 }
 
 export default Login;
+
+
