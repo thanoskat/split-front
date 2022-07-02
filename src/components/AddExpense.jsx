@@ -5,7 +5,6 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import currency from 'currency.js'
-import { combineReducers } from '@reduxjs/toolkit'
 
 function AddExpense({ setSearchParams }) {
   const api = useAxios()
@@ -24,7 +23,7 @@ function AddExpense({ setSearchParams }) {
     amount: '',
     description: '',
     label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: 1, percentage: "" }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount:"", percentage: "" }))
   })
 
   //console.log("participants", newExpense.participants?.length !== 0)
@@ -71,7 +70,9 @@ function AddExpense({ setSearchParams }) {
               //console.log("after",tempParticipant.contributionAmount)
               counter = counter + 1
             }
+            return true
           })
+          return true
         })
       }
     } else {
@@ -90,7 +91,9 @@ function AddExpense({ setSearchParams }) {
               //console.log("after",tempParticipant.percentage)
               counter = counter + 1
             }
+            return true
           })
+          return true
         })
       }
     }

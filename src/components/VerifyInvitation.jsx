@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useParams,  useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
-import { setSelectedGroup } from '../redux/mainSlice'
-import { useDispatch} from 'react-redux'
 import store from '../redux/store'
 
 
@@ -10,9 +8,7 @@ const VerifyInvitation = () => {
 
   const params = useParams()
   const api = useAxios()
-  const dispatch = useDispatch()
   const abortControllerRef = useRef(new AbortController())
-  const [invitationAccepted, setInvitationAccepted] = useState(false)
   const [askforReview, setAskforReview] = useState(false)
   const [data, setData] = useState()
   const sessionData = store.getState().authReducer.sessionData
@@ -48,7 +44,7 @@ const VerifyInvitation = () => {
     try {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
-      const res = await api.post('/invitation/accept', {
+     await api.post('/invitation/accept', {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
@@ -101,9 +97,3 @@ const VerifyInvitation = () => {
 }
 
 export default VerifyInvitation;
-
-{/* {invitationAccepted &&
-        <Link to={`/${data.groupId}/expenses`}>
-          Go to main page
-        </Link>}
-    </div> */}

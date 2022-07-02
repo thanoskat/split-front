@@ -12,7 +12,6 @@ const LoginOrSignup = () => {
   const dispatch = useDispatch()
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
-  const [link, ] = useState('')
   const [linkText, setLinkText] = useState('')
   const [loginEmailSent, setLoginEmailSent] = useState(false)
   const [sessionUnique, setSessionUnique] = useState('')
