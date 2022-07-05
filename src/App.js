@@ -10,7 +10,8 @@ import {
   TabMembers,
   TabSettleUp,
   Expenses,
-  VerifyToken,
+  VerifySignInToken,
+  VerifySignUpToken,
   ReviewGroups,
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -27,7 +28,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Login />} />
           <Route path="/v/:token" element={<VerifyLink />} />
-          <Route path="/s/:token" element={<VerifyToken />} />
+          <Route path="/si/:token" element={<VerifySignInToken />} />
+          <Route path="/su/:token" element={<VerifySignUpToken />} />
           <Route path="/addexp" element={<AddExpense />} />
           <Route element={<PrivateRoutes />}>
             <Route path='/' element={<Home />} />

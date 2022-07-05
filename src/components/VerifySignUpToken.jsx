@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const VerifyToken = () => {
+const VerifySignUpToken = () => {
 
   const { token } = useParams()
   const [loading, setLoading] = useState(true)
@@ -10,7 +10,7 @@ const VerifyToken = () => {
 
   const verifyTokenParam = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_APIURL}/auth/createsession`, { token: token })
+      await axios.post(`${process.env.REACT_APP_APIURL}/auth/verify-sign-up-token`, { token: token })
       setLinkIsValid(true)
     }
     catch(error) {
@@ -38,4 +38,4 @@ const VerifyToken = () => {
   )
 }
 
-export default VerifyToken
+export default VerifySignUpToken

@@ -20,7 +20,7 @@ const LoginOrSignup = () => {
   const loginSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sendsigninlink`, { email })
+      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/request-sign-in`, { email })
       if(res && res.data) {
         if(res.data === `Cannot read property '_id' of null`) {
           setMessage('The email you entered does not correspond to an account. Please try again.')
