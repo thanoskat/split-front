@@ -15,7 +15,7 @@ const LoginOrSignup = () => {
   const [link, ] = useState('')
   const [linkText, setLinkText] = useState('')
   const [loginEmailSent, setLoginEmailSent] = useState(false)
-  const [sessionUnique, setSessionUnique] = useState(sessionStorage.getItem('unique'))
+  const [sessionUnique, setSessionUnique] = useState(localStorage.getItem('unique'))
 
   const loginSubmit = async (e) => {
     e.preventDefault()
@@ -29,7 +29,7 @@ const LoginOrSignup = () => {
         else {
           setLoginEmailSent(true)
           setSessionUnique(res.data.unique)
-          sessionStorage.setItem('unique', res.data.unique)
+          localStorage.setItem('unique', res.data.unique)
           setLinkText(res.data.link)
           console.log(res.data.unique)
         }
