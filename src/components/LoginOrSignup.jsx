@@ -15,7 +15,7 @@ const LoginOrSignup = () => {
   const [link, ] = useState('')
   const [linkText, setLinkText] = useState('')
   const [loginEmailSent, setLoginEmailSent] = useState(false)
-  const [sessionUnique, setSessionUnique] = useState('')
+  const [sessionUnique, setSessionUnique] = useState(sessionStorage.getItem('unique'))
 
   const loginSubmit = async (e) => {
     e.preventDefault()
@@ -29,6 +29,7 @@ const LoginOrSignup = () => {
         else {
           setLoginEmailSent(true)
           setSessionUnique(res.data.unique)
+          sessionStorage.setItem('unique', res.data.unique)
           setLinkText(res.data.link)
           console.log(res.data.unique)
         }
@@ -79,7 +80,7 @@ const LoginOrSignup = () => {
   return(
     <div className='loginBox flex column' style={{ backgroundColor: 'var(--layer-1-color)', borderColor: 'var(--layer-1-color)', borderStyle: 'solid' }}>
       <div className='signUpMsg' style={{ color: 'var(--light-color)' }}>
-        Enter your email to log in.
+        Enter your email to log in. {sessionUnique}
       </div>
       <form className='flex column' onSubmit={(e) => loginSubmit(e)}>
         <div className='mailbox flex column'>
