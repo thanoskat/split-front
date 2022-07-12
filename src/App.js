@@ -57,19 +57,30 @@ function App() {
 export default App
 // TODO
 // [x] email service !
-// [x] user bar !
-// [/] loadings !
-// [/] try/catch !
-// [ ] members tab css !
-// [ ] New expense button at bottom!
-// [ ] settle/transfer in members tab !
-// [ ] go from group to welcome page !
-// [ ] visit invitation without account/login !
-// [ ] sum filtered expenses !
-// [ ] delete group !
-//
-// [ ] add member with no account ~!
-//
 // [x] LoginOrSignup component fix
+// [/] loadings !!
+// [/] try/catch !!
+//
+// [ ] [BUG] description overflows over amount !
+// [ ] [BUG] can't refresh in mobile browser with gesture !
+// [ ] [BUG] go from group to home page !
+// [ ] [BUG] sum filtered expenses !
+//
+// [ ] transfer !!
+// [ ] add guest member Kristie(Guest) !!
+// [ ] expense details: participants, isEqually && participation !!
+// [ ] expense EDIT !!
+// [/] members tab css / settle in members tab !
+//
+// [ ] user bar !
+// [ ] single + button for expense/transfer/member ? !
+// [ ] create new group focus on group name input field
+// [ ] currency conversion
+// [ ]
+// [ ] expense unequal split amount addition per name UX ??
+// [ ] /62c40a27e252e8ca01293e1f/review
+// [ ] visit invitation without account/login
+// [ ] delete group
 // [ ] kick a user
 // [ ] correct view in desktop mode
+//
