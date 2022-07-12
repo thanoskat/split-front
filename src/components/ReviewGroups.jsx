@@ -4,9 +4,12 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import dayjs from 'dayjs'
+import { useDispatch } from 'react-redux'
+import { setSelectedGroup } from '../redux/mainSlice'
 
 export default function ReviewGroups() {
   const params = useParams()
+  const dispatch = useDispatch()
   const api = useAxios()
   const navigate = useNavigate()
   const abortControllerRef = useRef(new AbortController())
@@ -41,6 +44,7 @@ export default function ReviewGroups() {
         if (expense.splitEqually === true && !expense.participants.includes(sessionData.id)) {
           expArr.push(expense)
         }
+        return expArr
       })
       setExpenses({ all: expArr, filtered: [], groupTitle: res.data.group.title, groupId: res.data.group._id })
       setLoading(false)
@@ -55,6 +59,7 @@ export default function ReviewGroups() {
   }
 
   const updateExpenses = async () => {
+    console.log("UPDATED RAN")
     let toBeupdatedExpenses
     if (participateInAll) {
       toBeupdatedExpenses = expenses.all
@@ -70,7 +75,7 @@ export default function ReviewGroups() {
       },
         { signal: abortControllerRef.current.signal })
       console.log(updateExpenses)
-
+      dispatch(setSelectedGroup(updateExpenses.data))
 
     } catch (err) {
       console.log(err)
