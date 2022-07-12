@@ -46,7 +46,7 @@ export default function Home() {
   const logoutClick = async () => {
     console.log('onLogoutClick')
     try {
-      await api.post('/auth/signout', { sessionID: sessionData.id })
+      await api.post('/auth/signout', { sessionID: sessionData.id }, { withCredentials: true })
     } catch (error) {
       console.dir(error)
     }

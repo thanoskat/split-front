@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 const PrivateRoutes = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken)
   return(
-    accessToken ? <Outlet/> : <Navigate to='/login'/>
+    accessToken ? <Outlet/> : <Navigate to='/signin'/>
   )
 }
 
