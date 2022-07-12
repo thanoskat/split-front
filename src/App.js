@@ -10,27 +10,33 @@ import {
   TabMembers,
   TabSettleUp,
   Expenses,
+  VerifyToken,
   VerifySignInToken,
   VerifySignUpToken,
   ReviewGroups,
+  SignIn,
+  SignUp,
+  Continue,
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
 
-
 function App() {
-
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
           {/* <Route path="/socket" element={<WebSocketTest />} /> */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Login />} />
-          <Route path="/v/:token" element={<VerifyLink />} />
-          <Route path="/si/:token" element={<VerifySignInToken />} />
-          <Route path="/su/:token" element={<VerifySignUpToken />} />
-          <Route path="/addexp" element={<AddExpense />} />
+          {/* <Route path="/login" element={<Login />} /> */}
+          {/* <Route path="/signup" element={<Login />} /> */}
+          {/* <Route path="/v/:token" element={<VerifyLink />} /> */}
+          {/* <Route path="/si/:token" element={<VerifySignInToken />} /> */}
+          {/* <Route path="/su/:token" element={<VerifySignUpToken />} /> */}
+          {/* <Route path="/addexp" element={<AddExpense />} /> */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/continue" element={<Continue />} />
+          <Route path="/s/:token" element={<VerifyToken />} />
           <Route element={<PrivateRoutes />}>
             <Route path='/' element={<Home />} />
             <Route path='i/:invitationCode' element={<VerifyInvitation />} />
@@ -49,23 +55,21 @@ function App() {
 }
 
 export default App
-
 // TODO
-
-// members tab css !
-// settle/transfer in members tab !
-// go from group to welcome page !
-// visit invitation without account/login !
-// loadings !
-// try/catch !
-// email service !
-// user bar !
-// sum filtered expenses !
-// delete group !
-
-// add member with no account ~!
-
-// LoginOrSignup component fix
-// kick a user
-// New expense button at bottom
-// correct view in desktop mode
+// [x] email service !
+// [x] user bar !
+// [/] loadings !
+// [/] try/catch !
+// [ ] members tab css !
+// [ ] New expense button at bottom!
+// [ ] settle/transfer in members tab !
+// [ ] go from group to welcome page !
+// [ ] visit invitation without account/login !
+// [ ] sum filtered expenses !
+// [ ] delete group !
+//
+// [ ] add member with no account ~!
+//
+// [x] LoginOrSignup component fix
+// [ ] kick a user
+// [ ] correct view in desktop mode

@@ -15,12 +15,12 @@ const LoginOrSignup = () => {
   const [link, ] = useState('')
   const [linkText, setLinkText] = useState('')
   const [loginEmailSent, setLoginEmailSent] = useState(false)
-  const [sessionUnique, setSessionUnique] = useState('')
+  // const [sessionUnique, setSessionUnique] = useState('')
 
   const loginSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/request-sign-in`, { email })
+      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/request-sign-in`, { email }, { withCredentials: true })
       if(res && res.data) {
         if(res.data === `Cannot read property '_id' of null`) {
           setMessage('The email you entered does not correspond to an account. Please try again.')
@@ -28,9 +28,9 @@ const LoginOrSignup = () => {
         }
         else {
           setLoginEmailSent(true)
-          setSessionUnique(res.data.unique)
+          // setSessionUnique(res.data.unique)
           setLinkText(res.data.link)
-          console.log(res.data.unique)
+          // console.log(res.data.unique)
         }
       }
     }
@@ -39,9 +39,9 @@ const LoginOrSignup = () => {
     }
   }
 
-  const continueSignIn = async (unique) => {
+  const continueSignIn = async () => {
     try {
-      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/signin`, { unique: unique }, { withCredentials: true })
+      const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sign-in`, { },  { withCredentials: true })
       dispatch(signIn({accessToken: res.data.accessToken, sessionData: res.data.sessionData}))
       navigate('/')
     }
@@ -99,7 +99,7 @@ const LoginOrSignup = () => {
         </Link>
       </form>
       {loginEmailSent &&
-      <button className={`shadow login-button flex justcont-center relative active`} onClick={() => continueSignIn(sessionUnique)}>
+      <button className={`shadow login-button flex justcont-center relative active`} onClick={() => continueSignIn()}>
         Continue
       </button>}
     </div>
