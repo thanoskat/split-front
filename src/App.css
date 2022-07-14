@@ -666,8 +666,13 @@ select {
   padding: 15px
 }
 
+
 .padding4 {
   padding: 4px
+}
+
+.padding6 {
+  padding: 6px
 }
 
 .padding1812 {
@@ -1367,4 +1372,15 @@ input:focus.inputErr {
   border-color: var(--pink);
   border-width: 2px;
 
+}
+
+.encircle-item{
+  display: flex;
+  background:var(--layer-4-color);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }

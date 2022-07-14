@@ -81,7 +81,7 @@ const TabMembers = () => {
               {id === sessionData.userId ? "You" : name}
             </div>
           </div>
-          <div className="totalSpent">
+          <div >
             Total spent
           </div>
         </div>
