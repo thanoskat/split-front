@@ -17,9 +17,9 @@ function RecordPayment({ headline, close}) {
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const selectedPendingTX = store.getState().mainReducer.selectedPendingTX
 
-  const [trackIDsingle, setTrackIDsingle] = useState([selectedPendingTX.receiver._id])
+  const [trackIDsingle, setTrackIDsingle] = useState([selectedPendingTX?.receiver._id])
   const [inputDescription, setInputDescription] = useState("Settle payment")
-  const [inputAmount, setInputAmount] = useState(selectedPendingTX.amount)
+  const [inputAmount, setInputAmount] = useState(selectedPendingTX?.amount)
   const [submitisLoading, setSubmitLoading] = useState(false)
 
   const abortControllerRef = useRef(null)
@@ -142,16 +142,10 @@ function RecordPayment({ headline, close}) {
         <MultiSelect
           setTrackID={setTrackIDsingle}
           value={trackIDsingle}
-          optionsArray={selectedGroup.members.filter(filterIDfromMembers)} //filters out user's ID from showing as option. Debatable
+          optionsArray={selectedGroup?.members.filter(filterIDfromMembers)} //filters out user's ID from showing as option. Debatable
           allowMultiSelections={false} />
 
-        <div className='submit-button-container v-flex alignitems-center justcont-center'>
-          <div
-            className={`submit-button ${inputAmount && trackIDsingle.length!==0 ? "active" : null} h-flex justcont-spacearound `}
-            onClick={recordPayment}>
-            {submitisLoading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
-          </div>
-        </div>
+       
       </div>
     </div>
   );
@@ -238,7 +232,7 @@ function MultiSelect({ optionsArray, setTrackID, allowMultiSelections, label, va
       </div>
 
       <div className='multiselectbox'>
-        {optionsArray.map((option) =>
+        {optionsArray?.map((option) =>
           <div className='flex column profilecircle' key={option._id} onClick={() => onSubmitFunction(allowMultiSelections, option)} >
             <span className='avatar'>
               <div className='firstLetter'>

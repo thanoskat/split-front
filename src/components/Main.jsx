@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor, New } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor, New, RecordTransfer } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -97,11 +97,20 @@ const Main = () => {
 
       <CSSTransition
         in={(searchParams.get('menu') === 'newexpense')}
-        timeout={500}
+        timeout={300}
         classNames='leftslide'
         unmountOnExit
       >
         <AddExpense setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'recordtransfer')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <RecordTransfer setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition

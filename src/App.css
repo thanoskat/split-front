@@ -1384,3 +1384,18 @@ input:focus.inputErr {
   justify-content: center;
   align-items: center;
 }
+
+.backIcon{
+  position: relative;
+  display: flex;
+  border: none;
+}
+
+.frontIcon{
+  position: absolute;
+  color: white;
+
+  font-weight: 700;
+  margin-left: 15px;
+  margin-top: 8px;
+}

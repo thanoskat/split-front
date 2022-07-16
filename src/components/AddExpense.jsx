@@ -25,6 +25,7 @@ function AddExpense({ setSearchParams }) {
     label: null,
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
   })
+  const inputAmountRef = useRef(null)
 
   //console.log("participants", newExpense.participants?.length !== 0)
 
@@ -109,6 +110,9 @@ function AddExpense({ setSearchParams }) {
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
+    setTimeout(()=>{
+      inputAmountRef.current.focus()
+    },300)
     return () => {
       abortControllerRef.current.abort()
     }
@@ -259,13 +263,14 @@ function AddExpense({ setSearchParams }) {
           </div>
 
           <input
+            ref={inputAmountRef}
             className='styledInput t3 text-align-right'
             type='tel'
             placeholder='0'
             step="0.01"
             value={newExpense.amount}
             onChange={(e) => updateAmount(e)}
-            autoFocus={true}
+            //autoFocus={true}
             spellCheck='false'
           />
         </div>
@@ -306,8 +311,7 @@ function AddExpense({ setSearchParams }) {
                 {selectedGroup.members.map(member => (
                   <div className={`pill pointer shadow ${newExpense?.participants.map(participants => participants.memberId).includes(member._id) ? 'filled' : 'empty'}`}
                     key={member._id} style={{ '--pill-color': `gray` }}
-                    onClick={() => participantClicked(member._id)}
-                  >
+                    onClick={() => participantClicked(member._id)}>
                     {member.nickname}
                   </div>))}
               </div>

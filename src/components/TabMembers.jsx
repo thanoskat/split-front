@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
+import IonIcon from '@reacticons/ionicons'
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
@@ -52,9 +53,6 @@ const TabMembers = () => {
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
 
-  console.log(membersNoUser)
-  console.log(userNoMembers)
-
   const Tree = ({ toFrom, isSenderReceiverSettled }) => {
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
@@ -96,7 +94,10 @@ const TabMembers = () => {
                 {toFrom.length === 1 ? <div>from <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
               <div className="description flex row alignitems-center">
-                is settled
+                <div>
+                {id === sessionData.userId ?"are":"is"} settled 
+                </div>
+               <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize:"22px", fontWeight:"500" }} />
               </div>}
           <div className="totalSpent medium t25 white">
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
