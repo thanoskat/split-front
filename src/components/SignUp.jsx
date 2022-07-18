@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
-
   const navigate = useNavigate()
   const [signUpForm, setSignUpForm] = useState({
     nickname: '',
@@ -24,7 +23,7 @@ const SignUp = () => {
     setLoading(true)
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_APIURL}/auth/request-sign-up`,
         { email: signUpForm.email, nickname: signUpForm.nickname },
         { withCredentials: true }
@@ -35,12 +34,12 @@ const SignUp = () => {
     catch (error) {
       if(error.response) {
         if(Array.isArray(error.response.data)) {
-          const tempSignUpErrorMessages = {}
+          const tempErrorMessages = {}
           error.response.data.reverse().forEach(err => {
-            if(err.field === 'nickname') tempSignUpErrorMessages.nickname = err.message
-            if(err.field === 'email') tempSignUpErrorMessages.email = err.message
+            if(err.field === 'nickname') tempErrorMessages.nickname = err.message
+            if(err.field === 'email') tempErrorMessages.email = err.message
           })
-          setSignUpErrorMessages(tempSignUpErrorMessages)
+          setSignUpErrorMessages(tempErrorMessages)
         }
         if(error.response.data.message) {
           setSubmitErrorMessage(error.response.data.message)
@@ -95,6 +94,7 @@ const SignUp = () => {
               <input
                 className={`styledInput ${signUpErrorMessages.email ? 'inputErr' : ''}`}
                 placeholder='john@rambo.com'
+                inputmode='email'
                 value={signUpForm.email}
                 onChange={e => changeEmail(e)}
                 onKeyPress={keyPress}

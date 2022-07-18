@@ -2,10 +2,8 @@ import { Header } from '.'
 import { useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom';
-import { signIn } from '../redux/authSlice'
+import { useNavigate } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
-import { useDispatch } from 'react-redux'
 
 const SignIn = () => {
 
@@ -24,7 +22,7 @@ const SignIn = () => {
     setLoading(true)
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_APIURL}/auth/request-sign-in`,
         { email: signInForm.email },
         { withCredentials: true }
@@ -35,11 +33,11 @@ const SignIn = () => {
     catch(error) {
       if(error.response) {
         if(Array.isArray(error.response.data)) {
-          const tempSignInErrorMessages = {}
+          const tempErrorMessages = {}
           error.response.data.reverse().forEach(err => {
-            if(err.field === 'email') tempSignInErrorMessages.email = err.message
+            if(err.field === 'email') tempErrorMessages.email = err.message
           })
-          setSignInErrorMessages(tempSignInErrorMessages)
+          setSignInErrorMessages(tempErrorMessages)
         }
         if(error.response.data.message) {
           setSubmitErrorMessage(error.response.data.message)
@@ -75,6 +73,7 @@ const SignIn = () => {
         <div className='flex column'>
           <div className='mailbox flex column'>
             <input
+              inputmode='email'
               value={signInForm.email}
               className={`styledInput ${signInErrorMessages.email ? 'inputErr' : null}`}
               placeholder='john@rambo.com'

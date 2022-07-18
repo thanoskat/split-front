@@ -13,14 +13,13 @@ export default function CreateNewGroup({ setSearchParams }) {
   const sessionData = store.getState().authReducer.sessionData
   const navigate = useNavigate()
   const [newMode, setNewMode] = useState(false)
-  const [labelName, setLabelName] = useState("")
+  const [labelName, setLabelName] = useState('')
   const [newLabel, setNewLabel] = useState([])
-
 
   const createGroup = async () => {
     setLoading(true)
     try {
-      const group = await api.post("/groups/creategroup", {
+      const group = await api.post('/groups/creategroup', {
         creatorID: sessionData.userId,
         title: groupName,
         groupLabels: newLabel
@@ -37,10 +36,9 @@ export default function CreateNewGroup({ setSearchParams }) {
 
   const cancelNewMode = () => {
     setNewLabel([...newLabel])
-    setLabelName("")
+    setLabelName('')
     setNewMode(false)
   }
-
 
   const createNewLabel = () => {
     const existingNames = (newLabel?.map(label => label.name))
@@ -58,7 +56,7 @@ export default function CreateNewGroup({ setSearchParams }) {
     const defaultColorsUsed = newLabel?.map(label => label.color)
     const firstAvailableColor = defaultColors.filter(color => !defaultColorsUsed.includes(color))[0]
     setNewLabel([...newLabel, { name: labelName, color: firstAvailableColor }])
-    setLabelName("")
+    setLabelName('')
   }
 
   const deleteLabel = (label) => {
@@ -68,21 +66,24 @@ export default function CreateNewGroup({ setSearchParams }) {
   const LabelItem = ({ label }) => {
     return (
       <div className='flex row justcont-spacebetween alignitems-center' style={{ height: 'fit-content' }}>
-        <div className={`pill filled t5 shadow test `}
-          style={{ '--pill-color': `var(--${label.color})` }}
+        <div className={`pill2 t5 shadow test `}
+          style={{ color: `var(--${label.color})` }}
         >{label.name}</div>
         <div className='flex row gap10'>
         </div>
-        <div style={{ fontSize: "25px", cursor: "pointer" }} onClick={() => deleteLabel(label)}>
-          <i className='icon delete' ></i>
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'var(--darkletterColor)' }}
+          onClick={() => deleteLabel(label)}
+        >
+          <IonIcon name='trash' className='t2' />
         </div>
-
       </div>
     )
   }
 
   return (
-    <div className='createnewgroupBox flex column fixed ' style={{ left: "0px" }}>
+    <div className='createnewgroupBox flex column fixed ' style={{ left: '0px' }}>
       <div className='createnewgroupHeader flex row t1  padding1010 gap10'>
         <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
           <i className='arrow left icon t3'></i>
@@ -100,19 +101,19 @@ export default function CreateNewGroup({ setSearchParams }) {
           onChange={e => setGroupName(e.target.value)}
           spellCheck='false'
         />
-        <div className="flex column" style={{ marginTop: "15px" }}>
-          <div className="whiteSpace-initial" style={{ margin: "0px 0px 15px 0px", fontSize: "20px" }}>Select currency</div>
-          <div style={{ backgroundColor: "#121214", padding: "0.8rem" , borderRadius:"4px", width:"5rem", cursor:"pointer" }}>
-            <div className='currency-ticker-section' style={{ position: "relative", justifyContent: "flex-start", left: "0px" }}>
+        <div className='flex column' style={{ marginTop: '15px' }}>
+          <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px', fontSize: '20px' }}>Select currency</div>
+          <div style={{ backgroundColor: '#121214', padding: '0.8rem' , borderRadius:'4px', width:'5rem', cursor:'pointer' }}>
+            <div className='currency-ticker-section' style={{ position: 'relative', justifyContent: 'flex-start', left: '0px' }}>
               <i className='angle down icon'></i>
               <div className='currency-ticker'>EUR </div>
             </div>
           </div>
         </div>
-        <div style={{ marginTop: "10px", fontSize: "20px" }}>
+        <div style={{ marginTop: '10px', fontSize: '20px' }}>
           Create labels
         </div>
-        <div className="whiteSpace-initial" style={{ margin: "0px 0px 15px 0px" }}>
+        <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px' }}>
           Labels can help you group, filter and organise your expenses.
         </div>
 
@@ -121,8 +122,13 @@ export default function CreateNewGroup({ setSearchParams }) {
         ))}
 
         {!newMode &&
-          <div style={{ color: "var(--light-color)", borderColor: "var(--label-color-6)", backgroundColor: "var(--label-color-6)", alignSelf:"auto" }}
-          className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
+        <div
+          style={{ color: 'var(--light-color)', borderColor: 'var(--label-color-6)', backgroundColor: 'var(--label-color-6)', alignSelf: 'auto' }}
+          className='pill t5 empty pointer shadow'
+          onClick={() => setNewMode(true)}
+        >
+          Create new label
+        </div>}
         {newMode &&
           <div className='flex row justcont-spacebetween'>
             <input
@@ -141,21 +147,13 @@ export default function CreateNewGroup({ setSearchParams }) {
             </div>
           </div>
         }
-
-
       </div>
-
-
-
-
-
-
       <div className='submit-button-container flex padding1010'>
         <button
-          className={`shadow submit-button ${groupName !== "" ? "active" : null} h-flex justcont-spacearound `}
+          className={`shadow submit-button ${groupName !== '' ? 'active' : null} h-flex justcont-spacearound `}
           onClick={createGroup}
-          disabled={groupName !== "" ? false : true}>
-          {loading ? <IonIcon name='sync' className='t3 spin' /> : "Create Group"}
+          disabled={groupName !== '' ? false : true}>
+          {loading ? <IonIcon name='sync' className='t3 spin' /> : 'Create Group'}
         </button>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
+import currency from 'currency.js'
 dayjs.extend(calendar)
 
 const Expenses = () => {
@@ -41,28 +42,35 @@ const Expenses = () => {
     setFilters(filters.filter(filter => (filter !== id)))
   }
 
+  var filterSum = currency(0)
+  if(filters.length > 0) {
+    filteredExpenses.forEach(expense => {
+      filterSum = filterSum.add(expense.amount)
+    })
+  }
+
   return (
-    <div className='flex flex-1 column overflow-hidden' style={{ padding: '14px', gap: '14px' }}>
+    <div id='expenses-tab' className='flex column'>
       {filters.length > 0 &&
-        <div className='flex row justcont-spacebetween alignitems-center'>
-          <div id='expense-filters' className='flex row alignitems-center'>
-            {filters.map(filter => (
-              <div
-                key={filter}
-                id='expense-pill'
-                className='pointer'
-                onClick={() => removeFilter(filter)}
-                style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
-              >
-                {selectedGroup.members.find(member => member._id === filter)?.nickname}
-                {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
-                <IonIcon name='close' />
-              </div>
-            ))}
-          </div>
-          <div style={{ fontSize: '14px', fontWeight: '700' }}>TOTAL: $15</div>
-        </div>}
-      <div id='expenses' className='flex flex-1 column overflow-auto'>
+      <div className='flex row justcont-spacebetween alignitems-center'>
+        <div id='expense-filters' className='flex row alignitems-center'>
+          {filters.map(filter => (
+            <div
+              key={filter}
+              id='expense-pill'
+              className='pointer'
+              onClick={() => removeFilter(filter)}
+              style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
+            >
+              {selectedGroup.members.find(member => member._id === filter)?.nickname}
+              {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
+              <IonIcon name='close' />
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: '14px', fontWeight: '700' }}>{filterSum.format()}</div>
+      </div>}
+      <div id='expenses'>
         {filteredExpenses.map(expense => (
           <div key={expense._id} id='expense' className='flex column'>
             <div className='flex row justcont-spacebetween alignitems-center'>
@@ -76,7 +84,7 @@ const Expenses = () => {
                 onClick={() => setSearchParams({ menu: 'deleteexpense', id: expense._id })}
               />
             </div>
-            <div className='flex row justcont-spacebetween'>
+            <div className='flex row justcont-spacebetween gap10 alignitems-center'>
               <div id='expense-description'>{expense.description}</div>
               <div id='expense-amount'>${expense.amount}</div>
             </div>
@@ -105,8 +113,8 @@ const Expenses = () => {
             </div>
           </div>
         )).reverse()}
-        <div style={{ marginBottom: "80px" }}>
-        </div>
+        {/* <div style={{ marginBottom: "80px" }}>
+        </div> */}
       </div>
     </div>
   )

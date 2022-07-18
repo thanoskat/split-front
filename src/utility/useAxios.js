@@ -20,7 +20,7 @@ const useAxios = () => {
         refresh.refreshSubscribers.shift()(token)
       }
       catch(error) {
-        console.log(error)
+        // console.log(error)
       }
     }
   }
@@ -46,7 +46,7 @@ const useAxios = () => {
   async (error) => {
     const originalRequest = error.config
     const errorStatus = error.response.status
-    console.log(errorStatus, error.response.data)
+    // console.log(errorStatus, error.response.data)
 
     // console.log(`errorStatus === ${errorStatus}`)
     if (errorStatus === 401) {
@@ -63,7 +63,7 @@ const useAxios = () => {
           refresh.isRefreshing = false
           onRrefreshed(store.getState().authReducer.accessToken)
           refresh.refreshSubscribers = []
-          console.log(error.response.status, error.response.data)
+          // console.log(error.response.status, error.response.data)
           dispatch(signOut())
         })
       }
@@ -77,7 +77,7 @@ const useAxios = () => {
       return retryOriginalRequest;
     }
     else {
-      console.log('Error code: ', errorStatus)
+      // console.log('Error code: ', errorStatus)
       return Promise.reject(error)
     }
   })
