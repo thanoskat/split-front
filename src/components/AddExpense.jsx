@@ -26,8 +26,6 @@ function AddExpense({ setSearchParams }) {
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '', percentage: '' }))
   })
 
-  console.log(newExpense)
-
   //console.log('participants', newExpense.participants?.length !== 0)
 
   const addCommas = num => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -49,7 +47,6 @@ function AddExpense({ setSearchParams }) {
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
   const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
-  console.log('remaining',remainingAmount)
 
   const remaining = () => {
     const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
@@ -169,7 +166,7 @@ function AddExpense({ setSearchParams }) {
     if (!loading) {
       setLoading(true)
       try {
-        const res = await api.post('expense/add',
+        const res = await api.post('expense/add2',
           {
             groupId: selectedGroup._id,
             spender: sessionData.userId,
@@ -182,14 +179,13 @@ function AddExpense({ setSearchParams }) {
           { signal: abortControllerRef.current.signal })
         dispatch(setSelectedGroup(res.data))
         setLoading(false)
+        setSearchParams({}) //close menu
       }
       catch (error) {
         console.log(error)
         setLoading(false)
       }
     }
-    //dispatch(closeSlidingLeftBox())
-    setSearchParams({}) //close menu
   }
 
   const labelClicked = (labelClickedId) => {

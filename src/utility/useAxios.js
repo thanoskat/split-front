@@ -15,12 +15,12 @@ const useAxios = () => {
   const dispatch = useDispatch()
 
   const onRrefreshed = (token) => {
-    while(refresh.refreshSubscribers.length > 0){
+    while(refresh.refreshSubscribers.length > 0) {
       try {
         refresh.refreshSubscribers.shift()(token)
       }
       catch(error) {
-        // console.log(error)
+        // console.log('onRrefreshed(token)', error)
       }
     }
   }
@@ -45,16 +45,17 @@ const useAxios = () => {
   },
   async (error) => {
     const originalRequest = error.config
-    const errorStatus = error.response.status
+    const errorStatus = error.response?.status
     // console.log(errorStatus, error.response.data)
 
-    // console.log(`errorStatus === ${errorStatus}`)
+    // console.log('errorStatus', errorStatus)
     if (errorStatus === 401) {
+      // console.log(error)
       // console.log(`isRefreshing === ${refresh.isRefreshing}`)
       if(!refresh.isRefreshing) {
         refresh.isRefreshing = true
         // Getting new access token
-        axios.get(`${baseURL}/auth/refreshtoken`, {withCredentials: true})
+        axios.get(`${baseURL}/auth/refreshtoken`, { withCredentials: true })
         .then(response => {
           dispatch(refreshAccessToken(response.data.newAccessToken))
           refresh.isRefreshing = false
@@ -72,12 +73,13 @@ const useAxios = () => {
         refresh.refreshSubscribers.push(token => {
           originalRequest.headers['Authorization'] = 'Bearer ' + token
           resolve(axios(originalRequest))
-        });
-      }).catch(error => console.log(error.message));
-      return retryOriginalRequest;
+        })
+        // console.log(refresh.refreshSubscribers)
+      }).catch(error => console.log(error.message))
+      return retryOriginalRequest
     }
     else {
-      // console.log('Error code: ', errorStatus)
+      // console.log(error)
       return Promise.reject(error)
     }
   })

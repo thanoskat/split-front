@@ -11,7 +11,6 @@ const NewExpense = ({ setSearchParams }) => {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const sessionData = store.getState().authReducer.sessionData
   const abortControllerRef = useRef(null)
 
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -25,7 +24,7 @@ const NewExpense = ({ setSearchParams }) => {
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
 
-  console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
+  // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
 
   useEffect(() => {
     setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
@@ -46,19 +45,22 @@ const NewExpense = ({ setSearchParams }) => {
       setSubmitLoading(true)
       try {
         const res = await api.post('expense/add', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
-        dispatch(setSelectedGroup(res.data))
-        setSubmitLoading(false)
-        setSearchParams({})
+        if(res.data.validationArray) {
+          const tempErrorMessages = {}
+          res.data.validationArray.reverse().forEach(err => {
+            tempErrorMessages[err.field] = err.message
+          })
+          setNewExpenseErrorMessages(tempErrorMessages)
+          setSubmitLoading(false)
+        }
+        else {
+          dispatch(setSelectedGroup(res.data))
+          setSubmitLoading(false)
+          setSearchParams({})
+        }
       }
       catch (error) {
         if(error.response) {
-          if(Array.isArray(error.response.data)) {
-            const tempErrorMessages = {}
-            error.response.data.reverse().forEach(err => {
-              tempErrorMessages[err.field] = err.message
-            })
-            setNewExpenseErrorMessages(tempErrorMessages)
-          }
           if(error.response.data.message) {
             setSubmitErrorMessage(error.response.data.message)
           }
@@ -81,8 +83,18 @@ const NewExpense = ({ setSearchParams }) => {
     }
   }
 
+  const removedContributionAmountErrors = () => {
+    const contributionAmountErrorMessages = {}
+    for(const field in newExpenseErrorMessages) {
+      if(/^participants\[[0-9]+]\.contributionAmount$/.test(field)) {
+        contributionAmountErrorMessages[field] = null
+      }
+    }
+    return(contributionAmountErrorMessages)
+  }
+
   const participantClicked = (participantClickedId) => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: null})
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: null, ...removedContributionAmountErrors() })
     if (newExpense.participants.map(participants => participants.memberId).includes(participantClickedId)) {
       setNewExpense({ ...newExpense, participants: newExpense.participants.filter(participant => participant.memberId !== participantClickedId) })
     }
@@ -99,7 +111,8 @@ const NewExpense = ({ setSearchParams }) => {
   }
 
   const allClick = () => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: []})
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, splitEqually: null, participants: null, ...removedContributionAmountErrors() })
+
     if(allMembers()) {
       setNewExpense({ ...newExpense, participants: [] })
     }
@@ -109,12 +122,8 @@ const NewExpense = ({ setSearchParams }) => {
   }
 
   const equalClick = () => {
-    for(const field in newExpenseErrorMessages) {
-      if(/^participants\[[0-9]+]\.contributionAmount$/.test(field)) {
-        newExpenseErrorMessages[field] = null
-      }
-    }
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: []})
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
+
     if(newExpense.splitEqually) {
       setNewExpense({ ...newExpense, splitEqually: false })
     }
@@ -161,7 +170,6 @@ const NewExpense = ({ setSearchParams }) => {
             <div
               className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant.memberId).includes(member._id) ? 'filled' : ''}`}
               onClick={() => participantClicked(member._id)}
-              // style={{ color: `${newExpense.participants.map(participant => participant.memberId).includes(member._id) ? 'white' : '#606060'}` }}
             >
               {member.nickname}
             </div>

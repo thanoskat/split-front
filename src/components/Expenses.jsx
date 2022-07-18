@@ -23,7 +23,7 @@ const Expenses = () => {
     sameElse: 'MMM DD'
   }
 
-  const filteredExpenses = selectedGroup.expenses.filter(expense => {
+  const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
     if (filters.length === 0) return true
     if (filters.length === 1) {
       if (filters.includes(expense.spender._id) || filters.includes(expense.label)) return true
