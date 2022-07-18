@@ -130,7 +130,6 @@ const deleteFunction=(e,expenseId)=>{
                     </div>
                   </div>
                 }
-
                 {expense.splitEqually === false ?
                   <IonIcon
                     name='logo-react' className='larger-click-area pointer'

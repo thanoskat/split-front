@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor, New, RecordTransfer } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor, New, RecordTransfer,SettleUp} from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -6,6 +6,7 @@ import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
+
 
 const Main = () => {
 
@@ -94,6 +95,8 @@ const Main = () => {
       >
         <New setSearchParams={setSearchParams}/>
       </CSSTransition>
+
+    
 
       <CSSTransition
         in={(searchParams.get('menu') === 'newexpense')}

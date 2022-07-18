@@ -3,10 +3,15 @@ import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
+import { useSearchParams } from 'react-router-dom'
+import { SettleUp } from '.'
+import { CSSTransition } from 'react-transition-group'
+
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const [searchParams, setSearchParams] = useSearchParams()
 
 
   Array.prototype.move = function (from, to) {
@@ -52,19 +57,39 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
+  console.log(userNoMembers)
 
   const Tree = ({ toFrom, isSenderReceiverSettled }) => {
+
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
         <ul>
           {toFrom?.map(member => (
             <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
-                <div className='flex row'><div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> to &nbsp;<strong>{member.name}</strong></div>
+                <div className='flex row alignitems-center'>
+                  <div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                  </div> to &nbsp;
+                  <strong>{member.name}</strong>
+                </div>
                 : isSenderReceiverSettled === 2 ?
-                  <div className='flex row'><div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> from &nbsp;<strong>{member.name}</strong></div> : <></>}
+                  <div className='flex row justcont-spacebetween'>
+                    <div className='flex row alignitems-center whiteSpace-initial'>
+                      <div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                      </div>
+                      <div>
+                        from
+                      </div>
+                      &nbsp;
+                      <strong>{member.name}</strong>
+                    </div>
+                    &nbsp;
+                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setSearchParams({ menu: 'settleup' })}>Settle Up</div>
+
+                  </div> : <></>}
             </li>))}
         </ul>
+
       </div>
     )
   }
@@ -95,19 +120,21 @@ const TabMembers = () => {
               </div> :
               <div className="description flex row alignitems-center">
                 <div>
-                {id === sessionData.userId ?"are":"is"} settled 
+                  {id === sessionData.userId ? "are" : "is"} settled
                 </div>
-               <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize:"22px", fontWeight:"500" }} />
+                <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: "22px", fontWeight: "500" }} />
               </div>}
           <div className="totalSpent medium t25 white">
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
+
         </div>
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
           <Tree
             toFrom={toFrom}
             isSenderReceiverSettled={isSenderReceiverSettled} />
         }
+
       </div>
     )
   }
@@ -125,6 +152,8 @@ const TabMembers = () => {
               toFrom={member.toFrom}
               pendingTotalAmount={member.pendingTotalAmount}
               totalSpent={member.totalSpent} />
+
+
           </div>
         ))}
         {membersNoUser.map((member) => (
@@ -143,6 +172,17 @@ const TabMembers = () => {
         </div>
       </div>
       <Outlet />
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'settleup')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <SettleUp
+          setSearchParams={setSearchParams} />
+      </CSSTransition>
+
     </div>
   );
 }

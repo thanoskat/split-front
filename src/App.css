@@ -14,12 +14,11 @@ body,
 select {
   scrollbar-gutter: auto both-edges;
   margin: 0;
-  height: 100%;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   user-select: none;
-  height: 100vh;
+  height: 100%;
   white-space: nowrap;
 
   /* --base-color: #406abf;
@@ -354,6 +353,9 @@ select {
   justify-self: center
 }
 
+.justself-end {
+  justify-self: end
+}
 .alignself-center {
   align-self: center
 }
@@ -554,8 +556,8 @@ select {
 
 .bottom-menu {
   bottom: 0;
-  width: 100%;
   position: fixed;
+  width:100%;
   background-color: var(--layer-1-color);
 }
 
@@ -1329,6 +1331,17 @@ input:focus.inputErr {
   border-radius: 6px;
   padding: 3px 8px;
   gap: 3px;
+}
+
+#settleUp-pill {
+  font-weight: 400;
+  background-color:var(--label-color-6);
+  display: flex;
+  color:white;
+  border-radius: 6px;
+  padding: 3px 8px;
+  gap: 3px;
+  
 }
 
 #tab-selector {
