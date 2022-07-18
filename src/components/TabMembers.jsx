@@ -112,7 +112,7 @@ const TabMembers = () => {
   }
 
   return (
-    <div className='flex flex-1 column overflow-hidden' style={{ padding: '14px', gap: '14px' }}>
+    <div className='flex flex-1 column overflow-hidden'>
       <div id='expenses' className='flex flex-1 column overflow-auto'>
         {userNoMembers.map((member) => (
           <div key={member._id} className='overflow-visible'>

@@ -67,7 +67,7 @@ function Invitation() {
   }
 
   return (
-    <div className='flex column fixed' style={{bottom: '0px', width: '100%', height:'100vh', backgroundColor: 'var(--layer-0-color)'}}>
+    <div className='flex column fixed' style={{bottom: '0px', width: '100%', height:'100%', backgroundColor: 'var(--layer-0-color)'}}>
       {isLoading && <IonIcon name='sync' className='t1 spin'/>}
       {!isLoading &&
       <div className='flex column padding1010 gap10' style={{height: '100%'}}>
