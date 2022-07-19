@@ -17,7 +17,6 @@ const DeleteExpense = () => {
   const [searchParams] = useSearchParams()
   const expenseID = searchParams.get('id')
 
-  console.log(expenseID)
   useEffect(() => {
     //window.addEventListener('popstate', event => console.log(event));
     abortControllerRef.current = new AbortController()

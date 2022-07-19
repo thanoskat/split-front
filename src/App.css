@@ -680,6 +680,9 @@ select {
 .padding1812 {
   padding: 18px 12px
 }
+.padding15{
+  padding: 12px;
+}
 
 .padding0014 {
   margin: 0px 14px
@@ -1279,7 +1282,7 @@ input:focus.inputErr {
 }
 
 #expense {
-  gap: 12px;
+  gap: 8px;
   padding: 12px 12px;
   background-color: #26272B;
   border-radius: 10px;
@@ -1341,7 +1344,6 @@ input:focus.inputErr {
   border-radius: 6px;
   padding: 3px 8px;
   gap: 3px;
-  
 }
 
 #tab-selector {

@@ -59,7 +59,7 @@ export default function ReviewGroups() {
   }
 
   const updateExpenses = async () => {
-    console.log("UPDATED RAN")
+    //console.log("UPDATED RAN")
     let toBeupdatedExpenses
     if (participateInAll) {
       toBeupdatedExpenses = expenses.all
