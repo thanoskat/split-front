@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -11,9 +11,9 @@ const Expenses = () => {
 
   const [, setSearchParams] = useSearchParams()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-
   const [filters, setFilters] = useState([])
-
+  const [expandExpense, setExpandExpense] = useState([])
+  console.log(selectedGroup)
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',
@@ -32,7 +32,12 @@ const Expenses = () => {
     return false
   })
 
-  const addFilter = (id) => {
+const deleteFunction=(e,expenseId)=>{
+  e.stopPropagation()
+  setSearchParams({ menu: 'deleteexpense', id: expenseId })
+}
+  const addFilter = (e,id) => {
+    e.stopPropagation()
     if (!filters.includes(id)) {
       setFilters([...filters, id])
     }
@@ -47,6 +52,16 @@ const Expenses = () => {
     filteredExpenses.forEach(expense => {
       filterSum = filterSum.add(expense.amount)
     })
+    
+  //https://bobbyhadz.com/blog/react-onclick-only-parent
+  const expenseClicked = (expenseClickedId) => {
+  
+    if (expandExpense.includes(expenseClickedId)) {
+      setExpandExpense(expandExpense.filter(expenseId => expenseId !== expenseClickedId))
+    }
+    else {
+      setExpandExpense([...expandExpense, expenseClickedId])
+    }
   }
 
   return (
@@ -72,7 +87,7 @@ const Expenses = () => {
       </div>}
       <div id='expenses'>
         {filteredExpenses.map(expense => (
-          <div key={expense._id} id='expense' className='flex column'>
+          <div key={expense._id} id='expense' className='flex column' onClick={() => expenseClicked(expense._id)}>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row'>
                 <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
@@ -81,7 +96,7 @@ const Expenses = () => {
               <IonIcon
                 name='ellipsis-vertical'
                 className='larger-click-area pointer' style={{ fontSize: '14px' }}
-                onClick={() => setSearchParams({ menu: 'deleteexpense', id: expense._id })}
+                onClick={(e) => deleteFunction(e,expense._id)}
               />
             </div>
             <div className='flex row justcont-spacebetween gap10 alignitems-center'>
@@ -92,7 +107,7 @@ const Expenses = () => {
               <div className='flex row alignitems-center' style={{ gap: '8px' }}>
                 {expense.label &&
                   <div
-                    onClick={() => addFilter(expense.label)}
+                    onClick={(e) => addFilter(e,expense.label)}
                     id='expense-pill' className='pointer shadow'
                     style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === expense.label).color})` }}
                   >
@@ -101,16 +116,47 @@ const Expenses = () => {
                 <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
                 <div
                   id='expense-pill' className='shadow pointer'
-                  onClick={() => addFilter(expense.spender._id)}
+                  onClick={(e) => addFilter(e,expense.spender._id)}
                 >
                   {expense.spender.nickname}
                 </div>
               </div>
-              <IonIcon
-                name='caret-down' className='larger-click-area pointer'
-                style={{ fontSize: '14px' }}
-              />
+              <div className='flex gap10'>
+                {selectedGroup.members.length === expense.participants.length ? "" :
+                  <div>
+                    <div className='backIcon'>
+                      <IonIcon
+                        name='people' className='larger-click-area pointer'
+                        style={{ fontSize: '22px' }}
+                      />
+                      <div className='frontIcon'>
+                        {expense.participants.length}
+                      </div>
+                    </div>
+                  </div>
+                }
+                {expense.splitEqually === false ?
+                  <IonIcon
+                    name='logo-react' className='larger-click-area pointer'
+                    style={{ fontSize: '22px' }}
+                  /> : ""}
+              </div>
             </div>
+            {expandExpense.includes(expense._id) ?
+              <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
+                <ul>
+                  {expense.participants.map((participant, index) => (
+                    <li key={participant._id}>
+                      {
+                        expense.splitEqually === false ?
+                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(participant.contributionAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member=>member._id===participant.memberId).nickname }</strong></div>
+                          :
+                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(currency(expense.amount).distribute(expense.participants.length)[index], { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member=>member._id===participant.memberId).nickname}</strong></div>
+                      }
+                    </li>))}
+                </ul>
+              </div>
+              : ""}
           </div>
         )).reverse()}
         {/* <div style={{ marginBottom: "80px" }}>

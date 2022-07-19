@@ -22,9 +22,9 @@ const GroupSelector = () => {
 
   const getGroups = async () => {
     try {
-      console.log('getGroups()')
+      //console.log('getGroups()')
       const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      console.log('/groups/mygroups', response.data)
+      //console.log('/groups/mygroups', response.data)
       setGroupList(response.data)
     }
     catch(error) {
@@ -43,8 +43,6 @@ const GroupSelector = () => {
     }
   // eslint-disable-next-line
   },[])
-
-  console.log('loading', loading)
 
   return (
     <div className={`group-selector top-radius${!loading ? ' my-animation' : ''}`} style={{zIndex: '3'}}>

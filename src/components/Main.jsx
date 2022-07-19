@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, SettleUp, New } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -6,6 +6,7 @@ import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
+
 
 const Main = () => {
 
@@ -15,16 +16,20 @@ const Main = () => {
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [mainIsLoading, ] = useState(false)
+  const [mainIsLoading,] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const amountToTrasnfer = searchParams.get('amount')
+  const receiverName = searchParams.get('name')
+  const receiverId = searchParams.get("receiverId")
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     getGroup(params.groupid)
-    return() => {
+    return () => {
       abortControllerRef.current.abort()
     }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [params.groupid])
 
   const getGroup = async (id) => {
@@ -32,7 +37,7 @@ const Main = () => {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
       dispatch(setSelectedGroup(res.data))
     }
-    catch(error) {
+    catch (error) {
       console.log('/groups/getgroup', error)
     }
   }
@@ -54,10 +59,10 @@ const Main = () => {
               <IonIcon name='caret-down' className='t2' />
             </div>
             <div className='flex row gap10 alignitems-center'>
-              <div onClick={() => setSearchParams({menu: 'invitation'})}>
-                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
+              <div onClick={() => setSearchParams({ menu: 'invitation' })}>
+                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
               </div>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({menu: 'groupoptions'})} />
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
             </div>
           </div>
           {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
@@ -102,7 +107,16 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <AddExpense setSearchParams={setSearchParams}/>
+        <AddExpense setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'recordtransfer')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <RecordTransfer setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
@@ -120,7 +134,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <Invitation />
+        <Invitation setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
@@ -140,6 +154,21 @@ const Main = () => {
       >
         <LabelEditor />
       </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'settleup')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <SettleUp
+          setSearchParams={setSearchParams}
+          name ={receiverName}
+          amount ={amountToTrasnfer}
+          receiverId={receiverId}
+           />
+      </CSSTransition>
+
     </div>
   )
 }
