@@ -32,10 +32,11 @@ const Expenses = () => {
     return false
   })
 
-const deleteFunction=(e,expenseId)=>{
-  e.stopPropagation()
-  setSearchParams({ menu: 'deleteexpense', id: expenseId })
-}
+  const deleteFunction=(e, expenseId) => {
+    e.stopPropagation()
+    setSearchParams({ menu: 'deleteexpense', id: expenseId })
+  }
+
   const addFilter = (e,id) => {
     e.stopPropagation()
     if (!filters.includes(id)) {
@@ -52,10 +53,11 @@ const deleteFunction=(e,expenseId)=>{
     filteredExpenses.forEach(expense => {
       filterSum = filterSum.add(expense.amount)
     })
-    
+  }
+
   //https://bobbyhadz.com/blog/react-onclick-only-parent
   const expenseClicked = (expenseClickedId) => {
-  
+
     if (expandExpense.includes(expenseClickedId)) {
       setExpandExpense(expandExpense.filter(expenseId => expenseId !== expenseClickedId))
     }
