@@ -6,19 +6,15 @@
   outline: solid #f00 1px !important;
 } */
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap'); */
 
-
-html,
-body,
-select {
-  scrollbar-gutter: auto both-edges;
+html, body {
+  -webkit-tap-highlight-color:  transparent;
   margin: 0;
-  overflow: hidden;
+  height: 100%;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   user-select: none;
-  height: 100%;
   white-space: nowrap;
 
   /* --base-color: #406abf;
@@ -34,7 +30,6 @@ select {
   --layer-4-color: #555659;
   --layer-5-color: #626366;
   --layer-6-color: #6E6F72; */
-
   --base-color: #406abf;
   --base-color-1: #4563A1;
   --tag-color-1: #c3dd86;
@@ -50,7 +45,6 @@ select {
   --layer-5-color: #737373;
   --layer-6-color: #a3a3a3;
   --layer-7-color: #737373;
-
   /* --weekday-1: #d17d75;
   --weekday-2: #D1C275;
   --weekday-3: #9BD175;
@@ -58,7 +52,6 @@ select {
   --weekday-5: #3D4B8F;
   --weekday-6: #7584D1;
   --weekday-0: #AB75D1; */
-
   --weekday-1: hsl(5, 30%, 80%);
   --weekday-2: hsl(50, 30%, 80%);
   --weekday-3: hsl(95, 30%, 80%);
@@ -74,17 +67,14 @@ select {
   --weekday-5: #fffee1;
   --weekday-6: #d3eeca;
   --weekday-0: #c9a2a2; */
-
   /* #d3eeca
   #c9a2a2
   #abeff9
   #c9bedf
   #fffee1 */
-
   --buttonPadd: 1rem;
   /* scrollbar-width: none !important;
   min-width: 0px !important; */
-
   --primaryBackgroundColor: #121212;
   /* --secondaryBackgroundColor: #101011; */
   --secondaryBackgroundColor: #161618;
@@ -114,19 +104,133 @@ select {
   --label-color-5: #85E0A3;
   --label-color-6: #8594E0;
   --label-color-7: #E085C2;
-
-
-
   color: var(--layer-6-color);
-  background-color: var(--layer-0-color);
+  background-color: #151517;
+  /* background-color: var(--layer-0-color); */
 }
 
 #root {
-  height: inherit
+  height: 100%;
 }
 
-.App {
-  height: inherit
+#main {
+  box-sizing: border-box;
+  gap: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#main-menu {
+  flex: none;
+  gap: 14px;
+}
+
+#logo-bar {
+  font-size: 48px;
+}
+
+#navbar {
+  flex: none;
+  font-size: 24px;
+}
+
+#nav-button {
+  padding: 14px;
+  margin: 14px;
+}
+
+#expenses-tab {
+  flex: 1 1 auto;
+  min-height: 0px;
+  /* padding: 14px; */
+  gap: 14px;
+}
+
+#expenses {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* scrollbar-gutter: stable both-edges; */
+  overflow: auto;
+  gap: 14px;
+}
+
+#expenses::-webkit-scrollbar {
+  overflow: hidden;
+}
+
+#new-expense {
+  box-sizing: border-box;
+  padding: 14px;
+  gap: 14px;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: #26272b;
+  /* background-color: #1b1b1e; */
+}
+
+#new-expense-submit {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  margin-top: auto;
+  border-radius: 8px;
+  user-select: none;
+  border: none;
+  width: auto;
+  cursor: pointer;
+  color: var(--text);
+  background-color: #eeeeee;
+}
+
+#menu-header {
+  /* padding: 14px 0px 14px 0px; */
+  font-size: 28px;
+  gap: 14px
+}
+
+#styled-input {
+  border-radius: 10px;
+  padding: 10px 10px 10px 10px;
+  outline: none;
+  color: white;
+  border-style: none;
+  background-color: #151517;
+  /* background-color: #121214; */
+  font-family: inherit;
+  font-size: 20px;
+}
+
+#styled-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #6e6e6e;
+  opacity: 1; /* Firefox */
+}
+
+#styled-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #404041;
+}
+
+#styled-input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #404041;
+}
+
+#styled-input::-webkit-outer-spin-button,
+#styled-input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+#styled-input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input:focus {
+  outline: none;
 }
 
 .tick-cube {
@@ -498,6 +602,36 @@ select {
   background-color: var(--label-color-6)
 }
 
+.pill2 {
+  font-weight: 400;
+  font-size: 18px;
+  background-color: #151517;
+  /* background-color: #121214; */
+  /* background-color: #131519; */
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "Inter";
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 6px;
+  padding: 6px 8px;
+  gap: 3px;
+}
+
+.pill2.filled {
+  background-color: white;
+  color: #151517
+}
+
+.pill2.hidden {
+  position: absolute;
+  opacity: 0;
+  z-index: -100;
+  white-space: pre;
+}
+
 .expenseEmpty {
   background-color: #26272B;
 }
@@ -529,18 +663,14 @@ select {
   white-space: pre;
 }
 
-.figma-main {
-  height: inherit
-}
-
-.group-info-frame {
+/* .group-info-frame {
   box-sizing: border-box;
   height: 60px;
   padding: 0px 14px 0px 14px;
   justify-content: space-between;
   background-color: var(--layer-0-color);
   color: var(--light-color)
-}
+} */
 
 .group-options-icon {
   color: var(--layer-6-color);
@@ -626,7 +756,6 @@ select {
   border-radius: 12px 12px 0px 0px;
 }
 
-.expenses-tab,
 .settleUp-tab {
   background-color: var(--layer-1-color);
   border-style: solid;
@@ -933,7 +1062,7 @@ select {
 
 .gotogroup {
   bottom: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overflow: auto;
 
@@ -941,7 +1070,7 @@ select {
 
 .addExpenseBox, .createnewgroupBox {
   bottom: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overflow: auto;
   background-color: var(--layer-1-color);
@@ -1223,12 +1352,12 @@ input:focus.inputErr {
 }
 
 #loginpage {
-  /* height: 100vh; */
+  /* height: 100%; */
   margin: 0rem 2rem 0rem 2rem
 }
 
 #homepage {
-  height: 100vh;
+  height: 100%;
   margin: 0rem 2rem 0rem 2rem;
 }
 
@@ -1241,10 +1370,6 @@ input:focus.inputErr {
   white-space: initial;
 }
 
-.my-animation {
-  animation: slideupp .3s 1 ease-in-out both;
-}
-
 @keyframes slide-up {
   0% {
     transform: translateY(100%);
@@ -1255,25 +1380,9 @@ input:focus.inputErr {
   }
 }
 
-@keyframes slideupp {
-  from {
-    max-height: 0;
-  }
-
-  to {
-    max-height: 100vh;
-  }
-}
-
 .welcomemsg {
   font-size: 15px;
   padding: 2.5rem 0 2.5rem 0;
-}
-
-
-#expenses {
-  gap: 14px;
-  /* padding: 0px 14px; */
 }
 
 #expense-filters {
@@ -1288,10 +1397,17 @@ input:focus.inputErr {
   border-radius: 10px;
 }
 
+.bubble {
+  gap: 14px;
+  padding: 10px 14px;
+  /* background-color: #121214; */
+  background-color: #26272B;
+  border-radius: 10px;
+}
+
 #reviewedExpense {
   gap: 12px;
   padding: 12px 12px;
-
   border-radius: 10px;
 }
 
@@ -1308,13 +1424,15 @@ input:focus.inputErr {
 }
 
 #expense-description {
-  font-size: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 22px;
   font-weight: 400;
-  color: white;
+  color: #dddddd;
 }
 
 #expense-amount {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   color: white;
 }
@@ -1332,7 +1450,7 @@ input:focus.inputErr {
   border-style: solid;
   border-width: 1px;
   border-radius: 6px;
-  padding: 3px 8px;
+  padding: 6px 8px;
   gap: 3px;
 }
 

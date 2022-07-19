@@ -23,7 +23,7 @@ const Expenses = () => {
     sameElse: 'MMM DD'
   }
 
-  const filteredExpenses = selectedGroup.expenses.filter(expense => {
+  const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
     if (filters.length === 0) return true
     if (filters.length === 1) {
       if (filters.includes(expense.spender._id) || filters.includes(expense.label)) return true
@@ -47,8 +47,13 @@ const deleteFunction=(e,expenseId)=>{
     setFilters(filters.filter(filter => (filter !== id)))
   }
 
-
-//https://bobbyhadz.com/blog/react-onclick-only-parent
+  var filterSum = currency(0)
+  if(filters.length > 0) {
+    filteredExpenses.forEach(expense => {
+      filterSum = filterSum.add(expense.amount)
+    })
+    
+  //https://bobbyhadz.com/blog/react-onclick-only-parent
   const expenseClicked = (expenseClickedId) => {
   
     if (expandExpense.includes(expenseClickedId)) {
@@ -60,27 +65,27 @@ const deleteFunction=(e,expenseId)=>{
   }
 
   return (
-    <div className='flex flex-1 column overflow-hidden' style={{ padding: '14px', gap: '14px' }}>
+    <div id='expenses-tab' className='flex column'>
       {filters.length > 0 &&
-        <div className='flex row justcont-spacebetween alignitems-center'>
-          <div id='expense-filters' className='flex row alignitems-center'>
-            {filters.map(filter => (
-              <div
-                key={filter}
-                id='expense-pill'
-                className='pointer'
-                onClick={() => removeFilter(filter)}
-                style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
-              >
-                {selectedGroup.members.find(member => member._id === filter)?.nickname}
-                {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
-                <IonIcon name='close' />
-              </div>
-            ))}
-          </div>
-          <div style={{ fontSize: '14px', fontWeight: '700' }}>TOTAL: $15</div>
-        </div>}
-      <div id='expenses' className='flex flex-1 column overflow-auto'>
+      <div className='flex row justcont-spacebetween alignitems-center'>
+        <div id='expense-filters' className='flex row alignitems-center'>
+          {filters.map(filter => (
+            <div
+              key={filter}
+              id='expense-pill'
+              className='pointer'
+              onClick={() => removeFilter(filter)}
+              style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
+            >
+              {selectedGroup.members.find(member => member._id === filter)?.nickname}
+              {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
+              <IonIcon name='close' />
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: '14px', fontWeight: '700' }}>{filterSum.format()}</div>
+      </div>}
+      <div id='expenses'>
         {filteredExpenses.map(expense => (
           <div key={expense._id} id='expense' className='flex column' onClick={() => expenseClicked(expense._id)}>
             <div className='flex row justcont-spacebetween alignitems-center'>
@@ -94,7 +99,7 @@ const deleteFunction=(e,expenseId)=>{
                 onClick={(e) => deleteFunction(e,expense._id)}
               />
             </div>
-            <div className='flex row justcont-spacebetween'>
+            <div className='flex row justcont-spacebetween gap10 alignitems-center'>
               <div id='expense-description'>{expense.description}</div>
               <div id='expense-amount'>${expense.amount}</div>
             </div>
@@ -154,8 +159,8 @@ const deleteFunction=(e,expenseId)=>{
               : ""}
           </div>
         )).reverse()}
-        <div style={{ marginBottom: "80px" }}>
-        </div>
+        {/* <div style={{ marginBottom: "80px" }}>
+        </div> */}
       </div>
     </div>
   )

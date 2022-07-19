@@ -11,13 +11,12 @@ const LabelItem = ({ labelId }) => {
   const group = store.getState().mainReducer.selectedGroup
   const dispatch = useDispatch()
   const abortControllerRef = useRef(null)
-  const [loading, setLoading] = useState(false)
   const label = useSelector(state => state.mainReducer.selectedGroup.groupLabels.find(label => label._id === labelId), shallowEqual)
-  const [editMode, setEditMode] = useState(false)
-  const [deleteMode, setDeleteMode] = useState(false)
+  const dummySpan = useRef()
+  const [loading, setLoading] = useState(false)
+  const [mode, setMode] = useState('read')
   const [content, setContent] = useState(label?.name)
   const [width, setWidth] = useState(0)
-  const dummySpan = useRef()
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -32,7 +31,7 @@ const LabelItem = ({ labelId }) => {
 
   const cancelEdit = () => {
     setContent(label.name)
-    setEditMode(false)
+    setMode('read')
   }
 
   const submitEdit = async () => {
@@ -53,7 +52,13 @@ const LabelItem = ({ labelId }) => {
           setLoading(false)
         }
       }
-      setEditMode(false)
+      setMode('read')
+    }
+  }
+
+  const keyPress = async (e) => {
+    if (e.key === 'Enter') {
+      await submitEdit()
     }
   }
 
@@ -71,12 +76,12 @@ const LabelItem = ({ labelId }) => {
     }
     finally {
       setLoading(false)
-      setDeleteMode(false)
+      setMode('read')
     }
   }
 
   const cancelDelete = () => {
-    setDeleteMode(false)
+    setMode('read')
   }
 
   const isUsed = (labelId) => (
@@ -88,58 +93,77 @@ const LabelItem = ({ labelId }) => {
   if(!label) return(<></>)
   return(
     <div className='flex row justcont-spacebetween alignitems-center' style={{height: 'fit-content'}}>
-      <span className='hide t5' ref={dummySpan}>{content}</span>
-      {!editMode &&
-      <div className={`pill filled t5 shadow test ${deleteMode ? 'shake' : ''}`}
-        style={{'--pill-color': `var(--${label.color})`}}
+      <span className='pill2 hidden shadow' ref={dummySpan}>{content}</span>
+      {!(mode === 'edit') &&
+      <div className={`pill2 shadow ${mode === 'delete' ? 'shake' : ''}`}
+        style={{ color: `var(--${label.color})` }}
       >{label.name}</div>}
-      {editMode &&
+      {(mode === 'edit') &&
       <input
         type='text'
+        onKeyPress={keyPress}
         value={content}
-        className='pill filled editable t5 shadow'
-        style={{width, '--pill-color': `var(--${label.color})`}}
+        className='pill2 filled shadow overflow-hidden'
+        style={{
+          width,
+          color: `var(--${label.color})`,
+          borderColor: `var(--${label.color})`,
+          borderWidth: '3px',
+          outlineWidth: '0'
+        }}
         autoFocus
         onChange={(e) => setContent(e.target.value)}/>}
-      {!editMode && !deleteMode &&
+      {(mode === 'read')  &&
       <div className='flex row gap10'>
         {!isUsed(labelId) &&
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': `#D16666`}} onClick={() => setDeleteMode(true)}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'var(--darkletterColor)' }}
+          onClick={() => setMode('delete')}
         >
-          Delete
+          <IonIcon name='trash' className='t2' />
         </div>}
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': 'var(--base-color-1)'}} onClick={() => setEditMode(true)}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'var(--darkletterColor)' }}
+          onClick={() => setMode('edit')}
         >
-          Edit
+          <IonIcon name='pencil' className='t2' />
         </div>
       </div>}
-      {editMode &&
+      {(mode === 'edit') &&
       <div className='flex row gap10'>
         {!loading &&
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': 'gray'}} onClick={cancelEdit}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'gray' }}
+          onClick={cancelEdit}
         >
           Discard
         </div>}
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': 'lightgreen'}} onClick={submitEdit}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'var(--green)' }}
+          onClick={submitEdit}
         >
           Apply
           {loading && <IonIcon name='sync' className='t5 spin'/>}
         </div>
       </div>}
-      {deleteMode &&
+      {(mode === 'delete') &&
       <div className='flex row gap10'>
         {!loading &&
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': 'gray'}} onClick={cancelDelete}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'gray' }}
+          onClick={cancelDelete}
         >
           Cancel
         </div>}
-        <div className='pill t5 empty pointer shadow'
-          style={{'--pill-color': 'red'}} onClick={submitDelete}
+        <div
+          className='pill2 t5 empty pointer shadow'
+          style={{ color: 'var(--pink)' }}
+          onClick={submitDelete}
         >
           Delete!
           {loading && <IonIcon name='sync' className='t5 spin'/>}
@@ -154,6 +178,7 @@ const LabelEditor = () => {
   const dispatch = useDispatch()
   const abortControllerRef = useRef(null)
   const group = store.getState().mainReducer.selectedGroup
+  const newLabelInput = useRef(null)
   const [loading, setLoading] = useState(false)
   const [newMode, setNewMode] = useState(false)
   const [newLabel, setNewLabel] = useState({
@@ -199,29 +224,50 @@ const LabelEditor = () => {
     setNewMode(false)
   }
 
+  const keyPress = (e) => {
+    if (e.key === 'Enter') {
+      createNewLabel()
+    }
+  }
+
+  const setNewModeOrFocus = () => {
+    if(!newMode) {
+      setNewMode(true)
+    }
+    else {
+      newLabelInput.current.focus()
+    }
+  }
+
   return (
-    // <SlidingBox close={close} className='top-radius' style={{backgroundColor: 'var(--layer-1-color)'}}>
-    <div className='bottom-menu top-radius' style={{zIndex: '2'}}>
+    <div className='bottom-menu top-radius overflow-auto' style={{ zIndex: '2', maxHeight: '80vh' }}>
       <div className='flex row t1 justcont-center padding4'>Labels</div>
-      <div className='flex column gap10 padding1010'>
+      <div className='flex column overflow-hidden' style={{ gap: '14px', padding: '14px 14px' }}>
+        <div
+          style={{ alignSelf: 'center', color: 'var(--light-color)', borderColor: 'var(--label-color-6)', backgroundColor: 'var(--label-color-6)', alignSelf: 'auto' }}
+          className='pill t5 empty pointer shadow'
+          onClick={setNewModeOrFocus}
+        >
+          Create new label
+        </div>
         {group?.groupLabels.map(label => (
-          <LabelItem labelId={label._id}/>
+          <LabelItem key={label._id} labelId={label._id}/>
         ))}
-        {!newMode &&
-        <div className='pill t5 empty pointer shadow' onClick={() => setNewMode(true)}>Create new label</div>}
         {newMode &&
         <div className='flex row justcont-spacebetween'>
           <input
+            ref={newLabelInput}
+            onKeyPress={(e) => keyPress(e)}
             type='text'
             value={newLabel.name}
-            className='pill empty editable t5 shadow'
-            style={{ width: '100px', '--pill-color': `white`}}
+            className='pill2 empty editable t5 shadow'
+            style={{ width: '100px', color: `white` }}
             autoFocus
             onChange={(e) => setNewLabel({...newLabel, name: e.target.value})}
           />
           <div className='flex row gap10 pointer'>
-            <div className='pill t5' onClick={cancelNewMode}>Cancel</div>
-            <div className='pill t5' onClick={() => createNewLabel()}>
+            <div className='pill2 t5' onClick={cancelNewMode}>Cancel</div>
+            <div className='pill2 t5' onClick={() => createNewLabel()}>
               OK
               {loading && <IonIcon name='sync' className='t5 spin'/>}
             </div>
