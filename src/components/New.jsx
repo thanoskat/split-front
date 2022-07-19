@@ -6,8 +6,8 @@ export default function New({ setSearchParams }) {
 
 
   return (
-    <div className='bottom-menu top-radius padding4' style={{ zIndex: '2' }}>
-      <div className='flex row justcont-spacebetween t05 padding4'>
+    <div className='bottom-menu-new top-radius' style={{ zIndex: '2' }}>
+      <div className='flex row justcont-spacebetween t05 'style={{padding:"10px"}}>
         <div style={{ color: "var(--light-color)", fontSize: "25px" }}>
           New
         </div>
@@ -15,7 +15,7 @@ export default function New({ setSearchParams }) {
           <IonIcon name='close-outline' />
         </div>
       </div>
-      <div className='flex column gap10 padding6'>
+      <div className='flex column gap10 padding1010'>
 
         <div className='flex row alignitems-center gap10' onClick={() => setSearchParams({ menu: 'newexpense' })}>
           <div className='encircle-item'>
@@ -24,7 +24,7 @@ export default function New({ setSearchParams }) {
             {/* <i className='file alternate outline icon' style={{ color: "var(--light-color)",fontSize:"15px", fontWeight:"lighter"}}/> */}
           </div>
           <div style={{ color: "var(--light-color)" }}>
-            Add Expense
+            New Expense
           </div>
         </div>
 

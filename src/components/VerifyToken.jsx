@@ -42,8 +42,8 @@ const VerifyToken = () => {
         {!loading && !errorMessage && type === 'sign-in' &&
         <div className='flex column alignitems-center t4'>
           <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)' }} />
-          <div>You have successfully signed in!</div>
-          <div>You can close this tab.</div>
+          <div>You have successfully signed in.</div>
+          <div>You can close this page</div>
         </div>}
         {!loading && !errorMessage && type === 'sign-up' &&
         <div className='flex column alignitems-center t4'>

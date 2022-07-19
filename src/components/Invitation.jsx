@@ -68,7 +68,9 @@ function Invitation({ setSearchParams }) {
 
   return (
     <div className='flex column fixed' style={{bottom: '0px', width: '100%', height:'100%', backgroundColor: 'var(--layer-0-color)'}}>
-      {isLoading && <IonIcon name='sync' className='t1 spin'/>}
+      {isLoading && <div className='invitationLoading flex alignself-center'>
+        <IonIcon name='sync' className='spin' size={50} />
+      </div>}
       {!isLoading &&
       <div className='flex column padding1010 gap10' style={{height: '100%'}}>
         <div className='flex row t1 gap10'>

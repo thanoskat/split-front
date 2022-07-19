@@ -1,4 +1,4 @@
-import { useState,useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -13,7 +13,6 @@ const Expenses = () => {
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [filters, setFilters] = useState([])
   const [expandExpense, setExpandExpense] = useState([])
-  console.log(selectedGroup)
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',
@@ -32,12 +31,12 @@ const Expenses = () => {
     return false
   })
 
-  const deleteFunction=(e, expenseId) => {
+  const deleteFunction = (e, expenseId) => {
     e.stopPropagation()
     setSearchParams({ menu: 'deleteexpense', id: expenseId })
   }
 
-  const addFilter = (e,id) => {
+  const addFilter = (e, id) => {
     e.stopPropagation()
     if (!filters.includes(id)) {
       setFilters([...filters, id])
@@ -49,7 +48,7 @@ const Expenses = () => {
   }
 
   var filterSum = currency(0)
-  if(filters.length > 0) {
+  if (filters.length > 0) {
     filteredExpenses.forEach(expense => {
       filterSum = filterSum.add(expense.amount)
     })
@@ -68,25 +67,31 @@ const Expenses = () => {
 
   return (
     <div id='expenses-tab' className='flex column'>
+      {selectedGroup.expenses.length === 0 ?
+        <div id='expense' className='flex justcont-center'>
+          <div className='flex whiteSpace-initial' style={{color:"white"}}>
+          There are currently no expenses
+          </div>
+          </div> : ""}
       {filters.length > 0 &&
-      <div className='flex row justcont-spacebetween alignitems-center'>
-        <div id='expense-filters' className='flex row alignitems-center'>
-          {filters.map(filter => (
-            <div
-              key={filter}
-              id='expense-pill'
-              className='pointer'
-              onClick={() => removeFilter(filter)}
-              style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
-            >
-              {selectedGroup.members.find(member => member._id === filter)?.nickname}
-              {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
-              <IonIcon name='close' />
-            </div>
-          ))}
-        </div>
-        <div style={{ fontSize: '14px', fontWeight: '700' }}>{filterSum.format()}</div>
-      </div>}
+        <div className='flex row justcont-spacebetween alignitems-center'>
+          <div id='expense-filters' className='flex row alignitems-center'>
+            {filters.map(filter => (
+              <div
+                key={filter}
+                id='expense-pill'
+                className='pointer'
+                onClick={() => removeFilter(filter)}
+                style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
+              >
+                {selectedGroup.members.find(member => member._id === filter)?.nickname}
+                {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
+                <IonIcon name='close' />
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: '14px', fontWeight: '700' }}>{filterSum.format()}</div>
+        </div>}
       <div id='expenses'>
         {filteredExpenses.map(expense => (
           <div key={expense._id} id='expense' className='flex column' onClick={() => expenseClicked(expense._id)}>
@@ -98,7 +103,7 @@ const Expenses = () => {
               <IonIcon
                 name='ellipsis-vertical'
                 className='larger-click-area pointer' style={{ fontSize: '14px' }}
-                onClick={(e) => deleteFunction(e,expense._id)}
+                onClick={(e) => deleteFunction(e, expense._id)}
               />
             </div>
             <div className='flex row justcont-spacebetween gap10 alignitems-center'>
@@ -109,7 +114,7 @@ const Expenses = () => {
               <div className='flex row alignitems-center' style={{ gap: '8px' }}>
                 {expense.label &&
                   <div
-                    onClick={(e) => addFilter(e,expense.label)}
+                    onClick={(e) => addFilter(e, expense.label)}
                     id='expense-pill' className='pointer shadow'
                     style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === expense.label).color})` }}
                   >
@@ -118,7 +123,7 @@ const Expenses = () => {
                 <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
                 <div
                   id='expense-pill' className='shadow pointer'
-                  onClick={(e) => addFilter(e,expense.spender._id)}
+                  onClick={(e) => addFilter(e, expense.spender._id)}
                 >
                   {expense.spender.nickname}
                 </div>
@@ -151,9 +156,9 @@ const Expenses = () => {
                     <li key={participant._id}>
                       {
                         expense.splitEqually === false ?
-                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(participant.contributionAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member=>member._id===participant.memberId).nickname }</strong></div>
+                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(participant.contributionAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member._id === participant.memberId).nickname}</strong></div>
                           :
-                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(currency(expense.amount).distribute(expense.participants.length)[index], { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member=>member._id===participant.memberId).nickname}</strong></div>
+                          <div className='flex row'><div style={{ color: "white" }}>{` ${currency(currency(expense.amount).distribute(expense.participants.length)[index], { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member._id === participant.memberId).nickname}</strong></div>
                       }
                     </li>))}
                 </ul>

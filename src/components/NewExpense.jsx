@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
-import store from '../redux/store'
+
 
 const NewExpense = ({ setSearchParams }) => {
   const api = useAxios()

@@ -76,7 +76,7 @@ export default function Home() {
 
         <div className='whiteSpace-initial'>
           <div className='flex column gap4 padding4'>
-            {isLoading && <IonIcon name='sync' className='t3 spin alignself-center' />}
+            {isLoading && <IonIcon name='sync' className='t3 spin alignself-center' style={{fontSize:"20px"}}/>}
             {groupList?.map((group) => (
               <Link
                 key={group._id}

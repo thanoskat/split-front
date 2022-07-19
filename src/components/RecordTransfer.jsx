@@ -23,9 +23,9 @@ function RecordTransfer({ setSearchParams }) {
 
   console.log(newTransfer)
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       inputAmountRef.current.focus()
-    },300)
+    }, 300)
     abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
@@ -76,7 +76,7 @@ function RecordTransfer({ setSearchParams }) {
     }
   }
 
-  const filterUser = (selectedGroup?.members.filter(member =>member._id!==sessionData.userId))
+  const filterUser = (selectedGroup?.members.filter(member => member._id !== sessionData.userId))
 
   return (
     <div className='addExpenseBox flex column fixed'>
@@ -91,35 +91,43 @@ function RecordTransfer({ setSearchParams }) {
       </div>
 
       <div className='inputsAndOptions-container flex column gap10 padding1010'>
-        <div className='input-amount flex relative column justcont-evenly '>
-          <div className='currency-ticker-section '>
-            <i className='angle down icon'></i>
-            <div className='currency-ticker'>EUR </div>
+        <div className='flex relative column'>
+          <div className='input-amount flex relative column justcont-evenly '>
+            <div className='currency-ticker-section '>
+              <i className='angle down icon'></i>
+              <div className='currency-ticker'>EUR </div>
+            </div>
+
+            <input
+              id='styled-input'
+              className='text-align-right'
+              type='text'
+              inputmode='decimal'
+              placeholder='0'
+              value={newTransfer.amount}
+              onChange={(e) => updateAmount(e)}
+              ref={inputAmountRef}
+              spellCheck='false'
+            />
+           
           </div>
-
-          <input
-            className='styledInput t3 text-align-right'
-            type='tel'
-            placeholder='0'
-            step="0.01"
-            value={newTransfer.amount}
-            onChange={(e) => updateAmount(e)}
-            ref={inputAmountRef}
-            spellCheck='false'
-          />
+          <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>
         </div>
-
+        <div className='flex relative column'>
         <input
           className='styledInput t3'
-          placeholder='Description'
+          placeholder='e.g. settled debt'
           value={newTransfer.description}
           onChange={e => setNewTransfer({ ...newTransfer, description: e.target.value })}
           spellCheck='false'
         />
+         <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>
+        </div>
+
         To:
         <div className='flex row wrap gap10'>
           {filterUser.map(member => (
-            <div className={`pill pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
+            <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
               key={member._id} style={{ '--pill-color': `gray` }}
               onClick={() => participantClicked(member._id)}
             >

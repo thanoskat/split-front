@@ -1,6 +1,6 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer } from '.'
+import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer } from '.'
 import { useState, useEffect, useRef } from 'react'
-import { Outlet, useSearchParams, useParams, useNavigate } from 'react-router-dom'
+import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,10 +15,10 @@ const Main = () => {
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [mainIsLoading,] = useState(false)
+  const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
 
- 
+
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -30,6 +30,7 @@ const Main = () => {
   }, [params.groupid])
 
   const getGroup = async (id) => {
+    setMainIsLoading(true)
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
       dispatch(setSelectedGroup(res.data))
@@ -37,41 +38,42 @@ const Main = () => {
     catch (error) {
       console.log('/groups/getgroup', error)
     }
+    setMainIsLoading(false)
   }
 
   return (
     <div style={{ height: '100%' }} className='flex column'>
       {mainIsLoading &&
-      <div className='mainIsLoading flex alignself-center'>
-        <IonIcon name='sync' className='spin' size={50} />
-      </div>}
+        <div className='mainIsLoading flex alignself-center'>
+          <IonIcon name='sync' className='spin' size={50} />
+        </div>}
       {!mainIsLoading &&
-      <div id='main'>
-        <div id='main-menu' className='flex column'>
-          {/* <UserBar /> */}
-          <LogoBar />
-          <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
-            <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => setSearchParams({menu: 'groups'})}>
-              <span>{displayedGroup?.title}</span>
-              <IonIcon name='caret-down' className='t2' />
-            </div>
-            <div className='flex row gap10 alignitems-center'>
-              <div onClick={() => setSearchParams({ menu: 'invitation' })}>
-                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
+        <div id='main'>
+          <div id='main-menu' className='flex column'>
+            {/* <UserBar /> */}
+            <LogoBar />
+            <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
+              <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => setSearchParams({ menu: 'groups' })}>
+                <span>{displayedGroup?.title}</span>
+                <IonIcon name='caret-down' className='t2' />
               </div>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
+              <div className='flex row gap10 alignitems-center'>
+                <div onClick={() => setSearchParams({ menu: 'invitation' })}>
+                  <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
+                </div>
+                <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
+              </div>
             </div>
-          </div>
-          {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
+            {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
               <div className='floating-button-text'>New</div>
             </div>
           </div> */}
-        </div>
-        {(displayedGroup !== null) && <Outlet />}
-        <NavBar />
-      </div>}
+          </div>
+          {(displayedGroup !== null) && <Outlet />}
+          <NavBar />
+        </div>}
 
       <CSSTransition
         onClick={() => setSearchParams({})} //this simply adds dark background
@@ -84,8 +86,9 @@ const Main = () => {
           height: '100%',
           width: '100%',
           backgroundColor:
-          'black',
-          opacity: '0.7'}}
+            'black',
+          opacity: '0.7'
+        }}
         />
       </CSSTransition>
 
@@ -122,7 +125,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <NewExpense setSearchParams={setSearchParams}/>
+        <NewExpense setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition

@@ -178,8 +178,8 @@ const TabMembers = () => {
       </div>
       <Outlet />
       <CSSTransition
-        onClick={() => setMenuParams({open:false})} //this simply adds dark background
-        in={menuParams.open===true}
+        onClick={() => setMenuParams({ open: false })} //this simply adds dark background
+        in={menuParams.open === true}
         timeout={0}
         unmountOnExit
       >
@@ -187,11 +187,15 @@ const TabMembers = () => {
           position: 'fixed',
           height: '100%',
           width: '100%',
+          top:"0px",
+          right:"0px",
           backgroundColor:
-          'black',
-          opacity: '0.7'}}
+            'black',
+          opacity: '0.7'
+        }}
         />
       </CSSTransition>
+
       <CSSTransition
         in={menuParams.open === true}
         timeout={300}
