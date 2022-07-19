@@ -3,15 +3,19 @@ import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import { useSearchParams } from 'react-router-dom'
-
-
+import { useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import { SettleUp } from '.'
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [searchParams, setSearchParams] = useSearchParams()
-
+  const [menuParams, setMenuParams] = useState({
+    open: false,
+    amount: null,
+    receiverName: "",
+    receiverId: ""
+  })
 
   Array.prototype.move = function (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
@@ -74,7 +78,7 @@ const TabMembers = () => {
                   </div>
                   &nbsp;
                   {id === sessionData.userId ? //only show buttons in You section
-                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setSearchParams({ menu: 'settleup', amount: member.amount, receiverId: member._id, name: member.name })}>Settle Up</div> : ""}
+                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: member.amount, receiverId: member._id, receiverName: member.name })}>Settle Up</div> : ""}
                 </div>
                 : isSenderReceiverSettled === 2 ?
                   <div className='flex row alignitems-center '>
@@ -129,7 +133,7 @@ const TabMembers = () => {
         </div>
         {id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1 ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow' onClick={() => setSearchParams({ menu: 'settleup', amount: toFrom[0].amount, receiverId: toFrom[0]._id, name: toFrom[0].name })}>Settle Up</div>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: toFrom[0].amount, receiverId: toFrom[0]._id, receiverName: toFrom[0].name })}>Settle Up</div>
           </div>
           : ""}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
@@ -173,6 +177,34 @@ const TabMembers = () => {
         </div>
       </div>
       <Outlet />
+      <CSSTransition
+        onClick={() => setMenuParams({open:false})} //this simply adds dark background
+        in={menuParams.open===true}
+        timeout={0}
+        unmountOnExit
+      >
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          backgroundColor:
+          'black',
+          opacity: '0.7'}}
+        />
+      </CSSTransition>
+      <CSSTransition
+        in={menuParams.open === true}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <SettleUp
+          setMenuParams={setMenuParams}
+          name={menuParams.receiverName}
+          amount={menuParams.amount}
+          receiverId={menuParams.receiverId}
+        />
+      </CSSTransition>
     </div>
   );
 }

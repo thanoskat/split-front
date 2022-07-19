@@ -81,7 +81,7 @@ function Invitation({ setSearchParams }) {
           <div>Scan QR</div>
           <QRCodeSVG
             value={invitationLink}
-            size='386'
+            size={window.innerWidth/1.5}
             level='L'
             bgColor='var(--light-color)'
             fgColor='var(--layer-0-color)'

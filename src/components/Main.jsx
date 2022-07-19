@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, SettleUp, New, RecordTransfer } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -12,16 +12,13 @@ const Main = () => {
 
   const api = useAxios()
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [mainIsLoading,] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const amountToTrasnfer = searchParams.get('amount')
-  const receiverName = searchParams.get('name')
-  const receiverId = searchParams.get("receiverId")
+ 
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
@@ -156,19 +153,13 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'settleup')}
+        in={(searchParams.get('menu') === 'new')}
         timeout={300}
         classNames='bottomslide'
         unmountOnExit
       >
-        <SettleUp
-          setSearchParams={setSearchParams}
-          name ={receiverName}
-          amount ={amountToTrasnfer}
-          receiverId={receiverId}
-           />
+        <New setSearchParams={setSearchParams} />
       </CSSTransition>
-
     </div>
   )
 }

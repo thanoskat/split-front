@@ -5,7 +5,7 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useRef, useState, useEffect } from 'react'
 
-function SettleUp({ setSearchParams, name, amount, receiverId }) {
+function SettleUp({ setMenuParams, name, amount, receiverId }) {
 
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -45,7 +45,7 @@ function SettleUp({ setSearchParams, name, amount, receiverId }) {
     catch (error) {
       console.log(error)
     }
-    setSearchParams({})
+    setMenuParams({ open: false })
   }
 
   return (
@@ -54,7 +54,7 @@ function SettleUp({ setSearchParams, name, amount, receiverId }) {
         <div style={{ color: "var(--light-color)", fontSize: "25px" }}>
           Settle Up
         </div>
-        <div onClick={() => setSearchParams({})}>
+        <div onClick={() => setMenuParams({ open: false })}>
           <IonIcon name='close-outline' />
         </div>
       </div>
@@ -65,7 +65,7 @@ function SettleUp({ setSearchParams, name, amount, receiverId }) {
         <div onClick={() => recordTransfer(amount, receiverId)} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Settle Up"}
         </div>
-        <div onClick={() => setSearchParams({})} style={{ backgroundColor: "var(--lightpink)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
+        <div onClick={() => setMenuParams({ open: false })} style={{ backgroundColor: "var(--lightpink)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
           Cancel
         </div>
       </div>
