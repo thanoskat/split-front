@@ -2,10 +2,15 @@ import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
+import IonIcon from '@reacticons/ionicons'
+import { useSearchParams } from 'react-router-dom'
+
+
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const [searchParams, setSearchParams] = useSearchParams()
 
 
   Array.prototype.move = function (from, to) {
@@ -52,19 +57,36 @@ const TabMembers = () => {
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
 
-  console.log(membersNoUser)
-  console.log(userNoMembers)
 
-  const Tree = ({ toFrom, isSenderReceiverSettled }) => {
+  const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
+
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
         <ul>
           {toFrom?.map(member => (
             <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
-                <div className='flex row'><div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> to &nbsp;<strong>{member.name}</strong></div>
+                <div className='flex row justcont-spacebetween'>
+                  <div className='flex row alignitems-center whiteSpace-initial'>
+                    <div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                    </div> to &nbsp;
+                    <strong>{member.name}</strong>
+                  </div>
+                  &nbsp;
+                  {id === sessionData.userId ? //only show buttons in You section
+                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setSearchParams({ menu: 'settleup', amount: member.amount, receiverId: member._id, name: member.name })}>Settle Up</div> : ""}
+                </div>
                 : isSenderReceiverSettled === 2 ?
-                  <div className='flex row'><div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> from &nbsp;<strong>{member.name}</strong></div> : <></>}
+                  <div className='flex row alignitems-center '>
+                    <div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                    </div>
+                    <div>
+                      from
+                    </div>
+                    &nbsp;
+                    <strong>{member.name}</strong>
+                  </div>
+                  : <></>}
             </li>))}
         </ul>
       </div>
@@ -72,7 +94,7 @@ const TabMembers = () => {
   }
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-
+    console.log(toFrom)
     return (
       <div id='expense' className='flex column'>
         <div className="nameIDandTotal flex row justcont-spacebetween">
@@ -81,7 +103,7 @@ const TabMembers = () => {
               {id === sessionData.userId ? "You" : name}
             </div>
           </div>
-          <div className="totalSpent">
+          <div >
             Total spent
           </div>
         </div>
@@ -96,14 +118,23 @@ const TabMembers = () => {
                 {toFrom.length === 1 ? <div>from <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
               <div className="description flex row alignitems-center">
-                is settled
+                <div>
+                  {id === sessionData.userId ? "are" : "is"} settled
+                </div>
+                <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: "22px", fontWeight: "500" }} />
               </div>}
           <div className="totalSpent medium t25 white">
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
+        {id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1 ?
+          <div className='flex justcont-start'>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setSearchParams({ menu: 'settleup', amount: toFrom[0].amount, receiverId: toFrom[0]._id, name: toFrom[0].name })}>Settle Up</div>
+          </div>
+          : ""}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
           <Tree
+            id={id}
             toFrom={toFrom}
             isSenderReceiverSettled={isSenderReceiverSettled} />
         }

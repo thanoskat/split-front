@@ -4,7 +4,7 @@ import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import { QRCodeSVG } from 'qrcode.react'
 
-function Invitation() {
+function Invitation({ setSearchParams }) {
 
   const api = useAxios()
   const userId = store.getState().authReducer.sessionData.userId
@@ -62,9 +62,9 @@ function Invitation() {
   // eslint-disable-next-line
   }, [])
 
-  const closeWindow = () => {
-    window.history.go(-1)
-  }
+  // const closeWindow = () => {
+  //   window.history.go(-1)
+  // }
 
   return (
     <div className='flex column fixed' style={{bottom: '0px', width: '100%', height:'100vh', backgroundColor: 'var(--layer-0-color)'}}>
@@ -72,7 +72,7 @@ function Invitation() {
       {!isLoading &&
       <div className='flex column padding1010 gap10' style={{height: '100%'}}>
         <div className='flex row t1 gap10'>
-          <div className='pointer' onClick={closeWindow}>
+          <div className='pointer' onClick={() => setSearchParams({})}>
             <i className='arrow left icon' />
           </div>
           <div>Invitation</div>

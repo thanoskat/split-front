@@ -17,12 +17,11 @@ const DeleteExpense = () => {
   const [searchParams] = useSearchParams()
   const expenseID = searchParams.get('id')
 
-
   useEffect(() => {
-    window.addEventListener('popstate', event => console.log(event));
+    //window.addEventListener('popstate', event => console.log(event));
     abortControllerRef.current = new AbortController()
     return () => {
-      window.removeEventListener('popstate', event => console.log(event));
+      //window.removeEventListener('popstate', event => console.log(event));
       abortControllerRef.current.abort()
     }
   // eslint-disable-next-line

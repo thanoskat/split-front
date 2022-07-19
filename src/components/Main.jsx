@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, DeleteExpense, Invitation, LabelEditor, New, RecordTransfer, SettleUp } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
 
+
 const Main = () => {
 
   const api = useAxios()
@@ -14,16 +15,20 @@ const Main = () => {
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [mainIsLoading, ] = useState(false)
+  const [mainIsLoading,] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const amountToTrasnfer = searchParams.get('amount')
+  const receiverName = searchParams.get('name')
+  const receiverId = searchParams.get("receiverId")
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     getGroup(params.groupid)
-    return() => {
+    return () => {
       abortControllerRef.current.abort()
     }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [params.groupid])
 
   const getGroup = async (id) => {
@@ -31,7 +36,7 @@ const Main = () => {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
       dispatch(setSelectedGroup(res.data))
     }
-    catch(error) {
+    catch (error) {
       console.log('/groups/getgroup', error)
     }
   }
@@ -47,21 +52,21 @@ const Main = () => {
           <UserBar />
           <div className='separator-1' />
           <div className='t1 group-info-frame medium flex row alignitems-center'>
-            <div className='flex row alignitems-center gap8 pointer' onClick={() => setSearchParams({menu: 'groups'})}>
+            <div className='flex row alignitems-center gap8 pointer' onClick={() => setSearchParams({ menu: 'groups' })}>
               <span>{displayedGroup?.title}</span>
               <IonIcon name='caret-down' className='t2' />
             </div>
             <div className='flex row gap10 alignitems-center'>
-              <div onClick={() => setSearchParams({menu: 'invitation'})}>
-                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2'/>
+              <div onClick={() => setSearchParams({ menu: 'invitation' })}>
+                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
               </div>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({menu: 'groupoptions'})} />
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
             </div>
           </div>
           <div className='separator-1' />
           <TabSwitcher />
           {(displayedGroup !== null) && <Outlet />}
-          <div onClick={() => setSearchParams({menu: 'newexpense'})}>
+          <div onClick={() => setSearchParams({ menu: 'new' })}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
               <div className='floating-button-text'>New</div>
@@ -74,7 +79,7 @@ const Main = () => {
         in={Boolean(searchParams.get('menu'))}
         timeout={0}
         unmountOnExit>
-        <div style={{position: 'fixed', height: '100vh', width: '100%', backgroundColor: 'black', opacity: '0.7'}} />
+        <div style={{ position: 'fixed', height: '100vh', width: '100%', backgroundColor: 'black', opacity: '0.7' }} />
       </CSSTransition>
 
       <CSSTransition
@@ -87,12 +92,32 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
+        in={(searchParams.get('menu') === 'new')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <New setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+
+
+      <CSSTransition
         in={(searchParams.get('menu') === 'newexpense')}
         timeout={300}
         classNames='leftslide'
         unmountOnExit
       >
-        <AddExpense setSearchParams={setSearchParams}/>
+        <AddExpense setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'recordtransfer')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <RecordTransfer setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
@@ -101,7 +126,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <Invitation />
+        <Invitation setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
@@ -121,6 +146,21 @@ const Main = () => {
       >
         <LabelEditor />
       </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'settleup')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <SettleUp
+          setSearchParams={setSearchParams}
+          name ={receiverName}
+          amount ={amountToTrasnfer}
+          receiverId={receiverId}
+           />
+      </CSSTransition>
+
     </div>
   )
 }

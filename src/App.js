@@ -17,6 +17,7 @@ import {
   SignIn,
   SignUp,
   Continue,
+  RecordPayment,
 } from './components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './semantic-icons.css'
@@ -66,12 +67,12 @@ export default App
 // [ ] [BUG] go from group to home page !
 // [ ] [BUG] sum filtered expenses !
 //
-// [ ] transfer !!
+// [X] transfer !!
 // [ ] add guest member Kristie(Guest) !!
-// [ ] expense details: participants, isEqually && participation !!
+// [X] expense details: participants, isEqually && participation !!
 // [ ] expense EDIT !!
 // [/] members tab css / settle in members tab !
-//
+// [ ] bring equal distributed amount from back end instead of re calculating in front.
 // [ ] user bar !
 // [ ] single + button for expense/transfer/member ? !
 // [ ] create new group focus on group name input field

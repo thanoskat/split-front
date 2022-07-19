@@ -23,8 +23,9 @@ function AddExpense({ setSearchParams }) {
     amount: '',
     description: '',
     label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount:"", percentage: "" }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: "", percentage: "" }))
   })
+  const inputAmountRef = useRef(null)
 
   //console.log("participants", newExpense.participants?.length !== 0)
 
@@ -47,7 +48,7 @@ function AddExpense({ setSearchParams }) {
     totalpercentage = currency(totalpercentage).add(participant?.percentage)
   })
   const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
-  console.log("remaining",remainingAmount)
+  console.log("remaining", remainingAmount)
 
   const remaining = () => {
     const remainingAmount = currency((newExpense.amount), { precision }).subtract(totalContributed.value).value
@@ -109,6 +110,9 @@ function AddExpense({ setSearchParams }) {
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
+    setTimeout(()=>{
+      inputAmountRef.current.focus()
+    },300)
     return () => {
       abortControllerRef.current.abort()
     }
@@ -160,7 +164,7 @@ function AddExpense({ setSearchParams }) {
   const updateAmount = (e) => {
     setNewExpense({
       ...newExpense,
-      amount:e.target.value //process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
+      amount: e.target.value //process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
     })
   }
 
@@ -237,6 +241,8 @@ function AddExpense({ setSearchParams }) {
     }
   }
 
+
+
   return (
     <div className='addExpenseBox flex column fixed'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
@@ -257,13 +263,14 @@ function AddExpense({ setSearchParams }) {
           </div>
 
           <input
+            ref={inputAmountRef}
             className='styledInput t3 text-align-right'
             type='tel'
             placeholder='0'
             step="0.01"
             value={newExpense.amount}
             onChange={(e) => updateAmount(e)}
-            autoFocus={true}
+            //autoFocus={true}
             spellCheck='false'
           />
         </div>
@@ -304,8 +311,7 @@ function AddExpense({ setSearchParams }) {
                 {selectedGroup.members.map(member => (
                   <div className={`pill pointer shadow ${newExpense?.participants.map(participants => participants.memberId).includes(member._id) ? 'filled' : 'empty'}`}
                     key={member._id} style={{ '--pill-color': `gray` }}
-                    onClick={() => participantClicked(member._id)}
-                  >
+                    onClick={() => participantClicked(member._id)}>
                     {member.nickname}
                   </div>))}
               </div>
@@ -346,8 +352,8 @@ function AddExpense({ setSearchParams }) {
                           {member.nickname}
                         </div>
                         <div className='input-amount flex relative column justcont-evenly '>
-                          <div className='currency-ticker-section ' style={{color:"var(--inactiveColor)"}}>
-                           €
+                          <div className='currency-ticker-section ' style={{ color: "var(--inactiveColor)" }}>
+                            €
                           </div>
                           <input
                             style={{ maxWidth: "75px" }}
@@ -364,8 +370,8 @@ function AddExpense({ setSearchParams }) {
                           />
                         </div>
                         <div className='input-amount flex relative column justcont-evenly '>
-                          <div className='currency-ticker-section ' style={{color:"var(--inactiveColor)"}}>
-                           %
+                          <div className='currency-ticker-section ' style={{ color: "var(--inactiveColor)" }}>
+                            %
                           </div>
                           <input
                             style={{ maxWidth: "75px" }}
@@ -386,14 +392,14 @@ function AddExpense({ setSearchParams }) {
                 </ul>
               </div>
               {/* {end of tree} */}
-              <div className='flex row justcont-spacebetween ' style={{marginLeft:"23px"}}>
+              <div className='flex row justcont-spacebetween ' style={{ marginLeft: "23px" }}>
                 <div className='flex alignitems-center' style={{ width: "40px", marginTop: "0.7rem" }}></div>
-                <div className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem", gap: "3px", padding:"0.8rem",width: "75px" }}>
+                <div className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem", gap: "3px", padding: "0.8rem", width: "75px" }}>
                   <span>€</span>
                   <span>{(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "0" : remaining().remainingAmount}</span>
                   <span>remaining</span>
                 </div>
-                <span className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem" ,padding:"0.8rem",width: "75px"}}>
+                <span className='flex justcont-center' style={{ fontSize: "13px", marginTop: "0.7rem", padding: "0.8rem", width: "75px" }}>
                   {(newExpense.amount === "" || Number(newExpense.amount) === 0) ? "100" : remaining().remainingPercentage}
                   %
                 </span>
@@ -419,10 +425,10 @@ function AddExpense({ setSearchParams }) {
           onClick={submitExpense}
           disabled={newExpense.amount &&
             Number(newExpense.amount) !== 0 &&
-            
-            
-            (!splitEqually? currency(newExpense.amount, { precision }).subtract(totalContributed.value).value === 0 &&
-            currency(100, { precision }).subtract(totalpercentage.value).value === 0 :true) ? false : true}>
+
+
+            (!splitEqually ? currency(newExpense.amount, { precision }).subtract(totalContributed.value).value === 0 &&
+              currency(100, { precision }).subtract(totalpercentage.value).value === 0 : true) ? false : true}>
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
         </button>
       </div>

@@ -14,12 +14,11 @@ body,
 select {
   scrollbar-gutter: auto both-edges;
   margin: 0;
-  height: 100%;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   user-select: none;
-  height: 100vh;
+  height: 100%;
   white-space: nowrap;
 
   /* --base-color: #406abf;
@@ -354,6 +353,9 @@ select {
   justify-self: center
 }
 
+.justself-end {
+  justify-self: end
+}
 .alignself-center {
   align-self: center
 }
@@ -554,8 +556,8 @@ select {
 
 .bottom-menu {
   bottom: 0;
-  width: 100%;
   position: fixed;
+  width:100%;
   background-color: var(--layer-1-color);
 }
 
@@ -666,12 +668,20 @@ select {
   padding: 15px
 }
 
+
 .padding4 {
   padding: 4px
 }
 
+.padding6 {
+  padding: 6px
+}
+
 .padding1812 {
   padding: 18px 12px
+}
+.padding15{
+  padding: 12px;
 }
 
 .padding0014 {
@@ -1272,7 +1282,7 @@ input:focus.inputErr {
 }
 
 #expense {
-  gap: 12px;
+  gap: 8px;
   padding: 12px 12px;
   background-color: #26272B;
   border-radius: 10px;
@@ -1326,6 +1336,16 @@ input:focus.inputErr {
   gap: 3px;
 }
 
+#settleUp-pill {
+  font-weight: 400;
+  background-color:var(--label-color-6);
+  display: flex;
+  color:white;
+  border-radius: 6px;
+  padding: 3px 8px;
+  gap: 3px;
+}
+
 #tab-selector {
   font-size: 16px;
   font-weight: 500;
@@ -1367,4 +1387,30 @@ input:focus.inputErr {
   border-color: var(--pink);
   border-width: 2px;
 
+}
+
+.encircle-item{
+  display: flex;
+  background:var(--layer-4-color);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.backIcon{
+  position: relative;
+  display: flex;
+  border: none;
+}
+
+.frontIcon{
+  position: absolute;
+  color: white;
+
+  font-weight: 700;
+  margin-left: 15px;
+  margin-top: 8px;
 }
