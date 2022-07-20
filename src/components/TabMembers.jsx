@@ -63,7 +63,7 @@ const TabMembers = () => {
 
 
   const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
-
+    console.log(toFrom)
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
         <ul>
@@ -74,7 +74,8 @@ const TabMembers = () => {
                   <div className='flex row alignitems-center whiteSpace-initial'>
                     <div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                     </div> to &nbsp;
-                    <strong>{member.name}</strong>
+                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
+
                   </div>
                   &nbsp;
                   {id === sessionData.userId ? //only show buttons in You section
@@ -88,7 +89,7 @@ const TabMembers = () => {
                       from
                     </div>
                     &nbsp;
-                    <strong>{member.name}</strong>
+                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
                   </div>
                   : <></>}
             </li>))}
@@ -115,11 +116,11 @@ const TabMembers = () => {
           {isSenderReceiverSettled === 1 ?
             <div className="description flex row alignitems-center">
               {id === sessionData.userId ? "owe" : "owes"}<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
-              {toFrom.length === 1 ? <div>to <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
+              {toFrom.length === 1 ? <div>to {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
             </div> : isSenderReceiverSettled === 2 ?
               <div className="description flex row alignitems-center" >
                 {id === sessionData.userId ? "are owed" : "is owed"}<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
-                {toFrom.length === 1 ? <div>from <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
+                {toFrom.length === 1 ? <div>from {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
               <div className="description flex row alignitems-center">
                 <div>
@@ -187,8 +188,8 @@ const TabMembers = () => {
           position: 'fixed',
           height: '100%',
           width: '100%',
-          top:"0px",
-          right:"0px",
+          top: "0px",
+          right: "0px",
           backgroundColor:
             'black',
           opacity: '0.7'
