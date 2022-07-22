@@ -34,6 +34,7 @@ export { default as New } from './New'
 export { default as RecordTransfer } from './RecordTransfer'
 export {default as SettleUp} from './SettleUp'
 export {default as NewGuest} from './NewGuest'
+export {default as NewMenuGuest} from './NewMenuGuest'
 
 
 // export { default as About } from './About'

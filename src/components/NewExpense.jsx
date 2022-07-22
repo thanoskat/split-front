@@ -5,25 +5,28 @@ import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
-
+import { useSearchParams } from 'react-router-dom'
 
 const NewExpense = ({ setSearchParams }) => {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const abortControllerRef = useRef(null)
-
+  const [searchParams] = useSearchParams()
   const [submitLoading, setSubmitLoading] = useState(false)
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
     amount: '',
     description: '',
     label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' }))
+    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })),
+    guestId: (searchParams.get('user') === null ? 0 : searchParams.get('user'))
   })
+
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
-
+  // const userID = searchParams.get('user')
+  //console.log(newExpense)
   // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
 
   useEffect(() => {
@@ -45,7 +48,7 @@ const NewExpense = ({ setSearchParams }) => {
       setSubmitLoading(true)
       try {
         const res = await api.post('expense/add', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
-        if(res.data.validationArray) {
+        if (res.data.validationArray) {
           const tempErrorMessages = {}
           res.data.validationArray.reverse().forEach(err => {
             tempErrorMessages[err.field] = err.message
@@ -60,13 +63,13 @@ const NewExpense = ({ setSearchParams }) => {
         }
       }
       catch (error) {
-        if(error.response) {
-          if(error.response.data.message) {
+        if (error.response) {
+          if (error.response.data.message) {
             setSubmitErrorMessage(error.response.data.message)
           }
         }
         else {
-          if(error.message === 'Network Error') setSubmitErrorMessage('Unable to establish connection to server')
+          if (error.message === 'Network Error') setSubmitErrorMessage('Unable to establish connection to server')
           else setSubmitErrorMessage(error.message)
         }
         setSubmitLoading(false)
@@ -85,12 +88,12 @@ const NewExpense = ({ setSearchParams }) => {
 
   const removedContributionAmountErrors = () => {
     const contributionAmountErrorMessages = {}
-    for(const field in newExpenseErrorMessages) {
-      if(/^participants\[[0-9]+]\.contributionAmount$/.test(field)) {
+    for (const field in newExpenseErrorMessages) {
+      if (/^participants\[[0-9]+]\.contributionAmount$/.test(field)) {
         contributionAmountErrorMessages[field] = null
       }
     }
-    return(contributionAmountErrorMessages)
+    return (contributionAmountErrorMessages)
   }
 
   const participantClicked = (participantClickedId) => {
@@ -104,7 +107,7 @@ const NewExpense = ({ setSearchParams }) => {
   }
 
   const allMembers = () => {
-    if(newExpense.participants) {
+    if (newExpense.participants) {
       return selectedGroup.members.length === newExpense.participants.length
     }
     else return true
@@ -113,18 +116,18 @@ const NewExpense = ({ setSearchParams }) => {
   const allClick = () => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, splitEqually: null, participants: null, ...removedContributionAmountErrors() })
 
-    if(allMembers()) {
+    if (allMembers()) {
       setNewExpense({ ...newExpense, participants: [] })
     }
     else {
-      setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' }))})
+      setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
     }
   }
 
   const equalClick = () => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
 
-    if(newExpense.splitEqually) {
+    if (newExpense.splitEqually) {
       setNewExpense({ ...newExpense, splitEqually: false })
     }
     else {
@@ -133,20 +136,20 @@ const NewExpense = ({ setSearchParams }) => {
   }
 
   const LabelSection = () => {
-    return(
-    <div className='flex row wrap' style={{ gap: '14px' }}>
-      {selectedGroup?.groupLabels.map(label => (
-      <div className={`pill2 pointer shadow`}
-        key={label._id} style={{ color: `${newExpense.label === label._id ? 'var(--'+label.color+')' : '#606060'}` }}
-        onClick={() => labelClicked(label._id)}
-      >
-        {label.name}
-      </div>))}
-    </div>)
+    return (
+      <div className='flex row wrap' style={{ gap: '14px' }}>
+        {selectedGroup?.groupLabels.map(label => (
+          <div className={`pill2 pointer shadow`}
+            key={label._id} style={{ color: `${newExpense.label === label._id ? 'var(--' + label.color + ')' : '#606060'}` }}
+            onClick={() => labelClicked(label._id)}
+          >
+            {label.name}
+          </div>))}
+      </div>)
   }
 
   const MemberSection = () => {
-    return(
+    return (
       <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
         <div
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
@@ -155,27 +158,27 @@ const NewExpense = ({ setSearchParams }) => {
           <div style={{ color: '#b6bfec' }}>Split among members</div>
           <div
             className='flex row alignitems-center'
-            style={{ color: `${allMembers() ? 'white': 'gray'}` }}
+            style={{ color: `${allMembers() ? 'white' : 'gray'}` }}
           >
             <div>All</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
-              {allMembers() && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14m-9 12l-4-4l1.41-1.42L10 14.17l6.59-6.59L18 9"/></svg>}
-              {!allMembers() && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg>}
+              {allMembers() && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14m-9 12l-4-4l1.41-1.42L10 14.17l6.59-6.59L18 9" /></svg>}
+              {!allMembers() && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z" /></svg>}
             </div>
           </div>
         </div>
         {!allMembers() &&
-        <div className='flex row wrap' style={{ gap: '14px' }}>
-          {selectedGroup.members?.map(member => (
-            <div
-              className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant.memberId).includes(member._id) ? 'filled' : ''}`}
-              onClick={() => participantClicked(member._id)}
-            >
-              {member.nickname}
-            </div>
-          ))}
-        </div>}
-      {newExpenseErrorMessages.participants && <div className='mailmsg t6'>{newExpenseErrorMessages.participants}</div>}
+          <div className='flex row wrap' style={{ gap: '14px' }}>
+            {selectedGroup.members?.map(member => (
+              <div
+                className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant.memberId).includes(member._id) ? 'filled' : ''}`}
+                onClick={() => participantClicked(member._id)}
+              >
+                {member.nickname}
+              </div>
+            ))}
+          </div>}
+        {newExpenseErrorMessages.participants && <div className='mailmsg t6'>{newExpenseErrorMessages.participants}</div>}
       </div>
     )
   }
@@ -191,10 +194,11 @@ const NewExpense = ({ setSearchParams }) => {
   }
 
   const changeContribution = (e, participant, index) => {
-    newExpenseErrorMessages['participants['+index+'].contributionAmount'] = null
+    newExpenseErrorMessages['participants[' + index + '].contributionAmount'] = null
     newExpenseErrorMessages.splitEqually = null
     setNewExpense(
-      { ...newExpense,
+      {
+        ...newExpense,
         participants: newExpense.participants.map(_participant => (_participant.memberId === participant.memberId) ? { ...participant, contributionAmount: e.target.value } : _participant)
       }
     )
@@ -241,7 +245,7 @@ const NewExpense = ({ setSearchParams }) => {
         {!newExpenseErrorMessages.description && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>}
         {newExpenseErrorMessages.description && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.description}</div>}
       </div>
-      {selectedGroup?.groupLabels.length !==0 && <LabelSection />}
+      {selectedGroup?.groupLabels.length !== 0 && <LabelSection />}
       <MemberSection />
       <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', gap: '28px', backgroundColor: '#151517' }}>
         <div
@@ -251,50 +255,50 @@ const NewExpense = ({ setSearchParams }) => {
           <div style={{ color: '#b6bfec' }}>Split</div>
           <div
             className='flex row alignitems-center'
-            style={{ color: `${newExpense.splitEqually ? 'white': 'gray'}` }}
+            style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
           >
             <div>Equal</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
-              {newExpense.splitEqually && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14m-9 12l-4-4l1.41-1.42L10 14.17l6.59-6.59L18 9"/></svg>}
-              {!newExpense.splitEqually && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg>}
+              {newExpense.splitEqually && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14m-9 12l-4-4l1.41-1.42L10 14.17l6.59-6.59L18 9" /></svg>}
+              {!newExpense.splitEqually && <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z" /></svg>}
             </div>
           </div>
         </div>
         {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
-        <div className='flex column' style={{ gap: '14px' }}>
-          {newExpense.participants?.map((participant, index) => (
-            <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
-              <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
-              </div>
-              <input
-                type='text'
-                inputmode='decimal'
-                className='text-align-right'
-                placeholder='0'
-                style={{
-                  borderRadius: '8px',
-                  padding: '6px',
-                  fontSize: '16px',
-                  flex: '1 1 auto',
-                  width: '100%',
-                  borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
-                  borderWidth: '1px',
-                  borderStyle: 'solid'
+          <div className='flex column' style={{ gap: '14px' }}>
+            {newExpense.participants?.map((participant, index) => (
+              <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                  {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
+                </div>
+                <input
+                  type='text'
+                  inputmode='decimal'
+                  className='text-align-right'
+                  placeholder='0'
+                  style={{
+                    borderRadius: '8px',
+                    padding: '6px',
+                    fontSize: '16px',
+                    flex: '1 1 auto',
+                    width: '100%',
+                    borderColor: `${newExpenseErrorMessages['participants[' + index + '].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                    borderWidth: '1px',
+                    borderStyle: 'solid'
                   }}
-                id='styled-input'
-                onChange={e => changeContribution(e, participant, index)}
-                value={participant.contributionAmount}
-                autoComplete='off'
-              />
+                  id='styled-input'
+                  onChange={e => changeContribution(e, participant, index)}
+                  value={participant.contributionAmount}
+                  autoComplete='off'
+                />
+              </div>
+            ))}
+            <div style={{ fontSize: '12px', alignSelf: 'center' }}>
+              REMAINING:&nbsp;
+              {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.contributionAmount).value), 0)).value}
             </div>
-          ))}
-          <div style={{ fontSize: '12px', alignSelf: 'center' }}>
-            REMAINING:&nbsp;
-            {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.contributionAmount).value), 0)).value}
-          </div>
-          {newExpenseErrorMessages.splitEqually && <div className='mailmsg t6'>{newExpenseErrorMessages.splitEqually}</div>}
-        </div>}
+            {newExpenseErrorMessages.splitEqually && <div className='mailmsg t6'>{newExpenseErrorMessages.splitEqually}</div>}
+          </div>}
       </div>
       <div style={{ marginTop: 'auto' }}>
         <div

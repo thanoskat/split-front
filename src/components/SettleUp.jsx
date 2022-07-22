@@ -46,7 +46,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
     catch (error) {
       console.log(error)
     }
-    setMenuParams({ open: false })
+    setMenuParams({ openSettleUp: false })
   }
 
   return (
@@ -55,7 +55,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
         <div style={{ color: "var(--light-color)", fontSize: "25px" }}>
           Settle Up
         </div>
-        <div className='pointer' onClick={() => setMenuParams({ open: false })}>
+        <div className='pointer' onClick={() => setMenuParams({ openSettleUp: false })}>
           <IonIcon name='close-outline' />
         </div>
       </div>
@@ -69,7 +69,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
         <div onClick={() => recordTransfer(amount, receiverId)} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Settle Up"}
         </div>
-        <div onClick={() => setMenuParams({ open: false })} style={{ backgroundColor: "var(--lightpink)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
+        <div onClick={() => setMenuParams({ openSettleUp: false })} style={{ backgroundColor: "var(--lightpink)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
           Cancel
         </div>
       </div>

@@ -5,23 +5,25 @@ import currency from 'currency.js'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
-
+import { useSearchParams } from 'react-router-dom'
 
 function RecordTransfer({ setSearchParams }) {
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
   const sessionData = store.getState().authReducer.sessionData
+  const [searchParams] = useSearchParams()
   const abortControllerRef = useRef(null)
   const dispatch = useDispatch()
   const inputAmountRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const [newTransfer, setNewTransfer] = useState({
+    senderId: (searchParams.get('user') === null ? sessionData.userId : searchParams.get('user')),
     amount: "",
     description: "",
     transferTo: ""
   })
 
-  console.log(newTransfer)
+  //console.log(newTransfer)
   useEffect(() => {
     setTimeout(() => {
       inputAmountRef.current.focus()
@@ -50,7 +52,7 @@ function RecordTransfer({ setSearchParams }) {
       const res = await api.post(`/expense/addtransfer`,
         {
           groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: sessionData.userId,
+          sender: newTransfer.senderId,
           receiver: newTransfer.transferTo,
           amount: newTransfer.amount,
           description: newTransfer.description
@@ -76,12 +78,18 @@ function RecordTransfer({ setSearchParams }) {
     }
   }
 
-  const filterUser = (selectedGroup?.members.filter(member => member._id !== sessionData.userId))
+
+  const filterUser = () => {
+    if (searchParams.get('user') === null) {
+      return selectedGroup?.members.filter(member => member._id !== sessionData.userId)
+    } else
+      return selectedGroup?.members.filter(member => member._id !== searchParams.get('user'))
+  }
 
   return (
     <div className='addExpenseBox flex column fixed'>
       <div className='addExpenseHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
+        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
           <i className='arrow left icon t3'></i>
         </div>
         <div>
@@ -109,24 +117,25 @@ function RecordTransfer({ setSearchParams }) {
               ref={inputAmountRef}
               spellCheck='false'
             />
-           
+
           </div>
           <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>
         </div>
         <div className='flex relative column'>
-        <input
-          className='styledInput t3'
-          placeholder='e.g. settled debt'
-          value={newTransfer.description}
-          onChange={e => setNewTransfer({ ...newTransfer, description: e.target.value })}
-          spellCheck='false'
-        />
-         <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>
+          <input
+            className='styledInput t3'
+            placeholder='e.g. settled debt'
+            value={newTransfer.description}
+            onChange={e => setNewTransfer({ ...newTransfer, description: e.target.value })}
+            spellCheck='false'
+          />
+          <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>
         </div>
 
-        To:
+       To
+       {/* {newTransfer.senderId===sessionData.userId? "To" : `from ${selectedGroup?.members.filter(member => member._id === searchParams.get('user'))[0].nickname} To`} */}
         <div className='flex row wrap gap10'>
-          {filterUser.map(member => (
+          {filterUser()?.map(member => (
             <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
               key={member._id} style={{ '--pill-color': `gray` }}
               onClick={() => participantClicked(member._id)}

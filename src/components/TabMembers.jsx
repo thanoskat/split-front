@@ -1,23 +1,27 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import { useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
-import { SettleUp } from '.'
+import { SettleUp, NewMenuGuest } from '.'
+
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  console.log(selectedGroup)
+  //console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
-    open: false,
+    openSettleUp: false,
     amount: null,
     receiverName: "",
-    receiverId: ""
+    receiverId: "",
+    openNewGuestMenu: false,
+    guestId: ""
   })
-
+  //console.log(menuParams)
+  const [, setSearchParams] = useSearchParams()
   Array.prototype.move = function (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
   };
@@ -63,8 +67,16 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
-  console.log(membersNoUser)
+  //console.log(membersNoUser)
 
+  const guestClicked = (id) => {
+    //console.log(id)
+    setMenuParams({ ...menuParams, openNewGuestMenu: true, guestId: id })
+  }
+  const closeMenu = () => {
+    setMenuParams({ ...menuParams, openNewGuestMenu: false, openSettleUp: false })
+    setSearchParams({})
+  }
   const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
 
     return (
@@ -82,7 +94,7 @@ const TabMembers = () => {
                   </div>
                   &nbsp;
                   {id === sessionData.userId ? //only show buttons in You section
-                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: member.amount, receiverId: member._id, receiverName: member.name })}>Settle Up</div> : ""}
+                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openSettleUp: true, amount: member.amount, receiverId: member._id, receiverName: member.name })}>Settle Up</div> : ""}
                 </div>
                 : isSenderReceiverSettled === 2 ?
                   <div className='flex row alignitems-center '>
@@ -144,7 +156,7 @@ const TabMembers = () => {
         </div>
         {id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1 ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: toFrom[0].amount, receiverId: toFrom[0]._id, receiverName: toFrom[0].name })}>Settle Up</div>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openSettleUp: true, amount: toFrom[0].amount, receiverId: toFrom[0]._id, receiverName: toFrom[0].name })}>Settle Up</div>
           </div>
           : ""}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
@@ -154,8 +166,10 @@ const TabMembers = () => {
             isSenderReceiverSettled={isSenderReceiverSettled} />
         }
         {isGuest ?
-          <div className='flex row pointer justcont-center' style={{ color: 'var(--label-color-6)', fontSize:"25px" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 12 12"><path fill="currentColor" d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5V1.75Z"/></svg>
+          <div className='flex row justcont-center' style={{ color: 'var(--label-color-6)', fontSize: "25px" }}>
+            <svg
+              onClick={() => guestClicked(id)}
+              className='pointer' xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 12 12"><path fill="currentColor" d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5V1.75Z" /></svg>
           </div> :
           ""}
       </div>
@@ -195,8 +209,8 @@ const TabMembers = () => {
       </div>
       <Outlet />
       <CSSTransition
-        onClick={() => setMenuParams({ open: false })} //this simply adds dark background
-        in={menuParams.open === true}
+        onClick={closeMenu} //this simply adds dark background
+        in={menuParams.openSettleUp === true || menuParams.openNewGuestMenu === true}
         timeout={0}
         unmountOnExit
       >
@@ -214,7 +228,7 @@ const TabMembers = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={menuParams.open === true}
+        in={menuParams.openSettleUp === true}
         timeout={300}
         classNames='bottomslide'
         unmountOnExit
@@ -224,6 +238,19 @@ const TabMembers = () => {
           name={menuParams.receiverName}
           amount={menuParams.amount}
           receiverId={menuParams.receiverId}
+        />
+      </CSSTransition>
+
+      <CSSTransition
+        in={menuParams.openNewGuestMenu === true}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <NewMenuGuest
+          setMenuParams={setMenuParams}
+          setSearchParams={setSearchParams}
+          guestId={menuParams.guestId}
         />
       </CSSTransition>
     </div>
