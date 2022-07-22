@@ -152,7 +152,7 @@ const NewExpense = ({ setSearchParams }) => {
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={allClick}
         >
-          <div style={{ color: '#b6bfec' }}>Members</div>
+          <div style={{ color: '#b6bfec' }}>Split among members</div>
           <div
             className='flex row alignitems-center'
             style={{ color: `${allMembers() ? 'white': 'gray'}` }}

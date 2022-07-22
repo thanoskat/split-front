@@ -1,4 +1,4 @@
-import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer } from '.'
+import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer,NewGuest } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -135,6 +135,15 @@ const Main = () => {
         unmountOnExit
       >
         <Invitation setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'newguest')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <NewGuest setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition

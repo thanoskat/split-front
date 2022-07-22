@@ -10,6 +10,7 @@ import { SettleUp } from '.'
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  //console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
     open: false,
     amount: null,
@@ -60,10 +61,10 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
-
+  //console.log(membersNoUser)
 
   const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
-    console.log(toFrom)
+
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
         <ul>
@@ -99,7 +100,7 @@ const TabMembers = () => {
   }
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-    console.log(toFrom)
+    
     return (
       <div id='expense' className='flex column'>
         <div className="nameIDandTotal flex row justcont-spacebetween">

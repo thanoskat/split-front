@@ -41,7 +41,7 @@ export default function ReviewGroups() {
       //console.log(res.data.group)
       let expArr = []
       expenses.map((expense) => {
-        if (expense.splitEqually === true && !expense.participants.includes(sessionData.id)) {
+        if (expense.splitEqually === true && !expense.participants.includes(sessionData.userId)) {
           expArr.push(expense)
         }
         return expArr
@@ -74,7 +74,7 @@ export default function ReviewGroups() {
         groupId: expenses.groupId
       },
         { signal: abortControllerRef.current.signal })
-      console.log(updateExpenses)
+      //console.log(updateExpenses)
       dispatch(setSelectedGroup(updateExpenses.data))
 
     } catch (err) {

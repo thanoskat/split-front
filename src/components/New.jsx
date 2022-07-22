@@ -37,6 +37,15 @@ export default function New({ setSearchParams }) {
             Record Transfer
           </div>
         </div>
+        <div className='flex row alignitems-center gap10' onClick={() => setSearchParams({ menu: 'newguest' })}>
+          <div className='encircle-item'>
+            <IonIcon name='person-outline' style={{ color: "#ffffff", fontSize: "20px" }} />
+            {/* <i className='exchange icon' style={{ color: "var(--light-color)",fontSize:"15px"}}/> */}
+          </div>
+          <div style={{ color: "var(--light-color)" }}>
+            New Guest
+          </div>
+        </div>
       </div>
     </div>
   )

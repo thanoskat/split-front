@@ -33,6 +33,8 @@ export { default as TabSelector } from './TabSelector'
 export { default as New } from './New'
 export { default as RecordTransfer } from './RecordTransfer'
 export {default as SettleUp} from './SettleUp'
+export {default as NewGuest} from './NewGuest'
+
 
 // export { default as About } from './About'
 // export { default as NavigationBar2 } from './NavigationBar2'
