@@ -55,7 +55,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
         <div style={{ color: "var(--light-color)", fontSize: "25px" }}>
           Settle Up
         </div>
-        <div onClick={() => setMenuParams({ open: false })}>
+        <div className='pointer' onClick={() => setMenuParams({ open: false })}>
           <IonIcon name='close-outline' />
         </div>
       </div>

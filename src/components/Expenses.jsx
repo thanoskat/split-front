@@ -94,7 +94,7 @@ const Expenses = () => {
         </div>}
       <div id='expenses'>
         {filteredExpenses.map(expense => (
-          <div key={expense._id} id='expense' className='flex column' onClick={() => expenseClicked(expense._id)}>
+          <div key={expense._id} id='expense' className='flex column pointer' onClick={() => expenseClicked(expense._id)}>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row'>
                 <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
@@ -108,7 +108,7 @@ const Expenses = () => {
             </div>
             <div className='flex row justcont-spacebetween gap10 alignitems-center'>
               <div id='expense-description'>{expense.description}</div>
-              <div id='expense-amount'>${expense.amount}</div>
+              <div id='expense-amount'>{currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
             </div>
             <div className='flex row justcont-spacebetween alignitems-center'>
               <div className='flex row alignitems-center' style={{ gap: '8px' }}>
@@ -133,10 +133,10 @@ const Expenses = () => {
                   <div>
                     <div className='backIcon'>
                       <IonIcon
-                        name='people' className='larger-click-area pointer'
+                        name='people' className='larger-click-area'
                         style={{ fontSize: '22px' }}
                       />
-                      <div className='frontIcon'>
+                      <div className='frontIcon' style={{color:"white"}}>
                         {expense.participants.length}
                       </div>
                     </div>
@@ -144,7 +144,7 @@ const Expenses = () => {
                 }
                 {expense.splitEqually === false ?
                   <IonIcon
-                    name='logo-react' className='larger-click-area pointer'
+                    name='logo-react' className='larger-click-area'
                     style={{ fontSize: '22px' }}
                   /> : ""}
               </div>

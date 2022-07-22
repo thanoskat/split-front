@@ -10,7 +10,7 @@ import { SettleUp } from '.'
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  //console.log(selectedGroup)
+  console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
     open: false,
     amount: null,
@@ -29,6 +29,7 @@ const TabMembers = () => {
       let total = currency(0)
       let toFrom = []
       let isSenderReceiverSettled
+      const isGuest = member.guest
       selectedGroup.expenses.forEach(expense => {
         if (expense.spender._id === member._id) {
           total = total.add(expense.amount)
@@ -51,7 +52,8 @@ const TabMembers = () => {
         isSenderReceiverSettled,
         toFrom,
         pendingTotalAmount: pendingTotalAmount.value,
-        totalSpent: total.value
+        totalSpent: total.value,
+        isGuest: isGuest
       })
     })
     return (members)
@@ -61,7 +63,7 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
-  //console.log(membersNoUser)
+  console.log(membersNoUser)
 
   const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
 
@@ -99,37 +101,44 @@ const TabMembers = () => {
     )
   }
 
-  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-    
+  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
+
     return (
-      <div id='expense' className='flex column'>
+      <div id='expense' className={`flex column ${isGuest ? "guestShadow marginLeft4px marginRight4px" : ""}`}>
         <div className="nameIDandTotal flex row justcont-spacebetween">
           <div className="name-ID flex row gap8 alignitems-center ">
             <div className="name medium t25 white">
-              {id === sessionData.userId ? "You" : name}
+              {id === sessionData.userId ? "You" : isGuest ?
+                <div className='flex row alignitems-center'>
+                  {name}&nbsp;
+                  <div style={{ fontSize: "13px", color: "var(--label-color-6)" }}>
+                    *guest
+                  </div>
+                </div> :
+                name}
             </div>
           </div>
           <div >
             Total spent
           </div>
         </div>
-        <div className="owesOwed flex row justcont-spacebetween alignitems-center">
+        <div className=" flex row justcont-spacebetween alignitems-center">
           {isSenderReceiverSettled === 1 ?
-            <div className="description flex row alignitems-center">
+            <div className=" flex row alignitems-center">
               {id === sessionData.userId ? "owe" : "owes"}<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
               {toFrom.length === 1 ? <div>to {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
             </div> : isSenderReceiverSettled === 2 ?
-              <div className="description flex row alignitems-center" >
+              <div className="flex row alignitems-center" >
                 {id === sessionData.userId ? "are owed" : "is owed"}<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
                 {toFrom.length === 1 ? <div>from {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
-              <div className="description flex row alignitems-center">
+              <div className="flex row alignitems-center">
                 <div>
                   {id === sessionData.userId ? "are" : "is"} settled
                 </div>
                 <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: "22px", fontWeight: "500" }} />
               </div>}
-          <div className="totalSpent medium t25 white">
+          <div className=" medium t25 white">
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
@@ -144,6 +153,11 @@ const TabMembers = () => {
             toFrom={toFrom}
             isSenderReceiverSettled={isSenderReceiverSettled} />
         }
+        {isGuest ?
+          <div className='flex row pointer justcont-center' style={{ color: 'var(--label-color-6)', fontSize:"25px" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 12 12"><path fill="currentColor" d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5V1.75Z"/></svg>
+          </div> :
+          ""}
       </div>
     )
   }
@@ -172,7 +186,8 @@ const TabMembers = () => {
               isSenderReceiverSettled={member.isSenderReceiverSettled}
               toFrom={member.toFrom}
               pendingTotalAmount={member.pendingTotalAmount}
-              totalSpent={member.totalSpent} />
+              totalSpent={member.totalSpent}
+              isGuest={member.isGuest} />
           </div>
         ))}
         <div style={{ marginBottom: "80px" }}>

@@ -15,8 +15,8 @@ function NewGuest({ setSearchParams }) {
     participateInAll: true,
     nickname: "",
     email: "",
-    all: selectedGroup?.expenses.filter(expense => expense.splitEqually === true),
-    filtered: []
+    allExpenses: selectedGroup?.expenses.filter(expense => expense.splitEqually === true),
+    filteredExpenses: []
   })
 
   console.log(guestInfo)
@@ -27,7 +27,7 @@ function NewGuest({ setSearchParams }) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setGuestInfo({ ...guestInfo, all: selectedGroup?.expenses.filter(expense => expense.splitEqually === true) })
+    setGuestInfo({ ...guestInfo, allExpenses: selectedGroup?.expenses.filter(expense => expense.splitEqually === true) })
   }, [selectedGroup])
 
   useEffect(() => {
@@ -41,9 +41,9 @@ function NewGuest({ setSearchParams }) {
   const submitGuest = async () => {
     let toBeupdatedExpenses
     if (guestInfo.participateInAll) {
-      toBeupdatedExpenses = guestInfo.all
+      toBeupdatedExpenses = guestInfo.allExpenses
     } else {
-      toBeupdatedExpenses = guestInfo.filtered
+      toBeupdatedExpenses = guestInfo.filteredExpenses
     }
     //e.preventDefault()
     setSignUpErrorMessages({})
@@ -102,11 +102,11 @@ function NewGuest({ setSearchParams }) {
     setSubmitErrorMessage('')
   }
   const handleClick = (clickedExpense) => {
-    if (guestInfo.filtered?.map(expense => expense._id).includes(clickedExpense?._id)) {
-      setGuestInfo({ ...guestInfo, filtered: guestInfo.filtered.filter(expense => expense._id !== clickedExpense._id) })
+    if (guestInfo.filteredExpenses?.map(expense => expense._id).includes(clickedExpense?._id)) {
+      setGuestInfo({ ...guestInfo, filteredExpenses: guestInfo.filteredExpenses.filter(expense => expense._id !== clickedExpense._id) })
     } else {
       //setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId }] })
-      setGuestInfo({ ...guestInfo, filtered: [...guestInfo.filtered, clickedExpense] })
+      setGuestInfo({ ...guestInfo, filteredExpenses: [...guestInfo.filteredExpenses, clickedExpense] })
     }
   }
 
@@ -162,14 +162,13 @@ function NewGuest({ setSearchParams }) {
             </div>
 
             <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: "1rem", height: "500px" }}>
-              {guestInfo?.all.map(expense => (
-                <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${guestInfo.filtered?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmptyforMenu'}`} onClick={() => handleClick(expense)}>
+              {guestInfo?.allExpenses.map(expense => (
+                <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${guestInfo.filteredExpenses?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmptyforMenu'}`} onClick={() => handleClick(expense)}>
                   <div className='flex row justcont-spacebetween alignitems-center'>
                     <div className='flex row'>
                       {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
                       <div id='expense-time'>{dayjs(expense.createdAt).format('HH:mm')}</div>
                     </div>
-
                   </div>
                   <div className='flex row justcont-spacebetween'>
                     <div id='expense-description'>{expense.description}</div>
