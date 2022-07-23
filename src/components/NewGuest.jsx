@@ -142,13 +142,13 @@ function NewGuest({ setSearchParams }) {
             onChange={e => changeEmail(e)}
             spellCheck='false'
           />
-          {!signUpErrorMessages.email && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's email (optional)</div>}
+          {!signUpErrorMessages.email && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's email</div>}
           {signUpErrorMessages.email && <div className='mailmsg t6'>{signUpErrorMessages.email}</div>}
         </div>
         <div className="relative padding1010" style={{ borderRadius: "4px", border: "none", backgroundColor: " rgb(21, 21, 23)", fontSize: "16px", fontWeight: "700" }}>
           <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
             <div className='alignself-center' style={{color:"#b6bfec"}}>Add guest in all shared expenses</div>
-            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "var(--label-color-1)" }} className='check icon absolute'></i> : ""} </div>
+            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
           </div>
         </div>
         {!guestInfo.participateInAll ?

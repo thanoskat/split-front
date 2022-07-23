@@ -122,7 +122,7 @@ export default function ReviewGroups() {
         <div style={{ borderRadius: "4px", padding: "0.8rem", border: "none", color: "var(--light-color)", backgroundColor: "#1f1f22", marginTop: "1rem" }}>
           <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
             <div className='alignself-center'>Participate in all shared expenses</div>
-            <div className='tick-cube' onClick={() => setParticipateInAll(prev => !prev)}> {participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "var(--label-color-1)" }} className='check icon absolute'></i> : ""} </div>
+            <div className='tick-cube' onClick={() => setParticipateInAll(prev => !prev)}> {participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
           </div>
         </div>
 

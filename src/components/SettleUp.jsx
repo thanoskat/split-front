@@ -6,7 +6,7 @@ import store from '../redux/store'
 import { useRef, useState, useEffect } from 'react'
 import currency from 'currency.js'
 
-function SettleUp({ setMenuParams, name, amount, receiverId }) {
+function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderId }) {
 
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -33,7 +33,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
       const res = await api.post(`/expense/addtransfer`,
         {
           groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: sessionData.userId,
+          sender: senderId,
           receiver: receiverId,
           amount: amount,
           description: "settle debt"
@@ -62,8 +62,9 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
       <div className='flex column gap10 padding1010'>
         <div className="flex row whiteSpace-initial wrap" style={{ color: "var(--light-color)", textAlign: "left" }}>
           You are about to settle a debt of
-          <div style={{ color: "var(--pink)" ,marginLeft:"5px" }}> {currency(amount, { symbol: '€', decimal: ',', separator: '.' }).format()}&nbsp;</div>
-          with&nbsp;
+          <div style={{ color: "var(--pink)", marginLeft: "5px" }}> {currency(amount, { symbol: '€', decimal: ',', separator: '.' }).format()}&nbsp;</div>
+          <div> between <strong>{`${sessionData.userId === senderId ? "You" : senderName}`}</strong></div>
+          &nbsp;and&nbsp;
           <strong>{name}</strong>
         </div>
         <div onClick={() => recordTransfer(amount, receiverId)} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">

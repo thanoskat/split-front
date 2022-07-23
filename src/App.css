@@ -244,10 +244,9 @@ input:focus {
   height: 25px;
   width: 25px;
   min-width: 25px;
-  background-color: var(--inactiveColor);
+  background-color: #585858;
   border-radius: 3px;
   cursor: pointer;
-
 }
 
 .overflow-auto {
@@ -1552,9 +1551,9 @@ input:focus.inputErr {
 
 .encircle-item {
   display: flex;
-  background: var(--layer-4-color);
-  width: 35px;
-  height: 35px;
+  background: rgb(58,58,58);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   text-align: center;
   justify-content: center;

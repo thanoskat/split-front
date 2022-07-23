@@ -1,4 +1,4 @@
-import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer,NewGuest } from '.'
+import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer,NewGuest, NewInvite } from '.'
 import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -58,7 +58,7 @@ const Main = () => {
                 <IonIcon name='caret-down' className='t2' />
               </div>
               <div className='flex row gap10 alignitems-center'>
-                <div onClick={() => setSearchParams({ menu: 'invitation' })}>
+                <div onClick={() => setSearchParams({ menu: 'invite' })}>
                   <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
                 </div>
                 <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
@@ -129,7 +129,7 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'invitation')}
+        in={(searchParams.get('menu') === 'friend')}
         timeout={300}
         classNames='leftslide'
         unmountOnExit
@@ -138,7 +138,7 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'newguest')}
+        in={(searchParams.get('menu') === 'guest')}
         timeout={300}
         classNames='leftslide'
         unmountOnExit
@@ -171,6 +171,15 @@ const Main = () => {
         unmountOnExit
       >
         <New setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'invite')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <NewInvite setSearchParams={setSearchParams} />
       </CSSTransition>
     </div>
   )

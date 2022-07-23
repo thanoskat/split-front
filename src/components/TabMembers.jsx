@@ -10,14 +10,17 @@ import { SettleUp } from '.'
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  console.log(selectedGroup)
+  //console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
     open: false,
     amount: null,
     receiverName: "",
-    receiverId: ""
+    receiverId: "",
+    senderName: "",
+    senderId: ""
   })
 
+  console.log(menuParams)
   Array.prototype.move = function (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
   };
@@ -63,9 +66,9 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
-  console.log(membersNoUser)
+  //console.log(membersNoUser)
 
-  const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
+  const Tree = ({ toFrom, isSenderReceiverSettled, id, isGuest, name }) => {
 
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
@@ -81,8 +84,17 @@ const TabMembers = () => {
 
                   </div>
                   &nbsp;
-                  {id === sessionData.userId ? //only show buttons in You section
-                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: member.amount, receiverId: member._id, receiverName: member.name })}>Settle Up</div> : ""}
+                  {id === sessionData.userId || isGuest ?  //only show buttons in You section
+                    <div id='settleUp-pill' className='pointer shadow'
+                      onClick={() => setMenuParams({
+                        open: true,
+                        amount: member.amount,
+                        receiverId: member._id,
+                        receiverName: member.name,
+                        senderId: id,
+                        senderName: name
+
+                      })}>Settle Up</div> : ""}
                 </div>
                 : isSenderReceiverSettled === 2 ?
                   <div className='flex row alignitems-center '>
@@ -102,7 +114,7 @@ const TabMembers = () => {
   }
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
-
+    //console.log(name, id)
     return (
       <div id='expense' className={`flex column ${isGuest ? "guestShadow marginLeft4px marginRight4px" : ""}`}>
         <div className="nameIDandTotal flex row justcont-spacebetween">
@@ -142,22 +154,27 @@ const TabMembers = () => {
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-        {id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1 ?
+        {(id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1) || (isGuest && isSenderReceiverSettled === 1 && toFrom.length === 1) ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: toFrom[0].amount, receiverId: toFrom[0]._id, receiverName: toFrom[0].name })}>Settle Up</div>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() =>
+              setMenuParams({
+                open: true,
+                amount: toFrom[0].amount,
+                receiverId: toFrom[0]._id,
+                receiverName: toFrom[0].name,
+                senderId: id,
+                senderName: name
+              })}>Settle Up</div>
           </div>
           : ""}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
           <Tree
             id={id}
+            name={name}
             toFrom={toFrom}
-            isSenderReceiverSettled={isSenderReceiverSettled} />
+            isSenderReceiverSettled={isSenderReceiverSettled}
+            isGuest={isGuest} />
         }
-        {isGuest ?
-          <div className='flex row pointer justcont-center' style={{ color: 'var(--label-color-6)', fontSize:"25px" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 12 12"><path fill="currentColor" d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5V1.75Z"/></svg>
-          </div> :
-          ""}
       </div>
     )
   }
@@ -224,6 +241,8 @@ const TabMembers = () => {
           name={menuParams.receiverName}
           amount={menuParams.amount}
           receiverId={menuParams.receiverId}
+          senderName={menuParams.senderName}
+          senderId={menuParams.senderId}
         />
       </CSSTransition>
     </div>
