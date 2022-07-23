@@ -155,7 +155,7 @@ function NewGuest({ setSearchParams }) {
           <div className='overflow-auto'>
             <div className='loginBox flex column ' style={{ backgroundColor: "rgb(21, 21, 23)", borderColor: "rgb(21, 21, 23)", borderStyle: "solid" }}>
               <div className='whiteSpace-initial'>
-                <div className='flex column gap4 padding4'>
+                <div className='flex column gap4 padding4 whiteSpace-initial'>
                   <div style={{color:"white"}}>Review and choose expenses your guest should participate in</div>
                 </div>
               </div>

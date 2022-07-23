@@ -55,8 +55,9 @@ export default App
 // [ ] css on create group submit same size as other submit buttons
 // [ ] get distribution response for expenses from DB
 // [ ] validator for record tranfer
-// [ ] add guest member Kristie(Guest) !!
+// [X] add guest member Kristie(Guest) !!
 // [X] expense details: participants, isEqually && participation !!
+// [ ] number of people participating in expense to be fixed so that if doesn't overlap with scale or be out of screen
 // [ ] automatic copy of invitation link
 // [ ] expense EDIT !!
 // [/] members tab css / settle in members tab !
