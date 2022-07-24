@@ -1,16 +1,15 @@
-/* Remove the code bellow to debug */
-
+/* Uncomment the code bellow to debug */
 /* * {
   background: #000 !important;
   color: #0f0 !important;
   outline: solid #f00 1px !important;
 } */
 
-/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap'); */
 
-html, body {
+body, html {
+  /* max-width: 500px; */
   -webkit-tap-highlight-color:  transparent;
-  margin: 0;
+  /* margin: 0; */
   height: 100%;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -73,8 +72,6 @@ html, body {
   #c9bedf
   #fffee1 */
   --buttonPadd: 1rem;
-  /* scrollbar-width: none !important;
-  min-width: 0px !important; */
   --primaryBackgroundColor: #121212;
   /* --secondaryBackgroundColor: #101011; */
   --secondaryBackgroundColor: #161618;
@@ -137,14 +134,11 @@ html, body {
 }
 
 #nav-button {
-  padding: 14px;
-  margin: 14px;
 }
 
 #expenses-tab {
   flex: 1 1 auto;
   min-height: 0px;
-  /* padding: 14px; */
   gap: 14px;
 }
 
@@ -152,14 +146,15 @@ html, body {
   width: 100%;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
   /* scrollbar-gutter: stable both-edges; */
   overflow: auto;
   gap: 14px;
 }
 
-#expenses::-webkit-scrollbar {
+/* #expenses::-webkit-scrollbar {
   overflow: hidden;
-}
+} */
 
 #new-expense {
   box-sizing: border-box;
@@ -177,12 +172,11 @@ html, body {
   padding: 10px;
   text-align: center;
   font-size: 18px;
-  margin-top: auto;
+  /* margin-top: auto; */
   border-radius: 8px;
-  user-select: none;
-  border: none;
-  width: auto;
-  cursor: pointer;
+  /* border: none; */
+  /* width: auto; */
+  /* cursor: pointer; */
   color: var(--text);
   background-color: #eeeeee;
 }
@@ -246,8 +240,8 @@ input:focus {
 
 .overflow-auto {
   /* firefox */
-  scrollbar-color: #858585 transparent;
-  scrollbar-width: thin;
+  /* scrollbar-color: #858585 transparent;
+  scrollbar-width: thin; */
   overflow: auto;
 
   /* chrome */
@@ -772,7 +766,6 @@ input:focus {
   padding: 10px 14px;
   /* height: 100px; */
   height: fit-content;
-
 }
 
 .floating-button {
@@ -917,22 +910,22 @@ input:focus {
 }
 
 /* Webkit scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
-}
+/* ::-webkit-scrollbar {
+  width: 6px;
+} */
 
-::-webkit-scrollbar-thumb {
-  border: 4px solid transparent;
+/* ::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
   background-clip: padding-box;
   border-radius: 10px;
   background-color: var(--layer-3-color);
-}
+} */
 
 /* No delete */
-::-webkit-scrollbar-track {
-  /* margin-block: 3px; */
-  margin-top: 0px;
-}
+  /* margin-top: 10px; */
+/* ::-webkit-scrollbar-track {
+  margin-block: 3px;
+} */
 
 
 .top-labels {

@@ -216,7 +216,7 @@ const NewExpense = ({ setSearchParams }) => {
           id='styled-input'
           className='text-align-right'
           type='text'
-          inputmode='decimal'
+          inputMode='decimal'
           placeholder='0'
           value={newExpense.amount}
           onChange={e => changeAmount(e)}
@@ -269,7 +269,7 @@ const NewExpense = ({ setSearchParams }) => {
               </div>
               <input
                 type='text'
-                inputmode='decimal'
+                inputMode='decimal'
                 className='text-align-right'
                 placeholder='0'
                 style={{
@@ -299,6 +299,7 @@ const NewExpense = ({ setSearchParams }) => {
       <div style={{ marginTop: 'auto' }}>
         <div
           id='new-expense-submit'
+          className='pointer shadow'
           onClick={submitExpense}
         >
           {submitLoading && <IonIcon name='sync' className='spin' />}

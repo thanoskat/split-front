@@ -59,9 +59,9 @@ export default App
 // [ ] expense EDIT !!
 // [/] members tab css / settle in members tab !
 // [ ] bring equal distributed amount from back end instead of re calculating in front.
-// [ ] user bar !
-// [ ] single + button for expense/transfer/member ? !
-// [ ] create new group focus on group name input field
+// [/] user bar !
+// [x] single + button for expense/transfer/member ? !
+// [x] create new group focus on group name input field
 // [ ] currency conversion
 // [ ]
 // [ ] expense unequal split amount addition per name UX ??

@@ -98,7 +98,6 @@ const TabMembers = () => {
   }
 
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-    console.log(toFrom)
     return (
       <div id='expense' className='flex column'>
         <div className="nameIDandTotal flex row justcont-spacebetween">

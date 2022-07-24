@@ -1,6 +1,6 @@
 .main-flex-container {
   /* padding: 1rem; */
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   overflow: auto;
   display: flex;
   /* flex-direction: row; */
@@ -11,7 +11,7 @@
 
 .my-menu {
   overflow: auto;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
 
   padding: 4px 0px 4px 0px;
 
