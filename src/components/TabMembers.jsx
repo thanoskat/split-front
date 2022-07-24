@@ -10,13 +10,17 @@ import { SettleUp } from '.'
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  //console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
     open: false,
     amount: null,
     receiverName: "",
-    receiverId: ""
+    receiverId: "",
+    senderName: "",
+    senderId: ""
   })
 
+  console.log(menuParams)
   Array.prototype.move = function (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
   };
@@ -28,6 +32,7 @@ const TabMembers = () => {
       let total = currency(0)
       let toFrom = []
       let isSenderReceiverSettled
+      const isGuest = member.guest
       selectedGroup.expenses.forEach(expense => {
         if (expense.spender._id === member._id) {
           total = total.add(expense.amount)
@@ -50,7 +55,8 @@ const TabMembers = () => {
         isSenderReceiverSettled,
         toFrom,
         pendingTotalAmount: pendingTotalAmount.value,
-        totalSpent: total.value
+        totalSpent: total.value,
+        isGuest: isGuest
       })
     })
     return (members)
@@ -60,9 +66,9 @@ const TabMembers = () => {
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
+  //console.log(membersNoUser)
 
-
-  const Tree = ({ toFrom, isSenderReceiverSettled, id }) => {
+  const Tree = ({ toFrom, isSenderReceiverSettled, id, isGuest, name }) => {
 
     return (
       <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
@@ -74,11 +80,21 @@ const TabMembers = () => {
                   <div className='flex row alignitems-center whiteSpace-initial'>
                     <div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                     </div> to &nbsp;
-                    <strong>{member.name}</strong>
+                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
+
                   </div>
                   &nbsp;
-                  {id === sessionData.userId ? //only show buttons in You section
-                    <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: member.amount, receiverId: member._id, receiverName: member.name })}>Settle Up</div> : ""}
+                  {id === sessionData.userId || isGuest ?  //only show buttons in You section
+                    <div id='settleUp-pill' className='pointer shadow'
+                      onClick={() => setMenuParams({
+                        open: true,
+                        amount: member.amount,
+                        receiverId: member._id,
+                        receiverName: member.name,
+                        senderId: id,
+                        senderName: name
+
+                      })}>Settle Up</div> : ""}
                 </div>
                 : isSenderReceiverSettled === 2 ?
                   <div className='flex row alignitems-center '>
@@ -88,7 +104,7 @@ const TabMembers = () => {
                       from
                     </div>
                     &nbsp;
-                    <strong>{member.name}</strong>
+                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
                   </div>
                   : <></>}
             </li>))}
@@ -97,50 +113,67 @@ const TabMembers = () => {
     )
   }
 
-  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent }) => {
-    console.log(toFrom)
+  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
+    //console.log(name, id)
     return (
-      <div id='expense' className='flex column'>
+      <div id='expense' className={`flex column ${isGuest ? "guestShadow marginLeft4px marginRight4px" : ""}`}>
         <div className="nameIDandTotal flex row justcont-spacebetween">
           <div className="name-ID flex row gap8 alignitems-center ">
             <div className="name medium t25 white">
-              {id === sessionData.userId ? "You" : name}
+              {id === sessionData.userId ? "You" : isGuest ?
+                <div className='flex row alignitems-center'>
+                  {name}&nbsp;
+                  <div style={{ fontSize: "13px", color: "var(--label-color-6)" }}>
+                    *guest
+                  </div>
+                </div> :
+                name}
             </div>
           </div>
           <div >
             Total spent
           </div>
         </div>
-        <div className="owesOwed flex row justcont-spacebetween alignitems-center">
+        <div className=" flex row justcont-spacebetween alignitems-center">
           {isSenderReceiverSettled === 1 ?
-            <div className="description flex row alignitems-center">
+            <div className=" flex row alignitems-center">
               {id === sessionData.userId ? "owe" : "owes"}<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
-              {toFrom.length === 1 ? <div>to <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
+              {toFrom.length === 1 ? <div>to {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
             </div> : isSenderReceiverSettled === 2 ?
-              <div className="description flex row alignitems-center" >
+              <div className="flex row alignitems-center" >
                 {id === sessionData.userId ? "are owed" : "is owed"}<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
-                {toFrom.length === 1 ? <div>from <strong>{toFrom[0].name}</strong> &nbsp;</div> : <div>in total &nbsp;</div>}
+                {toFrom.length === 1 ? <div>from {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
-              <div className="description flex row alignitems-center">
+              <div className="flex row alignitems-center">
                 <div>
                   {id === sessionData.userId ? "are" : "is"} settled
                 </div>
                 <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: "22px", fontWeight: "500" }} />
               </div>}
-          <div className="totalSpent medium t25 white">
+          <div className=" medium t25 white">
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-        {id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1 ?
+        {(id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1) || (isGuest && isSenderReceiverSettled === 1 && toFrom.length === 1) ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ open: true, amount: toFrom[0].amount, receiverId: toFrom[0]._id, receiverName: toFrom[0].name })}>Settle Up</div>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() =>
+              setMenuParams({
+                open: true,
+                amount: toFrom[0].amount,
+                receiverId: toFrom[0]._id,
+                receiverName: toFrom[0].name,
+                senderId: id,
+                senderName: name
+              })}>Settle Up</div>
           </div>
           : ""}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
           <Tree
             id={id}
+            name={name}
             toFrom={toFrom}
-            isSenderReceiverSettled={isSenderReceiverSettled} />
+            isSenderReceiverSettled={isSenderReceiverSettled}
+            isGuest={isGuest} />
         }
       </div>
     )
@@ -170,7 +203,8 @@ const TabMembers = () => {
               isSenderReceiverSettled={member.isSenderReceiverSettled}
               toFrom={member.toFrom}
               pendingTotalAmount={member.pendingTotalAmount}
-              totalSpent={member.totalSpent} />
+              totalSpent={member.totalSpent}
+              isGuest={member.isGuest} />
           </div>
         ))}
         <div style={{ marginBottom: "80px" }}>
@@ -178,8 +212,8 @@ const TabMembers = () => {
       </div>
       <Outlet />
       <CSSTransition
-        onClick={() => setMenuParams({open:false})} //this simply adds dark background
-        in={menuParams.open===true}
+        onClick={() => setMenuParams({ open: false })} //this simply adds dark background
+        in={menuParams.open === true}
         timeout={0}
         unmountOnExit
       >
@@ -187,11 +221,15 @@ const TabMembers = () => {
           position: 'fixed',
           height: '100%',
           width: '100%',
+          top: "0px",
+          right: "0px",
           backgroundColor:
-          'black',
-          opacity: '0.7'}}
+            'black',
+          opacity: '0.7'
+        }}
         />
       </CSSTransition>
+
       <CSSTransition
         in={menuParams.open === true}
         timeout={300}
@@ -203,6 +241,8 @@ const TabMembers = () => {
           name={menuParams.receiverName}
           amount={menuParams.amount}
           receiverId={menuParams.receiverId}
+          senderName={menuParams.senderName}
+          senderId={menuParams.senderId}
         />
       </CSSTransition>
     </div>

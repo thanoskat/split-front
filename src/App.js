@@ -5,7 +5,6 @@ import {
   VerifyInvitation,
   PrivateRoutes,
   TabMembers,
-  TabSettleUp,
   Expenses,
   VerifyToken,
   ReviewGroups,
@@ -33,7 +32,6 @@ function App() {
             <Route index element={<Expenses />} />
             <Route path='expenses' element={<Expenses />} />
             <Route path='members' element={<TabMembers />} />
-            <Route path='settleup' element={<TabSettleUp />} />
           </Route>
         </Route>
       </Routes>
@@ -54,15 +52,21 @@ export default App
 // [x] [BUG] sum filtered expenses !
 //
 // [X] transfer !!
-// [ ] add guest member Kristie(Guest) !!
+// [ ] css on create group submit same size as other submit buttons
+// [ ] get distribution response for expenses from DB
+// [ ] validator for record tranfer
+// [X] add guest member Kristie(Guest) !!
 // [X] expense details: participants, isEqually && participation !!
+// [ ] number of people participating in expense to be fixed so that if doesn't overlap with scale or be out of screen
+// [ ] automatic copy of invitation link
 // [ ] expense EDIT !!
 // [/] members tab css / settle in members tab !
 // [ ] bring equal distributed amount from back end instead of re calculating in front.
 // [ ] user bar !
-// [ ] single + button for expense/transfer/member ? !
-// [ ] create new group focus on group name input field
+// [X] single + button for expense/transfer/member ? !
+// [X] create new group focus on group name input field
 // [ ] currency conversion
+// [ ] profile button on top right to show more rather than logging you out instantly
 // [ ]
 // [ ] expense unequal split amount addition per name UX ??
 // [ ] /62c40a27e252e8ca01293e1f/review

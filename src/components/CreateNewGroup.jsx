@@ -100,6 +100,7 @@ export default function CreateNewGroup({ setSearchParams }) {
           value={groupName}
           onChange={e => setGroupName(e.target.value)}
           spellCheck='false'
+          autoFocus={true}
         />
         <div className='flex column' style={{ marginTop: '15px' }}>
           <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px', fontSize: '20px' }}>Select currency</div>

@@ -4,8 +4,9 @@ import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useRef, useState, useEffect } from 'react'
+import currency from 'currency.js'
 
-function SettleUp({ setMenuParams, name, amount, receiverId }) {
+function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderId }) {
 
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -32,7 +33,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
       const res = await api.post(`/expense/addtransfer`,
         {
           groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: sessionData.userId,
+          sender: senderId,
           receiver: receiverId,
           amount: amount,
           description: "settle debt"
@@ -49,18 +50,22 @@ function SettleUp({ setMenuParams, name, amount, receiverId }) {
   }
 
   return (
-    <div className='bottom-menu top-radius padding4' style={{ zIndex: '2' }}>
-      <div className='flex row justcont-spacebetween t05 padding4'>
+    <div className='bottom-menu-settle top-radius' style={{ zIndex: '2' }}>
+      <div className='flex row justcont-spacebetween t05' style={{ padding: "10px" }}>
         <div style={{ color: "var(--light-color)", fontSize: "25px" }}>
           Settle Up
         </div>
-        <div onClick={() => setMenuParams({ open: false })}>
+        <div className='pointer' onClick={() => setMenuParams({ open: false })}>
           <IonIcon name='close-outline' />
         </div>
       </div>
-      <div className='flex column gap10 padding6'>
-        <div className="whiteSpace-initial" style={{ color: "var(--light-color)", textAlign: "left" }}>
-          You are about to settle a debt of <strong>${amount}</strong> with <strong>{name}</strong>
+      <div className='flex column gap10 padding1010'>
+        <div className="flex row whiteSpace-initial wrap" style={{ color: "var(--light-color)", textAlign: "left" }}>
+          You are about to settle a debt of
+          <div style={{ color: "var(--pink)", marginLeft: "5px" }}> {currency(amount, { symbol: '€', decimal: ',', separator: '.' }).format()}&nbsp;</div>
+          <div> between <strong>{`${sessionData.userId === senderId ? "You" : senderName}`}</strong></div>
+          &nbsp;and&nbsp;
+          <strong>{name}</strong>
         </div>
         <div onClick={() => recordTransfer(amount, receiverId)} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding15 pointer shadow justcont-center">
           {loading ? <IonIcon name='sync' className='t3 spin' /> : "Settle Up"}
