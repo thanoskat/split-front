@@ -73,14 +73,14 @@ const SignIn = () => {
         <div className='flex column'>
           <div className='mailbox flex column'>
             <input
-              inputmode='email'
+              inputMode='email'
               value={signInForm.email}
               className={`styledInput ${signInErrorMessages.email ? 'inputErr' : null}`}
               placeholder='john@rambo.com'
               onChange={e => changeEmail(e)}
               onKeyPress={keyPress}
             />
-            <div className='mailmsg t6'>{signInErrorMessages.email}</div>
+            <div className='mailmsg t6'>{signInErrorMessages.email}&nbsp;</div>
           </div>
           {!loading && <button
             onClick={submitSignIn}

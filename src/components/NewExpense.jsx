@@ -275,7 +275,7 @@ const NewExpense = ({ setSearchParams }) => {
           id='styled-input'
           className='text-align-right'
           type='text'
-          inputmode='decimal'
+          inputMode='decimal'
           placeholder='0'
           value={newExpense.amount}
           onChange={e => changeAmount(e)}
@@ -322,26 +322,26 @@ const NewExpense = ({ setSearchParams }) => {
         </div>
 
         {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
-          <div className='flex column' style={{ gap: '14px' }}>
-            {newExpense.participants?.map((participant, index) => (
-              <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
-                <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                  {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
-                </div>
-                <input
-                  type='text'
-                  inputmode='decimal'
-                  className='text-align-right'
-                  placeholder='0'
-                  style={{
-                    borderRadius: '8px',
-                    padding: '6px',
-                    fontSize: '16px',
-                    flex: '1 1 auto',
-                    width: '100%',
-                    borderColor: `${newExpenseErrorMessages['participants[' + index + '].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
-                    borderWidth: '1px',
-                    borderStyle: 'solid'
+        <div className='flex column' style={{ gap: '14px' }}>
+          {newExpense.participants?.map((participant, index) => (
+            <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+              <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
+              </div>
+              <input
+                type='text'
+                inputMode='decimal'
+                className='text-align-right'
+                placeholder='0'
+                style={{
+                  borderRadius: '8px',
+                  padding: '6px',
+                  fontSize: '16px',
+                  flex: '1 1 auto',
+                  width: '100%',
+                  borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
                   }}
                   id='styled-input'
                   onChange={e => changeContribution(e, participant, index)}
@@ -362,6 +362,7 @@ const NewExpense = ({ setSearchParams }) => {
       <div style={{ marginTop: 'auto' }}>
         <div
           id='new-expense-submit'
+          className='pointer shadow'
           onClick={submitExpense}
         >
           {submitLoading && <IonIcon name='sync' className='spin' />}

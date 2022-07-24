@@ -1,15 +1,13 @@
-import { GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer,NewGuest, NewInvite } from '.'
-import { useState, useEffect, useRef } from 'react'
-import { Outlet, useSearchParams, useParams } from 'react-router-dom'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewInvite } from '.'
+import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
+import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
 
-
 const Main = () => {
-
   const api = useAxios()
   const dispatch = useDispatch()
   const params = useParams()
@@ -17,13 +15,35 @@ const Main = () => {
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const navigationType = useNavigationType()
+  const location = useLocation()
+  const navigation = useContext(UNSAFE_NavigationContext).navigator
+  const [menuIsOpen, setMenuIsOpen] = useState(false)
 
+  // const [state, setState] = useState(window.location.pathname)
 
+  // useLayoutEffect(() => {
+  //   const unsubscribe = navigation.listen((locationListener) =>
+  //     navigate('/')
+  //   )
+  //   return unsubscribe
+  // }, [navigation])
 
   useEffect(() => {
+    window.addEventListener('popstate', () => {
+      setMenuIsOpen(false)
+    })
     abortControllerRef.current = new AbortController()
     getGroup(params.groupid)
     return () => {
+      window.removeEventListener('popstate', () => {
+        setMenuIsOpen(false)
+      })
+      // console.log('navigationType', navigationType)
+      // console.log('location.pathname', location.pathname)
+      // setState(location.pathname)
+      // navigate(location.pathname, { replace: true })
       abortControllerRef.current.abort()
     }
     // eslint-disable-next-line
@@ -39,6 +59,11 @@ const Main = () => {
       console.log('/groups/getgroup', error)
     }
     setMainIsLoading(false)
+  }
+
+  const openMenu = () => {
+    navigate(location.pathname, { replace: false })
+    setMenuIsOpen(true)
   }
 
   return (
@@ -63,6 +88,9 @@ const Main = () => {
                 </div>
                 <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
               </div>
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
+              {/* <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => navigate(`#${(Math.random() + 1).toString(36).substring(7)}`, { replace: false })} /> */}
+              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={openMenu} />
             </div>
             {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
@@ -117,6 +145,15 @@ const Main = () => {
         unmountOnExit
       >
         <RecordTransfer setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={menuIsOpen}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <NewExpense setSearchParams={setSearchParams}/>
       </CSSTransition>
 
       <CSSTransition

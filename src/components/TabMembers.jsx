@@ -112,7 +112,6 @@ const TabMembers = () => {
       </div>
     )
   }
-
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
     //console.log(name, id)
     return (

@@ -1,6 +1,6 @@
 .userbar-flex-container {
   padding: 1rem;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   overflow: visible;
   display: flex;
   flex-direction: row;

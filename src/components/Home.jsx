@@ -24,12 +24,10 @@ export default function Home() {
     setIsloading(true)
     try {
       const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
-      console.log("/groups/mygroups", response.data)
       setGroupList(response.data)
       setIsloading(false)
     }
     catch (error) {
-      console.log(error.message)
       setIsloading(false)
     }
   }

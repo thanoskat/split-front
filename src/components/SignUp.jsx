@@ -94,7 +94,7 @@ const SignUp = () => {
               <input
                 className={`styledInput ${signUpErrorMessages.email ? 'inputErr' : ''}`}
                 placeholder='john@rambo.com'
-                inputmode='email'
+                inputMode='email'
                 value={signUpForm.email}
                 onChange={e => changeEmail(e)}
                 onKeyPress={keyPress}
