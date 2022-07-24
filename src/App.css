@@ -5,7 +5,6 @@
   outline: solid #f00 1px !important;
 } */
 
-
 body, html {
   /* max-width: 500px; */
   -webkit-tap-highlight-color:  transparent;
@@ -199,16 +198,20 @@ body, html {
   font-size: 20px;
 }
 
-#styled-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+#styled-input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: #6e6e6e;
-  opacity: 1; /* Firefox */
+  opacity: 1;
+  /* Firefox */
 }
 
-#styled-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+#styled-input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
   color: #404041;
 }
 
-#styled-input::-ms-input-placeholder { /* Microsoft Edge */
+#styled-input::-ms-input-placeholder {
+  /* Microsoft Edge */
   color: #404041;
 }
 
@@ -216,11 +219,13 @@ body, html {
 #styled-input::-webkit-inner-spin-button {
   /* display: none; <- Crashes Chrome on hover */
   -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 #styled-input[type=number] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }
 
 input:focus {
@@ -232,10 +237,9 @@ input:focus {
   height: 25px;
   width: 25px;
   min-width: 25px;
-  background-color: var(--inactiveColor);
+  background-color: #585858;
   border-radius: 3px;
   cursor: pointer;
-
 }
 
 .overflow-auto {
@@ -392,6 +396,13 @@ input:focus {
   color: var(--layer-5-color)
 }
 
+.marginLeft4px{
+  margin-left: 4px;
+}
+.marginRight4px{
+  margin-right: 4px;
+}
+
 .flex {
   display: flex;
   flex-wrap: nowrap;
@@ -424,7 +435,7 @@ input:focus {
 }
 
 .alignitems-start {
-  align-items: flex-start
+  align-items: flex-start;
 }
 
 .alignitems-end {
@@ -454,6 +465,7 @@ input:focus {
 .justself-end {
   justify-self: end
 }
+
 .alignself-center {
   align-self: center
 }
@@ -517,6 +529,11 @@ input:focus {
 .shadow {
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   box-shadow: rgba(0, 0, 0, 0.50) 0px 4px 4px;
+}
+
+.guestShadow {
+  -webkit-box-shadow: 0 0 7px var(--label-color-6);
+  box-shadow: 0 0 7px var(--label-color-6);
 }
 
 .spin {
@@ -627,8 +644,13 @@ input:focus {
 }
 
 .expenseEmpty {
-  background-color: #26272B;
+  background-color: #292a2e;
 }
+
+.expenseEmptyforMenu {
+  background-color: rgb(21, 21, 23);
+}
+
 
 .pill.filled {
   color: var(--layer-0-color);
@@ -681,9 +703,19 @@ input:focus {
 .bottom-menu {
   bottom: 0;
   position: fixed;
-  width:100%;
+  width: 100%;
   background-color: var(--layer-1-color);
 }
+
+.bottom-menu-settle, .bottom-menu-new {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  left: 0px;
+  right: 0px;
+  background-color: var(--layer-1-color);
+}
+
 
 .addExpense-selector {
   height: 100%;
@@ -802,8 +834,9 @@ input:focus {
 .padding1812 {
   padding: 18px 12px
 }
-.padding15{
-  padding: 12px;
+
+.padding15 {
+  padding: 15px;
 }
 
 .padding0014 {
@@ -945,6 +978,14 @@ input:focus {
 .mainIsLoading {
   padding-top: 2rem;
   font-size: 120%;
+}
+
+.invitationLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
 }
 
 .submit-button {
@@ -1449,9 +1490,9 @@ input:focus.inputErr {
 
 #settleUp-pill {
   font-weight: 400;
-  background-color:var(--label-color-6);
+  background-color: var(--label-color-6);
   display: flex;
-  color:white;
+  color: white;
   border-radius: 6px;
   padding: 3px 8px;
   gap: 3px;
@@ -1500,27 +1541,26 @@ input:focus.inputErr {
 
 }
 
-.encircle-item{
+.encircle-item {
   display: flex;
-  background:var(--layer-4-color);
-  width: 35px;
-  height: 35px;
+  background: rgb(58,58,58);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   text-align: center;
   justify-content: center;
   align-items: center;
 }
 
-.backIcon{
+.backIcon {
   position: relative;
   display: flex;
   border: none;
 }
 
-.frontIcon{
+.frontIcon {
   position: absolute;
   color: white;
-
   font-weight: 700;
   margin-left: 15px;
   margin-top: 8px;

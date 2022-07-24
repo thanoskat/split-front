@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer } from '.'
+import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewInvite } from '.'
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -7,15 +7,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
 
-
 const Main = () => {
-
   const api = useAxios()
   const dispatch = useDispatch()
   const params = useParams()
   const abortControllerRef = useRef(new AbortController())
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [mainIsLoading,] = useState(false)
+  const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const navigationType = useNavigationType()
@@ -52,6 +50,7 @@ const Main = () => {
   }, [params.groupid])
 
   const getGroup = async (id) => {
+    setMainIsLoading(true)
     try {
       const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
       dispatch(setSelectedGroup(res.data))
@@ -59,6 +58,7 @@ const Main = () => {
     catch (error) {
       console.log('/groups/getgroup', error)
     }
+    setMainIsLoading(false)
   }
 
   const openMenu = () => {
@@ -69,38 +69,39 @@ const Main = () => {
   return (
     <div style={{ height: '100%' }} className='flex column'>
       {mainIsLoading &&
-      <div className='mainIsLoading flex alignself-center'>
-        <IonIcon name='sync' className='spin' size={50} />
-      </div>}
+        <div className='mainIsLoading flex alignself-center'>
+          <IonIcon name='sync' className='spin' size={50} />
+        </div>}
       {!mainIsLoading &&
-      <div id='main'>
-        <div id='main-menu' className='flex column'>
-          {/* <UserBar /> */}
-          <LogoBar />
-          <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
-            <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => setSearchParams({menu: 'groups'})}>
-              <span>{displayedGroup?.title}</span>
-              <IonIcon name='caret-down' className='t2' />
-            </div>
-            <div className='flex row gap10 alignitems-center'>
-              <div onClick={() => setSearchParams({ menu: 'invitation' })}>
-                <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
+        <div id='main'>
+          <div id='main-menu' className='flex column'>
+            {/* <UserBar /> */}
+            <LogoBar />
+            <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
+              <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => setSearchParams({ menu: 'groups' })}>
+                <span>{displayedGroup?.title}</span>
+                <IonIcon name='caret-down' className='t2' />
+              </div>
+              <div className='flex row gap10 alignitems-center'>
+                <div onClick={() => setSearchParams({ menu: 'invite' })}>
+                  <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
+                </div>
+                <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
               </div>
               <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
               {/* <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => navigate(`#${(Math.random() + 1).toString(36).substring(7)}`, { replace: false })} /> */}
               <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={openMenu} />
             </div>
-          </div>
-          {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
+            {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
               <IonIcon name='add' className='floating-button-icon' />
               <div className='floating-button-text'>New</div>
             </div>
           </div> */}
-        </div>
-        {(displayedGroup !== null) && <Outlet />}
-        <NavBar />
-      </div>}
+          </div>
+          {(displayedGroup !== null) && <Outlet />}
+          <NavBar />
+        </div>}
 
       <CSSTransition
         onClick={() => setSearchParams({})} //this simply adds dark background
@@ -113,8 +114,9 @@ const Main = () => {
           height: '100%',
           width: '100%',
           backgroundColor:
-          'black',
-          opacity: '0.7'}}
+            'black',
+          opacity: '0.7'
+        }}
         />
       </CSSTransition>
 
@@ -160,16 +162,25 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <NewExpense setSearchParams={setSearchParams}/>
+        <NewExpense setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'invitation')}
+        in={(searchParams.get('menu') === 'friend')}
         timeout={300}
         classNames='leftslide'
         unmountOnExit
       >
         <Invitation setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'guest')}
+        timeout={300}
+        classNames='leftslide'
+        unmountOnExit
+      >
+        <NewGuest setSearchParams={setSearchParams} />
       </CSSTransition>
 
       <CSSTransition
@@ -197,6 +208,15 @@ const Main = () => {
         unmountOnExit
       >
         <New setSearchParams={setSearchParams} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={(searchParams.get('menu') === 'invite')}
+        timeout={300}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <NewInvite setSearchParams={setSearchParams} />
       </CSSTransition>
     </div>
   )

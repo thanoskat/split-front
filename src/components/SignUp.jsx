@@ -25,28 +25,28 @@ const SignUp = () => {
     try {
       await axios.post(
         `${process.env.REACT_APP_APIURL}/auth/request-sign-up`,
-        { email: signUpForm.email, nickname: signUpForm.nickname },
+        { email: signUpForm.email, nickname: signUpForm.nickname, guest: false },
         { withCredentials: true }
       )
       setLoading(false)
       navigate('/continue')
     }
     catch (error) {
-      if(error.response) {
-        if(Array.isArray(error.response.data)) {
+      if (error.response) {
+        if (Array.isArray(error.response.data)) {
           const tempErrorMessages = {}
           error.response.data.reverse().forEach(err => {
-            if(err.field === 'nickname') tempErrorMessages.nickname = err.message
-            if(err.field === 'email') tempErrorMessages.email = err.message
+            if (err.field === 'nickname') tempErrorMessages.nickname = err.message
+            if (err.field === 'email') tempErrorMessages.email = err.message
           })
           setSignUpErrorMessages(tempErrorMessages)
         }
-        if(error.response.data.message) {
+        if (error.response.data.message) {
           setSubmitErrorMessage(error.response.data.message)
         }
       }
       else {
-        if(error.message === 'Network Error') setSubmitErrorMessage('Unable to establish connection to server')
+        if (error.message === 'Network Error') setSubmitErrorMessage('Unable to establish connection to server')
         else setSubmitErrorMessage(error.message)
       }
       setLoading(false)
@@ -66,7 +66,7 @@ const SignUp = () => {
   }
 
   const changeEmail = (e) => {
-    setSignUpErrorMessages({...signUpErrorMessages, email: null})
+    setSignUpErrorMessages({ ...signUpErrorMessages, email: null })
     setSignUpForm({ ...signUpForm, email: e.target.value })
     setSubmitErrorMessage('')
   }
@@ -104,8 +104,8 @@ const SignUp = () => {
             {!loading && <button
               onClick={submitSignUp}
               className={`shadow login-button flex justcont-center relative active`}
-              // className={`shadow login-button flex justcont-center relative ${signUpForm.email && signUpForm.nickname !== '' ? 'active' : null}`}
-              // disabled={signUpForm.email && signUpForm.nickname === '' ? true : false}
+            // className={`shadow login-button flex justcont-center relative ${signUpForm.email && signUpForm.nickname !== '' ? 'active' : null}`}
+            // disabled={signUpForm.email && signUpForm.nickname === '' ? true : false}
             >
               Create account
             </button>}

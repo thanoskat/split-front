@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useParams,  useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
-
+import IonIcon from '@reacticons/ionicons'
 
 const VerifyInvitation = () => {
 
@@ -12,11 +12,12 @@ const VerifyInvitation = () => {
   const [askforReview, setAskforReview] = useState(false)
   const [data, setData] = useState()
   const sessionData = store.getState().authReducer.sessionData
-
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-   console.log(data)
+  //console.log(data)
   const verifyInvitation = async () => {
+    setLoading(true)
     try {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
@@ -38,13 +39,14 @@ const VerifyInvitation = () => {
     catch (error) {
       console.log('/invitation/verify', error.response?.status, error.response?.data)
     }
+    setLoading(false)
   }
 
   const acceptInvitation = async () => {
     try {
       abortControllerRef.current.abort()
       abortControllerRef.current = new AbortController()
-     await api.post('/invitation/accept', {
+      await api.post('/invitation/accept', {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
@@ -56,7 +58,7 @@ const VerifyInvitation = () => {
     }
     if (askforReview) {
       navigate('review', { replace: true })
-    }else navigate(`/${data.group._id}/expenses`)
+    } else navigate(`/${data.group._id}/expenses`)
   }
 
 
@@ -76,20 +78,26 @@ const VerifyInvitation = () => {
       <div className='padding3rem3rem'></div>
       <div className='loginBox flex column ' style={{ backgroundColor: "var(--layer-1-color)", borderColor: "var(--layer-1-color)", borderStyle: "solid" }}>
         <div className='whiteSpace-initial'>
-          <div className='flex column gap4 padding4'>
-            <div>{data?.inviterNickname} has invited you to join <strong>{data?.group.title}</strong></div>
-            <div className='flex column gap4 padding1812'>
-              <div onClick={acceptInvitation} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center">
-                Accept
+          {loading ? 
+          <div className='flex justcont-center' style={{fontSize:"20px"}}>
+          <IonIcon name='sync' className='spin' />
+          </div> :
+            <div className='flex column gap4 padding4'>
+              <div>{data?.inviterNickname} has invited you to join <strong>{data?.group.title}</strong></div>
+
+              <div className='flex column gap4 padding1812'>
+                <div onClick={acceptInvitation} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center">
+                  Accept
+                </div>
+                <Link
+                  style={{ backgroundColor: "var(--lightpink)" }}
+                  className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center"
+                  to={"/"}>
+                  Reject
+                </Link>
               </div>
-              <Link
-                style={{ backgroundColor: "var(--lightpink)" }}
-                className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center"
-                to={"/"}>
-                Reject
-              </Link>
             </div>
-          </div>
+          }
         </div>
       </div>
     </div>

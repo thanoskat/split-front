@@ -18,14 +18,15 @@ function RecordTransfer({ setSearchParams }) {
   const [newTransfer, setNewTransfer] = useState({
     amount: "",
     description: "",
-    transferTo: ""
+    transferTo: "",
+    transferFrom: sessionData.userId
   })
 
   console.log(newTransfer)
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       inputAmountRef.current.focus()
-    },300)
+    }, 300)
     abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
@@ -50,7 +51,7 @@ function RecordTransfer({ setSearchParams }) {
       const res = await api.post(`/expense/addtransfer`,
         {
           groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: sessionData.userId,
+          sender: newTransfer.transferFrom,
           receiver: newTransfer.transferTo,
           amount: newTransfer.amount,
           description: newTransfer.description
@@ -76,55 +77,121 @@ function RecordTransfer({ setSearchParams }) {
     }
   }
 
-  const filterUser = (selectedGroup?.members.filter(member =>member._id!==sessionData.userId))
+  const filterUser = () => {
+    if (newTransfer.transferFrom === sessionData.userId) {
+      return selectedGroup?.members.filter(member => member._id !== sessionData.userId)
+    } else
+      return selectedGroup?.members
+
+  }
+
+  const senderClicked = (spenderID) => {
+    if (newTransfer.transferFrom === spenderID) {
+      setNewTransfer({ ...newTransfer, transferFrom: "" })
+    }
+    else {
+      setNewTransfer({ ...newTransfer, transferFrom: spenderID })
+    }
+  }
+  const transferredFromClicked = () => {
+    //setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
+    if (newTransfer.transferFrom === sessionData.userId) {
+      setNewTransfer({ ...newTransfer, transferFrom: "" })
+    } else {
+      setNewTransfer(({ ...newTransfer, transferFrom: sessionData.userId }))
+    }
+  }
+  const TransferredBy = () => {
+    return (
+      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
+        <div
+          className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
+          onClick={transferredFromClicked}
+        >
+          <div style={{ color: '#b6bfec' }}>Transfer from</div>
+          <div
+            className='flex row alignitems-center gap8'
+            style={{ color: `${newTransfer.transferFrom === sessionData.userId ? 'white' : 'gray'}` }}
+          >
+            <div>You</div>
+            <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
+              <div className='tick-cube' >{newTransfer.transferFrom === sessionData.userId ? <i style={{ cursor: 'pointer', fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
+
+            </div>
+          </div>
+        </div>
+        {newTransfer.transferFrom !== sessionData.userId &&
+          <div className='flex row wrap' style={{ gap: '14px' }}>
+            {selectedGroup.members?.map(member => (
+              <div
+                className={`pill2 pointer shadow ${newTransfer.transferFrom === member._id ? 'filled' : ''}`}
+                onClick={() => senderClicked(member._id)}
+              >
+                {member.nickname}
+              </div>
+            ))}
+          </div>}
+        {/* {newExpenseErrorMessages.spender && <div className='mailmsg t6'>{newExpenseErrorMessages.spender}</div>} */}
+      </div>
+    )
+  }
 
   return (
-    <div className='addExpenseBox flex column fixed'>
-      <div className='addExpenseHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
-          <i className='arrow left icon t3'></i>
+    <div id='new-expense' className='flex column fixed'>
+      <div id='menu-header' className='flex row'>
+        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
+          <i className='arrow left icon'></i>
         </div>
         <div>
           Record Transfer
         </div>
-        <div className='separator-0' />
       </div>
 
       <div className='inputsAndOptions-container flex column gap10 padding1010'>
-        <div className='input-amount flex relative column justcont-evenly '>
-          <div className='currency-ticker-section '>
-            <i className='angle down icon'></i>
-            <div className='currency-ticker'>EUR </div>
-          </div>
+        <div className='flex relative column'>
+          <div className='input-amount flex relative column justcont-evenly '>
+            <div className='currency-ticker-section '>
+              <i className='angle down icon'></i>
+              <div className='currency-ticker'>EUR </div>
+            </div>
 
+            <input
+              id='styled-input'
+              className='text-align-right'
+              type='text'
+              inputmode='decimal'
+              placeholder='0'
+              value={newTransfer.amount}
+              onChange={(e) => updateAmount(e)}
+              ref={inputAmountRef}
+              spellCheck='false'
+            />
+
+          </div>
+          <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>
+        </div>
+        <div className='flex relative column'>
           <input
-            className='styledInput t3 text-align-right'
-            type='tel'
-            placeholder='0'
-            step="0.01"
-            value={newTransfer.amount}
-            onChange={(e) => updateAmount(e)}
-            ref={inputAmountRef}
+            id='styled-input'
+            placeholder='e.g. settled debt'
+            value={newTransfer.description}
+            onChange={e => setNewTransfer({ ...newTransfer, description: e.target.value })}
             spellCheck='false'
           />
+          <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>
         </div>
-
-        <input
-          className='styledInput t3'
-          placeholder='Description'
-          value={newTransfer.description}
-          onChange={e => setNewTransfer({ ...newTransfer, description: e.target.value })}
-          spellCheck='false'
-        />
-        To:
-        <div className='flex row wrap gap10'>
-          {filterUser.map(member => (
-            <div className={`pill pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
-              key={member._id} style={{ '--pill-color': `gray` }}
-              onClick={() => participantClicked(member._id)}
-            >
-              {member.nickname}
-            </div>))}
+        <TransferredBy />
+        <div div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
+          <span style={{color:"rgb(182, 191, 236)"}}>To:</span>
+          <div className='flex row wrap gap10'>
+            {filterUser()?.map(member => (
+              <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
+                key={member._id} style={{ '--pill-color': `gray` }}
+                onClick={() => participantClicked(member._id)}
+              >
+                {member.nickname}
+              </div>))}
+          </div>
         </div>
       </div>
 
