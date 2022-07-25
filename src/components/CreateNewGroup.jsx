@@ -85,17 +85,16 @@ export default function CreateNewGroup({ setSearchParams }) {
   return (
     <div className='createnewgroupBox flex column fixed ' style={{ left: '0px' }}>
       <div className='createnewgroupHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center' onClick={() => setSearchParams({})}>
+        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
           <i className='arrow left icon t3'></i>
         </div>
         <div>
           Create New Group
         </div>
-        <div className='separator-0' />
       </div>
       <div className='inputsAndOptions-container flex column gap10 padding1010'>
         <input
-          className='styledInput t3'
+          id='styled-input'
           placeholder='Group Name'
           value={groupName}
           onChange={e => setGroupName(e.target.value)}
@@ -104,7 +103,7 @@ export default function CreateNewGroup({ setSearchParams }) {
         />
         <div className='flex column' style={{ marginTop: '15px' }}>
           <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px', fontSize: '20px' }}>Select currency</div>
-          <div style={{ backgroundColor: '#121214', padding: '0.8rem' , borderRadius:'4px', width:'5rem', cursor:'pointer' }}>
+          <div style={{ backgroundColor: '#151517', padding: '0.8rem' , borderRadius:'8px', width:'5rem', cursor:'pointer' }}>
             <div className='currency-ticker-section' style={{ position: 'relative', justifyContent: 'flex-start', left: '0px' }}>
               <i className='angle down icon'></i>
               <div className='currency-ticker'>EUR </div>
@@ -123,13 +122,13 @@ export default function CreateNewGroup({ setSearchParams }) {
         ))}
 
         {!newMode &&
-        <div
-          style={{ color: 'var(--light-color)', borderColor: 'var(--label-color-6)', backgroundColor: 'var(--label-color-6)', alignSelf: 'auto' }}
-          className='pill t5 empty pointer shadow'
-          onClick={() => setNewMode(true)}
-        >
-          Create new label
-        </div>}
+          <div
+            style={{ color: 'var(--light-color)', borderColor: 'var(--label-color-6)', backgroundColor: 'var(--label-color-6)', alignSelf: 'auto' }}
+            className='pill t5 empty pointer shadow'
+            onClick={() => setNewMode(true)}
+          >
+            Create new label
+          </div>}
         {newMode &&
           <div className='flex row justcont-spacebetween'>
             <input
@@ -157,6 +156,6 @@ export default function CreateNewGroup({ setSearchParams }) {
           {loading ? <IonIcon name='sync' className='t3 spin' /> : 'Create Group'}
         </button>
       </div>
-    </div>
+      </div>
   )
 }

@@ -21,6 +21,8 @@ function RecordTransfer({ setSearchParams }) {
     transferTo: "",
     transferFrom: sessionData.userId
   })
+  const [submitErrorMessage, setSubmitErrorMessage] = useState('')
+  const [newTransferErrorMessages, setNewTransferErrorMessages] = useState({})
 
   console.log(newTransfer)
   useEffect(() => {
@@ -44,8 +46,10 @@ function RecordTransfer({ setSearchParams }) {
 
   const recordTransfer = async () => {
 
-    if (newTransfer.transferTo === "") return null; //do not proceed to recording tx if no user has been selected
-    if (newTransfer.amount === "") return null; //do not proceed to recording tx if no amount has been given
+    //if (newTransfer.transferTo === "") return null; //do not proceed to recording tx if no user has been selected
+    //if (newTransfer.amount === "") return null; //do not proceed to recording tx if no amount has been given
+    setNewTransferErrorMessages({})
+    setSubmitErrorMessage('')
     setLoading(true)
     try {
       const res = await api.post(`/expense/addtransfer`,
@@ -57,15 +61,34 @@ function RecordTransfer({ setSearchParams }) {
           description: newTransfer.description
         }, { signal: abortControllerRef.current.signal }
       )
-      setLoading(false)
-      setNewTransfer({ ...newTransfer, amount: "", description: "" })
-      dispatch(setSelectedGroup(res.data))
-      console.log(res)
+      if (res.data.validationArray) {
+        const tempErrorMessages = {}
+        res.data.validationArray.reverse().forEach(err => {
+          tempErrorMessages[err.field] = err.message
+        })
+        setNewTransferErrorMessages(tempErrorMessages)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        setNewTransfer({ ...newTransfer, amount: "", description: "" })
+        setSearchParams({})
+        dispatch(setSelectedGroup(res.data))
+        console.log(res)
+      }
+
     }
     catch (error) {
-      console.log(error)
+      if (error.response) {
+        if (error.response.data.message) {
+          setSubmitErrorMessage(error.response.data.message)
+        }
+      }
+      else {
+        if (error.message === 'Network Error') setSubmitErrorMessage('Unable to establish connection to server')
+        else setSubmitErrorMessage(error.message)
+      }
+      setLoading(false)
     }
-    setSearchParams({})
   }
 
   const participantClicked = (memberClickedId) => {
@@ -77,13 +100,13 @@ function RecordTransfer({ setSearchParams }) {
     }
   }
 
-  const filterUser = () => {
-    if (newTransfer.transferFrom === sessionData.userId) {
-      return selectedGroup?.members.filter(member => member._id !== sessionData.userId)
-    } else
-      return selectedGroup?.members
+  // const filterUser = () => {
+  //   if (newTransfer.transferFrom === sessionData.userId) {
+  //     return selectedGroup?.members.filter(member => member._id !== sessionData.userId)
+  //   } else
+  //     return selectedGroup?.members
 
-  }
+  // }
 
   const senderClicked = (spenderID) => {
     if (newTransfer.transferFrom === spenderID) {
@@ -131,7 +154,7 @@ function RecordTransfer({ setSearchParams }) {
               </div>
             ))}
           </div>}
-        {/* {newExpenseErrorMessages.spender && <div className='mailmsg t6'>{newExpenseErrorMessages.spender}</div>} */}
+        {newTransferErrorMessages.sender && <div className='mailmsg t6'>{newTransferErrorMessages.sender}</div>}
       </div>
     )
   }
@@ -143,7 +166,7 @@ function RecordTransfer({ setSearchParams }) {
           <i className='arrow left icon'></i>
         </div>
         <div>
-          Record Transfer
+          New Transfer
         </div>
       </div>
 
@@ -168,7 +191,8 @@ function RecordTransfer({ setSearchParams }) {
             />
 
           </div>
-          <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>
+          {!newTransferErrorMessages.amount && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>}
+        {newTransferErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newTransferErrorMessages.amount}</div>}
         </div>
         <div className='flex relative column'>
           <input
@@ -182,9 +206,9 @@ function RecordTransfer({ setSearchParams }) {
         </div>
         <TransferredBy />
         <div div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
-          <span style={{color:"rgb(182, 191, 236)"}}>To:</span>
+          <span style={{ color: "rgb(182, 191, 236)" }}>To:</span>
           <div className='flex row wrap gap10'>
-            {filterUser()?.map(member => (
+            {selectedGroup?.members.map(member => (
               <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
                 key={member._id} style={{ '--pill-color': `gray` }}
                 onClick={() => participantClicked(member._id)}
@@ -192,21 +216,20 @@ function RecordTransfer({ setSearchParams }) {
                 {member.nickname}
               </div>))}
           </div>
+          {newTransferErrorMessages.receiver && <div className='mailmsg t6'>{newTransferErrorMessages.receiver}</div>}
         </div>
       </div>
 
-      <div className='submit-button-container flex padding1010'>
-        <button
-          style={{ padding: "0.8rem" }}
-          className={`shadow submit-button ${Number(newTransfer.amount) !== 0 && newTransfer.transferTo !== null ? "active"
-            :
-            null} h-flex justcont-spacearound `}
+      <div style={{ marginTop: 'auto' }}>
+        <div
+          id='new-expense-submit'
+          className='pointer shadow'
           onClick={recordTransfer}
-          disabled={newTransfer.amount &&
-            Number(newTransfer.amount) !== 0
-            ? false : true}>
-          {loading ? <IonIcon name='sync' className='t3 spin' /> : "Submit"}
-        </button>
+        >
+          {loading && <IonIcon name='sync' className='spin' />}
+          {!loading && <div>Submit</div>}
+        </div>
+        {submitErrorMessage && <div className='mailmsg t6 alignself-center'>{submitErrorMessage}</div>}
       </div>
 
     </div>

@@ -24,7 +24,7 @@ export default function New({ setSearchParams }) {
             {/* <i className='file alternate outline icon' style={{ color: "var(--light-color)",fontSize:"15px", fontWeight:"lighter"}}/> */}
           </div>
           <div className='pointer' style={{ color: "var(--light-color)" }}>
-            New Expense
+            Expense
           </div>
         </div>
 
@@ -34,7 +34,7 @@ export default function New({ setSearchParams }) {
             {/* <i className='exchange icon' style={{ color: "var(--light-color)",fontSize:"15px"}}/> */}
           </div>
           <div className='pointer' style={{ color: "var(--light-color)" }}>
-            Record Transfer
+            Transfer
           </div>
         </div>
        

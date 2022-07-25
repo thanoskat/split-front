@@ -154,6 +154,18 @@ body, html {
 /* #expenses::-webkit-scrollbar {
   overflow: hidden;
 } */
+#new-group{
+  box-sizing: border-box;
+  padding: 14px;
+  gap: 14px;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: #26272b;
+  margin:"0px";
+  /* background-color: #1b1b1e; */
+}
 
 #new-expense {
   box-sizing: border-box;
@@ -166,6 +178,8 @@ body, html {
   background-color: #26272b;
   /* background-color: #1b1b1e; */
 }
+
+
 
 #new-expense-submit {
   padding: 10px;
@@ -973,6 +987,7 @@ input:focus {
 .submit-button-container-review-group {
   width: 96%;
   bottom: 1rem;
+
 }
 
 .mainIsLoading {
@@ -990,30 +1005,30 @@ input:focus {
 
 .submit-button {
   position: relative;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
-  padding: 0.5rem;
+  padding: 10px;
   border: none;
   width: 100%;
   cursor: pointer;
   color: var(--text);
   background-color: #3a3b3c;
-  font-size: 16px;
+  font-size: 18px;
 
 }
 
 .submit-button.active {
   position: relative;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: var(--sliding-menu-button-size);
   user-select: none;
-  padding: 0.5rem;
+  padding: 10px;
   width: 100%;
   cursor: pointer;
   color: var(--text);
   background-color: #f0f0f0;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .submit-button:hover {
@@ -1107,11 +1122,11 @@ input:focus {
   height: 100%;
   width: 100%;
   overflow: auto;
-  background-color: var(--layer-1-color);
+  background-color: #26272b;
 }
 
 .addExpenseHeader, .createnewgroupHeader {
-  background-color: var(--layer-1-color);
+  background-color: #26272b;
   position: sticky;
   top: 0;
   z-index: 2;

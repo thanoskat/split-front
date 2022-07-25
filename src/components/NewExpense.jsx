@@ -208,7 +208,7 @@ const NewExpense = ({ setSearchParams }) => {
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={allClick}
         >
-          <div style={{ color: '#b6bfec' }}>Split among</div>
+          <div style={{ color: '#b6bfec' }}>Members</div>
           <div
             className='flex row alignitems-center gap8'
             style={{ color: `${allMembers() ? 'white' : 'gray'}` }}
@@ -269,6 +269,7 @@ const NewExpense = ({ setSearchParams }) => {
           New expense
         </div>
       </div>
+      
       <div className='flex relative column'>
         <div style={{ fontSize: '18px', position: 'absolute', left: '14px', transform: 'translate(0, 50%)' }}>EUR</div>
         <input
@@ -314,7 +315,7 @@ const NewExpense = ({ setSearchParams }) => {
             className='flex row alignitems-center gap8'
             style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
           >
-            <div>Equal</div>
+            <div>Equally</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
               <div className='tick-cube'> {newExpense.splitEqually ? <i style={{ fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
             </div>
