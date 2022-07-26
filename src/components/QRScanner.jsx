@@ -1,16 +1,20 @@
 import QrScanner from 'qr-scanner'
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function QRScanner() {
-
+  const navigate = useNavigate()
   const [data, setData] = useState('No result')
   const videoRef = useRef(null)
   useEffect(() => {
-    QrScanner.listCameras(true)
+    // QrScanner.listCameras(true)
     const qrScanner = new QrScanner(
       videoRef.current,
-      result => setData(result),
-      { returnDetailedScanResult: true }
+      result => navigate(result),
+      {
+        highlightScanRegion: true,
+        highlightCodeOutline: true
+      }
     )
     qrScanner.start()
 
