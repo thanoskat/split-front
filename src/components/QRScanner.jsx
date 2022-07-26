@@ -9,7 +9,9 @@ export default function QRScanner() {
 
   useEffect(() => {
     const handleResult = (result) => {
-      window.location.replace(result.data)
+      if(/https:\/\/splita\.xyz\/i\/[a-z0-9]{8}$/.test(result.data)) {
+        window.location.replace(result.data)
+      }
     }
 
     const qrScanner = new QrScanner(
@@ -37,7 +39,7 @@ export default function QRScanner() {
   return (
     <div
       className='bottom-menu top-radius flex column'
-      style={{ zIndex: '2', gap: '14px', padding: '14px' }}
+      style={{ zIndex: '2', gap: '14px', padding: '14px', maxHeight: 'calc(80%)' }}
     >
       {loading &&
       <div className='flex row alignitems-center'>
