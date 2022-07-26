@@ -9,7 +9,7 @@ export default function QRScanner() {
 
   useEffect(() => {
     const handleResult = (result) => {
-      setData(result.data)
+      window.location.replace(result.data)
       // window.location.replace(result.data)
       // navigate(result.data)
     }
