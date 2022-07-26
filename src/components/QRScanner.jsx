@@ -6,18 +6,25 @@ export default function QRScanner() {
   const navigate = useNavigate()
   const [data, setData] = useState('No result')
   const videoRef = useRef(null)
+
   useEffect(() => {
-    // QrScanner.listCameras(true)
+    const handleResult = (result) => {
+      setData(result)
+      navigate(result)
+    }
+
     const qrScanner = new QrScanner(
       videoRef.current,
-      result => navigate(result),
+      result => handleResult(result),
       {
         highlightScanRegion: true,
         highlightCodeOutline: true
       }
     )
     qrScanner.start()
-
+    return(
+      qrScanner.stop()
+    )
   }, [])
 
 
