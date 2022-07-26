@@ -23,9 +23,9 @@ export default function QRScanner() {
       }
     )
     qrScanner.start()
-    return(
+    return () => {
       qrScanner.destroy()
-    )
+    }
   }, [])
 
 
