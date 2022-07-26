@@ -29,7 +29,7 @@ function App() {
           <Route path='i/:invitationCode' element={<VerifyInvitation />} />
           <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
           <Route path=':groupid' element={<Main />}>
-            <Route index element={<Expenses />} />
+            {/* <Route index element={<Expenses />} /> */}
             <Route path='expenses' element={<Expenses />} />
             <Route path='members' element={<TabMembers />} />
           </Route>

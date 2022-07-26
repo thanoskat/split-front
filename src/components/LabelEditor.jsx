@@ -92,7 +92,7 @@ const LabelItem = ({ labelId }) => {
 
   if(!label) return(<></>)
   return(
-    <div className='flex row justcont-spacebetween alignitems-center' style={{height: 'fit-content'}}>
+    <div className='flex row justcont-spacebetween alignitems-center' style={{ height: 'fit-content', padding: '0px 2px' }}>
       <span className='pill2 hidden shadow' ref={dummySpan}>{content}</span>
       {!(mode === 'edit') &&
       <div className={`pill2 shadow ${mode === 'delete' ? 'shake' : ''}`}
@@ -103,7 +103,7 @@ const LabelItem = ({ labelId }) => {
         type='text'
         onKeyPress={keyPress}
         value={content}
-        className='pill2 filled shadow overflow-hidden'
+        className='pill2 shadow overflow-hidden'
         style={{
           width,
           color: `var(--${label.color})`,
@@ -240,9 +240,9 @@ const LabelEditor = () => {
   }
 
   return (
-    <div className='bottom-menu top-radius overflow-auto' style={{ zIndex: '2', maxHeight: '80vh' }}>
-      <div className='flex row t1 justcont-center padding4'>Labels</div>
-      <div className='flex column overflow-hidden' style={{ gap: '14px', padding: '14px 14px' }}>
+    <div className='bottom-menu top-radius' style={{ zIndex: '2', height: '70vh' }}>
+      <div className='flex column' style={{ gap: '14px', height: '100%', padding: '14px', boxSizing: 'border-box' }}>
+        <div className='flex row t1 justcont-center padding4'>Labels</div>
         <div
           style={{ alignSelf: 'center', color: 'var(--light-color)', borderColor: 'var(--label-color-6)', backgroundColor: 'var(--label-color-6)', alignSelf: 'auto' }}
           className='pill t5 empty pointer shadow'
@@ -250,9 +250,6 @@ const LabelEditor = () => {
         >
           Create new label
         </div>
-        {group?.groupLabels.map(label => (
-          <LabelItem key={label._id} labelId={label._id}/>
-        ))}
         {newMode &&
         <div className='flex row justcont-spacebetween'>
           <input
@@ -263,7 +260,7 @@ const LabelEditor = () => {
             className='pill2 empty editable t5 shadow'
             style={{ width: '100px', color: `white` }}
             autoFocus
-            onChange={(e) => setNewLabel({...newLabel, name: e.target.value})}
+            onChange={(e) => setNewLabel({ ...newLabel, name: e.target.value })}
           />
           <div className='flex row gap10 pointer'>
             <div className='pill2 t5' onClick={cancelNewMode}>Cancel</div>
@@ -272,8 +269,12 @@ const LabelEditor = () => {
               {loading && <IonIcon name='sync' className='t5 spin'/>}
             </div>
           </div>
+        </div>}
+        <div className='flex column overflow-auto' style={{ gap: '14px' }}>
+          {group?.groupLabels.map(label => (
+            <LabelItem key={label._id} labelId={label._id}/>
+          )).reverse()}
         </div>
-        }
       </div>
     </div>
   )

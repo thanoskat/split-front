@@ -6,15 +6,15 @@ import { setSelectedGroup } from '../redux/mainSlice'
 import dayjs from 'dayjs'
 
 
-function NewGuest({ setSearchParams }) {
+function NewGuest({ openMenu }) {
 
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   //console.log(selectedGroup)
   const [loading, setLoading] = useState(false)
   const [guestInfo, setGuestInfo] = useState({
     participateInAll: true,
-    nickname: "",
-    email: "",
+    nickname: '',
+    email: '',
     allExpenses: selectedGroup?.expenses.filter(expense => expense.splitEqually === true),
     filteredExpenses: []
   })
@@ -50,19 +50,19 @@ function NewGuest({ setSearchParams }) {
     setSubmitErrorMessage('')
     setLoading(true)
     try {
-      const res = await api.post("/expense/addguest",
+      const res = await api.post('/expense/addguest',
         {
           email: guestInfo.email,
           nickname: guestInfo.nickname,
           guest: true,
           groupID: selectedGroup._id,
           toBeupdatedExpenses: toBeupdatedExpenses
-        }, 
+        },
         { signal: abortControllerRef.current.signal }
       )
       console.log(res)
       setLoading(false)
-      setSearchParams({})
+      openMenu(null)
       dispatch(setSelectedGroup(res.data))
     }
     catch (error) {
@@ -113,7 +113,7 @@ function NewGuest({ setSearchParams }) {
   return (
     <div id='new-expense' className='flex column fixed'>
       <div id='menu-header' className='flex row'>
-        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
+        <div className='cancelIcon alignself-center pointer' onClick={() => openMenu(null)}>
           <i className='arrow left icon'></i>
         </div>
         <div>
@@ -145,23 +145,23 @@ function NewGuest({ setSearchParams }) {
           {!signUpErrorMessages.email && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's email</div>}
           {signUpErrorMessages.email && <div className='mailmsg t6'>{signUpErrorMessages.email}</div>}
         </div>
-        <div className="relative padding1010" style={{ borderRadius: "4px", border: "none", backgroundColor: " rgb(21, 21, 23)", fontSize: "16px", fontWeight: "700" }}>
-          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
-            <div className='alignself-center' style={{color:"#b6bfec"}}>Add guest in all shared expenses</div>
-            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
+        <div className='relative padding1010' style={{ borderRadius: '4px', border: 'none', backgroundColor: ' rgb(21, 21, 23)', fontSize: '16px', fontWeight: '700' }}>
+          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: 'none' }}>
+            <div className='alignself-center' style={{color:'#b6bfec'}}>Add guest in all shared expenses</div>
+            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: 'pointer', fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
           </div>
         </div>
         {!guestInfo.participateInAll ?
           <div className='overflow-auto'>
-            <div className='loginBox flex column ' style={{ backgroundColor: "rgb(21, 21, 23)", borderColor: "rgb(21, 21, 23)", borderStyle: "solid" }}>
+            <div className='loginBox flex column ' style={{ backgroundColor: 'rgb(21, 21, 23)', borderColor: 'rgb(21, 21, 23)', borderStyle: 'solid' }}>
               <div className='whiteSpace-initial'>
                 <div className='flex column gap4 padding4 whiteSpace-initial'>
-                  <div style={{color:"white"}}>Review and choose expenses your guest should participate in</div>
+                  <div style={{color:'white'}}>Review and choose expenses your guest should participate in</div>
                 </div>
               </div>
             </div>
 
-            <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: "1rem", height: "500px" }}>
+            <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: '1rem', height: '500px' }}>
               {guestInfo?.allExpenses.map(expense => (
                 <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${guestInfo.filteredExpenses?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmptyforMenu'}`} onClick={() => handleClick(expense)}>
                   <div className='flex row justcont-spacebetween alignitems-center'>
@@ -186,11 +186,11 @@ function NewGuest({ setSearchParams }) {
                   </div>
                 </div>
               )).reverse()}
-              <div style={{ marginBottom: "80px" }}>
+              <div style={{ marginBottom: '80px' }}>
               </div>
             </div>
 
-          </div> : ""}
+          </div> : ''}
       </div>
 
       <div style={{ marginTop: 'auto' }}>

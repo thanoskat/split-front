@@ -10,25 +10,23 @@ import { SettleUp } from '.'
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  //console.log(selectedGroup)
   const [menuParams, setMenuParams] = useState({
     open: false,
     amount: null,
-    receiverName: "",
-    receiverId: "",
-    senderName: "",
-    senderId: ""
+    receiverName: '',
+    receiverId: '',
+    senderName: '',
+    senderId: ''
   })
 
-  console.log(menuParams)
   Array.prototype.move = function (from, to) {
-    this.splice(to, 0, this.splice(from, 1)[0]);
-  };
+    this.splice(to, 0, this.splice(from, 1)[0])
+  }
 
   const memberInfoConstructor = (selectedGroup) => {
     let members = []
     selectedGroup?.members.forEach((member) => {
-      let pendingTotalAmount = currency(0);
+      let pendingTotalAmount = currency(0)
       let total = currency(0)
       let toFrom = []
       let isSenderReceiverSettled
@@ -62,26 +60,23 @@ const TabMembers = () => {
     return (members)
   }
 
-
   const memberInfo = memberInfoConstructor(selectedGroup)
   const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
   const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
-  //console.log(membersNoUser)
 
   const Tree = ({ toFrom, isSenderReceiverSettled, id, isGuest, name }) => {
 
     return (
-      <div className='tree' style={{ bottom: "10px", margin: "0 0 -15px 0" }}>
+      <div className='tree' style={{ bottom: '10px', margin: '0 0 -15px 0' }}>
         <ul>
           {toFrom?.map(member => (
             <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
                 <div className='flex row justcont-spacebetween'>
                   <div className='flex row alignitems-center whiteSpace-initial'>
-                    <div style={{ color: "var(--pink)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                    <div style={{ color: 'var(--pink)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                     </div> to &nbsp;
                     {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
-
                   </div>
                   &nbsp;
                   {id === sessionData.userId || isGuest ?  //only show buttons in You section
@@ -94,11 +89,11 @@ const TabMembers = () => {
                         senderId: id,
                         senderName: name
 
-                      })}>Settle Up</div> : ""}
+                      })}>Settle Up</div> : ''}
                 </div>
                 : isSenderReceiverSettled === 2 ?
                   <div className='flex row alignitems-center '>
-                    <div style={{ color: "var(--green)" }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                    <div style={{ color: 'var(--green)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                     </div>
                     <div>
                       from
@@ -115,15 +110,15 @@ const TabMembers = () => {
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
     //console.log(name, id)
     return (
-      <div id='expense' className={`flex column ${isGuest ? "guestShadow marginLeft4px marginRight4px" : ""}`}>
-        <div className="nameIDandTotal flex row justcont-spacebetween">
-          <div className="name-ID flex row gap8 alignitems-center ">
-            <div className="name medium t25 white">
-              {id === sessionData.userId ? "You" : isGuest ?
+      <div id='expense' className={`flex column`}>
+        <div className='nameIDandTotal flex row justcont-spacebetween'>
+          <div className='name-ID flex row gap8 alignitems-center '>
+            <div className='name medium t25 white'>
+              {id === sessionData.userId ? 'You' : isGuest ?
                 <div className='flex row alignitems-center'>
                   {name}&nbsp;
-                  <div style={{ fontSize: "13px", color: "var(--label-color-6)" }}>
-                    *guest
+                  <div style={{ fontSize: '13px', color: 'var(--label-color-6)' }}>
+                    Guest
                   </div>
                 </div> :
                 name}
@@ -133,23 +128,23 @@ const TabMembers = () => {
             Total spent
           </div>
         </div>
-        <div className=" flex row justcont-spacebetween alignitems-center">
+        <div className=' flex row justcont-spacebetween alignitems-center'>
           {isSenderReceiverSettled === 1 ?
-            <div className=" flex row alignitems-center">
-              {id === sessionData.userId ? "owe" : "owes"}<div style={{ color: "var(--pink)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
+            <div className=' flex row alignitems-center'>
+              {id === sessionData.userId ? 'owe' : 'owes'}<div style={{ color: 'var(--pink)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
               {toFrom.length === 1 ? <div>to {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
             </div> : isSenderReceiverSettled === 2 ?
-              <div className="flex row alignitems-center" >
-                {id === sessionData.userId ? "are owed" : "is owed"}<div style={{ color: "var(--green)" }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
+              <div className='flex row alignitems-center' >
+                {id === sessionData.userId ? 'are owed' : 'is owed'}<div style={{ color: 'var(--green)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
                 {toFrom.length === 1 ? <div>from {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
-              <div className="flex row alignitems-center">
+              <div className='flex row alignitems-center'>
                 <div>
-                  {id === sessionData.userId ? "are" : "is"} settled
+                  {id === sessionData.userId ? 'are' : 'is'} settled
                 </div>
-                <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: "22px", fontWeight: "500" }} />
+                <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: '22px', fontWeight: '500' }} />
               </div>}
-          <div className=" medium t25 white">
+          <div className=' medium t25 white'>
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
@@ -165,7 +160,7 @@ const TabMembers = () => {
                 senderName: name
               })}>Settle Up</div>
           </div>
-          : ""}
+          : ''}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
           <Tree
             id={id}
@@ -206,7 +201,7 @@ const TabMembers = () => {
               isGuest={member.isGuest} />
           </div>
         ))}
-        <div style={{ marginBottom: "80px" }}>
+        <div style={{ marginBottom: '80px' }}>
         </div>
       </div>
       <Outlet />
@@ -220,8 +215,8 @@ const TabMembers = () => {
           position: 'fixed',
           height: '100%',
           width: '100%',
-          top: "0px",
-          right: "0px",
+          top: '0px',
+          right: '0px',
           backgroundColor:
             'black',
           opacity: '0.7'
@@ -245,7 +240,7 @@ const TabMembers = () => {
         />
       </CSSTransition>
     </div>
-  );
+  )
 }
 
-export default TabMembers;
+export default TabMembers

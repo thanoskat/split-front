@@ -7,7 +7,7 @@ import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
 import store from '../redux/store'
 
-const NewExpense = ({ setSearchParams }) => {
+const NewExpense = ({ close }) => {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
@@ -57,7 +57,7 @@ const NewExpense = ({ setSearchParams }) => {
         else {
           dispatch(setSelectedGroup(res.data))
           setSubmitLoading(false)
-          setSearchParams({})
+          close()
         }
       }
       catch (error) {
@@ -83,7 +83,6 @@ const NewExpense = ({ setSearchParams }) => {
       setNewExpense({ ...newExpense, label: labelClickedId })
     }
   }
-
 
   const removedContributionAmountErrors = () => {
     const contributionAmountErrorMessages = {}
@@ -136,15 +135,19 @@ const NewExpense = ({ setSearchParams }) => {
 
   const LabelSection = () => {
     return (
-      <div className='flex row wrap' style={{ gap: '14px' }}>
-        {selectedGroup?.groupLabels.map(label => (
-          <div className={`pill2 pointer shadow`}
-            key={label._id} style={{ color: `${newExpense.label === label._id ? 'var(--' + label.color + ')' : '#606060'}` }}
-            onClick={() => labelClicked(label._id)}
-          >
-            {label.name}
-          </div>))}
-      </div>)
+      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
+        <div style={{ color: '#b6bfec' }}>Label</div>
+        <div className='flex row wrap' style={{ gap: '14px', padding: '0px 0px 6px 0px' }}>
+          {selectedGroup?.groupLabels.map(label => (
+            <div className={`pill2 pointer shadow`}
+              key={label._id} style={{ color: `${newExpense.label === label._id ? 'var(--' + label.color + ')' : '#606060'}` }}
+              onClick={() => labelClicked(label._id)}
+            >
+              {label.name}
+            </div>))}
+        </div>
+      </div>
+    )
   }
 
   const paidByClicked = () => {
@@ -164,7 +167,6 @@ const NewExpense = ({ setSearchParams }) => {
       setNewExpense({ ...newExpense, spender: spenderID })
     }
   }
-
 
   const PaidBy = () => {
     return (
@@ -236,8 +238,6 @@ const NewExpense = ({ setSearchParams }) => {
     )
   }
 
-
-
   const changeAmount = (e) => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, amount: null })
     setNewExpense({ ...newExpense, amount: e.target.value })
@@ -262,103 +262,102 @@ const NewExpense = ({ setSearchParams }) => {
   return (
     <div id='new-expense' className='flex column fixed'>
       <div id='menu-header' className='flex row'>
-        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
+        <div className='cancelIcon alignself-center pointer' onClick={close}>
           <i className='arrow left icon'></i>
         </div>
         <div>
           New expense
         </div>
       </div>
-      <div className='flex relative column'>
-        <div style={{ fontSize: '18px', position: 'absolute', left: '14px', transform: 'translate(0, 50%)' }}>EUR</div>
-        <input
-          id='styled-input'
-          className='text-align-right'
-          type='text'
-          inputMode='decimal'
-          placeholder='0'
-          value={newExpense.amount}
-          onChange={e => changeAmount(e)}
-          autoFocus={true}
-          spellCheck='false'
-          autoComplete='off'
-        />
-        {!newExpenseErrorMessages.amount && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>}
-        {newExpenseErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.amount}</div>}
-      </div>
-      <div className='flex relative column'>
-        <input
-          id='styled-input'
-          className=''
-          type='text'
-          placeholder='e.g. Air tickets'
-          value={newExpense.description}
-          onChange={e => changeDescription(e)}
-          spellCheck='false'
-          autoComplete='off'
-        />
-        {!newExpenseErrorMessages.description && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>}
-        {newExpenseErrorMessages.description && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.description}</div>}
-      </div>
-      {selectedGroup?.groupLabels.length !== 0 && <LabelSection />}
-      <PaidBy />
-      <MemberSection />
-      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', gap: '28px', backgroundColor: '#151517' }}>
-
-        <div
-          className='flex row justcont-spacebetween alignitems-center pointer'
-          onClick={equalClick}
-        >
-          <div style={{ color: '#b6bfec' }}>Split</div>
+      <div className='flex column overflow-auto' style={{ gap: '14px' }}>
+        <div className='flex relative column'>
+          <div style={{ fontSize: '18px', position: 'absolute', left: '14px', transform: 'translate(0, 50%)' }}>EUR</div>
+          <input
+            id='styled-input'
+            className='text-align-right'
+            type='text'
+            inputMode='decimal'
+            placeholder='0'
+            value={newExpense.amount}
+            onChange={e => changeAmount(e)}
+            spellCheck='false'
+            autoComplete='off'
+          />
+          {!newExpenseErrorMessages.amount && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>}
+          {newExpenseErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.amount}</div>}
+        </div>
+        <div className='flex relative column'>
+          <input
+            id='styled-input'
+            className=''
+            type='text'
+            placeholder='e.g. Air tickets'
+            value={newExpense.description}
+            onChange={e => changeDescription(e)}
+            spellCheck='false'
+            autoComplete='off'
+          />
+          {!newExpenseErrorMessages.description && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>}
+          {newExpenseErrorMessages.description && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.description}</div>}
+        </div>
+        {selectedGroup?.groupLabels.length !== 0 && <LabelSection />}
+        <PaidBy />
+        <MemberSection />
+        <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', gap: '28px', backgroundColor: '#151517' }}>
           <div
-            className='flex row alignitems-center gap8'
-            style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
+            className='flex row justcont-spacebetween alignitems-center pointer'
+            onClick={equalClick}
           >
-            <div>Equal</div>
-            <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
-              <div className='tick-cube'> {newExpense.splitEqually ? <i style={{ fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
+            <div style={{ color: '#b6bfec' }}>Split</div>
+            <div
+              className='flex row alignitems-center gap8'
+              style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
+            >
+              <div>Equal</div>
+              <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
+                <div className='tick-cube'> {newExpense.splitEqually ? <i style={{ fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
-        <div className='flex column' style={{ gap: '14px' }}>
-          {newExpense.participants?.map((participant, index) => (
-            <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
-              <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
+          {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
+          <div className='flex column' style={{ gap: '14px' }}>
+            {newExpense.participants?.map((participant, index) => (
+              <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                  {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
+                </div>
+                <input
+                  type='text'
+                  inputMode='decimal'
+                  className='text-align-right'
+                  placeholder='0'
+                  style={{
+                    borderRadius: '8px',
+                    padding: '6px',
+                    fontSize: '16px',
+                    flex: '1 1 auto',
+                    width: '100%',
+                    borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                    borderWidth: '1px',
+                    borderStyle: 'solid'
+                    }}
+                    id='styled-input'
+                    onChange={e => changeContribution(e, participant, index)}
+                    value={participant.contributionAmount}
+                    autoComplete='off'
+                  />
+                </div>
+              ))}
+              <div style={{ fontSize: '12px', alignSelf: 'center' }}>
+                REMAINING:&nbsp;
+                {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.contributionAmount).value), 0)).value}
               </div>
-              <input
-                type='text'
-                inputMode='decimal'
-                className='text-align-right'
-                placeholder='0'
-                style={{
-                  borderRadius: '8px',
-                  padding: '6px',
-                  fontSize: '16px',
-                  flex: '1 1 auto',
-                  width: '100%',
-                  borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
-                  borderWidth: '1px',
-                  borderStyle: 'solid'
-                  }}
-                  id='styled-input'
-                  onChange={e => changeContribution(e, participant, index)}
-                  value={participant.contributionAmount}
-                  autoComplete='off'
-                />
-              </div>
-            ))}
-            <div style={{ fontSize: '12px', alignSelf: 'center' }}>
-              REMAINING:&nbsp;
-              {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.contributionAmount).value), 0)).value}
+              {newExpenseErrorMessages.splitEqually && <div className='mailmsg t6'>{newExpenseErrorMessages.splitEqually}</div>}
             </div>
-            {newExpenseErrorMessages.splitEqually && <div className='mailmsg t6'>{newExpenseErrorMessages.splitEqually}</div>}
-          </div>}
-
+          }
+        </div>
       </div>
-
       <div style={{ marginTop: 'auto' }}>
         <div
           id='new-expense-submit'
