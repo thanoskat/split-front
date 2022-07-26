@@ -10,13 +10,13 @@ export default function QRScanner() {
   useEffect(() => {
     const handleResult = (result) => {
       setData(result.data)
-      window.location.replace(result.data)
+      // window.location.replace(result.data)
       // navigate(result.data)
     }
 
     const qrScanner = new QrScanner(
       videoRef.current,
-      result => handleResult(result.data),
+      result => handleResult(result),
       {
         highlightScanRegion: true,
         highlightCodeOutline: true,
@@ -37,7 +37,12 @@ export default function QRScanner() {
     >
       <video ref={videoRef}>
       </video>
-      {data}
+      <div className='flex row justcont-spacebetween'>
+        {data}
+        <button onClick={() => window.location.replace(data)}>
+          GO
+        </button>
+      </div>
     </div>
   )
 
