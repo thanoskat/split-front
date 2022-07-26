@@ -8,11 +8,6 @@ export default function QRScanner() {
   const videoRef = useRef(null)
 
   useEffect(() => {
-    const handleResult = (result) => {
-      if(/https:\/\/splita\.xyz\/i\/[a-z0-9]{8}$/.test(result.data)) {
-        window.location.replace(result.data)
-      }
-    }
 
     const qrScanner = new QrScanner(
       videoRef.current,
@@ -23,6 +18,15 @@ export default function QRScanner() {
         returnDetailedScanResult: true
       }
     )
+
+    const handleResult = (result) => {
+      if(/https:\/\/splita\.xyz\/i\/[a-z0-9]{8}$/.test(result.data)) {
+        window.location = (result.data)
+        qrScanner.stop()
+        // setMessage(result.data)
+      }
+    }
+
     qrScanner.start().then(() => {
       setLoading(false)
       setMessage('')
