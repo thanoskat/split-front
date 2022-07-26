@@ -23,7 +23,7 @@ export default function QRScanner() {
     )
     qrScanner.start()
     return(
-      qrScanner.stop()
+      qrScanner.destroy()
     )
   }, [])
 
