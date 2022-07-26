@@ -4,9 +4,10 @@ import { useState, useRef, useEffect } from 'react'
 
 export default function QRScanner() {
   const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState('Loading')
   const videoRef = useRef(null)
 
-  useEffect(async () => {
+  useEffect(() => {
     const handleResult = (result) => {
       window.location.replace(result.data)
     }
@@ -20,8 +21,13 @@ export default function QRScanner() {
         returnDetailedScanResult: true
       }
     )
-    await qrScanner.start()
-    setLoading(false)
+    qrScanner.start().then(() => {
+      setLoading(false)
+      setMessage('')
+    }).catch((error) => {
+      setLoading(false)
+      setMessage(error)
+    })
     return () => {
       qrScanner.destroy()
     }
@@ -33,7 +39,11 @@ export default function QRScanner() {
       className='bottom-menu top-radius flex column'
       style={{ zIndex: '2', gap: '14px', padding: '14px' }}
     >
-      {loading && <IonIcon name='sync' className='spin' />}
+      {loading &&
+      <div className='flex row alignitems-center'>
+        <IonIcon name='sync' className='spin' />
+      </div>}
+      {!loading && <>{message}</>}
       <video ref={videoRef} />
     </div>
   )
