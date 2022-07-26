@@ -9,8 +9,8 @@ export default function QRScanner() {
 
   useEffect(() => {
     const handleResult = (result) => {
-      setData(result)
-      navigate(result)
+      setData(JSON.Stringify(result, null, 2))
+      // navigate(result.data)
     }
 
     const qrScanner = new QrScanner(
@@ -18,7 +18,8 @@ export default function QRScanner() {
       result => handleResult(result),
       {
         highlightScanRegion: true,
-        highlightCodeOutline: true
+        highlightCodeOutline: true,
+        returnDetailedScanResult: true
       }
     )
     qrScanner.start()
