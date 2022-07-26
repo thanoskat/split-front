@@ -1,17 +1,14 @@
 import QrScanner from 'qr-scanner'
+import IonIcon from '@reacticons/ionicons'
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 export default function QRScanner() {
-  const navigate = useNavigate()
-  const [data, setData] = useState('No result')
+  const [loading, setLoading] = useState(true)
   const videoRef = useRef(null)
 
-  useEffect(() => {
+  useEffect(async () => {
     const handleResult = (result) => {
       window.location.replace(result.data)
-      // window.location.replace(result.data)
-      // navigate(result.data)
     }
 
     const qrScanner = new QrScanner(
@@ -23,7 +20,8 @@ export default function QRScanner() {
         returnDetailedScanResult: true
       }
     )
-    qrScanner.start()
+    await qrScanner.start()
+    setLoading(false)
     return () => {
       qrScanner.destroy()
     }
@@ -35,14 +33,8 @@ export default function QRScanner() {
       className='bottom-menu top-radius flex column'
       style={{ zIndex: '2', gap: '14px', padding: '14px' }}
     >
-      <video ref={videoRef}>
-      </video>
-      <div className='flex row justcont-spacebetween'>
-        {data}
-        <button onClick={() => window.location.replace(data)}>
-          GO
-        </button>
-      </div>
+      {loading && <IonIcon name='sync' className='spin' />}
+      <video ref={videoRef} />
     </div>
   )
 
