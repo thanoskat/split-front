@@ -15,7 +15,7 @@ export default function QRScanner() {
 
     const qrScanner = new QrScanner(
       videoRef.current,
-      result => setData(result.data),
+      result => navigate(result.data),
       {
         highlightScanRegion: true,
         highlightCodeOutline: true,
