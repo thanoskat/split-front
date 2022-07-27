@@ -37,6 +37,7 @@ export { default as NewMember } from './NewMember'
 export { default as ExpenseOptions } from './ExpenseOptions'
 export { default as ReviewGroups } from './ReviewGroups'
 export { default as QRScanner } from './QRScanner'
+export { default as UserOptions } from './UserOptions'
 
 //export { default as Modal } from './Modal'
 // export { default as About } from './About'

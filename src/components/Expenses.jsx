@@ -186,7 +186,7 @@ const Expenses = () => {
           classNames='bottomslide'
           unmountOnExit
         >
-          <DeleteExpense expense={expense} />
+          <DeleteExpense expense={expense} openMenu={openMenu} />
         </CSSTransition>
         <CSSTransition
           in={menu === 'expenseOptions'}

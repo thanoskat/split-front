@@ -1395,7 +1395,7 @@ input:focus.inputErr {
 
 #homepage {
   height: 100%;
-  margin: 0rem 2rem 0rem 2rem;
+  margin: 20px;
 }
 
 .mailmsg {

@@ -33,7 +33,7 @@ const DeleteExpense = ({ expense, openMenu }) => {
       },
       { signal: abortControllerRef.current.signal })
       await getGroup(params.groupid)
-      openMenu(null)
+      // openMenu(null)
       // navigate('expenses', { replace: true })
     }
     catch(error) {
@@ -44,9 +44,9 @@ const DeleteExpense = ({ expense, openMenu }) => {
     }
   }
 
-  const clickedNo = () => {
-    navigate('expenses', { replace: false })
-  }
+  // const clickedNo = () => {
+  //   navigate('expenses', { replace: false })
+  // }
 
   const getGroup = async (id) => {
     try {
@@ -72,7 +72,7 @@ const DeleteExpense = ({ expense, openMenu }) => {
         <div>Yes</div>
       </div>
       <div
-        onClick={() => openMenu(null)}
+        onClick={(e) => openMenu(e, null)}
         className='group-selector-button medium flex row overflow-hidden justcont-center alignitems-center t3 pointer shadow'
         style={{ padding: '14px', width: '100%', gap: '14px' }}
       >

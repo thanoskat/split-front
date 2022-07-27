@@ -1,4 +1,4 @@
-import { QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
+import { UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -20,6 +20,8 @@ const Main = () => {
   const location = useLocation()
   // const navigation = useContext(UNSAFE_NavigationContext).navigator
   const [menu, setMenu] = useState(null)
+
+  console.log(menu)
 
   useEffect(() => {
     window.addEventListener('popstate', () => {
@@ -56,14 +58,14 @@ const Main = () => {
   return (
     <div style={{ height: '100%' }} className='flex column'>
       {mainIsLoading &&
-        <div className='mainIsLoading flex alignself-center'>
-          <IonIcon name='sync' className='spin' size={50} />
-        </div>}
+      <div className='mainIsLoading flex alignself-center'>
+        <IonIcon name='sync' className='spin' size={50} />
+      </div>}
       {!mainIsLoading &&
         <div id='main'>
           <div id='main-menu' className='flex column'>
             {/* <UserBar /> */}
-            <LogoBar />
+            <LogoBar openMenu={openMenu} />
             <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
               <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => openMenu('groupList')}>
                 <span>{displayedGroup?.title}</span>
@@ -74,7 +76,7 @@ const Main = () => {
                   <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
                 </div>
                 <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => openMenu('groupOptions')} />
-                <IonIcon name='scan' className='group-options-icon pointer t2' onClick={() => openMenu('qrScanner')} />
+                {/* <IonIcon name='scan' className='group-options-icon pointer t2' onClick={() => openMenu('qrScanner')} /> */}
               </div>
             </div>
             {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
@@ -175,6 +177,15 @@ const Main = () => {
         unmountOnExit
       >
         <ExpenseOptions openMenu={openMenu} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'userOptions'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <UserOptions openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
