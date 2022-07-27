@@ -5,13 +5,30 @@ import { useDispatch } from 'react-redux'
 import { signIn } from '../redux/authSlice'
 import IonIcon from '@reacticons/ionicons'
 import { useNavigate } from 'react-router-dom'
-
-const Continue = () => {
+import { useEffect } from 'react'
+const Continue = ({ initialPath, setInitialPath }) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [continueErrorMessage, setContinueErrorMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  console.log(initialPath)
+
+  const updateLocalStorage = () => {
+    if (localStorage.getItem("initialPath").length === 11 && localStorage.getItem("initialPath").substring(0, 3) === "/i/") {
+      if (localStorage.getItem('initalPath') === initialPath) {
+        return
+      } else {
+        localStorage.setItem('initialPath', initialPath);
+      }
+    } else {
+      localStorage.setItem('initialPath', initialPath);
+    }
+  }
+
+  useEffect(() => {
+    updateLocalStorage()
+  }, [initialPath])
 
   const continueSignUp = async () => {
     setContinueErrorMessage('')
@@ -20,9 +37,15 @@ const Continue = () => {
       const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sign-in`, {}, { withCredentials: true })
       dispatch(signIn({ accessToken: res.data.accessToken, sessionData: res.data.sessionData }))
       setLoading(false)
-      navigate('/')
+      if (initialPath.length === 11 && initialPath.substring(0, 3) === "/i/") {
+        navigate(initialPath)
+        setInitialPath("")
+      } else {
+        navigate('/')
+      }
+
     }
-    catch(error) {
+    catch (error) {
       setContinueErrorMessage(error.response?.data.message)
       setLoading(false)
     }

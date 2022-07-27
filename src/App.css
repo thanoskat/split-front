@@ -911,7 +911,7 @@ input:focus {
 
 .group-selector-button.highlighted-group {
   color: white;
-  background-color: var(--base-color-1);
+  background-color: var( --label-color-6);
 }
 
 .floating-button {
