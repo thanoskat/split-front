@@ -19,7 +19,7 @@ import { useState } from 'react'
 function App() {
   const location = useLocation()
   const [initialPath, setInitialPath] = useState(location.pathname)
-  console.log(initialPath)
+  //console.log(initialPath)
 
   return (
 

@@ -50,7 +50,8 @@ const VerifyInvitation = ({ setInitialPath }) => {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
-      setInitialPath("")
+        setInitialPath("")
+        localStorage.removeItem("initialPath")
     }
     catch (error) {
       // setData(error.response.data)
@@ -68,6 +69,10 @@ const VerifyInvitation = ({ setInitialPath }) => {
     // eslint-disable-next-line
   }, [])
 
+  const emptyPaths = ()=>{
+    setInitialPath("")
+    localStorage.removeItem("initialPath")
+  }
   return (
     <div id="homepage" className=' flex column ' style={{ color: "var(--light-color)" }}>
       <div className='logo t66 flex alignitems-center justcont-spacebetween '>
@@ -90,7 +95,7 @@ const VerifyInvitation = ({ setInitialPath }) => {
                   Accept
                 </div>
                 <Link
-                  onClick={() => setInitialPath("")}
+                  onClick={emptyPaths}
                   style={{ backgroundColor: "var(--lightpink)" }}
                   className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center"
                   to={"/"}>

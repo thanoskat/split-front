@@ -12,23 +12,33 @@ const Continue = ({ initialPath, setInitialPath }) => {
   const dispatch = useDispatch()
   const [continueErrorMessage, setContinueErrorMessage] = useState('')
   const [loading, setLoading] = useState(false)
-  console.log(initialPath)
+  //console.log(initialPath)
 
   const updateLocalStorage = () => {
-    if (localStorage.getItem("initialPath").length === 11 && localStorage.getItem("initialPath").substring(0, 3) === "/i/") {
-      if (localStorage.getItem('initalPath') === initialPath) {
-        return
+    if (initialPath.length === 11 && initialPath.substring(0, 3) === "/i/") {
+      if (localStorage.initialPath) {
+        if (localStorage.getItem("initialPath") === initialPath) return
       } else {
-        localStorage.setItem('initialPath', initialPath);
+        localStorage.setItem("initialPath", initialPath)
       }
     } else {
-      localStorage.setItem('initialPath', initialPath);
+      if (localStorage.initialPath) {
+        if (localStorage.getItem("initialPath").length === 11 && localStorage.getItem("initialPath").substring(0, 3) === "/i/") {
+          return
+        } else {
+          localStorage.removeItem("initialPath")
+        }
+      } else {
+        return
+      }
     }
   }
 
   useEffect(() => {
     updateLocalStorage()
   }, [initialPath])
+  // console.log((localStorage))
+
 
   const continueSignUp = async () => {
     setContinueErrorMessage('')
@@ -37,12 +47,15 @@ const Continue = ({ initialPath, setInitialPath }) => {
       const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sign-in`, {}, { withCredentials: true })
       dispatch(signIn({ accessToken: res.data.accessToken, sessionData: res.data.sessionData }))
       setLoading(false)
-      if (initialPath.length === 11 && initialPath.substring(0, 3) === "/i/") {
-        navigate(initialPath)
+
+      if (localStorage.initialPath) {
+        navigate(localStorage.getItem("initialPath"))
         setInitialPath("")
+        localStorage.removeItem("initialPath")
       } else {
         navigate('/')
       }
+
 
     }
     catch (error) {
