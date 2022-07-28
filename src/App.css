@@ -6,9 +6,7 @@
 } */
 
 body, html {
-  /* max-width: 500px; */
   -webkit-tap-highlight-color:  transparent;
-  /* margin: 0; */
   height: 100%;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -1395,7 +1393,7 @@ input:focus.inputErr {
 
 #homepage {
   height: 100%;
-  margin: 20px;
+  padding: 20px;
 }
 
 .mailmsg {
