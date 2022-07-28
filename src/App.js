@@ -1,4 +1,4 @@
-import './App.css';
+import './App.css'
 import {
   Home,
   Main,
@@ -13,10 +13,15 @@ import {
   Continue,
   RecordPayment,
 } from './components'
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './semantic-icons.css'
 
 function App() {
+
+  useEffect(() => {
+    document.title = 'αSplit'
+  })
+
   return (
     <BrowserRouter>
       <Routes>

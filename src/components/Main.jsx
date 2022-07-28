@@ -50,6 +50,16 @@ const Main = () => {
     setMainIsLoading(false)
   }
 
+  const removeGroup = async () => {
+    try {
+      const res = await api.post('/groups/remove', { groupId: params.groupid }, { signal: abortControllerRef.current.signal })
+      navigate('/')
+    }
+    catch (error) {
+      console.log('/groups/remove', error)
+    }
+  }
+
   const openMenu = (menuName) => {
     navigate(location.pathname, { replace: false })
     setMenu(menuName)
@@ -76,6 +86,7 @@ const Main = () => {
                   <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
                 </div>
                 <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => openMenu('groupOptions')} />
+                <IonIcon name='trash-sharp' className='group-options-icon pointer t2' onClick={removeGroup} />
                 {/* <IonIcon name='scan' className='group-options-icon pointer t2' onClick={() => openMenu('qrScanner')} /> */}
               </div>
             </div>

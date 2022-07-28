@@ -112,7 +112,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className='or flex justcont-center alignitems-center' style={{ color: 'var(--light-color)' }}>OR</div>
+        {groupList?.length !== 0 && <div className='or flex justcont-center alignitems-center' style={{ color: 'var(--light-color)' }}>OR</div>}
+        {groupList?.length === 0 && <div>&nbsp;</div>}
         <div style={{ padding: '0 0 2rem 0' }}>
           <div className='shadow createnewgroup-button flex justcont-center relative alignitems-center' onClick={() => openMenu('newGroup')}>Create new group</div>
         </div>
