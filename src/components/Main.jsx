@@ -1,4 +1,4 @@
-import { UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
+import { DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -50,16 +50,6 @@ const Main = () => {
     setMainIsLoading(false)
   }
 
-  const removeGroup = async () => {
-    try {
-      const res = await api.post('/groups/remove', { groupId: params.groupid }, { signal: abortControllerRef.current.signal })
-      navigate('/')
-    }
-    catch (error) {
-      console.log('/groups/remove', error)
-    }
-  }
-
   const openMenu = (menuName) => {
     navigate(location.pathname, { replace: false })
     setMenu(menuName)
@@ -86,7 +76,6 @@ const Main = () => {
                   <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
                 </div>
                 <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => openMenu('groupOptions')} />
-                <IonIcon name='trash-sharp' className='group-options-icon pointer t2' onClick={removeGroup} />
                 {/* <IonIcon name='scan' className='group-options-icon pointer t2' onClick={() => openMenu('qrScanner')} /> */}
               </div>
             </div>
@@ -214,7 +203,25 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <LabelEditor />
+        <GroupOptions openMenu={openMenu}/>
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'deleteGroup'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <DeleteGroup openMenu={openMenu}/>
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'labelEditor'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <LabelEditor/>
       </CSSTransition>
 
       <CSSTransition

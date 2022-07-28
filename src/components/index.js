@@ -38,6 +38,8 @@ export { default as ExpenseOptions } from './ExpenseOptions'
 export { default as ReviewGroups } from './ReviewGroups'
 export { default as QRScanner } from './QRScanner'
 export { default as UserOptions } from './UserOptions'
+export { default as GroupOptions } from './GroupOptions'
+export { default as DeleteGroup } from './DeleteGroup'
 
 //export { default as Modal } from './Modal'
 // export { default as About } from './About'

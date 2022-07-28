@@ -86,7 +86,7 @@ export default function CreateNewGroup({ openMenu }) {
     <div className='createnewgroupBox flex column fixed ' style={{ left: '0px' }}>
       <div className='createnewgroupHeader flex row t1  padding1010 gap10'>
         <div className='cancelIcon alignself-center' onClick={() => openMenu(null)}>
-          <i className='arrow left icon t3'></i>
+          <IonIcon name='arrow-back' className='pointer' />
         </div>
         <div>
           Create New Group
