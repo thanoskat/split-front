@@ -1,5 +1,7 @@
 import './App.css'
+import './semantic-icons.css'
 import {
+  RedirectToExpenses,
   Home,
   Main,
   VerifyInvitation,
@@ -34,9 +36,10 @@ function App() {
           <Route path='i/:invitationCode' element={<VerifyInvitation />} />
           <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
           <Route path=':groupid' element={<Main />}>
-            {/* <Route index element={<Expenses />} /> */}
+            <Route index element={<RedirectToExpenses />} />
             <Route path='expenses' element={<Expenses />} />
             <Route path='members' element={<TabMembers />} />
+            <Route path='*' element={<RedirectToExpenses />} />
           </Route>
         </Route>
       </Routes>

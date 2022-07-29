@@ -40,6 +40,7 @@ export { default as QRScanner } from './QRScanner'
 export { default as UserOptions } from './UserOptions'
 export { default as GroupOptions } from './GroupOptions'
 export { default as DeleteGroup } from './DeleteGroup'
+export { default as RedirectToExpenses } from './RedirectToExpenses'
 
 //export { default as Modal } from './Modal'
 // export { default as About } from './About'
