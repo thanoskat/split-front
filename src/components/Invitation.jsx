@@ -34,6 +34,8 @@ function Invitation({ openMenu }) {
     }
   }
 
+  const ref=useRef(null)
+
   const getInvitation = async () => {
     setLoading(true)
     try {
@@ -43,7 +45,7 @@ function Invitation({ openMenu }) {
         inviter: userId,
         group: selectedGroup._id
       },
-      { signal: abortControllerRef.current.signal })
+        { signal: abortControllerRef.current.signal })
       const invitationCode = res.data.code
       console.log('/groups/createinvitation', invitationCode)
       setInvitationLink(`${process.env.REACT_APP_FRONTURL}/i/${invitationCode}`)
@@ -65,7 +67,7 @@ function Invitation({ openMenu }) {
         inviter: userId,
         group: selectedGroup._id
       },
-      { signal: abortControllerRef.current.signal })
+        { signal: abortControllerRef.current.signal })
       const invitationCode = res.data.code
       console.log('/groups/regenerate', invitationCode)
       setInvitationLink(`${process.env.REACT_APP_FRONTURL}/i/${invitationCode}`)
@@ -80,7 +82,7 @@ function Invitation({ openMenu }) {
 
   useEffect(() => {
     getInvitation()
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [])
 
   return (

@@ -210,7 +210,7 @@ const NewExpense = ({ close }) => {
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={allClick}
         >
-          <div style={{ color: '#b6bfec' }}>Split among</div>
+          <div style={{ color: '#b6bfec' }}>Members</div>
           <div
             className='flex row alignitems-center gap8'
             style={{ color: `${allMembers() ? 'white' : 'gray'}` }}
@@ -313,7 +313,7 @@ const NewExpense = ({ close }) => {
               className='flex row alignitems-center gap8'
               style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
             >
-              <div>Equal</div>
+              <div>Equally</div>
               <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
                 <div className='tick-cube'> {newExpense.splitEqually ? <i style={{ fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
               </div>

@@ -232,7 +232,7 @@ const Expenses = () => {
               </div>
             ))}
           </div>
-          <div style={{ fontSize: '14px', fontWeight: '700' }}>{filterSum.format()}</div>
+          <div style={{ fontSize: '14px', fontWeight: '700' }}>{currency(filterSum, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
         </div>}
       <div id='expenses'>
         {filteredExpenses.map(expense => (

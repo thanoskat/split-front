@@ -19,9 +19,10 @@ const TabMembers = () => {
     senderId: ''
   })
 
-  Array.prototype.move = function (from, to) {
-    this.splice(to, 0, this.splice(from, 1)[0])
-  }
+  // console.log(menuParams)
+  // Array.prototype.move = function (from, to) {
+  //   this.splice(to, 0, this.splice(from, 1)[0]);
+  // };
 
   const memberInfoConstructor = (selectedGroup) => {
     let members = []

@@ -52,7 +52,7 @@ function NewGuest({ openMenu }) {
     try {
       const res = await api.post('/expense/addguest',
         {
-          email: guestInfo.email,
+          // email: guestInfo.email,
           nickname: guestInfo.nickname,
           guest: true,
           groupID: selectedGroup._id,
@@ -101,6 +101,7 @@ function NewGuest({ openMenu }) {
     setGuestInfo({ ...guestInfo, email: e.target.value })
     setSubmitErrorMessage('')
   }
+
   const handleClick = (clickedExpense) => {
     if (guestInfo.filteredExpenses?.map(expense => expense._id).includes(clickedExpense?._id)) {
       setGuestInfo({ ...guestInfo, filteredExpenses: guestInfo.filteredExpenses.filter(expense => expense._id !== clickedExpense._id) })
@@ -134,7 +135,7 @@ function NewGuest({ openMenu }) {
           {!signUpErrorMessages.nickname && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's name</div>}
           {signUpErrorMessages.nickname && <div className='mailmsg t6'>{signUpErrorMessages.nickname}</div>}
         </div>
-        <div className='flex relative column'>
+        {/* <div className='flex relative column'>
           <input
             className='styledInput t3'
             placeholder='guest@email.com'
@@ -144,11 +145,11 @@ function NewGuest({ openMenu }) {
           />
           {!signUpErrorMessages.email && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's email</div>}
           {signUpErrorMessages.email && <div className='mailmsg t6'>{signUpErrorMessages.email}</div>}
-        </div>
-        <div className='relative padding1010' style={{ borderRadius: '4px', border: 'none', backgroundColor: ' rgb(21, 21, 23)', fontSize: '16px', fontWeight: '700' }}>
-          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: 'none' }}>
-            <div className='alignself-center' style={{color:'#b6bfec'}}>Add guest in all shared expenses</div>
-            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: 'pointer', fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
+        </div> */}
+        <div className="relative padding1010" style={{ borderRadius: "4px", border: "none", backgroundColor: " rgb(21, 21, 23)", fontSize: "16px", fontWeight: "700" }}>
+          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
+            <div className='alignself-center' style={{ color: "#b6bfec" }}>Add guest in all shared expenses</div>
+            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
           </div>
         </div>
         {!guestInfo.participateInAll ?
@@ -156,7 +157,10 @@ function NewGuest({ openMenu }) {
             <div className='loginBox flex column ' style={{ backgroundColor: 'rgb(21, 21, 23)', borderColor: 'rgb(21, 21, 23)', borderStyle: 'solid' }}>
               <div className='whiteSpace-initial'>
                 <div className='flex column gap4 padding4 whiteSpace-initial'>
-                  <div style={{color:'white'}}>Review and choose expenses your guest should participate in</div>
+                  {guestInfo.allExpenses.length === 0 ?
+                    <div style={{ color: "white" }}>There are currently no expenses </div> :
+                    <div style={{ color: "white" }}>Review and choose expenses your guest should participate in</div>
+                  }
                 </div>
               </div>
             </div>
