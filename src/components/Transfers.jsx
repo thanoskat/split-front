@@ -97,12 +97,11 @@ const Transfers = () => {
             <div style={{ color: 'white' }}>{transfer.sender.nickname}&nbsp;to&nbsp;{transfer.receiver?.nickname}</div>
             <div style={{ color: 'white' }}>{currency(transfer.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
           </div>
-          <div className='flex row justcont-spacebetween gap10 alignitems-center' style={{ fontSize: '14px' }}>
+          {transfer.description !== '' &&
+          <div className='flex row justcont-spacebetween gap10 alignitems-end' style={{ alignItems: 'flex-end', fontSize: '14px' }}>
             <div style={{ color: 'gray' }}>{transfer.description}</div>
             {/* <div id='expense-amount'>{currency(expense.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}</div> */}
-          </div>
-          <div className='flex row justcont-spacebetween alignitems-center'>
-          </div>
+          </div>}
         </div>
         <CSSTransition
           onClick={() => setMenu(null)}
