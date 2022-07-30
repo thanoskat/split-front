@@ -35,11 +35,12 @@ function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderI
           groupId: selectedGroup._id, //does it feed at first render? Need to check
           sender: senderId,
           receiver: receiverId,
-          amount: amount,
+          amount: amount.toString(),
           description: "settle debt"
         }, { signal: abortControllerRef.current.signal }
       )
       setLoading(false)
+      console.log(res.data)
       dispatch(setSelectedGroup(res.data))
       //console.log(res)
     }
