@@ -1,4 +1,4 @@
-import { TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewInvite } from '.'
+import { Transfers, DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -18,32 +18,21 @@ const Main = () => {
   const navigate = useNavigate()
   const navigationType = useNavigationType()
   const location = useLocation()
-  const navigation = useContext(UNSAFE_NavigationContext).navigator
-  const [menuIsOpen, setMenuIsOpen] = useState(false)
+  // const navigation = useContext(UNSAFE_NavigationContext).navigator
+  const [menu, setMenu] = useState(null)
 
-  // const [state, setState] = useState(window.location.pathname)
-
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.listen((locationListener) =>
-  //     navigate('/')
-  //   )
-  //   return unsubscribe
-  // }, [navigation])
+  console.log(menu)
 
   useEffect(() => {
     window.addEventListener('popstate', () => {
-      setMenuIsOpen(false)
+      setMenu(null)
     })
     abortControllerRef.current = new AbortController()
     getGroup(params.groupid)
     return () => {
       window.removeEventListener('popstate', () => {
-        setMenuIsOpen(false)
+        setMenu(null)
       })
-      // console.log('navigationType', navigationType)
-      // console.log('location.pathname', location.pathname)
-      // setState(location.pathname)
-      // navigate(location.pathname, { replace: true })
       abortControllerRef.current.abort()
     }
     // eslint-disable-next-line
@@ -61,36 +50,34 @@ const Main = () => {
     setMainIsLoading(false)
   }
 
-  const openMenu = () => {
+  const openMenu = (menuName) => {
     navigate(location.pathname, { replace: false })
-    setMenuIsOpen(true)
+    setMenu(menuName)
   }
 
   return (
     <div style={{ height: '100%' }} className='flex column'>
       {mainIsLoading &&
-        <div className='mainIsLoading flex alignself-center'>
-          <IonIcon name='sync' className='spin' size={50} />
-        </div>}
+      <div className='mainIsLoading flex alignself-center'>
+        <IonIcon name='sync' className='spin' size={50} />
+      </div>}
       {!mainIsLoading &&
         <div id='main'>
           <div id='main-menu' className='flex column'>
             {/* <UserBar /> */}
-            <LogoBar />
+            <LogoBar openMenu={openMenu} />
             <div className='t1 medium flex row alignitems-center justcont-spacebetween'>
-              <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => setSearchParams({ menu: 'groups' })}>
+              <div className='flex row alignitems-center gap8 pointer overflow-hidden' onClick={() => openMenu('groupList')}>
                 <span>{displayedGroup?.title}</span>
-                <IonIcon name='caret-down' className='t2' />
+                {/* <IonIcon name='caret-down' className='t2' /> */}
               </div>
               <div className='flex row gap10 alignitems-center'>
-                <div onClick={() => setSearchParams({ menu: 'invite' })}>
+                <div onClick={() => openMenu('newMember')}>
                   <IonIcon name='person-add-sharp' className='group-options-icon pointer t2' />
                 </div>
-                <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
+                <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => openMenu('groupOptions')} />
+                {/* <IonIcon name='scan' className='group-options-icon pointer t2' onClick={() => openMenu('qrScanner')} /> */}
               </div>
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => setSearchParams({ menu: 'groupoptions' })} />
-              {/* <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={() => navigate(`#${(Math.random() + 1).toString(36).substring(7)}`, { replace: false })} /> */}
-              <IonIcon name='settings-sharp' className='group-options-icon pointer t2' onClick={openMenu} />
             </div>
             {/* <div onClick={() => setSearchParams({menu: 'newexpense'})}>
             <div className='floating-button pointer flex row shadow justcont-center alignitems-center'>
@@ -100,12 +87,12 @@ const Main = () => {
           </div> */}
           </div>
           {(displayedGroup !== null) && <Outlet />}
-          <NavBar />
+          <NavBar openMenu={openMenu} />
         </div>}
 
       <CSSTransition
-        onClick={() => setSearchParams({})} //this simply adds dark background
-        in={Boolean(searchParams.get('menu'))}
+        onClick={() => setMenu(null)}
+        in={Boolean(menu)}
         timeout={0}
         unmountOnExit
       >
@@ -121,8 +108,8 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'groups')}
-        timeout={300}
+        in={(menu === 'groupList')}
+        timeout={100}
         classNames='bottomslide'
         unmountOnExit
       >
@@ -130,8 +117,17 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
+        in={(menu === 'qrScanner')}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <QRScanner />
+      </CSSTransition>
+
+      <CSSTransition
         in={(searchParams.get('menu') === 'newexpense2')}
-        timeout={300}
+        timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
@@ -139,53 +135,62 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'recordtransfer')}
-        timeout={300}
+        in={(menu === 'newTransfer')}
+        timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
-        <RecordTransfer setSearchParams={setSearchParams} />
+        <RecordTransfer close={() => setMenu(null)} />
       </CSSTransition>
 
       <CSSTransition
-        in={menuIsOpen}
-        timeout={300}
+        in={menu === 'newExpense'}
+        timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
-        <NewExpense setSearchParams={setSearchParams}/>
+        <NewExpense close={() => setMenu(null)}/>
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'newexpense')}
-        timeout={300}
+        in={menu === 'invitation'}
+        timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
-        <NewExpense setSearchParams={setSearchParams} />
+        <Invitation openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'friend')}
-        timeout={300}
+        in={menu === 'newGuest'}
+        timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
-        <Invitation setSearchParams={setSearchParams} />
+        <NewGuest openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'guest')}
-        timeout={300}
-        classNames='leftslide'
+        in={menu === 'expenseOptions'}
+        timeout={100}
+        classNames='bottomslide'
         unmountOnExit
       >
-        <NewGuest setSearchParams={setSearchParams} />
+        <ExpenseOptions openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'deleteexpense')}
-        timeout={300}
+        in={menu === 'userOptions'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <UserOptions openMenu={openMenu} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'deleteExpense'}
+        timeout={100}
         classNames='bottomslide'
         unmountOnExit
       >
@@ -193,30 +198,48 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'groupoptions')}
-        timeout={300}
+        in={menu === 'groupOptions'}
+        timeout={100}
         classNames='bottomslide'
         unmountOnExit
       >
-        <LabelEditor />
+        <GroupOptions openMenu={openMenu}/>
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'new')}
-        timeout={300}
+        in={menu === 'deleteGroup'}
+        timeout={100}
         classNames='bottomslide'
         unmountOnExit
       >
-        <New setSearchParams={setSearchParams} />
+        <DeleteGroup openMenu={openMenu}/>
       </CSSTransition>
 
       <CSSTransition
-        in={(searchParams.get('menu') === 'invite')}
-        timeout={300}
+        in={menu === 'labelEditor'}
+        timeout={100}
         classNames='bottomslide'
         unmountOnExit
       >
-        <NewInvite setSearchParams={setSearchParams} />
+        <LabelEditor/>
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'new'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <New openMenu={openMenu} />
+      </CSSTransition>
+
+      <CSSTransition
+        in={menu === 'newMember'}
+        timeout={100}
+        classNames='bottomslide'
+        unmountOnExit
+      >
+        <NewMember openMenu={openMenu} />
       </CSSTransition>
     </div>
   )

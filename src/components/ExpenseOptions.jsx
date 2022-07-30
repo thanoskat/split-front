@@ -6,18 +6,22 @@ import IonIcon from '@reacticons/ionicons'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { useDispatch } from 'react-redux'
 
-const DeleteExpense = ({ expense, openMenu }) => {
+const ExpenseOptions = ({ openMenu, expense }) => {
 
   const params = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const api = useAxios()
   const abortControllerRef = useRef(null)
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [searchParams] = useSearchParams()
+  const expenseID = null
 
   useEffect(() => {
+    //window.addEventListener('popstate', event => console.log(event));
     abortControllerRef.current = new AbortController()
     return () => {
+      //window.removeEventListener('popstate', event => console.log(event));
       abortControllerRef.current.abort()
     }
   // eslint-disable-next-line
@@ -29,12 +33,11 @@ const DeleteExpense = ({ expense, openMenu }) => {
       await api.post('/expense/remove',
       {
         groupId: store.getState().mainReducer.selectedGroup._id,
-        expenseId: expense._id
+        expenseId: expenseID
       },
       { signal: abortControllerRef.current.signal })
-      await getGroup(params.groupid)
-      // openMenu(null)
-      // navigate('expenses', { replace: true })
+      getGroup(params.groupid)
+      navigate('expenses', { replace: true })
     }
     catch(error) {
       console.log(error.message)
@@ -44,9 +47,9 @@ const DeleteExpense = ({ expense, openMenu }) => {
     }
   }
 
-  // const clickedNo = () => {
-  //   navigate('expenses', { replace: false })
-  // }
+  const clickedNo = () => {
+    navigate('expenses', { replace: true })
+  }
 
   const getGroup = async (id) => {
     try {
@@ -58,28 +61,29 @@ const DeleteExpense = ({ expense, openMenu }) => {
     }
   }
 
-  return(
+  return (
     <div className='top-radius flex column fixed' style={{ zIndex: '2', gap: '14px', padding: '14px', left: '14px', bottom: '0px', backgroundColor: 'var(--layer-1-color)', width: 'calc(100% - 56px)' }}>
       <div className='flex row' style={{ fontSize: '26px' }}>
-        Delete {expense.description}?
+        {expense.description}
       </div>
       <div
-        onClick={deleteExpense}
+        onClick={(e) => openMenu(e, 'editExpense')}
         className='group-selector-button medium flex row overflow-hidden justcont-center alignitems-center t3 pointer shadow'
         style={{ padding: '14px', width: '100%', gap: '14px' }}
       >
-        {loading && <IonIcon name='sync' className='t3 spin' />}
-        <div>Yes</div>
+        <IonIcon name='pencil' className='t2' />
+        <div>Edit</div>
       </div>
       <div
-        onClick={(e) => openMenu(e, null)}
+        onClick={(e) => openMenu(e, 'deleteExpense')}
         className='group-selector-button medium flex row overflow-hidden justcont-center alignitems-center t3 pointer shadow'
         style={{ padding: '14px', width: '100%', gap: '14px' }}
       >
-        <div>No</div>
+        <IonIcon name='trash' className='t2' />
+        <div>Delete</div>
       </div>
     </div>
   )
 }
 
-export default DeleteExpense
+export default ExpenseOptions

@@ -5,7 +5,7 @@ import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useNavigate } from 'react-router-dom'
 
-export default function CreateNewGroup({ setSearchParams }) {
+export default function CreateNewGroup({ openMenu }) {
 
   const [groupName, setGroupName] = useState('')
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export default function CreateNewGroup({ setSearchParams }) {
       })
       console.log(group)
       setLoading(false)
-      setSearchParams({})
+      openMenu(null)
       navigate(`${group.data}/expenses`)
     } catch (err) {
       setLoading(false)
@@ -85,8 +85,8 @@ export default function CreateNewGroup({ setSearchParams }) {
   return (
     <div className='createnewgroupBox flex column fixed ' style={{ left: '0px' }}>
       <div className='createnewgroupHeader flex row t1  padding1010 gap10'>
-        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
-          <i className='arrow left icon t3'></i>
+        <div className='cancelIcon alignself-center' onClick={() => openMenu(null)}>
+          <IonIcon name='arrow-back' className='pointer' />
         </div>
         <div>
           Create New Group

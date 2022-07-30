@@ -6,7 +6,7 @@ import IonIcon from '@reacticons/ionicons'
 import { setSelectedGroup } from '../redux/mainSlice'
 import { useDispatch } from 'react-redux'
 
-const DeleteExpense = ({ expense, openMenu }) => {
+const DeleteTransfer = ({ transfer, openMenu }) => {
 
   const params = useParams()
   const dispatch = useDispatch()
@@ -26,13 +26,14 @@ const DeleteExpense = ({ expense, openMenu }) => {
   const deleteExpense = async () => {
     setLoading(true)
     try {
-      await api.post('/expense/remove',
+      const res = await api.post('/expense/removetransfer',
       {
         groupId: store.getState().mainReducer.selectedGroup._id,
-        expenseId: expense._id
+        transferId: transfer._id
       },
       { signal: abortControllerRef.current.signal })
-      await getGroup(params.groupid)
+      dispatch(setSelectedGroup(res.data))
+      // await getGroup(params.groupid)
       // openMenu(null)
       // navigate('expenses', { replace: true })
     }
@@ -61,7 +62,7 @@ const DeleteExpense = ({ expense, openMenu }) => {
   return(
     <div className='top-radius flex column fixed' style={{ zIndex: '2', gap: '14px', padding: '14px', left: '14px', bottom: '0px', backgroundColor: 'var(--layer-1-color)', width: 'calc(100% - 56px)' }}>
       <div className='flex row' style={{ fontSize: '26px' }}>
-        Delete {expense.description}?
+        Delete?
       </div>
       <div
         onClick={deleteExpense}
@@ -82,4 +83,4 @@ const DeleteExpense = ({ expense, openMenu }) => {
   )
 }
 
-export default DeleteExpense
+export default DeleteTransfer

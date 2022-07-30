@@ -7,28 +7,29 @@ import useAxios from '../utility/useAxios'
 import { useSelector } from 'react-redux'
 import store from '../redux/store'
 
-const NewExpense = ({ close }) => {
+const EditExpense = ({ close, expense }) => {
   const api = useAxios()
   const dispatch = useDispatch()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const abortControllerRef = useRef(null)
   const sessionData = store.getState().authReducer.sessionData
   const [submitLoading, setSubmitLoading] = useState(false)
-  const [newExpense, setNewExpense] = useState({
-    splitEqually: true,
-    amount: '',
-    description: '',
-    label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })),
-    spender: sessionData.userId
-  })
+  // const [newExpense, setNewExpense] = useState({
+  //   splitEqually: true,
+  //   amount: '',
+  //   description: '',
+  //   label: null,
+  //   participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })),
+  //   spender: sessionData.userId
+  // })
+  const [newExpense, setNewExpense] = useState(expense)
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
-  console.log(newExpense)
+  console.log(JSON.stringify(newExpense, null, 2))
   // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
 
   useEffect(() => {
-    setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
+    // setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
   }, [selectedGroup])
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const NewExpense = ({ close }) => {
       setNewExpenseErrorMessages({})
       setSubmitLoading(true)
       try {
-        const res = await api.post('expense/add', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
+        const res = await api.post('expense/edit', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
         if (res.data.validationArray) {
           const tempErrorMessages = {}
           res.data.validationArray.reverse().forEach(err => {
@@ -153,7 +154,7 @@ const NewExpense = ({ close }) => {
   const paidByClicked = () => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
     if (newExpense.spender === sessionData.userId) {
-      setNewExpense(({ ...newExpense, spender: "" }))
+      setNewExpense(({ ...newExpense, spender: '' }))
     } else {
       setNewExpense(({ ...newExpense, spender: sessionData.userId }))
     }
@@ -161,7 +162,7 @@ const NewExpense = ({ close }) => {
 
   const senderClicked = (spenderID) => {
     if (newExpense.spender === spenderID) {
-      setNewExpense({ ...newExpense, spender: "" })
+      setNewExpense({ ...newExpense, spender: '' })
     }
     else {
       setNewExpense({ ...newExpense, spender: spenderID })
@@ -210,7 +211,7 @@ const NewExpense = ({ close }) => {
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={allClick}
         >
-          <div style={{ color: '#b6bfec' }}>Members</div>
+          <div style={{ color: '#b6bfec' }}>Split among</div>
           <div
             className='flex row alignitems-center gap8'
             style={{ color: `${allMembers() ? 'white' : 'gray'}` }}
@@ -260,7 +261,7 @@ const NewExpense = ({ close }) => {
   }
 
   return (
-    <div id='new-expense' className='flex column fixed'>
+    <div id='new-expense' className='flex column fixed' style={{ left: '0px' }}>
       <div id='menu-header' className='flex row'>
         <div className='cancelIcon alignself-center pointer' onClick={close}>
           <i className='arrow left icon'></i>
@@ -313,7 +314,7 @@ const NewExpense = ({ close }) => {
               className='flex row alignitems-center gap8'
               style={{ color: `${newExpense.splitEqually ? 'white' : 'gray'}` }}
             >
-              <div>Equally</div>
+              <div>Equal</div>
               <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
                 <div className='tick-cube'> {newExpense.splitEqually ? <i style={{ fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
               </div>
@@ -373,4 +374,4 @@ const NewExpense = ({ close }) => {
   )
 }
 
-export default NewExpense
+export default EditExpense

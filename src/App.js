@@ -1,5 +1,8 @@
-import './App.css';
+import './App.css'
+import './semantic-icons.css'
 import {
+  Transfers,
+  RedirectToExpenses,
   Home,
   Main,
   VerifyInvitation,
@@ -12,34 +15,38 @@ import {
   SignUp,
   Continue,
 } from './components'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import './semantic-icons.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 
 function App() {
   const location = useLocation()
   const [initialPath, setInitialPath] = useState(location.pathname)
-  //console.log(initialPath)
+
+  useEffect(() => {
+    document.title = 'αSplit'
+  })
 
   return (
-
-    <Routes>
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/continue" element={<Continue initialPath={initialPath} setInitialPath={setInitialPath} />} />
-      <Route path="/s/:token" element={<VerifyToken />} />
-      <Route element={<PrivateRoutes />}>
-        <Route path='/' element={<Home />} />
-        <Route path='i/:invitationCode' element={<VerifyInvitation setInitialPath={setInitialPath} />} />
-        <Route path='i/:invitationCode/review' element={<ReviewGroups />} />
-        <Route path=':groupid' element={<Main />}>
-          <Route index element={<Expenses />} />
-          <Route path='expenses' element={<Expenses />} />
-          <Route path='members' element={<TabMembers />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/continue" element={<Continue initialPath={initialPath} setInitialPath={setInitialPath} />} />
+        <Route path="/s/:token" element={<VerifyToken />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path='/' element={<Home />} />
+          <Route path='i/:invitationCode' element={<VerifyInvitation setInitialPath={setInitialPath} />} />
+          <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
+          <Route path=':groupid' element={<Main />}>
+            <Route index element={<RedirectToExpenses />} />
+            <Route path='expenses' element={<Expenses />} />
+            <Route path='transfers' element={<Transfers />} />
+            <Route path='members' element={<TabMembers />} />
+            <Route path='*' element={<RedirectToExpenses />} />
+          </Route>
         </Route>
       </Route>
     </Routes>
-
   )
 }
 

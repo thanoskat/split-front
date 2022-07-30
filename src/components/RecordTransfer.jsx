@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 
 
-function RecordTransfer({ setSearchParams }) {
+function RecordTransfer({ close }) {
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
   const sessionData = store.getState().authReducer.sessionData
@@ -16,15 +16,14 @@ function RecordTransfer({ setSearchParams }) {
   const inputAmountRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const [newTransfer, setNewTransfer] = useState({
-    amount: "",
-    description: "",
-    transferTo: "",
+    amount: '',
+    description: '',
+    transferTo: '',
     transferFrom: sessionData.userId
   })
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newTransferErrorMessages, setNewTransferErrorMessages] = useState({})
 
-  console.log(newTransfer)
   useEffect(() => {
     setTimeout(() => {
       inputAmountRef.current.focus()
@@ -40,7 +39,7 @@ function RecordTransfer({ setSearchParams }) {
   const updateAmount = (e) => {
     setNewTransfer({
       ...newTransfer,
-      amount: e.target.value //process(addCommas(removeNonNumeric(e.target.value.toString().split(".").map((el, i) => i ? el.split("").slice(0, 2).join("") : el).join("."))))
+      amount: e.target.value //process(addCommas(removeNonNumeric(e.target.value.toString().split('.').map((el, i) => i ? el.split('').slice(0, 2).join('') : el).join('.'))))
     })
   }
 
@@ -110,7 +109,7 @@ function RecordTransfer({ setSearchParams }) {
 
   const senderClicked = (spenderID) => {
     if (newTransfer.transferFrom === spenderID) {
-      setNewTransfer({ ...newTransfer, transferFrom: "" })
+      setNewTransfer({ ...newTransfer, transferFrom: '' })
     }
     else {
       setNewTransfer({ ...newTransfer, transferFrom: spenderID })
@@ -119,11 +118,12 @@ function RecordTransfer({ setSearchParams }) {
   const transferredFromClicked = () => {
     //setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
     if (newTransfer.transferFrom === sessionData.userId) {
-      setNewTransfer({ ...newTransfer, transferFrom: "" })
+      setNewTransfer({ ...newTransfer, transferFrom: '' })
     } else {
       setNewTransfer(({ ...newTransfer, transferFrom: sessionData.userId }))
     }
   }
+
   const TransferredBy = () => {
     return (
       <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
@@ -162,7 +162,7 @@ function RecordTransfer({ setSearchParams }) {
   return (
     <div id='new-expense' className='flex column fixed'>
       <div id='menu-header' className='flex row'>
-        <div className='cancelIcon alignself-center pointer' onClick={() => setSearchParams({})}>
+        <div className='cancelIcon alignself-center pointer' onClick={close}>
           <i className='arrow left icon'></i>
         </div>
         <div>
