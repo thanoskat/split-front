@@ -22,7 +22,7 @@ export default function ReviewGroups() {
   })
 
   const [loading, setLoading] = useState(false)
-  const [participateInAll, setParticipateInAll] = useState(true)
+  const [participateInAll, setParticipateInAll] = useState(false)
 
   //fix going back before submitting any reviews
   // console.log(expenses)
@@ -172,10 +172,10 @@ export default function ReviewGroups() {
         <div className='submit-button-container-review-group flex alignself-center padding1010 fixed'>
           <button
             style={{ padding: "0.8rem" }}
-            className={`shadow submit-button ${participateInAll || expenses.filtered.length !== 0 ? "active"
-              : null} h-flex justcont-spacearound `}
+            className="shadow submit-button active  h-flex justcont-spacearound"
             onClick={() => updateExpenses()}
-            disabled={participateInAll || expenses.filtered.length !== 0 ? false : true}>
+            // disabled={participateInAll || expenses.filtered.length !== 0 ? false : true}
+            >
             {loading ? <IonIcon name='sync' className='t3 spin' /> : "Continue to Group"}
           </button>
         </div>
