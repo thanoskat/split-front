@@ -9,7 +9,7 @@ export default function NewInvite({ setSearchParams }) {
     <div className='bottom-menu-new top-radius' style={{ zIndex: '2' }}>
       <div className='flex row justcont-spacebetween t05 'style={{padding:"10px"}}>
         <div style={{ color: "var(--light-color)", fontSize: "22px" }}>
-          Invite
+          Add member
         </div>
         <div className='pointer' onClick={() => setSearchParams({})}>
           <IonIcon name='close-outline' />
@@ -23,7 +23,7 @@ export default function NewInvite({ setSearchParams }) {
             {/* <i className='exchange icon' style={{ color: "var(--light-color)",fontSize:"15px"}}/> */}
           </div>
           <div className='pointer' style={{ color: "var(--light-color)" }}>
-            Friend
+            Invite
           </div>
         </div>
 

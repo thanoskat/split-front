@@ -11,31 +11,35 @@ import {
   SignIn,
   SignUp,
   Continue,
-  RecordPayment,
 } from './components'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import './semantic-icons.css'
+import { useState } from 'react'
 
 function App() {
+  const location = useLocation()
+  const [initialPath, setInitialPath] = useState(location.pathname)
+  //console.log(initialPath)
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/continue" element={<Continue />} />
-        <Route path="/s/:token" element={<VerifyToken />} />
-        <Route element={<PrivateRoutes />}>
-          <Route path='/' element={<Home />} />
-          <Route path='i/:invitationCode' element={<VerifyInvitation />} />
-          <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
-          <Route path=':groupid' element={<Main />}>
-            <Route index element={<Expenses />} />
-            <Route path='expenses' element={<Expenses />} />
-            <Route path='members' element={<TabMembers />} />
-          </Route>
+
+    <Routes>
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/continue" element={<Continue initialPath={initialPath} setInitialPath={setInitialPath} />} />
+      <Route path="/s/:token" element={<VerifyToken />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path='/' element={<Home />} />
+        <Route path='i/:invitationCode' element={<VerifyInvitation setInitialPath={setInitialPath} />} />
+        <Route path='i/:invitationCode/review' element={<ReviewGroups />} />
+        <Route path=':groupid' element={<Main />}>
+          <Route index element={<Expenses />} />
+          <Route path='expenses' element={<Expenses />} />
+          <Route path='members' element={<TabMembers />} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+      </Route>
+    </Routes>
+
   )
 }
 
@@ -52,12 +56,12 @@ export default App
 // [x] [BUG] sum filtered expenses !
 //
 // [X] transfer !!
-// [ ] css on create group submit same size as other submit buttons
+// [X] css on create group submit same size as other submit buttons
 // [ ] get distribution response for expenses from DB
-// [ ] validator for record tranfer
+// [X] validator for record tranfer
 // [X] add guest member Kristie(Guest) !!
 // [X] expense details: participants, isEqually && participation !!
-// [ ] number of people participating in expense to be fixed so that if doesn't overlap with scale or be out of screen
+// [ ] number of people participating in expense to be fixed so that if doesn't overlap with scale or be out of screen (minor)
 // [ ] automatic copy of invitation link
 // [ ] expense EDIT !!
 // [/] members tab css / settle in members tab !
@@ -66,8 +70,7 @@ export default App
 // [X] single + button for expense/transfer/member ? !
 // [X] create new group focus on group name input field
 // [ ] currency conversion
-// [ ] profile button on top right to show more rather than logging you out instantly
-// [ ]
+// [ ] profile button on top logs off automatically?
 // [ ] expense unequal split amount addition per name UX ??
 // [ ] /62c40a27e252e8ca01293e1f/review
 // [ ] visit invitation without account/login
