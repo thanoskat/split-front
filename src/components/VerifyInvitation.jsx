@@ -31,7 +31,7 @@ const VerifyInvitation = ({ setInitialPath }) => {
 
       for (let i = 0; i < expenses.length; i++) {
         if (expenses[i].splitEqually === true && !expenses[i].participants.includes(sessionData.id)) {
-          setAskforReview(true)
+          setAskforReview(false)
           break;
         }
       }
