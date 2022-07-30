@@ -8,7 +8,6 @@ export default function QRScanner() {
   const videoRef = useRef(null)
 
   useEffect(() => {
-
     const qrScanner = new QrScanner(
       videoRef.current,
       result => handleResult(result),
@@ -39,7 +38,6 @@ export default function QRScanner() {
     }
   }, [])
 
-
   return (
     <div
       className='bottom-menu top-radius flex column'
@@ -53,5 +51,4 @@ export default function QRScanner() {
       <video ref={videoRef} />
     </div>
   )
-
 }

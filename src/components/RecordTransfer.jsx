@@ -22,7 +22,6 @@ function RecordTransfer({ close }) {
     transferFrom: sessionData.userId
   })
 
-  console.log(newTransfer)
   useEffect(() => {
     setTimeout(() => {
       inputAmountRef.current.focus()
@@ -43,7 +42,7 @@ function RecordTransfer({ close }) {
   }
 
   const recordTransfer = async () => {
-
+    console.log(JSON.stringify(newTransfer, null, 2))
     if (newTransfer.transferTo === '') return null; //do not proceed to recording tx if no user has been selected
     if (newTransfer.amount === '') return null; //do not proceed to recording tx if no amount has been given
     setLoading(true)

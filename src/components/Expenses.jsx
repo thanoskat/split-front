@@ -1,4 +1,4 @@
-import { ExpenseOptions, DeleteExpense } from './'
+import { ExpenseOptions, DeleteExpense, EditExpense } from './'
 import { useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
@@ -25,7 +25,6 @@ const Expenses = () => {
     lastWeek: 'MMM DD',
     sameElse: 'MMM DD'
   }
-
 
   const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
     if (filters.length === 0) return true
@@ -179,6 +178,14 @@ const Expenses = () => {
             opacity: '0.7'
           }}
           />
+        </CSSTransition>
+        <CSSTransition
+          in={menu === 'editExpense'}
+          timeout={100}
+          classNames='bottomslide'
+          unmountOnExit
+        >
+          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spender: expense.spender._id, participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount.toString() })) }} close={() => setMenu(null)} />
         </CSSTransition>
         <CSSTransition
           in={menu === 'deleteExpense'}

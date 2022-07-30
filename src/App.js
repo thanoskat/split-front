@@ -1,6 +1,7 @@
 import './App.css'
 import './semantic-icons.css'
 import {
+  Transfers,
   RedirectToExpenses,
   Home,
   Main,
@@ -38,6 +39,7 @@ function App() {
           <Route path=':groupid' element={<Main />}>
             <Route index element={<RedirectToExpenses />} />
             <Route path='expenses' element={<Expenses />} />
+            <Route path='transfers' element={<Transfers />} />
             <Route path='members' element={<TabMembers />} />
             <Route path='*' element={<RedirectToExpenses />} />
           </Route>
