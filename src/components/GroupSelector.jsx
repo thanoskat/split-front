@@ -4,7 +4,7 @@ import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
 import { Link, useLocation } from 'react-router-dom'
 
-const GroupSelector = () => {
+const GroupSelector = ({ close }) => {
 
   const api = useAxios()
   const abortControllerRef = useRef(null)
@@ -55,6 +55,7 @@ const GroupSelector = () => {
       <div className={`flex column gap4 padding4`}>
         {groupList?.map((group, index) => (
           <Link
+            onClick={close}
             key={group._id}
             to={`/${group._id}${currentTab}`}
             className={`${group._id === selectedGroup?._id ? 'highlighted-group' : ''} group-selector-button medium flex row overflow-hidden justcont-spacebetween alignitems-center t3 padding1812 pointer shadow`}

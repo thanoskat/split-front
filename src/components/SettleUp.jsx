@@ -15,7 +15,6 @@ function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderI
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
 
-
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     return () => {

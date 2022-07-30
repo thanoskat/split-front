@@ -113,7 +113,7 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <GroupSelector />
+        <GroupSelector close={() => setMenu(null)} />
       </CSSTransition>
 
       <CSSTransition
