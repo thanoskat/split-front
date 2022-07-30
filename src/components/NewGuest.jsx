@@ -12,7 +12,7 @@ function NewGuest({ setSearchParams }) {
   //console.log(selectedGroup)
   const [loading, setLoading] = useState(false)
   const [guestInfo, setGuestInfo] = useState({
-    participateInAll: true,
+    participateInAll: false,
     nickname: "",
     email: "",
     allExpenses: selectedGroup?.expenses.filter(expense => expense.splitEqually === true),
