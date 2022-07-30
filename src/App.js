@@ -27,23 +27,21 @@ function App() {
   })
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/continue" element={<Continue initialPath={initialPath} setInitialPath={setInitialPath} />} />
-        <Route path="/s/:token" element={<VerifyToken />} />
-        <Route element={<PrivateRoutes />}>
-          <Route path='/' element={<Home />} />
-          <Route path='i/:invitationCode' element={<VerifyInvitation setInitialPath={setInitialPath} />} />
-          <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
-          <Route path=':groupid' element={<Main />}>
-            <Route index element={<RedirectToExpenses />} />
-            <Route path='expenses' element={<Expenses />} />
-            <Route path='transfers' element={<Transfers />} />
-            <Route path='members' element={<TabMembers />} />
-            <Route path='*' element={<RedirectToExpenses />} />
-          </Route>
+    <Routes>
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/continue" element={<Continue initialPath={initialPath} setInitialPath={setInitialPath} />} />
+      <Route path="/s/:token" element={<VerifyToken />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path='/' element={<Home />} />
+        <Route path='i/:invitationCode' element={<VerifyInvitation setInitialPath={setInitialPath} />} />
+        <Route path ='i/:invitationCode/review' element={<ReviewGroups/>}/>
+        <Route path=':groupid' element={<Main />}>
+          <Route index element={<RedirectToExpenses />} />
+          <Route path='expenses' element={<Expenses />} />
+          <Route path='transfers' element={<Transfers />} />
+          <Route path='members' element={<TabMembers />} />
+          <Route path='*' element={<RedirectToExpenses />} />
         </Route>
       </Route>
     </Routes>

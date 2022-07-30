@@ -6,7 +6,6 @@ import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSelectedGroup } from '../redux/mainSlice'
 
-
 function RecordTransfer({ close }) {
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
@@ -70,7 +69,7 @@ function RecordTransfer({ close }) {
       } else {
         setLoading(false)
         setNewTransfer({ ...newTransfer, amount: "", description: "" })
-        setSearchParams({})
+        close()
         dispatch(setSelectedGroup(res.data))
         console.log(res)
       }
