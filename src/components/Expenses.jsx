@@ -183,7 +183,7 @@ const Expenses = () => {
           classNames='bottomslide'
           unmountOnExit
         >
-          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spender: expense.spender._id, participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount.toString() })) }} close={() => setMenu(null)} />
+          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spender: expense.spender._id, participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount?.toString() })) }} close={() => setMenu(null)} />
         </CSSTransition>
         <CSSTransition
           in={menu === 'deleteExpense'}

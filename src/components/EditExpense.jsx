@@ -261,7 +261,7 @@ const EditExpense = ({ close, expense }) => {
   }
 
   return (
-    <div id='new-expense' className='flex column fixed' style={{ left: '0px' }}>
+    <div id='new-expense' className='flex column fixed' style={{ left: '0px', top: '0px', zIndex: '3' }}>
       <div id='menu-header' className='flex row'>
         <div className='cancelIcon alignself-center pointer' onClick={close}>
           <i className='arrow left icon'></i>
