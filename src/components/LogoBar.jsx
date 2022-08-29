@@ -1,6 +1,6 @@
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 const LogoBar = ({ openMenu }) => {
 

@@ -1,4 +1,4 @@
-import { Transfers, DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar,  New, RecordTransfer, NewGuest, NewMember } from '.'
+import { Transfers, DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer, NewGuest, NewMember } from '.'
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
@@ -21,7 +21,6 @@ const Main = () => {
   // const navigation = useContext(UNSAFE_NavigationContext).navigator
   const [menu, setMenu] = useState(null)
 
-  console.log(menu)
 
   useEffect(() => {
     window.addEventListener('popstate', () => {
@@ -37,6 +36,8 @@ const Main = () => {
     }
     // eslint-disable-next-line
   }, [params.groupid])
+
+
 
   const getGroup = async (id) => {
     setMainIsLoading(true)
@@ -55,12 +56,23 @@ const Main = () => {
     setMenu(menuName)
   }
 
+  const getHistoricBalance = async () => {
+    try {
+      const res = await api.post('/expense/txhistory', { groupID: displayedGroup._id }, { signal: abortControllerRef.current.signal })
+      console.log(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   return (
     <div style={{ height: '100%' }} className='flex column'>
+      <IonIcon onClick={getHistoricBalance} className='pointer' name='construct-outline' style={{ fontSize: '32px', color: '#eeeeee' }} />
       {mainIsLoading &&
-      <div className='mainIsLoading flex alignself-center'>
-        <IonIcon name='sync' className='spin' size={50} />
-      </div>}
+        <div className='mainIsLoading flex alignself-center'>
+          <IonIcon name='sync' className='spin' size={50} />
+        </div>}
       {!mainIsLoading &&
         <div id='main'>
           <div id='main-menu' className='flex column'>
@@ -149,7 +161,7 @@ const Main = () => {
         classNames='leftslide'
         unmountOnExit
       >
-        <NewExpense close={() => setMenu(null)}/>
+        <NewExpense close={() => setMenu(null)} />
       </CSSTransition>
 
       <CSSTransition
@@ -203,7 +215,7 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <GroupOptions openMenu={openMenu}/>
+        <GroupOptions openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
@@ -212,7 +224,7 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <DeleteGroup openMenu={openMenu}/>
+        <DeleteGroup openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition
@@ -221,7 +233,7 @@ const Main = () => {
         classNames='bottomslide'
         unmountOnExit
       >
-        <LabelEditor/>
+        <LabelEditor />
       </CSSTransition>
 
       <CSSTransition

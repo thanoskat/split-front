@@ -20,8 +20,10 @@ const NewExpense = ({ close }) => {
     description: '',
     label: null,
     participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })),
-    spender: sessionData.userId
+    spender: sessionData.userId,
+    includeNewMemberToThisExpense: true
   })
+
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
   console.log(newExpense)
@@ -31,6 +33,7 @@ const NewExpense = ({ close }) => {
     setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
   }, [selectedGroup])
 
+
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     return () => {
@@ -39,11 +42,27 @@ const NewExpense = ({ close }) => {
     // eslint-disable-next-line
   }, [])
 
+  useEffect(() => {
+    setNewExpense({ ...newExpense, includeNewMemberToThisExpense: selectedGroup.members.length === newExpense.participants.length })
+  }, [newExpense.participants])
+
+  const allMembers = () => {
+    if (newExpense.participants) {
+      return selectedGroup.members.length === newExpense.participants.length
+    }
+    else return true
+  }
+
+  // useEffect(()=>{
+  //   console.log("UseEffect ran")
+  //   distributeEqually()
+  // },[newExpense.amount, newExpense.spender])
+
   const submitExpense = async () => {
     if (!submitLoading) {
       setSubmitErrorMessage('')
       setNewExpenseErrorMessages({})
-      setSubmitLoading(true)
+      setSubmitLoading(true)  
       try {
         const res = await api.post('expense/add', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
         if (res.data.validationArray) {
@@ -63,6 +82,7 @@ const NewExpense = ({ close }) => {
       catch (error) {
         if (error.response) {
           if (error.response.data.message) {
+
             setSubmitErrorMessage(error.response.data.message)
           }
         }
@@ -74,6 +94,7 @@ const NewExpense = ({ close }) => {
       }
     }
   }
+
 
   const labelClicked = (labelClickedId) => {
     if (newExpense.label === labelClickedId) {
@@ -96,7 +117,7 @@ const NewExpense = ({ close }) => {
 
   const participantClicked = (participantClickedId) => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: null, ...removedContributionAmountErrors() })
-    if (newExpense.participants.map(participants => participants.memberId).includes(participantClickedId)) {
+    if (newExpense.participants.map(participants => participants?.memberId).includes(participantClickedId)) {
       setNewExpense({ ...newExpense, participants: newExpense.participants.filter(participant => participant.memberId !== participantClickedId) })
     }
     else {
@@ -104,12 +125,8 @@ const NewExpense = ({ close }) => {
     }
   }
 
-  const allMembers = () => {
-    if (newExpense.participants) {
-      return selectedGroup.members.length === newExpense.participants.length
-    }
-    else return true
-  }
+
+
 
   const allClick = () => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, splitEqually: null, participants: null, ...removedContributionAmountErrors() })
@@ -178,7 +195,7 @@ const NewExpense = ({ close }) => {
           <div style={{ color: '#b6bfec' }}>Paid by</div>
           <div
             className='flex row alignitems-center gap8'
-           style={{ color: `${newExpense.spender === sessionData.userId ? 'white' : 'gray'}` }}
+            style={{ color: `${newExpense.spender === sessionData.userId ? 'white' : 'gray'}` }}
           >
             <div>You</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
@@ -226,7 +243,8 @@ const NewExpense = ({ close }) => {
           <div className='flex row wrap' style={{ gap: '14px' }}>
             {selectedGroup.members?.map(member => (
               <div
-                className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant.memberId).includes(member._id) ? 'filled' : ''}`}
+                key={member._id}
+                className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant?.memberId).includes(member._id) ? 'filled' : ''}`}
                 onClick={() => participantClicked(member._id)}
               >
                 {member.nickname}
@@ -251,6 +269,7 @@ const NewExpense = ({ close }) => {
   const changeContribution = (e, participant, index) => {
     newExpenseErrorMessages['participants[' + index + '].contributionAmount'] = null
     newExpenseErrorMessages.splitEqually = null
+    console.log(newExpenseErrorMessages)
     setNewExpense(
       {
         ...newExpense,
@@ -258,6 +277,22 @@ const NewExpense = ({ close }) => {
       }
     )
   }
+
+  // const distributeEqually = () => {
+  //   if (newExpense.splitEqually === true) {
+  //     newExpenseErrorMessages.splitEqually = null
+  //     for (let i = 0; i < newExpense.participants.length; i++) {
+  //       newExpenseErrorMessages['participants[' + i + '].contributionAmount'] = null
+  //     }
+  //     const distributedAmountArray = currency(newExpense.amount)
+  //       .distribute(newExpense.participants.length).map(e => e.value.toString()) //why is validator complaining about string in contribution amount?
+  //     console.log(distributedAmountArray)
+  //       setNewExpense({
+  //       ...newExpense,
+  //       participants: newExpense.participants.map((participant, index) => ({ ...participant, contributionAmount: distributedAmountArray[index] }))
+  //     })
+  //   } else return
+  // }
 
   return (
     <div id='new-expense' className='flex column fixed'>
@@ -321,26 +356,26 @@ const NewExpense = ({ close }) => {
           </div>
 
           {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
-          <div className='flex column' style={{ gap: '14px' }}>
-            {newExpense.participants?.map((participant, index) => (
-              <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
-                <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                  {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
-                </div>
-                <input
-                  type='text'
-                  inputMode='decimal'
-                  className='text-align-right'
-                  placeholder='0'
-                  style={{
-                    borderRadius: '8px',
-                    padding: '6px',
-                    fontSize: '16px',
-                    flex: '1 1 auto',
-                    width: '100%',
-                    borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
-                    borderWidth: '1px',
-                    borderStyle: 'solid'
+            <div className='flex column' style={{ gap: '14px' }}>
+              {newExpense.participants?.map((participant, index) => (
+                <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                  <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                    {selectedGroup?.members?.find(member => member._id === participant?.memberId)?.nickname}
+                  </div>
+                  <input
+                    type='text'
+                    inputMode='decimal'
+                    className='text-align-right'
+                    placeholder='0'
+                    style={{
+                      borderRadius: '8px',
+                      padding: '6px',
+                      fontSize: '16px',
+                      flex: '1 1 auto',
+                      width: '100%',
+                      borderColor: `${newExpenseErrorMessages['participants[' + index + '].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
                     }}
                     id='styled-input'
                     onChange={e => changeContribution(e, participant, index)}

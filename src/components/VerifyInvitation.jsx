@@ -30,8 +30,8 @@ const VerifyInvitation = ({ setInitialPath }) => {
       const expenses = res.data.group.expenses
 
       for (let i = 0; i < expenses.length; i++) {
-        if (expenses[i].splitEqually === true && !expenses[i].participants.includes(sessionData.id)) {
-          setAskforReview(false)
+        if (expenses[i].splitEqually === true && expenses[i].includeNewMemberToThisExpense === true) {
+          setAskforReview(true)
           break;
         }
       }
@@ -50,8 +50,8 @@ const VerifyInvitation = ({ setInitialPath }) => {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
-        setInitialPath("")
-        localStorage.removeItem("initialPath")
+      setInitialPath("")
+      localStorage.removeItem("initialPath")
     }
     catch (error) {
       // setData(error.response.data)
@@ -69,7 +69,7 @@ const VerifyInvitation = ({ setInitialPath }) => {
     // eslint-disable-next-line
   }, [])
 
-  const emptyPaths = ()=>{
+  const emptyPaths = () => {
     setInitialPath("")
     localStorage.removeItem("initialPath")
   }

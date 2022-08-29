@@ -59,7 +59,18 @@ export default App
 // [x] [BUG] can't refresh in mobile browser with gesture !
 // [x] [BUG] go from group to home page !
 // [x] [BUG] sum filtered expenses !
-//
+
+// allow option to show expenses only user is involved in
+// tags should be filtered easier (e.g. search bar or list)
+// total spent fix with actual spent. Allow breakdown option
+// replace user's name with You and have it checked
+// add percentages, shares in unequal split
+// add calculator in unequal split
+// allow multiple spenders for one expense
+
+
+
+
 // [X] transfer !!
 // [X] css on create group submit same size as other submit buttons
 // [ ] get distribution response for expenses from DB

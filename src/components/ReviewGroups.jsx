@@ -41,7 +41,7 @@ export default function ReviewGroups() {
       //console.log(res.data.group)
       let expArr = []
       expenses.map((expense) => {
-        if (expense.splitEqually === true && !expense.participants.includes(sessionData.userId)) {
+        if (expense.splitEqually === true && expense.includeNewMemberToThisExpense === true) {
           expArr.push(expense)
         }
         return expArr
@@ -174,8 +174,8 @@ export default function ReviewGroups() {
             style={{ padding: "0.8rem" }}
             className="shadow submit-button active  h-flex justcont-spacearound"
             onClick={() => updateExpenses()}
-            // disabled={participateInAll || expenses.filtered.length !== 0 ? false : true}
-            >
+          // disabled={participateInAll || expenses.filtered.length !== 0 ? false : true}
+          >
             {loading ? <IonIcon name='sync' className='t3 spin' /> : "Continue to Group"}
           </button>
         </div>
