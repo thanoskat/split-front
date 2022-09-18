@@ -44,6 +44,7 @@ export { default as DeleteGroup } from './DeleteGroup'
 export { default as RedirectToExpenses } from './RedirectToExpenses'
 export { default as Transfers } from './Transfers'
 export { default as DeleteTransfer } from './DeleteTransfer'
+export { default as BreakDown } from './BreakDown'
 
 //export { default as Modal } from './Modal'
 // export { default as About } from './About'

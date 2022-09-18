@@ -1,16 +1,17 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
 import { useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
-import { SettleUp } from '.'
+import { SettleUp, BreakDown } from '.'
 
 const TabMembers = () => {
   const sessionData = store.getState().authReducer.sessionData
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [menuParams, setMenuParams] = useState({
+    openBreakDown: false,
     open: false,
     amount: null,
     receiverName: '',
@@ -70,7 +71,7 @@ const TabMembers = () => {
     return (
       <div className='tree' style={{ bottom: '10px', margin: '0 0 -15px 0' }}>
         <ul>
-          {toFrom?.map(member => (
+          {toFrom?.map((member, index) => (
             <li key={member._id}>
               {isSenderReceiverSettled === 1 ?
                 <div className='flex row justcont-spacebetween'>
@@ -80,7 +81,7 @@ const TabMembers = () => {
                     {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
                   </div>
                   &nbsp;
-                  {id === sessionData.userId || isGuest ?  //only show buttons in You section
+                  {id === sessionData.userId || isGuest ?  //only show buttons in You or guest section
                     <div id='settleUp-pill' className='pointer shadow'
                       onClick={() => setMenuParams({
                         open: true,
@@ -89,25 +90,38 @@ const TabMembers = () => {
                         receiverName: member.name,
                         senderId: id,
                         senderName: name
-
                       })}>Settle Up</div> : ''}
                 </div>
                 : isSenderReceiverSettled === 2 ?
-                  <div className='flex row alignitems-center '>
-                    <div style={{ color: 'var(--green)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+
+                  <div className='flex row alignitems-center justcont-spacebetween'>
+                    <div className='flex row alignitems-center'>
+                      <div style={{ color: 'var(--green)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                      </div>
+                      <div>
+                        from
+                      </div>
+                      &nbsp;
+                      {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
                     </div>
-                    <div>
-                      from
-                    </div>
-                    &nbsp;
-                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
+                    {index === toFrom.length - 1 && id === sessionData.userId ?
+
+                      <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })} >
+                        <div className='flex row justcont-spacebetween gap6'>
+                          <i className='pie chart icon'></i>
+                          <div>Breakdown</div>
+                        </div>
+                      </div>
+
+                      : ""}
                   </div>
                   : <></>}
             </li>))}
         </ul>
-      </div>
+      </div >
     )
   }
+
   const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
     //console.log(name, id)
     return (
@@ -149,8 +163,18 @@ const TabMembers = () => {
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
         </div>
-        {(id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1) || (isGuest && isSenderReceiverSettled === 1 && toFrom.length === 1) ?
+        {isSenderReceiverSettled === 2 && toFrom.length === 1 && id === sessionData.userId ?
           <div className='flex justcont-start'>
+            <div id='settleUp-pill' className='pointer shadow'>
+              <div className='flex row justcont-spacebetween gap6'>
+                <i className='pie chart icon'></i>
+                <div>Breakdown</div>
+              </div>
+            </div>
+          </div> : ""}
+
+        {(id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1) || (isGuest && isSenderReceiverSettled === 1 && toFrom.length === 1) ?
+          <div className='flex justcont-spacebetween'>
             <div id='settleUp-pill' className='pointer shadow' onClick={() =>
               setMenuParams({
                 open: true,
@@ -160,6 +184,12 @@ const TabMembers = () => {
                 senderId: id,
                 senderName: name
               })}>Settle Up</div>
+            {id === sessionData.userId ? <div id='settleUp-pill' className='pointer shadow'>
+              <div className='flex row justcont-spacebetween gap6'>
+                <i className='pie chart icon'></i>
+                <div>Breakdown</div>
+              </div>
+            </div> : ""}
           </div>
           : ''}
         {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
@@ -170,6 +200,15 @@ const TabMembers = () => {
             isSenderReceiverSettled={isSenderReceiverSettled}
             isGuest={isGuest} />
         }
+        {toFrom.length > 1 && isSenderReceiverSettled === 1 && id === sessionData.userId ?
+          <div className='flex justcont-start'>
+            <div id='settleUp-pill' className='pointer shadow'>
+              <div className='flex row justcont-spacebetween gap6'>
+                <i className='pie chart icon'></i>
+                <div>Breakdown</div>
+              </div>
+            </div>
+          </div> : ""}
       </div>
     )
   }
@@ -201,7 +240,9 @@ const TabMembers = () => {
               totalSpent={member.totalSpent}
               isGuest={member.isGuest} />
           </div>
+
         ))}
+
         <div style={{ marginBottom: '80px' }}>
         </div>
       </div>
@@ -240,6 +281,17 @@ const TabMembers = () => {
           senderId={menuParams.senderId}
         />
       </CSSTransition>
+
+      <CSSTransition
+        in={menuParams.openBreakDown === true}
+        timeout={0}
+        unmountOnExit
+      >
+        <BreakDown 
+        setMenuParams={setMenuParams}
+        />
+      </CSSTransition>
+
     </div>
   )
 }

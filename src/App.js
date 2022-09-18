@@ -14,6 +14,7 @@ import {
   SignIn,
   SignUp,
   Continue,
+  BreakDown
 } from './components'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
@@ -67,8 +68,6 @@ export default App
 // add percentages, shares in unequal split
 // add calculator in unequal split
 // allow multiple spenders for one expense
-
-
 
 
 // [X] transfer !!

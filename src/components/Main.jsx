@@ -68,7 +68,7 @@ const Main = () => {
 
   return (
     <div style={{ height: '100%' }} className='flex column'>
-      <IonIcon onClick={getHistoricBalance} className='pointer' name='construct-outline' style={{ fontSize: '32px', color: '#eeeeee' }} />
+      {/* <IonIcon onClick={getHistoricBalance} className='pointer' name='construct-outline' style={{ fontSize: '32px', color: '#eeeeee' }} /> */}
       {mainIsLoading &&
         <div className='mainIsLoading flex alignself-center'>
           <IonIcon name='sync' className='spin' size={50} />
