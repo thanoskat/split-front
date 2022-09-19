@@ -165,7 +165,7 @@ const TabMembers = () => {
         </div>
         {isSenderReceiverSettled === 2 && toFrom.length === 1 && id === sessionData.userId ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow'>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
               <div className='flex row justcont-spacebetween gap6'>
                 <i className='pie chart icon'></i>
                 <div>Breakdown</div>
@@ -185,7 +185,7 @@ const TabMembers = () => {
                 senderName: name
               })}>Settle Up</div>
             {id === sessionData.userId ? <div id='settleUp-pill' className='pointer shadow'>
-              <div className='flex row justcont-spacebetween gap6'>
+              <div className='flex row justcont-spacebetween gap6' onClick={() => setMenuParams({ openBreakDown: true })}>
                 <i className='pie chart icon'></i>
                 <div>Breakdown</div>
               </div>
@@ -202,7 +202,7 @@ const TabMembers = () => {
         }
         {toFrom.length > 1 && isSenderReceiverSettled === 1 && id === sessionData.userId ?
           <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow'>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
               <div className='flex row justcont-spacebetween gap6'>
                 <i className='pie chart icon'></i>
                 <div>Breakdown</div>

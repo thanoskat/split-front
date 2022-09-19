@@ -281,6 +281,10 @@ input:focus {
   overflow: visible
 }
 
+.overflow-scroll {
+  overflow: scroll;
+}
+
 .relative {
   position: relative
 }
