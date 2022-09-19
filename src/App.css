@@ -1018,12 +1018,13 @@ input:focus {
   font-size: 120%;
 }
 
-.invitationLoading {
+.loadingCenter {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  font-size: 120%;
 }
 
 .submit-button {
@@ -1411,7 +1412,7 @@ input:focus.inputErr {
 
 .vl {
   border-left: 2px solid rgb(124, 124, 124);
-  height: 100px;
+  height: 100%;
   /* position: absolute; */
   left: 50%;
   margin-left: 0px;

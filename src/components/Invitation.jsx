@@ -87,7 +87,7 @@ function Invitation({ openMenu }) {
 
   return (
     <div className='flex column fixed' style={{ bottom: '0px', width: '100%', height:'100%', backgroundColor: '#17181d' }}>
-      {isLoading && <div className='invitationLoading flex alignself-center'>
+      {isLoading && <div className='loadingCenter flex alignself-center'>
         <IonIcon name='sync' className='spin' size={50} />
       </div>}
       {!isLoading &&

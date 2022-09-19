@@ -159,10 +159,22 @@ const TabMembers = () => {
                 </div>
                 <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: '22px', fontWeight: '500' }} />
               </div>}
+
           <div className=' medium t25 white'>
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
+          
         </div>
+        {isSenderReceiverSettled !== 1 && isSenderReceiverSettled !== 2 && id === sessionData.userId?
+        <div className='flex justcont-start'>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
+              <div className='flex row justcont-spacebetween gap6'>
+                <i className='pie chart icon'></i>
+                <div>Breakdown</div>
+              </div>
+            </div>
+          </div> :""}
+        
         {isSenderReceiverSettled === 2 && toFrom.length === 1 && id === sessionData.userId ?
           <div className='flex justcont-start'>
             <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
@@ -287,8 +299,8 @@ const TabMembers = () => {
         timeout={0}
         unmountOnExit
       >
-        <BreakDown 
-        setMenuParams={setMenuParams}
+        <BreakDown
+          setMenuParams={setMenuParams}
         />
       </CSSTransition>
 
