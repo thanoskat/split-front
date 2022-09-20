@@ -1410,13 +1410,27 @@ input:focus.inputErr {
   margin: 0 10px;
 }
 
+
+h1 {
+  overflow: hidden;
+  text-align: center;
+}
+
+
 .vl {
-  border-left: 2px solid rgb(124, 124, 124);
+  border-left: 2px solid rgb(148, 146, 146);
   height: 100%;
   /* position: absolute; */
   left: 50%;
   margin-left: 0px;
   top: 90px;
+}
+.dot{
+  height: 5px;
+  width: 5px;
+  background-color: #bbbbbb;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .signUpMsg {
@@ -1610,4 +1624,16 @@ input:focus.inputErr {
   font-weight: 700;
   margin-left: 15px;
   margin-top: 8px;
+}
+
+@media (max-width :420px) {
+  .cla {
+    flex-wrap: wrap
+  }
+}
+
+@media(max-width:400px) {
+  #marginLeft {
+    margin-left: "40px"
+  }
 }

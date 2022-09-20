@@ -60,7 +60,7 @@ export default function BreakDown({ setMenuParams }) {
       <div className='flex column overflow-auto' style={{ maxWidth: "100%", overflowX: "hidden" }}>
 
         {txhistory?.map((tx, index) => (
-          <div className='flex column alignitems-center' style={{ marginBottom: "15px", marginLeft: "40px" }} >
+          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px"}} >
             <div className='flex column alignitems-center' style={{ gap: "0px" }}>
               <div className='flex row justcont-spacebetween'>
                 <div id="expense-date"> {dayjs(tx.date).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
@@ -77,32 +77,33 @@ export default function BreakDown({ setMenuParams }) {
             }}>
               <div className='flex row justcont-end' style={{ maxWidth: "50px" }}>
                 <div className='flex column alignitems-end'>
-                  <div style={{ color: "#8583F2" }}>
+                  <div className='cla flex row justcont-end' style={{ color: "#8583F2" }}>
                     <strong>
                       {tx.isTransfer === true ? (tx.borrowed !== 0 ? "You received" : "You transferred")
                         :
                         (tx.borrowed !== 0 ? "Paid on your behalf" :
-                          <div className='flex column gap6'>
+                          <div className='flex column gap6' style={{marginTop:"7px"}}>
                             <div className='flex row justcont-end' style={{ color: "#7f7f7f" }}>You paid {currency(tx.userPaid, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
                             <div className='flex row justcont-end' style={{ color: "#7f7f7f" }}>Your share -{currency(tx.userShare, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
-                            <div className='flex row justcont-end'><div>You lent an extra</div>&nbsp;<div style={{ color: "#dddddd" }}>{currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format()}</div></div>
+                            <div className='cla flex row justcont-end'><div>You paid extra</div>&nbsp;<div style={{ color: "#dddddd" }}>{currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format()}</div></div>
                           </div>
                         )}
                     </strong>
-                  </div>
-                  <div style={{ color: "#dddddd" }}>
-                    <strong>
-                      {tx.borrowed !== 0 ? currency(tx.borrowed, { symbol: '€', decimal: ',', separator: '.' }).format()
-                        :
-                        (tx.isTransfer === true ? currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format() : "")
-                      }
-                    </strong>
+                    &nbsp;
+                    <div style={{ color: "#dddddd" }}>
+                      <strong>
+                        {tx.borrowed !== 0 ? currency(tx.borrowed, { symbol: '€', decimal: ',', separator: '.' }).format()
+                          :
+                          (tx.isTransfer === true ? currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format() : "")
+                        }
+                      </strong>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className='vl'></div>
-              <div className='right text' style={{ maxWidth: "50px" }}>
-                <div className='flex column'>
+              <div className='' style={{ maxWidth: "50px" }}>
+                <div className='flex row'>
                   {tx.balance === 0 ?
 
                     <div className='flex row alignitems-center' style={{ color: "#8583F2" }}>
@@ -111,26 +112,33 @@ export default function BreakDown({ setMenuParams }) {
                         <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: '22px', fontWeight: '500' }} />
                       </div>
                     </div>
-
                     :
-                    <div>
-                      <div style={{ color: "#8583F2" }}><strong>{tx.balance > 0 ? (index === txhistory.length - 1 ? "You are owed" : "You were owed") : (index === txhistory.length - 1 ? "You owe" : "You owed")}</strong></div>
-                      <div style={{ color: tx.balance > 0 ? "var(--green)" : "var(--pink)" }}><strong>{currency(Math.abs(tx.balance), { symbol: '€', decimal: ',', separator: '.' }).format()}</strong></div>
+                    <div className="cla flex row">
+                      <div style={{ color: "#8583F2" }}>
+                        <strong>{tx.balance > 0 ? (index === txhistory.length - 1 ? "You are owed" : "You were owed") : (index === txhistory.length - 1 ? "You owe" : "You owed")}
+                        </strong>
+                      </div>
+                      &nbsp;
+                      <div style={{ color: tx.balance > 0 ? "var(--green)" : "var(--pink)" }}>
+                        <strong>{currency(Math.abs(tx.balance), { symbol: '€', decimal: ',', separator: '.' }).format()}
+                        </strong>
+                      </div>
                     </div>}
                 </div>
               </div>
             </div>
           </div>
         )).reverse()}
-        <div className='flex column alignitems-center' style={{ marginBottom: "15px", marginLeft: "40px" }}>
+        <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px"}}>
           <div className='flex row justcont-spacebetween'>
             <div id="expense-date"> {dayjs(displayedGroup.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
             <div id="expense-time"> {dayjs(displayedGroup.createdAt).format('HH:mm')}</div>
           </div>
-          <div id="expense-description">
-            Group Created
-          </div>
+          {/* <h2><span>Group Created</span></h2> */}
+          <div style={{fontSize:"22px", fontWeight:"600", color:"#dddddd"}}>Group Created</div>
+          <div className='dot' style={{marginTop:"10px"}}></div>
         </div>
+        
       </div>
     </div>
 
