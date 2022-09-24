@@ -68,6 +68,8 @@ export default App
 // add percentages, shares in unequal split
 // add calculator in unequal split
 // allow multiple spenders for one expense
+//show total balance at home page from all groups?
+//preferred repayment options details
 
 
 // [X] transfer !!

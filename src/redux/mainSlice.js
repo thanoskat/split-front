@@ -7,7 +7,8 @@ export const mainSlice = createSlice({
     groupList: [],
     selectedGroup: null,
     selectedExpense: null,
-    selectedPendingTX: null,    
+    selectedPendingTX: null,
+    trackExpenseIDfromBreakdown:""    
   },
 
   reducers: {
@@ -25,9 +26,12 @@ export const mainSlice = createSlice({
     },
     setSelectedPendingTX:(state,action)=>{
       state.selectedPendingTX=action.payload
+    },
+    setTrackID:(state,action)=>{
+      state.trackExpenseIDfromBreakdown=action.payload
     }
   }
 })
 
-export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense,setSelectedPendingTX} = mainSlice.actions
+export const { setCurrentMenu, setGroupList, setSelectedGroup, setSelectedExpense,setSelectedPendingTX,setTrackID} = mainSlice.actions
 export default mainSlice.reducer

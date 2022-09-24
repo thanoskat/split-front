@@ -67,7 +67,7 @@ export default function Home() {
   }
 
   return (
-    <div className='flex column' style={{height:"100%"}}>
+    <div className='flex column' style={{ height: "100%" }}>
       <div id='homepage' className='flex column ' style={{ color: 'var(--light-color)' }}>
         <div className='flex column'>
           <div className='logo t05 flex alignitems-center justcont-spacebetween '>
@@ -93,7 +93,7 @@ export default function Home() {
 
         <div className='flex flex-1 column justcont-spacebetween' style={{ height:"0%" }}>
           <div className='flex  column overflow-auto' style={{ padding: "0 0.8rem 1rem 0.8rem", borderRadius: "10px", backgroundColor: 'var(--layer-1-color)', borderColor: 'var(--layer-1-color)', borderStyle: 'solid' }}>
-            {groupList?.length === 0 ? <div className='flex' style={{ whiteSpace: 'initial', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
+            {groupList?.length === 0 ? <div className='loginBox flex' style={{ whiteSpace: 'initial', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
               It looks like you are not a member of a group at the moment. Follow the invitation link other members might have sent you or scan their QR code in order to join a group
             </div> :
               <div className='sticky' style={{ top: "0px", padding: "1rem 1rem 1rem 0 ", backgroundColor: "#1f1f22" }}>
@@ -115,12 +115,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-
-
-          {groupList?.length !== 0 && <div className='or flex justcont-center alignitems-center' style={{ color: 'var(--light-color)' }}>OR</div>}
-          {groupList?.length === 0 && <div>&nbsp;</div>}
-
+          <div className='or flex justcont-center alignitems-center' style={{ color: 'var(--light-color)' }}>OR</div>
           <div style={{ padding: '0 0 2rem 0' }}>
 
             <div className='shadow createnewgroup-button flex justcont-center relative alignitems-center' onClick={() => openMenu('newGroup')}>Create new group</div>

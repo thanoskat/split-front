@@ -1,6 +1,6 @@
-import { Transfers, DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, TabSwitcher, UserBar, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer, NewGuest, NewMember } from '.'
-import { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react'
-import { Outlet, useSearchParams, useParams, useNavigate, UNSAFE_NavigationContext, useLocation, useNavigationType } from 'react-router-dom'
+import { DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions,GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer, NewGuest, NewMember } from '.'
+import { useState, useEffect, useRef} from 'react'
+import { Outlet, useSearchParams, useParams, useNavigate, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,7 +16,7 @@ const Main = () => {
   const [mainIsLoading, setMainIsLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
-  const navigationType = useNavigationType()
+  // const navigationType = useNavigationType()
   const location = useLocation()
   // const navigation = useContext(UNSAFE_NavigationContext).navigator
   const [menu, setMenu] = useState(null)
@@ -56,19 +56,10 @@ const Main = () => {
     setMenu(menuName)
   }
 
-  const getHistoricBalance = async () => {
-    try {
-      const res = await api.post('/expense/txhistory', { groupID: displayedGroup._id }, { signal: abortControllerRef.current.signal })
-      console.log(res)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
+  
 
   return (
     <div style={{ height: '100%' }} className='flex column'>
-      {/* <IonIcon onClick={getHistoricBalance} className='pointer' name='construct-outline' style={{ fontSize: '32px', color: '#eeeeee' }} /> */}
       {mainIsLoading &&
         <div className='mainIsLoading flex alignself-center'>
           <IonIcon name='sync' className='spin' size={50} />

@@ -565,9 +565,14 @@ input:focus {
   box-shadow: rgba(0, 0, 0, 0.50) 0px 4px 4px;
 }
 
-.guestShadow {
-  -webkit-box-shadow: 0 0 7px var(--label-color-6);
-  box-shadow: 0 0 7px var(--label-color-6);
+.colorFade {
+  animation: mymove 4s;
+}
+
+@keyframes mymove {
+  0% {
+    background-color: #8583F2;
+  }
 }
 
 .spin {
@@ -1425,7 +1430,8 @@ h1 {
   margin-left: 0px;
   top: 90px;
 }
-.dot{
+
+.dot {
   height: 5px;
   width: 5px;
   background-color: #bbbbbb;
@@ -1436,6 +1442,11 @@ h1 {
 .signUpMsg {
   padding-bottom: 1rem;
   white-space: initial;
+}
+
+.loginBox {
+  padding: 1rem 0.8rem;
+  border-radius: 10px
 }
 
 .mailbox {

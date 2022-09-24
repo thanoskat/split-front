@@ -2,10 +2,12 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import useAxios from '../utility/useAxios'
 import currency from 'currency.js'
-import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import IonIcon from '@reacticons/ionicons'
+import { useDispatch, useSelector } from 'react-redux'
+import { setTrackID } from '../redux/mainSlice'
+import { useNavigate } from 'react-router-dom'
 dayjs.extend(calendar)
 
 export default function BreakDown({ setMenuParams }) {
@@ -14,6 +16,9 @@ export default function BreakDown({ setMenuParams }) {
   const api = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const abortControllerRef = useRef(new AbortController())
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',
@@ -23,7 +28,6 @@ export default function BreakDown({ setMenuParams }) {
     sameElse: 'MMM DD'
   }
 
-
   //add button on settle up
   //navigate to expense when clicked?
 
@@ -32,6 +36,7 @@ export default function BreakDown({ setMenuParams }) {
     try {
       const res = await api.post('/expense/txhistory', { groupID: displayedGroup._id }, { signal: abortControllerRef.current.signal })
       console.log(res.data)
+      // const items = Array.from(res.data.keys());
       getTxHistory(res.data)
     } catch (err) {
       console.log("txhistory Error", err)
@@ -44,8 +49,18 @@ export default function BreakDown({ setMenuParams }) {
   }, [])
 
 
+  const handleExpenseClick = (id, isTransfer) => {
+    dispatch(setTrackID(id))
+    setMenuParams({ open: false })
+    if (isTransfer) {
+      navigate(`/${displayedGroup._id}/transfers`)
+    } else {
+      navigate(`/${displayedGroup._id}/expenses`)
+    }
+  }
+
   return (
-    <div id='breakDown' className='flex column fixed' style={{ right: "0px" }}>
+    <div id='breakDown' className='flex column fixed ' style={{ right: "0px" }}>
       {loading && <div className='loadingCenter alignself-center'>
         <IonIcon name='sync' className='spin' size={50} />
       </div>}
@@ -56,11 +71,9 @@ export default function BreakDown({ setMenuParams }) {
         <div>
         </div>
       </div>
-
-      <div className='flex column overflow-auto' style={{ maxWidth: "100%", overflowX: "hidden" }}>
-
+      <div className='flex column overflow-auto ' style={{ maxWidth: "100%", overflowX: "hidden" }}>
         {txhistory?.map((tx, index) => (
-          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px"}} >
+          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px" }} onClick={() => handleExpenseClick(tx.id, tx.isTransfer)}>
             <div className='flex column alignitems-center' style={{ gap: "0px" }}>
               <div className='flex row justcont-spacebetween'>
                 <div id="expense-date"> {dayjs(tx.date).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
@@ -70,7 +83,7 @@ export default function BreakDown({ setMenuParams }) {
                 {tx.description}
               </div>
             </div>
-            <div className='flex row justcont-center alignitems-center gap10' style={{
+            <div className='flex row justcont-center alignitems-center gap10 pointer' style={{
               width: "400px",
               minHeight: "80px"
 
@@ -82,10 +95,10 @@ export default function BreakDown({ setMenuParams }) {
                       {tx.isTransfer === true ? (tx.borrowed !== 0 ? "You received" : "You transferred")
                         :
                         (tx.borrowed !== 0 ? "Paid on your behalf" :
-                          <div className='flex column gap6' style={{marginTop:"7px"}}>
+                          <div className='flex column gap6' style={{ marginTop: "7px" }}>
                             <div className='flex row justcont-end' style={{ color: "#7f7f7f" }}>You paid {currency(tx.userPaid, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
                             <div className='flex row justcont-end' style={{ color: "#7f7f7f" }}>Your share -{currency(tx.userShare, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
-                            <div className='cla flex row justcont-end'><div>You paid extra</div>&nbsp;<div style={{ color: "#dddddd" }}>{currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format()}</div></div>
+                            <div className='cla flex row justcont-end'><div>You paid an extra</div>&nbsp;<div style={{ color: "#dddddd" }}>{currency(tx.lent, { symbol: '€', decimal: ',', separator: '.' }).format()}</div></div>
                           </div>
                         )}
                     </strong>
@@ -129,18 +142,16 @@ export default function BreakDown({ setMenuParams }) {
             </div>
           </div>
         )).reverse()}
-        <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px"}}>
+        <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px" }}>
           <div className='flex row justcont-spacebetween'>
             <div id="expense-date"> {dayjs(displayedGroup.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
             <div id="expense-time"> {dayjs(displayedGroup.createdAt).format('HH:mm')}</div>
           </div>
           {/* <h2><span>Group Created</span></h2> */}
-          <div style={{fontSize:"22px", fontWeight:"600", color:"#dddddd"}}>Group Created</div>
-          <div className='dot' style={{marginTop:"10px"}}></div>
+          <div style={{ fontSize: "22px", fontWeight: "600", color: "#dddddd" }}>Group Created</div>
+          <div className='dot' style={{ marginTop: "10px" }}></div>
         </div>
-        
       </div>
     </div>
-
   )
 }
