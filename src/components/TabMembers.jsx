@@ -33,11 +33,11 @@ const TabMembers = () => {
       let toFrom = []
       let isSenderReceiverSettled
       const isGuest = member.guest
-      selectedGroup.expenses.forEach(expense => {
-        if (expense.spender._id === member._id) {
-          total = total.add(expense.amount)
-        }
-      })
+      // selectedGroup.expenses.forEach(expense => {
+      //   if (expense.spender._id === member._id) {
+      //     total = total.add(expense.amount)
+      //   }
+      // })
       selectedGroup.pendingTransactions.forEach((tx) => {
         if (tx.sender?._id === member?._id) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
@@ -55,7 +55,7 @@ const TabMembers = () => {
         isSenderReceiverSettled,
         toFrom,
         pendingTotalAmount: pendingTotalAmount.value,
-        totalSpent: total.value,
+        totalSpent:0, //total.value,
         isGuest: isGuest
       })
     })

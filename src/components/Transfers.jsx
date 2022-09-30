@@ -95,10 +95,10 @@ const Transfers = () => {
     return (
       <div>
         <div
-           id='expense' ref={innerRef} className={`flex column ${innerRef === null ? "" : "colorFade"}`}>
+          id='expense' ref={innerRef} className={`flex column ${innerRef === null ? "" : "colorFade"}`}>
           {/* id='expense' ref={innerRef} className={`flex column guestShadow marginLeft4px marginRight4px`}
           > */}
-          
+
           <div
             className='flex row justcont-spacebetween alignitems-center'>
             <div className='flex row'>
@@ -154,10 +154,10 @@ const Transfers = () => {
   }
 
   return (
-    <div id='expenses-tab' className='flex column'>
+    <div id='expenses-tab' className='flex column justcont-spacebetween'>
       {selectedGroup.transfers.length === 0 ?
         <div id='expense' className='flex justcont-center'>
-          <div className='flex whiteSpace-initial' style={{ color: 'white' }}>
+          <div className='flex whiteSpace-initial' style={{ color: 'white', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
             There are currently no recorded money transfers
           </div>
         </div> : ''}
@@ -165,6 +165,12 @@ const Transfers = () => {
         {selectedGroup.transfers.map(transfer => (
           <Transfer innerRef={transfer._id === trackedExpenseID ? ref : null} transfer={transfer} key={transfer._id} />
         )).reverse()}
+        {selectedGroup.expenses.length === 0 && selectedGroup.transfers.length === 0 ?
+          <div class="movingarrows flex column alignself-end" >
+            <span class="movingarrow one"></span>
+            <span class="movingarrow two"></span>
+            <span class="movingarrow three"></span>
+          </div> : ""}
       </div>
     </div>
   )

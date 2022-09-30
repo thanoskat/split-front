@@ -27,7 +27,7 @@ const EditExpense = ({ close, expense }) => {
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
   console.log(JSON.stringify(newExpense, null, 2))
   // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
-
+  console.log(newExpense)
   useEffect(() => {
     // setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
   }, [selectedGroup])
@@ -105,6 +105,17 @@ const EditExpense = ({ close, expense }) => {
     }
   }
 
+  const spenderClicked = (spenderID) => {
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, spenders: null, ...removedContributionAmountErrors() })
+    console.log(newExpense.spenders.length)
+    if (newExpense.spenders.map(spender => spender?.spenderId).includes(spenderID)) {
+      setNewExpense({ ...newExpense, spenders: newExpense.spenders.filter(spender => spender.spenderId !== spenderID) })
+    }
+    else {
+      setNewExpense({ ...newExpense, spenders: [...newExpense.spenders, { spenderId: spenderID, spenderAmount: "" }] })
+    }
+  }
+
   const allMembers = () => {
     if (newExpense.participants) {
       return selectedGroup.members.length === newExpense.participants.length
@@ -153,11 +164,12 @@ const EditExpense = ({ close, expense }) => {
 
   const paidByClicked = () => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
-    if (newExpense.spender === sessionData.userId) {
-      setNewExpense(({ ...newExpense, spender: '' }))
-    } else {
-      setNewExpense(({ ...newExpense, spender: sessionData.userId }))
+    if (newExpense.spenders.length > 1) {
+      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] }))
+    } else if (newExpense.spenders.length === 1 && newExpense.spenders[0].spenderId === sessionData.userId) {
+      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [] }))
     }
+    else { setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] })) }
   }
 
   const senderClicked = (spenderID) => {
@@ -171,7 +183,7 @@ const EditExpense = ({ close, expense }) => {
 
   const PaidBy = () => {
     return (
-      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
+      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', borderBottomLeftRadius: newExpense.spenders.length >= 2 ? "0px" : "", borderBottomRightRadius: newExpense.spenders.length >= 2 ? "0px" : "" }}>
         <div
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={paidByClicked}
@@ -179,7 +191,7 @@ const EditExpense = ({ close, expense }) => {
           <div style={{ color: '#b6bfec' }}>Paid by</div>
           <div
             className='flex row alignitems-center gap8'
-           style={{ color: `${newExpense.spender === sessionData.userId ? 'white' : 'gray'}` }}
+            style={{ color: `${newExpense.spender === sessionData.userId ? 'white' : 'gray'}` }}
           >
             <div>You</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
@@ -188,18 +200,19 @@ const EditExpense = ({ close, expense }) => {
             </div>
           </div>
         </div>
-        {newExpense.spender !== sessionData.userId &&
+        {!newExpense.paidbyYouClicked &&
           <div className='flex row wrap' style={{ gap: '14px' }}>
-            {selectedGroup.members?.map(member => (
+            {selectedGroup.members?.map((member, index) => (
               <div
-                className={`pill2 pointer shadow ${newExpense.spender === member._id ? 'filled' : ''}`}
-                onClick={() => senderClicked(member._id)}
+                key={member._id}
+                className={`pill2 pointer shadow ${newExpense.spenders.map(spender => spender?.spenderId).includes(member._id) ? 'filled' : ''}`}
+                onClick={() => spenderClicked(member._id, index)}
               >
                 {member.nickname}
               </div>
             ))}
           </div>}
-        {newExpenseErrorMessages.spender && <div className='mailmsg t6'>{newExpenseErrorMessages.spender}</div>}
+        {newExpenseErrorMessages.spenders && <div className='mailmsg t6'>{newExpenseErrorMessages.spenders}</div>}
       </div>
     )
   }
@@ -260,6 +273,16 @@ const EditExpense = ({ close, expense }) => {
     )
   }
 
+  const changePaidByMany = (e, spender, index) => {
+    newExpenseErrorMessages['spenders[' + index + '].spenderAmount'] = null
+    newExpenseErrorMessages.paidByMany = null
+    setNewExpense(
+      {
+        ...newExpense,
+        spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
+      })
+  }
+
   return (
     <div id='new-expense' className='flex column fixed' style={{ left: '0px', top: '0px', zIndex: '3' }}>
       <div id='menu-header' className='flex row'>
@@ -267,7 +290,7 @@ const EditExpense = ({ close, expense }) => {
           <i className='arrow left icon'></i>
         </div>
         <div>
-          New expense
+          Edit Expense
         </div>
       </div>
       <div className='flex column overflow-auto' style={{ gap: '14px' }}>
@@ -303,6 +326,45 @@ const EditExpense = ({ close, expense }) => {
         </div>
         {selectedGroup?.groupLabels.length !== 0 && <LabelSection />}
         <PaidBy />
+        {newExpense.spenders.length >= 2 &&
+          <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', marginTop: "-15px", borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}>
+            <div className='flex column' style={{ gap: '14px' }}>
+              {newExpense.spenders?.map((spender, index) => (
+                <div key={spender.spenderId} className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                  <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                    {selectedGroup?.members?.find(member => member._id === spender?.spenderId)?.nickname}
+                  </div>
+                  <input
+                    type='text'
+                    inputMode='decimal'
+                    className='text-align-right'
+                    placeholder='0'
+                    style={{
+                      borderRadius: '8px',
+                      padding: '6px',
+                      fontSize: '16px',
+                      flex: '1 1 auto',
+                      width: '100%',
+                      borderColor: `${newExpenseErrorMessages['spenders[' + index + '].spenderAmount'] ? 'var(--pink)' : '#999999'}`,
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
+                    }}
+                    id='styled-input'
+                    onChange={e => changePaidByMany(e, spender, index)}
+                    value={spender.spenderAmount}
+                    autoComplete='off'
+                  />
+                </div>
+              ))}
+              <div style={{ fontSize: '12px', alignSelf: 'center' }}>
+                REMAINING:&nbsp;
+                {currency(newExpense.amount).subtract(newExpense.spenders.reduce(((sum, spender) => currency(sum).add(spender.spenderAmount).value), 0)).value}
+              </div>
+              {newExpenseErrorMessages.paidByMany && <div className='mailmsg t6'>{newExpenseErrorMessages.paidByMany}</div>}
+            </div>
+          </div>
+        }
+
         <MemberSection />
         <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', gap: '28px', backgroundColor: '#151517' }}>
           <div
@@ -322,26 +384,26 @@ const EditExpense = ({ close, expense }) => {
           </div>
 
           {!newExpense?.splitEqually && newExpense.participants.length > 0 &&
-          <div className='flex column' style={{ gap: '14px' }}>
-            {newExpense.participants?.map((participant, index) => (
-              <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
-                <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                  {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
-                </div>
-                <input
-                  type='text'
-                  inputMode='decimal'
-                  className='text-align-right'
-                  placeholder='0'
-                  style={{
-                    borderRadius: '8px',
-                    padding: '6px',
-                    fontSize: '16px',
-                    flex: '1 1 auto',
-                    width: '100%',
-                    borderColor: `${newExpenseErrorMessages['participants['+index+'].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
-                    borderWidth: '1px',
-                    borderStyle: 'solid'
+            <div className='flex column' style={{ gap: '14px' }}>
+              {newExpense.participants?.map((participant, index) => (
+                <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                  <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
+                    {selectedGroup?.members?.find(member => member._id === participant.memberId)?.nickname}
+                  </div>
+                  <input
+                    type='text'
+                    inputMode='decimal'
+                    className='text-align-right'
+                    placeholder='0'
+                    style={{
+                      borderRadius: '8px',
+                      padding: '6px',
+                      fontSize: '16px',
+                      flex: '1 1 auto',
+                      width: '100%',
+                      borderColor: `${newExpenseErrorMessages['participants[' + index + '].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                      borderWidth: '1px',
+                      borderStyle: 'solid'
                     }}
                     id='styled-input'
                     onChange={e => changeContribution(e, participant, index)}

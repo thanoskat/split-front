@@ -86,7 +86,6 @@ export default function BreakDown({ setMenuParams }) {
             <div className='flex row justcont-center alignitems-center gap10 pointer' style={{
               width: "400px",
               minHeight: "80px"
-
             }}>
               <div className='flex row justcont-end' style={{ maxWidth: "50px" }}>
                 <div className='flex column alignitems-end'>
@@ -142,6 +141,28 @@ export default function BreakDown({ setMenuParams }) {
             </div>
           </div>
         )).reverse()}
+
+        {txhistory?.length === 0 ?
+          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "0px" }}>
+            <div className='flex row justcont-spacebetween'>
+              <div id="expense-date"> {dayjs().calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
+              <div id="expense-time"> {dayjs().format('HH:mm')}</div>
+            </div>
+            <div id="expense-description" style={{ whiteSpace: 'initial', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
+              No recorded expenses or transfers 😴
+            </div>
+            <div className='flex row justcont-center alignitems-center gap10' style={{
+              width: "400px",
+              minHeight: "80px"
+            }}>
+              <div className='flex row justcont-end' style={{ maxWidth: "50px" }}>
+              </div>
+              <div className='vl'></div>
+              <div className='' style={{ maxWidth: "50px" }}>
+              </div>
+            </div>
+          </div>
+          : ""}
         <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px" }}>
           <div className='flex row justcont-spacebetween'>
             <div id="expense-date"> {dayjs(displayedGroup.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>
@@ -151,6 +172,7 @@ export default function BreakDown({ setMenuParams }) {
           <div style={{ fontSize: "22px", fontWeight: "600", color: "#dddddd" }}>Group Created</div>
           <div className='dot' style={{ marginTop: "10px" }}></div>
         </div>
+
       </div>
     </div>
   )

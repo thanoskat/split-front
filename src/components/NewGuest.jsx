@@ -19,7 +19,7 @@ function NewGuest({ openMenu }) {
     filteredExpenses: []
   })
 
-  console.log(guestInfo)
+  //console.log(guestInfo)
   console.log(selectedGroup)
 
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
@@ -136,52 +136,54 @@ function NewGuest({ openMenu }) {
           {!signUpErrorMessages.nickname && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Guest's name</div>}
           {signUpErrorMessages.nickname && <div className='mailmsg t6'>{signUpErrorMessages.nickname}</div>}
         </div>
-
-        <div className="relative padding1010" style={{ borderRadius: "4px", border: "none", backgroundColor: " rgb(21, 21, 23)", fontSize: "16px", fontWeight: "700" }}>
-          <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
-            <div className='alignself-center' style={{ color: "#b6bfec" }}>Add guest in all shared expenses</div>
-            <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
+      {selectedGroup.expenses.some(expense=>expense.includeNewMemberToThisExpense===true)?
+        <div className='flex column gap10'>
+          <div className="relative padding1010" style={{ borderRadius: "4px", border: "none", backgroundColor: " rgb(21, 21, 23)", fontSize: "16px", fontWeight: "700" }}>
+            <div className='shadow flex relative justcont-spacebetween' style={{ boxShadow: "none" }}>
+              <div className='alignself-center' style={{ color: "#b6bfec" }}>Add guest in all shared expenses</div>
+              <div className='tick-cube' onClick={() => setGuestInfo({ ...guestInfo, participateInAll: !guestInfo.participateInAll })}> {guestInfo.participateInAll ? <i style={{ cursor: "pointer", fontSize: "29px", bottom: "0px", color: "rgb(182, 191, 236)" }} className='check icon absolute'></i> : ""} </div>
+            </div>
           </div>
-        </div>
-        {!guestInfo.participateInAll ?
-          <div className='overflow-auto'>
-            <div className='loginBox flex column ' style={{ backgroundColor: "rgb(21, 21, 23)", borderColor: "rgb(21, 21, 23)", borderStyle: "solid" }}>
-              <div className='whiteSpace-initial'>
-                <div className='flex column gap4 padding4 whiteSpace-initial'>
-                  <div style={{ color: "white" }}>Choose expenses your guest should participate in</div>
+          {!guestInfo.participateInAll ?
+            <div className='overflow-auto'>
+              <div className='loginBox flex column ' style={{ borderRadius: "4px",backgroundColor: "rgb(21, 21, 23)", borderColor: "rgb(21, 21, 23)", borderStyle: "solid" }}>
+                <div className='whiteSpace-initial'>
+                  <div className='flex column gap4 padding4 whiteSpace-initial'>
+                    <div style={{ color: "white" }}>Choose expenses your guest should participate in</div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: "1rem", height: "500px" }}>
-              {guestInfo?.allExpenses.map(expense => (
-                <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${guestInfo.filteredExpenses?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmptyforMenu'}`} onClick={() => handleClick(expense)}>
-                  <div className='flex row justcont-spacebetween alignitems-center'>
-                    <div className='flex row'>
-                      {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
-                      <div id='expense-time'>{dayjs(expense.createdAt).format('HH:mm')}</div>
+              <div id='expenses' className='flex flex-1 column overflow-auto' style={{ marginTop: "1rem", height: "500px" }}>
+                {guestInfo?.allExpenses.map(expense => (
+                  <div key={expense._id} id='reviewedExpense' className={`flex column pointer ${guestInfo.filteredExpenses?.map(expense => expense._id).includes(expense._id) ? 'expenseFilled' : 'expenseEmptyforMenu'}`} onClick={() => handleClick(expense)}>
+                    <div className='flex row justcont-spacebetween alignitems-center'>
+                      <div className='flex row'>
+                        {/* <div id='expense-date'>{dayjs(expense.createdAt).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div> */}
+                        <div id='expense-time'>{dayjs(expense.createdAt).format('HH:mm')}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className='flex row justcont-spacebetween'>
-                    <div id='expense-description'>{expense.description}</div>
-                    <div id='expense-amount'>${expense.amount}</div>
-                  </div>
-                  <div className='flex row justcont-spacebetween alignitems-center'>
-                    <div className='flex row alignitems-center' style={{ gap: '8px' }}>
+                    <div className='flex row justcont-spacebetween'>
+                      <div id='expense-description'>{expense.description}</div>
+                      <div id='expense-amount'>${expense.amount}</div>
+                    </div>
+                    <div className='flex row justcont-spacebetween alignitems-center'>
+                      <div className='flex row alignitems-center' style={{ gap: '8px' }}>
 
-                      <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
-                      <div
-                        id='expense-pill' className='shadow'>
-                        {expense?.spender.nickname}
+                        <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
+                        <div
+                          id='expense-pill' className='shadow'>
+                          {/* {expense?.spender.nickname} */}
+                        </div>
                       </div>
                     </div>
                   </div>
+                )).reverse()}
+                <div style={{ marginBottom: "80px" }}>
                 </div>
-              )).reverse()}
-              <div style={{ marginBottom: "80px" }}>
               </div>
-            </div>
-          </div> : ""}
+            </div> : ""}
+        </div>:""}
 
       </div>
       <div style={{ marginTop: 'auto' }}>

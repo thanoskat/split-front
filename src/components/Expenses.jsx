@@ -31,7 +31,7 @@ const Expenses = () => {
     sameElse: 'MMM DD'
   }
   const ref = useRef(null);
-
+  console.log(selectedGroup)
   const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
     if (filters.length === 0) return true
     if (filters.length === 1) {
@@ -140,12 +140,12 @@ const Expenses = () => {
                   {selectedGroup.groupLabels.find(label => label._id === expense.label).name}
                 </div>}
               <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
-              <div
+              {/* <div
                 id='expense-pill' className='shadow pointer'
                 onClick={(e) => addFilter(e, expense.spender._id)}
               >
                 {expense.spender?.nickname}
-              </div>
+              </div> */}
             </div>
             <div className='flex gap10 alignitems-center'>
               {expense.splitEqually === false ?
@@ -203,7 +203,7 @@ const Expenses = () => {
           classNames='bottomslide'
           unmountOnExit
         >
-          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spender: expense.spender._id, participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount?.toString() })) }} close={() => setMenu(null)} />
+          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spenders: expense.spenders.map(spender => ({ ...spender, spenderAmount: spender.spenderAmount?.toString() })), participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount?.toString() })) }} close={() => setMenu(null)} />
         </CSSTransition>
         <CSSTransition
           in={menu === 'deleteExpense'}
@@ -226,13 +226,15 @@ const Expenses = () => {
   }
 
   return (
-    <div id='expenses-tab' className='flex column'>
+    <div id='expenses-tab' className='flex column justcont-spacebetween'>
       {selectedGroup.expenses.length === 0 ?
-        <div id='expense' className='flex justcont-center'>
-          <div className='flex whiteSpace-initial' style={{ color: 'white' }}>
-            There are currently no expenses
+        <div id='expense' className='flex justcont-center' >
+          <div className='flex whiteSpace-initial' style={{ color: 'white', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
+            There are currently no recorded expenses
           </div>
+
         </div> : ''}
+
       {filters.length > 0 &&
         <div className='flex row justcont-spacebetween alignitems-center'>
           <div id='expense-filters' className='flex row alignitems-center'>
@@ -256,6 +258,13 @@ const Expenses = () => {
         {filteredExpenses.map(expense => (
           <Expense innerRef={expense._id === trackedExpenseID ? ref : null} expense={expense} key={expense._id} />
         )).reverse()}
+        {selectedGroup.expenses.length === 0 && selectedGroup.transfers.length===0 ?
+          <div class="movingarrows flex column alignself-end" >
+            <span class="movingarrow one"></span>
+            <span class="movingarrow two"></span>
+            <span class="movingarrow three"></span>
+          </div> : ""}
+
       </div>
     </div>
   )

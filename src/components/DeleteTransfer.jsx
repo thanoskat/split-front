@@ -60,7 +60,7 @@ const DeleteTransfer = ({ transfer, openMenu }) => {
   }
 
   return(
-    <div className='top-radius flex column fixed' style={{ zIndex: '2', gap: '14px', padding: '14px', left: '14px', bottom: '0px', backgroundColor: 'var(--layer-1-color)', width: 'calc(100% - 56px)' }}>
+    <div className='top-radius flex column fixed' style={{ zIndex: '2', gap: '14px', padding: '14px', left: '14px', bottom: '0px', backgroundColor: 'var(--layer-1-color)', width: 'calc(100% - 28px)' }}>
       <div className='flex row' style={{ fontSize: '26px' }}>
         Delete?
       </div>

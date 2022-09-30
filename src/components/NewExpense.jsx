@@ -16,7 +16,7 @@ const NewExpense = ({ close }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
-    paidByMany: true,
+
     amount: '',
     description: '',
     label: null,
@@ -126,28 +126,30 @@ const NewExpense = ({ close }) => {
       setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId, contributionAmount: '' }] })
     }
   }
-
-  const senderClicked = (spenderID) => {
-    //! Requires validation?
+//spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
+  const spenderClicked = (spenderID) => {
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, spenders: null, ...removedContributionAmountErrors() })
+    console.log(newExpense.spenders.length)
     if (newExpense.spenders.map(spender => spender?.spenderId).includes(spenderID)) {
       setNewExpense({ ...newExpense, spenders: newExpense.spenders.filter(spender => spender.spenderId !== spenderID) })
     }
     else {
-      setNewExpense({ ...newExpense, spenders: [...newExpense.spenders, { spenderId: spenderID }] })
+      //const distributedExpense=currency(newExpense.amount).distribute(newExpense.spenders.length+1).map(e=>e.value)
+      setNewExpense({ ...newExpense, spenders:[...newExpense.spenders, { spenderId: spenderID, spenderAmount:"" }]})
+      //setNewExpense({ ...newExpense, spenders:[...newExpense.spenders, { spenderId: spenderID, spenderAmount:distributedExpense[index] }]})
     }
   }
 
-
+//spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
   const paidByClicked = () => {
 
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
     if (newExpense.spenders.length > 1) {
-      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId }] }))
+      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] }))
     } else if (newExpense.spenders.length === 1 && newExpense.spenders[0].spenderId === sessionData.userId) {
       setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [] }))
     }
-    else { setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId }] })) }
-
+    else { setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] })) }
   }
 
   // const allMembers = () => {
@@ -201,7 +203,7 @@ const NewExpense = ({ close }) => {
 
   const PaidBy = () => {
     return (
-      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', borderBottomLeftRadius: newExpense.spenders.length >= 2 ? "0px" : "",borderBottomRightRadius: newExpense.spenders.length >= 2 ? "0px" : "" }}>
+      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', borderBottomLeftRadius: newExpense.spenders.length >= 2 ? "0px" : "", borderBottomRightRadius: newExpense.spenders.length >= 2 ? "0px" : "" }}>
         <div
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={paidByClicked}
@@ -220,18 +222,17 @@ const NewExpense = ({ close }) => {
         </div>
         {!newExpense.paidbyYouClicked &&
           <div className='flex row wrap' style={{ gap: '14px' }}>
-            {selectedGroup.members?.map(member => (
+            {selectedGroup.members?.map((member,index) => (
               <div
-                className={`pill2 pointer shadow ${newExpense.spenders.map(spender => spender?.spenderId).includes(member._id) ? 'filled' : ''}`} //newExpense.participants.map(participant => participant?.memberId).includes(member._id)
-                onClick={() => senderClicked(member._id)}
+                key={member._id}
+                className={`pill2 pointer shadow ${newExpense.spenders.map(spender => spender?.spenderId).includes(member._id) ? 'filled' : ''}`}
+                onClick={() => spenderClicked(member._id, index)}
               >
                 {member.nickname}
               </div>
             ))}
           </div>}
-
-
-        {newExpenseErrorMessages.spender && <div className='mailmsg t6'>{newExpenseErrorMessages.spender}</div>}
+        {newExpenseErrorMessages.spenders && <div className='mailmsg t6'>{newExpenseErrorMessages.spenders}</div>}
       </div>
     )
   }
@@ -271,6 +272,8 @@ const NewExpense = ({ close }) => {
     )
   }
 
+
+  //, spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
   const changeAmount = (e) => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, amount: null })
     setNewExpense({ ...newExpense, amount: e.target.value })
@@ -364,11 +367,11 @@ const NewExpense = ({ close }) => {
         <PaidBy />
 
 
-        {newExpense.paidByMany && newExpense.spenders.length >= 2 &&
+        {newExpense.spenders.length >= 2 &&
           <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', marginTop: "-15px", borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}>
             <div className='flex column' style={{ gap: '14px' }}>
               {newExpense.spenders?.map((spender, index) => (
-                <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+                <div key={spender.spenderId} className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
                   <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
                     {selectedGroup?.members?.find(member => member._id === spender?.spenderId)?.nickname}
                   </div>

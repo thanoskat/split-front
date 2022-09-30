@@ -103,7 +103,7 @@ export default function CreateNewGroup({ openMenu }) {
         />
         <div className='flex column' style={{ marginTop: '15px' }}>
           <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px', fontSize: '20px' }}>Select currency</div>
-          <div style={{ backgroundColor: '#151517', padding: '0.8rem' , borderRadius:'8px', width:'5rem', cursor:'pointer' }}>
+          <div style={{ backgroundColor: '#151517', padding: '0.8rem' , borderRadius:'8px', width:'7rem', cursor:'pointer' }}>
             <div className='currency-ticker-section' style={{ position: 'relative', justifyContent: 'flex-start', left: '0px' }}>
               <i className='angle down icon'></i>
               <div className='currency-ticker'>EUR </div>
