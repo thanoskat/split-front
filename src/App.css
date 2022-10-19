@@ -200,6 +200,22 @@ body, html {
   background-color: #eeeeee;
 }
 
+#operator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  overflow: hidden;
+  flex: 1;
+  padding: 3px;
+  font-size: 28px;
+  border-radius: 10px;
+  background-color: #3f3f3f;
+  cursor: pointer;
+  color: #eeeeee
+}
+
 #menu-header {
   /* padding: 14px 0px 14px 0px; */
   font-size: 28px;
@@ -1651,8 +1667,10 @@ h1 {
 
 
 *, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
- }
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 
 .movingarrows {
@@ -1661,75 +1679,79 @@ h1 {
   overflow: hidden;
 }
 
-.movingarrow
-{
+.movingarrow {
   display: block;
   width: 5px;
   height: 5px;
-  -ms-transform: rotate(45deg); /* IE 9 */
-  -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+  -ms-transform: rotate(45deg);
+  /* IE 9 */
+  -webkit-transform: rotate(45deg);
+  /* Chrome, Safari, Opera */
   transform: rotate(45deg);
-   
+
   border-right: 2px solid var(--label-color-6);
   border-bottom: 2px solid var(--label-color-6);
   margin: 0 0 3px 4px;
-  
+
   width: 16px;
   height: 16px;
 }
 
 
-.one
-{
+.one {
   margin-top: 1px;
 }
 
-.one, .two, .three
-{
-    -webkit-animation: arrowAnim 1s infinite;
-    -moz-animation: arrowAnim 1s infinite;
-    animation: arrowAnim 1s infinite;
-  
+.one, .two, .three {
+  -webkit-animation: arrowAnim 1s infinite;
+  -moz-animation: arrowAnim 1s infinite;
+  animation: arrowAnim 1s infinite;
+
 }
 
-.one
-{
+.one {
   -webkit-animation-delay: .1s;
   -moz-animation-delay: .1s;
   -webkit-animation-direction: alternate;
-  
+
   animation-direction: alternate;
   animation-delay: alternate;
 }
 
-.two
-{
+.two {
   -webkit-animation-delay: .2s;
   -moz-animation-delay: .2s;
   -webkit-animation-direction: alternate;
-  
+
   animation-delay: .2s;
   animation-direction: alternate;
-  
+
   margin-top: -6px;
 }
 
-.three
-{
+.three {
   -webkit-animation-delay: .3s;
   -moz-animation-delay: .3s;
   -webkit-animation-direction: alternate;
-  
+
   animation-delay: .3s;
   animation-direction: alternate;
-  
+
   margin-top: -6px;
 }
 
 
 @keyframes arrowAnim {
 
-  0%   { opacity: 0; }
-  50%  { opacity: .5; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

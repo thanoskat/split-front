@@ -16,7 +16,7 @@ const NewExpense = ({ close }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
-
+    focus: false,
     amount: '',
     description: '',
     label: null,
@@ -28,7 +28,7 @@ const NewExpense = ({ close }) => {
 
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newExpenseErrorMessages, setNewExpenseErrorMessages] = useState({})
-  console.log(newExpense)
+
   // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const NewExpense = ({ close }) => {
       setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId, contributionAmount: '' }] })
     }
   }
-//spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
+  //spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
   const spenderClicked = (spenderID) => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, spenders: null, ...removedContributionAmountErrors() })
     console.log(newExpense.spenders.length)
@@ -135,12 +135,12 @@ const NewExpense = ({ close }) => {
     }
     else {
       //const distributedExpense=currency(newExpense.amount).distribute(newExpense.spenders.length+1).map(e=>e.value)
-      setNewExpense({ ...newExpense, spenders:[...newExpense.spenders, { spenderId: spenderID, spenderAmount:"" }]})
+      setNewExpense({ ...newExpense, spenders: [...newExpense.spenders, { spenderId: spenderID, spenderAmount: "" }] })
       //setNewExpense({ ...newExpense, spenders:[...newExpense.spenders, { spenderId: spenderID, spenderAmount:distributedExpense[index] }]})
     }
   }
 
-//spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
+  //spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
   const paidByClicked = () => {
 
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
@@ -222,7 +222,7 @@ const NewExpense = ({ close }) => {
         </div>
         {!newExpense.paidbyYouClicked &&
           <div className='flex row wrap' style={{ gap: '14px' }}>
-            {selectedGroup.members?.map((member,index) => (
+            {selectedGroup.members?.map((member, index) => (
               <div
                 key={member._id}
                 className={`pill2 pointer shadow ${newExpense.spenders.map(spender => spender?.spenderId).includes(member._id) ? 'filled' : ''}`}
@@ -322,8 +322,61 @@ const NewExpense = ({ close }) => {
   //   } else return
   // }
 
+  // const handleBlurOperator = () => {
+  //   //operatorRef.current.focus()
+  //   setNewExpense({ ...newExpense, focus: false })
+  // }
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+
+        if (ref.current && ref.current.contains(event.target)) {
+          setNewExpense({ ...newExpense, focus: true })
+        } else {
+          console.log("Here")
+          setNewExpense({ ...newExpense, focus: false })
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  const operatorRef = useRef(null)
+  console.log(operatorRef)
+  const operatorBlurHandle = (event) => {
+    console.log(event.target)
+    if (operatorRef.current && operatorRef.current.contains(event.target)) {
+      setNewExpense({ ...newExpense, focus: true })
+    } else {
+      console.log("Here")
+      setNewExpense({ ...newExpense, focus: false })
+    }
+  }
+
+  // const OperatorButtons = () => {
+  //   const operatorRef = useRef(null)
+  //   useOutsideAlerter(operatorRef);
+  //   return (
+  //     <div className='flex row justcont-spacebetween gap6'
+  //       style={{ marginTop: "10px" }}
+  //       ref={operatorRef}
+  //     >
+  //       <span id='operator'>+</span>
+  //       <span id='operator'>-</span>
+  //       <span id='operator'>x</span>
+  //       <span id='operator'>/</span>
+  //       <span id='operator'>=</span>
+  //     </div>
+  //   )
+  // }
+
   return (
-    <div id='new-expense' className='flex column fixed'>
+    <div id='new-expense' className='flex column fixed' style={{ paddingBottom: "5px" }}>
       <div id='menu-header' className='flex row'>
         <div className='cancelIcon alignself-center pointer' onClick={close}>
           <i className='arrow left icon'></i>
@@ -345,6 +398,8 @@ const NewExpense = ({ close }) => {
             onChange={e => changeAmount(e)}
             spellCheck='false'
             autoComplete='off'
+            onFocus={() => setNewExpense({ ...newExpense, focus: true })}
+            onBlur={(e) => operatorBlurHandle(e)}
           />
           {!newExpenseErrorMessages.amount && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>}
           {newExpenseErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.amount}</div>}
@@ -473,6 +528,18 @@ const NewExpense = ({ close }) => {
           {!submitLoading && <div>Submit</div>}
         </div>
         {submitErrorMessage && <div className='mailmsg t6 alignself-center'>{submitErrorMessage}</div>}
+
+        {newExpense.focus === true ?
+          <div className='flex row justcont-spacebetween gap6'
+            style={{ marginTop: "10px" }}
+            ref={operatorRef}
+          >
+            <span id='operator'>+</span>
+            <span id='operator'>-</span>
+            <span id='operator'>x</span>
+            <span id='operator'>/</span>
+            <span id='operator'>=</span>
+          </div> : ""}
       </div>
     </div>
   )
