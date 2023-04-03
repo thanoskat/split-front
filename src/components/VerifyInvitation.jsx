@@ -9,9 +9,8 @@ const VerifyInvitation = ({ setInitialPath }) => {
   const params = useParams()
   const api = useAxios()
   const abortControllerRef = useRef(new AbortController())
-  const [askforReview, setAskforReview] = useState(false)
+  //const [askforReview, setAskforReview] = useState(false)
   const [data, setData] = useState()
-  const sessionData = store.getState().authReducer.sessionData
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -25,16 +24,15 @@ const VerifyInvitation = ({ setInitialPath }) => {
         code: `${params.invitationCode}`
       },
         { signal: abortControllerRef.current.signal })
-
       setData(res.data)
-      const expenses = res.data.group.expenses
+      //const expenses = res.data.group.expenses
 
-      for (let i = 0; i < expenses.length; i++) {
-        if (expenses[i].splitEqually === true && expenses[i].includeNewMemberToThisExpense === true) {
-          setAskforReview(true)
-          break;
-        }
-      }
+      // for (let i = 0; i < expenses.length; i++) {
+      //   if (expenses[i].splitEqually === true && expenses[i].includeNewMemberToThisExpense === true) {
+      //     setAskforReview(true)
+      //     break;
+      //   }
+      // }
     }
     catch (error) {
       console.log('/invitation/verify', error.response?.status, error.response?.data)
@@ -57,9 +55,10 @@ const VerifyInvitation = ({ setInitialPath }) => {
       // setData(error.response.data)
       console.log('/invitation/accept', error.response.status, error.response.data)
     }
-    if (askforReview) {
-      navigate('review', { replace: true })
-    } else navigate(`/${data.group._id}/expenses`)
+    // if (askforReview) {
+    //   navigate('review', { replace: true })
+    // } else 
+    navigate(`/${data.groupId}/expenses`)
   }
 
 
@@ -88,7 +87,7 @@ const VerifyInvitation = ({ setInitialPath }) => {
               <IonIcon name='sync' className='spin' />
             </div> :
             <div className='flex column gap4 padding4'>
-              <div>{data?.inviterNickname} has invited you to join <strong>{data?.group.title}</strong></div>
+              <div>{data?.inviterNickName} has invited you to join <strong>{data?.groupTitle}</strong></div>
 
               <div className='flex column gap4 padding1812'>
                 <div onClick={acceptInvitation} style={{ backgroundColor: "var(--label-color-6)" }} className="accept-reject medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center">

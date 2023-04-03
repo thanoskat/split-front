@@ -94,4 +94,5 @@ export default App
 // [ ] delete group
 // [ ] kick a user
 // [ ] correct view in desktop mode
-//
+// [ ]!! New Expense -> Paid by->Unclick->select yourself from list down below ->click Paid by You again, spenders are empty issue
+// [ ]When 3 unequal split and uneqally distributed expenses are submitted with two members and a guest is about to be added, there is an issue as there he;s asked in which expenses to pariticipate and there are none available!

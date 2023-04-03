@@ -16,13 +16,14 @@ export default function CreateNewGroup({ openMenu }) {
   const [labelName, setLabelName] = useState('')
   const [newLabel, setNewLabel] = useState([])
 
+  console.log(newLabel)
   const createGroup = async () => {
     setLoading(true)
     try {
-      const group = await api.post('/groups/creategroup', {
-        creatorID: sessionData.userId,
+      const group = await api.post('/group/creategroup', {
+        baseCurrencyCode: "USD",
         title: groupName,
-        groupLabels: newLabel
+        labels: newLabel
       })
       console.log(group)
       setLoading(false)
@@ -103,7 +104,7 @@ export default function CreateNewGroup({ openMenu }) {
         />
         <div className='flex column' style={{ marginTop: '15px' }}>
           <div className='whiteSpace-initial' style={{ margin: '0px 0px 15px 0px', fontSize: '20px' }}>Select currency</div>
-          <div style={{ backgroundColor: '#151517', padding: '0.8rem' , borderRadius:'8px', width:'7rem', cursor:'pointer' }}>
+          <div style={{ backgroundColor: '#151517', padding: '0.8rem', borderRadius: '8px', width: '7rem', cursor: 'pointer' }}>
             <div className='currency-ticker-section' style={{ position: 'relative', justifyContent: 'flex-start', left: '0px' }}>
               <i className='angle down icon'></i>
               <div className='currency-ticker'>EUR </div>
@@ -156,6 +157,6 @@ export default function CreateNewGroup({ openMenu }) {
           {loading ? <IonIcon name='sync' className='t3 spin' /> : 'Create Group'}
         </button>
       </div>
-      </div>
+    </div>
   )
 }

@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 dayjs.extend(calendar)
 
 export default function BreakDown({ setMenuParams }) {
-  const [txhistory, getTxHistory] = useState()
+  const [txhistory, setTxHistory] = useState()
   const [loading, setLoading] = useState(false)
   const api = useAxios()
   const displayedGroup = useSelector(state => state.mainReducer.selectedGroup)
@@ -30,14 +30,14 @@ export default function BreakDown({ setMenuParams }) {
 
   //add button on settle up
   //navigate to expense when clicked?
-
+  console.log(displayedGroup)
   const getHistoricBalance = async () => {
     setLoading(true)
     try {
-      const res = await api.post('/expense/txhistory', { groupID: displayedGroup._id }, { signal: abortControllerRef.current.signal })
-      console.log(res.data)
+      const res = await api.post('/transaction/history', { groupID: displayedGroup.id }, { signal: abortControllerRef.current.signal })
+      //console.log(res.data)
       // const items = Array.from(res.data.keys());
-      getTxHistory(res.data)
+      setTxHistory(res.data.EUR) //need to decide how to display other currencies
     } catch (err) {
       console.log("txhistory Error", err)
     }
@@ -49,13 +49,13 @@ export default function BreakDown({ setMenuParams }) {
   }, [])
 
 
-  const handleExpenseClick = (id, isTransfer) => {
+  const handleTransactionClick = (id, isTransfer) => {
     dispatch(setTrackID(id))
     setMenuParams({ open: false })
     if (isTransfer) {
-      navigate(`/${displayedGroup._id}/transfers`)
+      navigate(`/${displayedGroup.id}/transfers`)
     } else {
-      navigate(`/${displayedGroup._id}/expenses`)
+      navigate(`/${displayedGroup.id}/expenses`)
     }
   }
 
@@ -73,7 +73,7 @@ export default function BreakDown({ setMenuParams }) {
       </div>
       <div className='flex column overflow-auto ' style={{ maxWidth: "100%", overflowX: "hidden" }}>
         {txhistory?.map((tx, index) => (
-          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px" }} onClick={() => handleExpenseClick(tx.id, tx.isTransfer)}>
+          <div id="marginLeft" className='flex column alignitems-center' style={{ marginBottom: "15px" }} onClick={() => handleTransactionClick(tx.id, tx.isTransfer)}>
             <div className='flex column alignitems-center' style={{ gap: "0px" }}>
               <div className='flex row justcont-spacebetween'>
                 <div id="expense-date"> {dayjs(tx.date).calendar(null, calendarConfig).toUpperCase()}&nbsp;</div>

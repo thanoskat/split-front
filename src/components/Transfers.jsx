@@ -1,26 +1,27 @@
 import { DeleteTransfer } from './'
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 import IonIcon from '@reacticons/ionicons'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import currency from 'currency.js'
 import store from '../redux/store'
-import { setTrackID } from '../redux/mainSlice'
+import { setSelectedGroup, setTrackID } from '../redux/mainSlice'
+import useAxios from '../utility/useAxios'
 dayjs.extend(calendar)
 
 const Transfers = () => {
 
-  // const navigate = useNavigate()
-  // const location = useLocation()
-  const [, setSearchParams] = useSearchParams()
+  const api = useAxios()
+  const toggle = useSelector(state => state.mainReducer.toggle)
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
-  const [filters, setFilters] = useState([])
-  //const [expandExpense, setExpandExpense] = useState([])
+  const [transfers, setTransfers] = useState([])
+  const abortControllerRef = useRef(null)
   const trackedExpenseID = store.getState().mainReducer.trackExpenseIDfromBreakdown
+
   const dispatch = useDispatch()
+
   const calendarConfig = {
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',
@@ -30,37 +31,7 @@ const Transfers = () => {
     sameElse: 'MMM DD'
   }
   const ref = useRef(null);
-  const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
-    if (filters.length === 0) return true
-    if (filters.length === 1) {
-      if (filters.includes(expense.spender._id) || filters.includes(expense.label)) return true
-    }
-    if (filters.includes(expense.spender._id) && filters.includes((expense.label))) return true
-    return false
-  })
 
-  // const deleteFunction = (e, expenseId) => {
-  //   e.stopPropagation()
-  //   setSearchParams({ menu: 'deleteexpense', id: expenseId })
-  // }
-
-  // const addFilter = (e, id) => {
-  //   e.stopPropagation()
-  //   if (!filters.includes(id)) {
-  //     setFilters([...filters, id])
-  //   }
-  // }
-
-  // const removeFilter = (id) => {
-  //   setFilters(filters.filter(filter => (filter !== id)))
-  // }
-
-  var filterSum = currency(0)
-  if (filters.length > 0) {
-    filteredExpenses.forEach(expense => {
-      filterSum = filterSum.add(expense.amount)
-    })
-  }
 
   const scrollToElement = () => {
     if (trackedExpenseID === "") return
@@ -73,9 +44,28 @@ const Transfers = () => {
     dispatch(setTrackID(""))
   }
 
+  const fetchTransfers = async () => {
+    try {
+
+      const transfersRes = await api.post('/transfer/getgrouptransfers', { groupId: selectedGroup.id, pageNumber: 1, pageSize: 20 }, { signal: abortControllerRef.current.signal });
+      setTransfers(transfersRes.data)
+     
+    } catch (error) {
+      console.log("fetchTransfers error", error)
+    }
+  }
+
   useEffect(() => {
+
+    abortControllerRef.current = new AbortController()
+    fetchTransfers()
     scrollToElement()
-  }, [])
+
+    return () => {
+
+      abortControllerRef.current.abort()
+    }
+  }, [toggle])
 
   const Transfer = ({ transfer, innerRef }) => {
     const [menu, setMenu] = useState(null)
@@ -114,7 +104,7 @@ const Transfers = () => {
             />
           </div>
           <div className='flex row justcont-spacebetween gap10 alignitems-center' style={{ fontSize: '18px' }}>
-            <div style={{ color: 'white' }}>{transfer.sender.nickname}&nbsp;to&nbsp;{transfer.receiver?.nickname}</div>
+            <div style={{ color: 'white' }}>{transfer.senderName}&nbsp;to&nbsp;{transfer.receiverName}</div>
             <div style={{ color: 'white' }}>{currency(transfer.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}</div>
           </div>
           {transfer.description !== '' &&
@@ -155,17 +145,18 @@ const Transfers = () => {
 
   return (
     <div id='expenses-tab' className='flex column justcont-spacebetween'>
-      {selectedGroup.transfers.length === 0 ?
+      {transfers.length === 0 ?
         <div id='expense' className='flex justcont-center'>
           <div className='flex whiteSpace-initial' style={{ color: 'white', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
             There are currently no recorded money transfers
           </div>
         </div> : ''}
       <div id='expenses'>
-        {selectedGroup.transfers.map(transfer => (
-          <Transfer innerRef={transfer._id === trackedExpenseID ? ref : null} transfer={transfer} key={transfer._id} />
+        {transfers.map(transfer => (
+          <Transfer innerRef={transfer.id === trackedExpenseID ? ref : null} transfer={transfer} key={transfer.id} />
         )).reverse()}
-        {selectedGroup.expenses.length === 0 && selectedGroup.transfers.length === 0 ?
+        {transfers.length === 0 ?
+          //selectedGroup.expenses.length === 0 && selectedGroup.transfers.length === 0 ?
           <div class="movingarrows flex column alignself-end" >
             <span class="movingarrow one"></span>
             <span class="movingarrow two"></span>

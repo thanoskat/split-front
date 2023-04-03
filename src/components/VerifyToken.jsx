@@ -14,6 +14,7 @@ const VerifyToken = () => {
   const verifyTokenParam = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/verify-token`, { token: token })
+      console.log("VerifyRes",res)
       setType(res.data.type)
     }
     catch(error) {

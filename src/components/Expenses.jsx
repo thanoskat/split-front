@@ -1,26 +1,29 @@
 import { ExpenseOptions, DeleteExpense, EditExpense } from './'
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 import IonIcon from '@reacticons/ionicons'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import currency from 'currency.js'
 import store from '../redux/store'
+import useAxios from '../utility/useAxios'
 import { setTrackID } from '../redux/mainSlice'
+
 
 dayjs.extend(calendar)
 
 const Expenses = () => {
 
-  // const navigate = useNavigate()
-  // const location = useLocation()
-  const [, setSearchParams] = useSearchParams()
+  const api = useAxios()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
   const [filters, setFilters] = useState([])
+  const toggle = useSelector(state => state.mainReducer.toggle)
+ 
   const [expandExpense, setExpandExpense] = useState([])
+  const [expenses, setExpenses] = useState([])
   const dispatch = useDispatch()
+  const abortControllerRef = useRef(null)
   const trackedExpenseID = store.getState().mainReducer.trackExpenseIDfromBreakdown
   const calendarConfig = {
     sameDay: '[Today]',
@@ -31,19 +34,25 @@ const Expenses = () => {
     sameElse: 'MMM DD'
   }
   const ref = useRef(null);
-  console.log(selectedGroup)
-  const filteredExpenses = selectedGroup?.expenses?.filter(expense => {
+
+  const filteredExpenses = expenses?.filter(expense => {
     if (filters.length === 0) return true
     if (filters.length === 1) {
-      if (filters.includes(expense.spender._id) || filters.includes(expense.label)) return true
+      if (filters.includes(expense.spender.id) || filters.includes(expense.label)) return true
     }
-    if (filters.includes(expense.spender._id) && filters.includes((expense.label))) return true
+    if (filters.includes(expense.spender.id) && filters.includes((expense.label))) return true
     return false
   })
 
-  const deleteFunction = (e, expenseId) => {
-    e.stopPropagation()
-    setSearchParams({ menu: 'deleteexpense', id: expenseId })
+  const fetchExpenses = async () => {
+    try {
+      const expenseRes = await api.post('/expense/getgroupexpenses', { groupId: selectedGroup.id, pageNumber: 1, pageSize: 20 }, { signal: abortControllerRef.current.signal });
+      setExpenses(expenseRes.data)
+      console.log(expenseRes.data)
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
   const addFilter = (e, id) => {
@@ -75,8 +84,17 @@ const Expenses = () => {
   }
 
   useEffect(() => {
+
+    abortControllerRef.current = new AbortController()
+
+    fetchExpenses()
     scrollToElement()
-  }, [])
+
+    return () => {
+
+      abortControllerRef.current.abort()
+    }
+  }, [toggle])
 
   //https://bobbyhadz.com/blog/react-onclick-only-parent
   const expenseClicked = (expenseClickedId) => {
@@ -108,7 +126,7 @@ const Expenses = () => {
       <div>
         <div
           id='expense' ref={innerRef} className={`flex column ${innerRef === null ? "pointer" : "colorFade pointer "}`}
-          onClick={() => expenseClicked(expense._id)}
+          onClick={() => expenseClicked(expense.id)}
         >
           <div
             className='flex row justcont-spacebetween alignitems-center'
@@ -135,9 +153,9 @@ const Expenses = () => {
                 <div
                   onClick={(e) => addFilter(e, expense.label)}
                   id='expense-pill' className='pointer shadow'
-                  style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === expense.label).color})` }}
+                  style={{ color: `var(--${selectedGroup.labels.find(label => label.id === expense.label).color})` }}
                 >
-                  {selectedGroup.groupLabels.find(label => label._id === expense.label).name}
+                  {selectedGroup.labels.find(label => label.id === expense.label).name}
                 </div>}
               <div style={{ fontSize: '12px', fontWeight: '700' }}>PAID BY</div>
               {/* <div
@@ -163,16 +181,16 @@ const Expenses = () => {
               </div>
             </div>
           </div>
-          {expandExpense.includes(expense._id) ?
+          {expandExpense.includes(expense.id) ?
             <div className='tree' style={{ bottom: '10px', margin: '0 0 -15px 0' }}>
               <ul>
                 {expense.participants.map((participant, index) => (
-                  <li key={participant._id}>
+                  <li key={participant.id}>
                     {
                       expense.splitEqually === false ?
-                        <div className='flex row'><div style={{ color: 'white' }}>{` ${currency(participant.contributionAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member._id === participant.memberId).nickname}</strong></div>
+                        <div className='flex row'><div style={{ color: 'white' }}>{` ${currency(participant.participationAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member.memberId === participant.memberId).name}</strong></div>
                         :
-                        <div className='flex row'><div style={{ color: 'white' }}>{` ${currency(currency(expense.amount).distribute(expense.participants.length)[index], { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member._id === participant.memberId).nickname}</strong></div>
+                        <div className='flex row'><div style={{ color: 'white' }}>{` ${currency(currency(expense.amount).distribute(expense.participants.length)[index], { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div> &nbsp;<strong>{selectedGroup.members.find(member => member.memberId === participant.memberId).name}</strong></div>
                     }
                   </li>))}
               </ul>
@@ -203,7 +221,7 @@ const Expenses = () => {
           classNames='bottomslide'
           unmountOnExit
         >
-          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), spenders: expense.spenders.map(spender => ({ ...spender, spenderAmount: spender.spenderAmount?.toString() })), participants: expense.participants.map(participant => ({ ...participant, contributionAmount: participant.contributionAmount?.toString() })) }} close={() => setMenu(null)} />
+          <EditExpense expense={{ ...expense, amount: expense.amount.toString(), payers: expense.payers.map(payer => ({ ...payer, payerAmount: payer.payerAmount?.toString() })), participants: expense.participants.map(participant => ({ ...participant, participationAmount: participant.participationAmount?.toString() })) }} close={() => setMenu(null)} />
         </CSSTransition>
         <CSSTransition
           in={menu === 'deleteExpense'}
@@ -227,7 +245,7 @@ const Expenses = () => {
 
   return (
     <div id='expenses-tab' className='flex column justcont-spacebetween'>
-      {selectedGroup.expenses.length === 0 ?
+      {expenses.length === 0 ?
         <div id='expense' className='flex justcont-center' >
           <div className='flex whiteSpace-initial' style={{ color: 'white', textAlign: 'center', alignSelf: 'center', justifySelf: 'center' }}>
             There are currently no recorded expenses
@@ -244,10 +262,10 @@ const Expenses = () => {
                 id='expense-pill'
                 className='pointer'
                 onClick={() => removeFilter(filter)}
-                style={{ color: `var(--${selectedGroup.groupLabels.find(label => label._id === filter)?.color})` }}
+                style={{ color: `var(--${selectedGroup.Labels.find(label => label.id === filter)?.color})` }}
               >
-                {selectedGroup.members.find(member => member._id === filter)?.nickname}
-                {selectedGroup.groupLabels.find(label => label._id === filter)?.name}
+                {selectedGroup.members.find(member => member.memberId === filter)?.name}
+                {selectedGroup.labels.find(label => label.id === filter)?.name}
                 <IonIcon name='close' />
               </div>
             ))}
@@ -256,9 +274,9 @@ const Expenses = () => {
         </div>}
       <div id='expenses'>
         {filteredExpenses.map(expense => (
-          <Expense innerRef={expense._id === trackedExpenseID ? ref : null} expense={expense} key={expense._id} />
+          <Expense innerRef={expense.id === trackedExpenseID ? ref : null} expense={expense} key={expense.id} />
         )).reverse()}
-        {selectedGroup.expenses.length === 0 && selectedGroup.transfers.length===0 ?
+        {expenses.length === 0 ?
           <div class="movingarrows flex column alignself-end" >
             <span class="movingarrow one"></span>
             <span class="movingarrow two"></span>

@@ -1,6 +1,6 @@
 import IonIcon from '@reacticons/ionicons'
 import { useDispatch } from 'react-redux'
-import { setSelectedGroup } from '../redux/mainSlice'
+import { setToggle } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import { useRef, useState, useEffect } from 'react'
@@ -11,6 +11,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderI
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
   const sessionData = store.getState().authReducer.sessionData
+  const toggle = store.getState().mainReducer.toggle
   const abortControllerRef = useRef(null)
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -26,21 +27,22 @@ function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderI
   const recordTransfer = async (amount, receiverId) => {
 
     if (receiverId === "" || receiverId === null) return null; //do not proceed to recording tx if no user has been selected
+    console.log(receiverId)
     if (amount === "") return null; //do not proceed to recording tx if no amount has been given
     setLoading(true)
     try {
-      const res = await api.post(`/expense/addtransfer`,
+      await api.post(`/transfer/create`,
         {
-          groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: senderId,
-          receiver: receiverId,
+          groupId: selectedGroup.id, //does it feed at first render? Need to check
+          senderId: senderId,
+          receiverId: receiverId,
+          currency: "EUR",
           amount: amount.toString(),
           description: "settle debt"
         }, { signal: abortControllerRef.current.signal }
       )
       setLoading(false)
-      console.log(res.data)
-      dispatch(setSelectedGroup(res.data))
+      dispatch(setToggle(!toggle))
       //console.log(res)
     }
     catch (error) {
@@ -63,7 +65,7 @@ function SettleUp({ setMenuParams, name, amount, receiverId, senderName, senderI
         <div className="flex row whiteSpace-initial wrap" style={{ color: "var(--light-color)", textAlign: "left" }}>
           You are about to settle a debt of
           <div style={{ color: "var(--pink)", marginLeft: "5px" }}> {currency(amount, { symbol: '€', decimal: ',', separator: '.' }).format()}&nbsp;</div>
-          <div> between <strong>{`${sessionData.userId === senderId ? "You" : senderName}`}</strong></div>
+          <div> between <strong>{`${selectedGroup.members.find(member => member.userId === sessionData.userId).memberId === senderId ? "You" : senderName}`}</strong></div>
           &nbsp;and&nbsp;
           <strong>{name}</strong>
         </div>

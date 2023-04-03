@@ -3,13 +3,19 @@ import { useSelector } from 'react-redux'
 import currency from 'currency.js'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
+import useAxios from '../utility/useAxios'
 import { SettleUp, BreakDown } from '.'
 
 const TabMembers = () => {
+
+  const api = useAxios()
+  const abortControllerRef = useRef(null)
   const sessionData = store.getState().authReducer.sessionData
+  const toggle = useSelector(state => state.mainReducer.toggle)
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const [pendingTransactions, setPendingTransactions] = useState([])
   const [menuParams, setMenuParams] = useState({
     openBreakDown: false,
     open: false,
@@ -20,42 +26,63 @@ const TabMembers = () => {
     senderId: ''
   })
 
-  // console.log(menuParams)
-  // Array.prototype.move = function (from, to) {
-  //   this.splice(to, 0, this.splice(from, 1)[0]);
-  // };
+  const getGroupPendingTransactions = async () => {
+    //setIsloading(true)
+    try {
+      const response = await api.post('/transaction/pending', { groupId: selectedGroup.id }, { signal: abortControllerRef.current.signal });
+      setPendingTransactions(response.data)
+      console.log("rendered members ",response)
+      //setIsloading(false)
+    }
+    catch (error) {
+      //setIsloading(false)
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    abortControllerRef.current = new AbortController()
+    getGroupPendingTransactions()
+    return () => {
+
+      abortControllerRef.current.abort()
+    }
+  }, [toggle])
+
+  const userStatus = {
+    SENDER: 1,
+    RECEIVER: 2,
+    SETTLED: 0
+  }
 
   const memberInfoConstructor = (selectedGroup) => {
     let members = []
     selectedGroup?.members.forEach((member) => {
+
       let pendingTotalAmount = currency(0)
       let total = currency(0)
-      let toFrom = []
-      let isSenderReceiverSettled
-      const isGuest = member.guest
-      // selectedGroup.expenses.forEach(expense => {
-      //   if (expense.spender._id === member._id) {
-      //     total = total.add(expense.amount)
-      //   }
-      // })
-      selectedGroup.pendingTransactions.forEach((tx) => {
-        if (tx.sender?._id === member?._id) {
+      let transactionMemberDetails = []
+      let status
+      const isGuest = member.memberType === "Guest"
+
+      pendingTransactions.forEach((tx) => {
+        if (tx.senderId === member?.memberId) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
-          toFrom.push({ _id: tx.receiver._id, name: tx.receiver.nickname, amount: tx.amount })
-          isSenderReceiverSettled = 1 //sender->1
-        } else if (tx.receiver._id === member._id) {
+          transactionMemberDetails.push({ id: tx.receiverId, name: tx.receiverName, amount: tx.amount })
+          status = userStatus.SENDER  //sender->1
+        } else if (tx.receiverId === member.memberId) {
           pendingTotalAmount = pendingTotalAmount.add(tx.amount)
-          toFrom.push({ _id: tx.sender?._id, name: tx.sender?.nickname, amount: tx.amount })
-          isSenderReceiverSettled = 2 //receiver->2
+          transactionMemberDetails.push({ id: tx.senderId, name: tx.senderName, amount: tx.amount })
+          status = userStatus.RECEIVER  //receiver->2
         }
       })
       members.push({
-        _id: member._id,
-        name: member.nickname,
-        isSenderReceiverSettled,
-        toFrom,
+        memberId: member.memberId,
+        name: member.name,
+        status,
+        transactionMemberDetails,
         pendingTotalAmount: pendingTotalAmount.value,
-        totalSpent:0, //total.value,
+        totalSpent: 0, //total.value,
         isGuest: isGuest
       })
     })
@@ -63,48 +90,49 @@ const TabMembers = () => {
   }
 
   const memberInfo = memberInfoConstructor(selectedGroup)
-  const userNoMembers = memberInfo.filter(member => member._id === sessionData.userId)
-  const membersNoUser = memberInfo.filter(member => member._id !== sessionData.userId)
+  const userNoMembers = memberInfo.filter(member => member.memberId === sessionData.userId)
+  const membersNoUser = memberInfo.filter(member => member.memberId !== sessionData.userId)
 
-  const Tree = ({ toFrom, isSenderReceiverSettled, id, isGuest, name }) => {
+
+  const Tree = ({ transactionMemberDetails, status, id, isGuest, name }) => {
 
     return (
       <div className='tree' style={{ bottom: '10px', margin: '0 0 -15px 0' }}>
         <ul>
-          {toFrom?.map((member, index) => (
-            <li key={member._id}>
-              {isSenderReceiverSettled === 1 ?
+          {transactionMemberDetails?.map((transactionMember, index) => (
+            <li key={transactionMember.id}>
+              {status === userStatus.SENDER ?
                 <div className='flex row justcont-spacebetween'>
                   <div className='flex row alignitems-center whiteSpace-initial'>
-                    <div style={{ color: 'var(--pink)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                    <div style={{ color: 'var(--pink)' }}>{` ${currency(transactionMember.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                     </div> to &nbsp;
-                    {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
+                    {selectedGroup.members.find(member => member.memberId === transactionMember.id).userId === sessionData.userId ? <strong>You</strong> : <strong>{transactionMember.name}</strong>}
                   </div>
                   &nbsp;
-                  {id === sessionData.userId || isGuest ?  //only show buttons in You or guest section
+                  {selectedGroup.members.find(member => member.memberId === transactionMember.id).userId === sessionData.userId || isGuest ?  //only show buttons in You or guest section
                     <div id='settleUp-pill' className='pointer shadow'
                       onClick={() => setMenuParams({
                         open: true,
-                        amount: member.amount,
-                        receiverId: member._id,
-                        receiverName: member.name,
+                        amount: transactionMember.amount,
+                        receiverId: transactionMember.id,
+                        receiverName: transactionMember.name,
                         senderId: id,
                         senderName: name
                       })}>Settle Up</div> : ''}
                 </div>
-                : isSenderReceiverSettled === 2 ?
+                : status === userStatus.RECEIVER ?
 
                   <div className='flex row alignitems-center justcont-spacebetween'>
                     <div className='flex row alignitems-center'>
-                      <div style={{ color: 'var(--green)' }}>{` ${currency(member.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
+                      <div style={{ color: 'var(--green)' }}>{` ${currency(transactionMember.amount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;
                       </div>
                       <div>
                         from
                       </div>
                       &nbsp;
-                      {member._id === sessionData.userId ? <strong>You</strong> : <strong>{member.name}</strong>}
+                      {selectedGroup.members.find(member => member.memberId === transactionMember.id).userId === sessionData.userId ? <strong>You</strong> : <strong>{transactionMember.name}</strong>}
                     </div>
-                    {index === toFrom.length - 1 && id === sessionData.userId ?
+                    {index === transactionMemberDetails.length - 1 && selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ?
 
                       <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })} >
                         <div className='flex row justcont-spacebetween gap6'>
@@ -122,14 +150,14 @@ const TabMembers = () => {
     )
   }
 
-  const Member = ({ id, name, isSenderReceiverSettled, toFrom, pendingTotalAmount, totalSpent, isGuest }) => {
+  const Member = ({ id, name, status, transactionMemberDetails, pendingTotalAmount, totalSpent, isGuest }) => {
     //console.log(name, id)
     return (
       <div id='expense' className={`flex column`}>
         <div className='nameIDandTotal flex row justcont-spacebetween'>
           <div className='name-ID flex row gap8 alignitems-center '>
             <div className='name medium t25 white'>
-              {id === sessionData.userId ? 'You' : isGuest ?
+              {selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ? 'You' : isGuest ?
                 <div className='flex row alignitems-center'>
                   {name}&nbsp;
                   <div style={{ fontSize: '13px', color: 'var(--label-color-6)' }}>
@@ -144,18 +172,18 @@ const TabMembers = () => {
           </div>
         </div>
         <div className=' flex row justcont-spacebetween alignitems-center'>
-          {isSenderReceiverSettled === 1 ?
+          {status === userStatus.SENDER ?
             <div className=' flex row alignitems-center'>
-              {id === sessionData.userId ? 'owe' : 'owes'}<div style={{ color: 'var(--pink)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
-              {toFrom.length === 1 ? <div>to {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
-            </div> : isSenderReceiverSettled === 2 ?
+              {selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ? 'owe' : 'owes'}<div style={{ color: 'var(--pink)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp; </div>
+              {transactionMemberDetails.length === 1 ? <div>to {String(selectedGroup.members.find(member => member.memberId === transactionMemberDetails[0].id).userId) === String(sessionData.userId) ? <strong>You</strong> : <strong>{transactionMemberDetails[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
+            </div> : status === userStatus.RECEIVER ?
               <div className='flex row alignitems-center' >
-                {id === sessionData.userId ? 'are owed' : 'is owed'}<div style={{ color: 'var(--green)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
-                {toFrom.length === 1 ? <div>from {String(toFrom[0]._id) === String(sessionData.userId) ? <strong>You</strong> : <strong>{toFrom[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
+                {selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ? 'are owed' : 'is owed'}<div style={{ color: 'var(--green)' }}>&nbsp;{` ${currency(pendingTotalAmount, { symbol: '€', decimal: ',', separator: '.' }).format()}`}&nbsp;</div>
+                {transactionMemberDetails.length === 1 ? <div>from {String(selectedGroup.members.find(member => member.memberId === transactionMemberDetails[0].id).userId) === String(sessionData.userId) ? <strong>You</strong> : <strong>{transactionMemberDetails[0].name}</strong>} &nbsp;</div> : <div>in total &nbsp;</div>}
               </div> :
               <div className='flex row alignitems-center'>
                 <div>
-                  {id === sessionData.userId ? 'are' : 'is'} settled
+                  {selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ? 'are' : 'is'} settled
                 </div>
                 <IonIcon name='checkmark-sharp' className='t1' style={{ color: 'var(--green)', fontSize: '22px', fontWeight: '500' }} />
               </div>}
@@ -163,19 +191,9 @@ const TabMembers = () => {
           <div className=' medium t25 white'>
             {` ${currency(totalSpent, { symbol: '€', decimal: ',', separator: '.' }).format()}`}
           </div>
-          
+
         </div>
-        {isSenderReceiverSettled !== 1 && isSenderReceiverSettled !== 2 && id === sessionData.userId?
-        <div className='flex justcont-start'>
-            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
-              <div className='flex row justcont-spacebetween gap6'>
-                <i className='pie chart icon'></i>
-                <div>Breakdown</div>
-              </div>
-            </div>
-          </div> :""}
-        
-        {isSenderReceiverSettled === 2 && toFrom.length === 1 && id === sessionData.userId ?
+        {status !== userStatus.SENDER && status !== userStatus.RECEIVER && selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ?
           <div className='flex justcont-start'>
             <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
               <div className='flex row justcont-spacebetween gap6'>
@@ -185,18 +203,28 @@ const TabMembers = () => {
             </div>
           </div> : ""}
 
-        {(id === sessionData.userId && isSenderReceiverSettled === 1 && toFrom.length === 1) || (isGuest && isSenderReceiverSettled === 1 && toFrom.length === 1) ?
+        {status === userStatus.RECEIVER && transactionMemberDetails.length === 1 && selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ?
+          <div className='flex justcont-start'>
+            <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
+              <div className='flex row justcont-spacebetween gap6'>
+                <i className='pie chart icon'></i>
+                <div>Breakdown</div>
+              </div>
+            </div>
+          </div> : ""}
+
+        {(selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId && status === userStatus.SENDER && transactionMemberDetails.length === 1) || (isGuest && status === userStatus.SENDER && transactionMemberDetails.length === 1) ?
           <div className='flex justcont-spacebetween'>
             <div id='settleUp-pill' className='pointer shadow' onClick={() =>
               setMenuParams({
                 open: true,
-                amount: toFrom[0].amount,
-                receiverId: toFrom[0]._id,
-                receiverName: toFrom[0].name,
+                amount: transactionMemberDetails[0].amount,
+                receiverId: transactionMemberDetails[0].id,
+                receiverName: transactionMemberDetails[0].name,
                 senderId: id,
                 senderName: name
               })}>Settle Up</div>
-            {id === sessionData.userId ? <div id='settleUp-pill' className='pointer shadow'>
+            {selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ? <div id='settleUp-pill' className='pointer shadow'>
               <div className='flex row justcont-spacebetween gap6' onClick={() => setMenuParams({ openBreakDown: true })}>
                 <i className='pie chart icon'></i>
                 <div>Breakdown</div>
@@ -204,15 +232,15 @@ const TabMembers = () => {
             </div> : ""}
           </div>
           : ''}
-        {toFrom.length === 1 || isSenderReceiverSettled === undefined ? <></> :
+        {transactionMemberDetails.length === 1 || status === userStatus.SETTLED ? <></> : //status === undefined
           <Tree
             id={id}
             name={name}
-            toFrom={toFrom}
-            isSenderReceiverSettled={isSenderReceiverSettled}
+            transactionMemberDetails={transactionMemberDetails}
+            status={status}
             isGuest={isGuest} />
         }
-        {toFrom.length > 1 && isSenderReceiverSettled === 1 && id === sessionData.userId ?
+        {transactionMemberDetails.length > 1 && status === userStatus.SENDER && selectedGroup.members.find(member => member.memberId === id).userId === sessionData.userId ?
           <div className='flex justcont-start'>
             <div id='settleUp-pill' className='pointer shadow' onClick={() => setMenuParams({ openBreakDown: true })}>
               <div className='flex row justcont-spacebetween gap6'>
@@ -229,25 +257,25 @@ const TabMembers = () => {
     <div className='flex flex-1 column overflow-hidden'>
       <div id='expenses' className='flex flex-1 column overflow-auto'>
         {userNoMembers.map((member) => (
-          <div key={member._id} className='overflow-visible'>
+          <div key={member.memberId} className='overflow-visible'>
             <Member
-              key={member._id}
-              id={member._id}
+              key={member.memberId}
+              id={member.memberId}
               name={member.name}
-              isSenderReceiverSettled={member.isSenderReceiverSettled}
-              toFrom={member.toFrom}
+              status={member.status}
+              transactionMemberDetails={member.transactionMemberDetails}
               pendingTotalAmount={member.pendingTotalAmount}
               totalSpent={member.totalSpent} />
           </div>
         ))}
         {membersNoUser.map((member) => (
-          <div key={member._id} className='overflow-visible'>
+          <div key={member.memberId} className='overflow-visible'>
             <Member
-              key={member._id}
-              id={member._id}
+              key={member.memberId}
+              id={member.memberId}
               name={member.name}
-              isSenderReceiverSettled={member.isSenderReceiverSettled}
-              toFrom={member.toFrom}
+              status={member.status}
+              transactionMemberDetails={member.transactionMemberDetails}
               pendingTotalAmount={member.pendingTotalAmount}
               totalSpent={member.totalSpent}
               isGuest={member.isGuest} />

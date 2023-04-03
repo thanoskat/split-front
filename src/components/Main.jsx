@@ -1,10 +1,10 @@
-import { DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions,GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer, NewGuest, NewMember } from '.'
-import { useState, useEffect, useRef} from 'react'
+import { DeleteGroup, GroupOptions, UserOptions, QRScanner, ExpenseOptions, GroupSelector, AddExpense, NewExpense, DeleteExpense, Invitation, LabelEditor, NavBar, LogoBar, New, RecordTransfer, NewGuest2, NewMember } from '.'
+import { useState, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useParams, useNavigate, useLocation, useNavigationType } from 'react-router-dom'
 import IonIcon from '@reacticons/ionicons'
 import useAxios from '../utility/useAxios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSelectedGroup } from '../redux/mainSlice'
+import { setSelectedGroup, setExpenses, setTransfers, setPendingTransactions } from '../redux/mainSlice'
 import { CSSTransition } from 'react-transition-group'
 
 const Main = () => {
@@ -21,13 +21,13 @@ const Main = () => {
   // const navigation = useContext(UNSAFE_NavigationContext).navigator
   const [menu, setMenu] = useState(null)
 
-
+  // console.log(params)
   useEffect(() => {
     window.addEventListener('popstate', () => {
       setMenu(null)
     })
     abortControllerRef.current = new AbortController()
-    getGroup(params.groupid)
+    fetchGroup(params.groupid)
     return () => {
       window.removeEventListener('popstate', () => {
         setMenu(null)
@@ -39,14 +39,16 @@ const Main = () => {
 
 
 
-  const getGroup = async (id) => {
+  const fetchGroup = async (id) => {
     setMainIsLoading(true)
     try {
-      const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      dispatch(setSelectedGroup(res.data))
+      
+      const groupRes = await api.post('/group/getgroupbyid', { groupid: id }, { signal: abortControllerRef.current.signal })
+      dispatch(setSelectedGroup(groupRes.data))
+     
     }
     catch (error) {
-      console.log('/groups/getgroup', error)
+      console.log('fetchgroup', error)
     }
     setMainIsLoading(false)
   }
@@ -56,7 +58,7 @@ const Main = () => {
     setMenu(menuName)
   }
 
-  
+
 
   return (
     <div style={{ height: '100%' }} className='flex column'>
@@ -165,12 +167,12 @@ const Main = () => {
       </CSSTransition>
 
       <CSSTransition
-        in={menu === 'newGuest'}
+        in={menu === 'newGuest2'}
         timeout={100}
         classNames='leftslide'
         unmountOnExit
       >
-        <NewGuest openMenu={openMenu} />
+        <NewGuest2 openMenu={openMenu} />
       </CSSTransition>
 
       <CSSTransition

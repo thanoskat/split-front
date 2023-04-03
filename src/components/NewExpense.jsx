@@ -1,27 +1,28 @@
 import IonIcon from '@reacticons/ionicons'
 import currency from 'currency.js'
 import { useState, useRef, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { setSelectedGroup } from '../redux/mainSlice'
 import useAxios from '../utility/useAxios'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
 import store from '../redux/store'
+import { setToggle } from '../redux/mainSlice'
 
 const NewExpense = ({ close }) => {
   const api = useAxios()
-  const dispatch = useDispatch()
   const selectedGroup = useSelector(state => state.mainReducer.selectedGroup)
+  const dispatch = useDispatch()
+  const toggle = store.getState().mainReducer.toggle
   const abortControllerRef = useRef(null)
   const sessionData = store.getState().authReducer.sessionData
   const [submitLoading, setSubmitLoading] = useState(false)
   const [newExpense, setNewExpense] = useState({
     splitEqually: true,
+    currency: "EUR",
     focus: false,
     amount: '',
     description: '',
     label: null,
-    participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })),
-    spenders: [{ spenderId: sessionData.userId, spenderAmount: '' }],
+    participants: selectedGroup?.members.map(member => ({ memberId: member.memberId, participationAmount: '' })),
+    payers: [{ memberId: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId, paymentAmount: '' }],
     includeNewMemberToThisExpense: true,
     paidbyYouClicked: true
   })
@@ -32,7 +33,7 @@ const NewExpense = ({ close }) => {
   // console.log(JSON.stringify(newExpenseErrorMessages, null, 2))
 
   useEffect(() => {
-    setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
+    setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member.memberId, participationAmount: '' })) })
   }, [selectedGroup])
 
 
@@ -55,18 +56,27 @@ const NewExpense = ({ close }) => {
     else return true
   }
 
-  // useEffect(()=>{
-  //   console.log("UseEffect ran")
-  //   distributeEqually()
-  // },[newExpense.amount, newExpense.spender])
+
+  const populateAmounts = () => {
+    if (newExpense.payers.length === 1) {
+      newExpense.payers.map(payer => payer.paymentAmount = newExpense.amount)
+    }
+    if (newExpense.splitEqually === true) {
+      const distributedAmountArray = currency(newExpense.amount).distribute(newExpense.participants.length).map(e => e.value)
+      newExpense.participants = newExpense.participants.map((participant, index) => ({ ...participant, participationAmount: distributedAmountArray[index].toString() }))
+    }
+  }
 
   const submitExpense = async () => {
+
     if (!submitLoading) {
+      populateAmounts()
       setSubmitErrorMessage('')
       setNewExpenseErrorMessages({})
       setSubmitLoading(true)
       try {
-        const res = await api.post('expense/add', { newExpense: { ...newExpense, groupId: selectedGroup._id } }, { signal: abortControllerRef.current.signal })
+        const res = await api.post('expense/create', { ...newExpense, groupId: selectedGroup.id }, { signal: abortControllerRef.current.signal })
+
         if (res.data.validationArray) {
           const tempErrorMessages = {}
           res.data.validationArray.reverse().forEach(err => {
@@ -76,7 +86,7 @@ const NewExpense = ({ close }) => {
           setSubmitLoading(false)
         }
         else {
-          dispatch(setSelectedGroup(res.data))
+          dispatch(setToggle(!toggle))
           setSubmitLoading(false)
           close()
         }
@@ -107,49 +117,49 @@ const NewExpense = ({ close }) => {
     }
   }
 
-  const removedContributionAmountErrors = () => {
-    const contributionAmountErrorMessages = {}
+  const removedparticipationAmountErrors = () => {
+    const participationAmountErrorMessages = {}
     for (const field in newExpenseErrorMessages) {
-      if (/^participants\[[0-9]+]\.contributionAmount$/.test(field)) {
-        contributionAmountErrorMessages[field] = null
+      if (/^participants\[[0-9]+]\.participationAmount$/.test(field)) {
+        participationAmountErrorMessages[field] = null
       }
     }
-    return (contributionAmountErrorMessages)
+    return (participationAmountErrorMessages)
   }
 
   const participantClicked = (participantClickedId) => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: null, ...removedContributionAmountErrors() })
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, participants: null, ...removedparticipationAmountErrors() })
     if (newExpense.participants.map(participants => participants?.memberId).includes(participantClickedId)) {
       setNewExpense({ ...newExpense, participants: newExpense.participants.filter(participant => participant.memberId !== participantClickedId) })
     }
     else {
-      setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId, contributionAmount: '' }] })
+      setNewExpense({ ...newExpense, participants: [...newExpense.participants, { memberId: participantClickedId, participationAmount: '' }] })
     }
   }
-  //spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
-  const spenderClicked = (spenderID) => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, spenders: null, ...removedContributionAmountErrors() })
-    console.log(newExpense.spenders.length)
-    if (newExpense.spenders.map(spender => spender?.spenderId).includes(spenderID)) {
-      setNewExpense({ ...newExpense, spenders: newExpense.spenders.filter(spender => spender.spenderId !== spenderID) })
+  //payers: newExpense.payers.map(_payer => (_payer.memberId === payer.memberId) ? { ...payer, paymentAmount: e.target.value } : _payer)
+  const payerClicked = (payerClickedId) => {
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, payers: null, ...removedparticipationAmountErrors() })
+
+    if (newExpense.payers.map(payer => payer?.memberId).includes(payerClickedId)) {
+      setNewExpense({ ...newExpense, payers: newExpense.payers.filter(payer => payer.memberId !== payerClickedId) })
     }
     else {
-      //const distributedExpense=currency(newExpense.amount).distribute(newExpense.spenders.length+1).map(e=>e.value)
-      setNewExpense({ ...newExpense, spenders: [...newExpense.spenders, { spenderId: spenderID, spenderAmount: "" }] })
-      //setNewExpense({ ...newExpense, spenders:[...newExpense.spenders, { spenderId: spenderID, spenderAmount:distributedExpense[index] }]})
+      //const distributedExpense=currency(newExpense.amount).distribute(newExpense.payers.length+1).map(e=>e.value)
+      setNewExpense({ ...newExpense, payers: [...newExpense.payers, { memberId: payerClickedId, paymentAmount: "" }] })
+      //setNewExpense({ ...newExpense, payers:[...newExpense.payers, { memberId: memberId, paymentAmount:distributedExpense[index] }]})
     }
   }
 
-  //spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
+  //payers: (newExpense.payers.length === 1? newExpense.payers.map(payer => ({ ...payer, paymentAmount: e.target.value })):"" )
   const paidByClicked = () => {
 
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
-    if (newExpense.spenders.length > 1) {
-      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] }))
-    } else if (newExpense.spenders.length === 1 && newExpense.spenders[0].spenderId === sessionData.userId) {
-      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [] }))
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedparticipationAmountErrors() })
+    if (newExpense.payers.length > 1) {
+      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, payers: [{ memberId: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId, paymentAmount: "" }] }))
+    } else if (newExpense.payers.length === 1 && newExpense.payers.map(payer => payer.memberId).includes(selectedGroup.members.find(member => member.userId === sessionData.userId).memberId)) {
+      setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, payers: [{ memberId: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId, paymentAmount: "" }] }))
     }
-    else { setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, spenders: [{ spenderId: sessionData.userId, spenderAmount: newExpense.amount }] })) }
+    else { setNewExpense(prev => ({ ...newExpense, paidbyYouClicked: !prev.paidbyYouClicked, payers: [{ memberId: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId, paymentAmount: "" }] })) }
   }
 
   // const allMembers = () => {
@@ -160,24 +170,24 @@ const NewExpense = ({ close }) => {
   //}
 
   const allClick = () => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, splitEqually: null, participants: null, ...removedContributionAmountErrors() })
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, splitEqually: null, participants: null, ...removedparticipationAmountErrors() })
 
     if (allMembers()) {
       setNewExpense({ ...newExpense, participants: [] })
     }
     else {
-      setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member._id, contributionAmount: '' })) })
+      setNewExpense({ ...newExpense, participants: selectedGroup?.members.map(member => ({ memberId: member.memberId, participationAmount: '' })) })
     }
   }
 
   const equalClick = () => {
-    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
+    setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedparticipationAmountErrors() })
 
     if (newExpense.splitEqually) {
       setNewExpense({ ...newExpense, splitEqually: false })
     }
     else {
-      setNewExpense({ ...newExpense, splitEqually: true, participants: newExpense.participants.map(participant => ({ memberId: participant.memberId, contributionAmount: '' })) })
+      setNewExpense({ ...newExpense, splitEqually: true, participants: newExpense.participants.map(participant => ({ memberId: participant.memberId, participationAmount: '' })) })
     }
   }
 
@@ -186,7 +196,7 @@ const NewExpense = ({ close }) => {
       <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517' }}>
         <div style={{ color: '#b6bfec' }}>Label</div>
         <div className='flex row wrap' style={{ gap: '14px', padding: '0px 0px 6px 0px' }}>
-          {selectedGroup?.groupLabels.map(label => (
+          {selectedGroup?.labels.map(label => (
             <div className={`pill2 pointer shadow`}
               key={label._id} style={{ color: `${newExpense.label === label._id ? 'var(--' + label.color + ')' : '#606060'}` }}
               onClick={() => labelClicked(label._id)}
@@ -203,7 +213,7 @@ const NewExpense = ({ close }) => {
 
   const PaidBy = () => {
     return (
-      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', borderBottomLeftRadius: newExpense.spenders.length >= 2 ? "0px" : "", borderBottomRightRadius: newExpense.spenders.length >= 2 ? "0px" : "" }}>
+      <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', borderBottomLeftRadius: newExpense.payers.length >= 2 ? "0px" : "", borderBottomRightRadius: newExpense.payers.length >= 2 ? "0px" : "" }}>
         <div
           className='flex row justcont-spacebetween alignitems-center pointer larger-click-area'
           onClick={paidByClicked}
@@ -224,15 +234,15 @@ const NewExpense = ({ close }) => {
           <div className='flex row wrap' style={{ gap: '14px' }}>
             {selectedGroup.members?.map((member, index) => (
               <div
-                key={member._id}
-                className={`pill2 pointer shadow ${newExpense.spenders.map(spender => spender?.spenderId).includes(member._id) ? 'filled' : ''}`}
-                onClick={() => spenderClicked(member._id, index)}
+                key={member.memberId}
+                className={`pill2 pointer shadow ${newExpense.payers.map(payer => payer?.memberId).includes(member.memberId) ? 'filled' : ''}`}
+                onClick={() => payerClicked(member.memberId, index)}
               >
-                {member.nickname}
+                {member.name}
               </div>
             ))}
           </div>}
-        {newExpenseErrorMessages.spenders && <div className='mailmsg t6'>{newExpenseErrorMessages.spenders}</div>}
+        {newExpenseErrorMessages.payers && <div className='mailmsg t6'>{newExpenseErrorMessages.payers}</div>}
       </div>
     )
   }
@@ -259,11 +269,11 @@ const NewExpense = ({ close }) => {
           <div className='flex row wrap' style={{ gap: '14px' }}>
             {selectedGroup.members?.map(member => (
               <div
-                key={member._id}
-                className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant?.memberId).includes(member._id) ? 'filled' : ''}`}
-                onClick={() => participantClicked(member._id)}
+                key={member.memberId}
+                className={`pill2 pointer shadow ${newExpense.participants.map(participant => participant?.memberId).includes(member.memberId) ? 'filled' : ''}`}
+                onClick={() => participantClicked(member.memberId)}
               >
-                {member.nickname}
+                {member.name}
               </div>
             ))}
           </div>}
@@ -273,7 +283,7 @@ const NewExpense = ({ close }) => {
   }
 
 
-  //, spenders: (newExpense.spenders.length === 1? newExpense.spenders.map(spender => ({ ...spender, spenderAmount: e.target.value })):"" )
+  //, payers: (newExpense.payers.length === 1? newExpense.payers.map(payer => ({ ...payer, paymentAmount: e.target.value })):"" )
   const changeAmount = (e) => {
     setNewExpenseErrorMessages({ ...newExpenseErrorMessages, amount: null })
     setNewExpense({ ...newExpense, amount: e.target.value })
@@ -284,96 +294,41 @@ const NewExpense = ({ close }) => {
     setNewExpense({ ...newExpense, description: e.target.value })
   }
 
-  const changeContribution = (e, participant, index) => {
-    newExpenseErrorMessages['participants[' + index + '].contributionAmount'] = null
+  const changeParticipation = (e, participant, index) => {
+    newExpenseErrorMessages['participants[' + index + '].participationAmount'] = null
     newExpenseErrorMessages.splitEqually = null
-    console.log(newExpenseErrorMessages)
+    //console.log(newExpenseErrorMessages)
     setNewExpense(
       {
         ...newExpense,
-        participants: newExpense.participants.map(_participant => (_participant.memberId === participant.memberId) ? { ...participant, contributionAmount: e.target.value } : _participant)
+        participants: newExpense.participants.map(_participant => (_participant.memberId === participant.memberId) ? { ...participant, participationAmount: e.target.value } : _participant)
       }
     )
   }
 
-  const changePaidByMany = (e, spender, index) => {
-    newExpenseErrorMessages['spenders[' + index + '].spenderAmount'] = null
+  const changePaidByMany = (e, payer, index) => {
+    newExpenseErrorMessages['payers[' + index + '].paymentAmount'] = null
     newExpenseErrorMessages.paidByMany = null
     setNewExpense(
       {
         ...newExpense,
-        spenders: newExpense.spenders.map(_spender => (_spender.spenderId === spender.spenderId) ? { ...spender, spenderAmount: e.target.value } : _spender)
+        payers: newExpense.payers.map(_payer => (_payer.memberId === payer.memberId) ? { ...payer, paymentAmount: e.target.value } : _payer)
       })
   }
 
-  // const distributeEqually = () => {
-  //   if (newExpense.splitEqually === true) {
-  //     newExpenseErrorMessages.splitEqually = null
-  //     for (let i = 0; i < newExpense.participants.length; i++) {
-  //       newExpenseErrorMessages['participants[' + i + '].contributionAmount'] = null
-  //     }
-  //     const distributedAmountArray = currency(newExpense.amount)
-  //       .distribute(newExpense.participants.length).map(e => e.value.toString()) //why is validator complaining about string in contribution amount?
-  //     console.log(distributedAmountArray)
-  //       setNewExpense({
-  //       ...newExpense,
-  //       participants: newExpense.participants.map((participant, index) => ({ ...participant, contributionAmount: distributedAmountArray[index] }))
-  //     })
-  //   } else return
-  // }
 
-  // const handleBlurOperator = () => {
-  //   //operatorRef.current.focus()
-  //   setNewExpense({ ...newExpense, focus: false })
-  // }
-
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-
-        if (ref.current && ref.current.contains(event.target)) {
-          setNewExpense({ ...newExpense, focus: true })
-        } else {
-          console.log("Here")
-          setNewExpense({ ...newExpense, focus: false })
-        }
-      }
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
 
   const operatorRef = useRef(null)
-  console.log(operatorRef)
+  //console.log(operatorRef)
   const operatorBlurHandle = (event) => {
-    console.log(event.target)
+
     if (operatorRef.current && operatorRef.current.contains(event.target)) {
       setNewExpense({ ...newExpense, focus: true })
     } else {
-      console.log("Here")
+
       setNewExpense({ ...newExpense, focus: false })
     }
   }
-
-  // const OperatorButtons = () => {
-  //   const operatorRef = useRef(null)
-  //   useOutsideAlerter(operatorRef);
-  //   return (
-  //     <div className='flex row justcont-spacebetween gap6'
-  //       style={{ marginTop: "10px" }}
-  //       ref={operatorRef}
-  //     >
-  //       <span id='operator'>+</span>
-  //       <span id='operator'>-</span>
-  //       <span id='operator'>x</span>
-  //       <span id='operator'>/</span>
-  //       <span id='operator'>=</span>
-  //     </div>
-  //   )
-  // }
 
   return (
     <div id='new-expense' className='flex column fixed' style={{ paddingBottom: "5px" }}>
@@ -418,17 +373,17 @@ const NewExpense = ({ close }) => {
           {!newExpenseErrorMessages.description && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Description</div>}
           {newExpenseErrorMessages.description && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newExpenseErrorMessages.description}</div>}
         </div>
-        {selectedGroup?.groupLabels.length !== 0 && <LabelSection />}
+        {selectedGroup?.labels.length !== 0 && <LabelSection />}
         <PaidBy />
 
 
-        {newExpense.spenders.length >= 2 &&
+        {newExpense.payers.length >= 2 &&
           <div className='bubble flex column' style={{ fontSize: '16px', fontWeight: '700', backgroundColor: '#151517', marginTop: "-15px", borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}>
             <div className='flex column' style={{ gap: '14px' }}>
-              {newExpense.spenders?.map((spender, index) => (
-                <div key={spender.spenderId} className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
+              {newExpense.payers?.map((payer, index) => (
+                <div key={payer.memberId} className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
                   <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                    {selectedGroup?.members?.find(member => member._id === spender?.spenderId)?.nickname}
+                    {selectedGroup?.members?.find(member => member.memberId === payer?.memberId)?.name}
                   </div>
                   <input
                     type='text'
@@ -441,20 +396,20 @@ const NewExpense = ({ close }) => {
                       fontSize: '16px',
                       flex: '1 1 auto',
                       width: '100%',
-                      borderColor: `${newExpenseErrorMessages['spenders[' + index + '].spenderAmount'] ? 'var(--pink)' : '#999999'}`,
+                      borderColor: `${newExpenseErrorMessages['payers[' + index + '].paymentAmount'] ? 'var(--pink)' : '#999999'}`,
                       borderWidth: '1px',
                       borderStyle: 'solid'
                     }}
                     id='styled-input'
-                    onChange={e => changePaidByMany(e, spender, index)}
-                    value={spender.spenderAmount}
+                    onChange={e => changePaidByMany(e, payer, index)}
+                    value={payer.paymentAmount}
                     autoComplete='off'
                   />
                 </div>
               ))}
               <div style={{ fontSize: '12px', alignSelf: 'center' }}>
                 REMAINING:&nbsp;
-                {currency(newExpense.amount).subtract(newExpense.spenders.reduce(((sum, spender) => currency(sum).add(spender.spenderAmount).value), 0)).value}
+                {currency(newExpense.amount).subtract(newExpense.payers.reduce(((sum, payer) => currency(sum).add(payer.paymentAmount).value), 0)).value}
               </div>
               {newExpenseErrorMessages.paidByMany && <div className='mailmsg t6'>{newExpenseErrorMessages.paidByMany}</div>}
             </div>
@@ -485,7 +440,7 @@ const NewExpense = ({ close }) => {
               {newExpense.participants?.map((participant, index) => (
                 <div className='flex row justcont-spacebetween alignitems-center' style={{ gap: '14px' }}>
                   <div style={{ flex: '1 1 auto', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#dddddd' }}>
-                    {selectedGroup?.members?.find(member => member._id === participant?.memberId)?.nickname}
+                    {selectedGroup?.members?.find(member => member.memberId === participant?.memberId)?.name}
                   </div>
                   <input
                     type='text'
@@ -498,20 +453,20 @@ const NewExpense = ({ close }) => {
                       fontSize: '16px',
                       flex: '1 1 auto',
                       width: '100%',
-                      borderColor: `${newExpenseErrorMessages['participants[' + index + '].contributionAmount'] ? 'var(--pink)' : '#999999'}`,
+                      borderColor: `${newExpenseErrorMessages['participants[' + index + '].participationAmount'] ? 'var(--pink)' : '#999999'}`,
                       borderWidth: '1px',
                       borderStyle: 'solid'
                     }}
                     id='styled-input'
-                    onChange={e => changeContribution(e, participant, index)}
-                    value={participant.contributionAmount}
+                    onChange={e => changeParticipation(e, participant, index)}
+                    value={participant.participationAmount}
                     autoComplete='off'
                   />
                 </div>
               ))}
               <div style={{ fontSize: '12px', alignSelf: 'center' }}>
                 REMAINING:&nbsp;
-                {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.contributionAmount).value), 0)).value}
+                {currency(newExpense.amount).subtract(newExpense.participants.reduce(((sum, participant) => currency(sum).add(participant.participationAmount).value), 0)).value}
               </div>
               {newExpenseErrorMessages.splitEqually && <div className='mailmsg t6'>{newExpenseErrorMessages.splitEqually}</div>}
             </div>

@@ -21,12 +21,12 @@ export default function Home() {
   const sessionData = store.getState().authReducer.sessionData
   // const [searchParams, setSearchParams] = useSearchParams()
   const [menu, setMenu] = useState(null)
-  const dispatch = useDispatch()
+  //const dispatch = useDispatch()
 
   const getGroups = async () => {
     setIsloading(true)
     try {
-      const response = await api.get('/groups/mygroups', { signal: abortControllerRef.current.signal });
+      const response = await api.get('/group/getusergroups', { signal: abortControllerRef.current.signal });
       setGroupList(response.data)
       setIsloading(false)
     }
@@ -50,16 +50,16 @@ export default function Home() {
     // eslint-disable-next-line
   }, [])
 
-  const logoutClick = async () => {
-    console.log('onLogoutClick')
-    try {
-      await api.post('/auth/signout', { sessionID: sessionData.id }, { withCredentials: true })
-    } catch (error) {
-      console.dir(error)
-    }
-    dispatch(signOut())
-    // signOut()
-  }
+  // const logoutClick = async () => {
+  //   console.log('onLogoutClick')
+  //   try {
+  //     await api.post('/auth/signout', { sessionID: sessionData.id }, { withCredentials: true })
+  //   } catch (error) {
+  //     console.dir(error)
+  //   }
+  //   dispatch(signOut())
+  //   // signOut()
+  // }
 
   const openMenu = (menuName) => {
     navigate(location.pathname, { replace: false })
@@ -104,8 +104,8 @@ export default function Home() {
                 {isLoading && <IonIcon name='sync' className='t3 spin alignself-center' style={{ fontSize: '20px' }} />}
                 {groupList?.map((group) => (
                   <Link
-                    key={group._id}
-                    to={`/${group._id}/expenses`}
+                    key={group.id}
+                    to={`/${group.id}/expenses`}
                     className='group-selector-button medium flex row overflow-hidden alignitems-center t3 padding1812 pointer shadow justcont-center'>
                     {group.title}
                     <div className='regular flex row t3 gap6 alignitems-center'>

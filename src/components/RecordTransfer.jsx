@@ -1,15 +1,15 @@
 import useAxios from '../utility/useAxios'
 import store from '../redux/store'
 import IonIcon from '@reacticons/ionicons'
-import currency from 'currency.js'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { setSelectedGroup } from '../redux/mainSlice'
+import { setToggle } from '../redux/mainSlice'
 
 function RecordTransfer({ close }) {
   const api = useAxios()
   const selectedGroup = store.getState().mainReducer.selectedGroup
   const sessionData = store.getState().authReducer.sessionData
+  const toggle = store.getState().mainReducer.toggle
   const abortControllerRef = useRef(null)
   const dispatch = useDispatch()
   const inputAmountRef = useRef(null)
@@ -17,8 +17,9 @@ function RecordTransfer({ close }) {
   const [newTransfer, setNewTransfer] = useState({
     amount: '',
     description: '',
+    currency: 'EUR',
     transferTo: '',
-    transferFrom: sessionData.userId
+    transferFrom: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId
   })
   const [submitErrorMessage, setSubmitErrorMessage] = useState('')
   const [newTransferErrorMessages, setNewTransferErrorMessages] = useState({})
@@ -50,11 +51,12 @@ function RecordTransfer({ close }) {
     setSubmitErrorMessage('')
     setLoading(true)
     try {
-      const res = await api.post(`/expense/addtransfer`,
+      const res = await api.post(`/transfer/create`,
         {
-          groupId: selectedGroup._id, //does it feed at first render? Need to check
-          sender: newTransfer.transferFrom,
-          receiver: newTransfer.transferTo,
+          groupId: selectedGroup.id, //does it feed at first render? Need to check
+          senderId: newTransfer.transferFrom,
+          currency: 'EUR',
+          receiverId: newTransfer.transferTo,
           amount: newTransfer.amount,
           description: newTransfer.description
         }, { signal: abortControllerRef.current.signal }
@@ -70,7 +72,7 @@ function RecordTransfer({ close }) {
         setLoading(false)
         setNewTransfer({ ...newTransfer, amount: "", description: "" })
         close()
-        dispatch(setSelectedGroup(res.data))
+        dispatch(setToggle(!toggle))
         console.log(res)
       }
 
@@ -116,10 +118,10 @@ function RecordTransfer({ close }) {
   }
   const transferredFromClicked = () => {
     //setNewExpenseErrorMessages({ ...newExpenseErrorMessages, ...removedContributionAmountErrors() })
-    if (newTransfer.transferFrom === sessionData.userId) {
+    if (newTransfer.transferFrom === selectedGroup.members.find(member => member.userId === sessionData.userId).memberId) {
       setNewTransfer({ ...newTransfer, transferFrom: '' })
     } else {
-      setNewTransfer(({ ...newTransfer, transferFrom: sessionData.userId }))
+      setNewTransfer(({ ...newTransfer, transferFrom: selectedGroup.members.find(member => member.userId === sessionData.userId).memberId }))
     }
   }
 
@@ -133,23 +135,23 @@ function RecordTransfer({ close }) {
           <div style={{ color: '#b6bfec' }}>Transfer from</div>
           <div
             className='flex row alignitems-center gap8'
-            style={{ color: `${newTransfer.transferFrom === sessionData.userId ? 'white' : 'gray'}` }}
+            style={{ color: `${newTransfer.transferFrom === selectedGroup.members.find(member => member.userId === sessionData.userId).memberId ? 'white' : 'gray'}` }}
           >
             <div>You</div>
             <div className='flex row alignitems-center' style={{ fontSize: '24px' }}>
-              <div className='tick-cube' >{newTransfer.transferFrom === sessionData.userId ? <i style={{ cursor: 'pointer', fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
+              <div className='tick-cube' >{newTransfer.transferFrom === selectedGroup.members.find(member => member.userId === sessionData.userId).memberId ? <i style={{ cursor: 'pointer', fontSize: '29px', bottom: '0px', color: 'rgb(182, 191, 236)' }} className='check icon absolute'></i> : ''} </div>
 
             </div>
           </div>
         </div>
-        {newTransfer.transferFrom !== sessionData.userId &&
+        {newTransfer.transferFrom !== selectedGroup.members.find(member => member.userId === sessionData.userId).memberId &&
           <div className='flex row wrap' style={{ gap: '14px' }}>
             {selectedGroup.members?.map(member => (
               <div
-                className={`pill2 pointer shadow ${newTransfer.transferFrom === member._id ? 'filled' : ''}`}
-                onClick={() => senderClicked(member._id)}
+                className={`pill2 pointer shadow ${newTransfer.transferFrom === member.memberId ? 'filled' : ''}`}
+                onClick={() => senderClicked(member.memberId)}
               >
-                {member.nickname}
+                {member.name}
               </div>
             ))}
           </div>}
@@ -191,7 +193,7 @@ function RecordTransfer({ close }) {
 
           </div>
           {!newTransferErrorMessages.amount && <div className='t6' style={{ color: '#b6bfec', marginTop: '2px', fontWeight: '800' }}>Amount</div>}
-        {newTransferErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newTransferErrorMessages.amount}</div>}
+          {newTransferErrorMessages.amount && <div className='t6' style={{ color: 'var(--pink)', marginTop: '2px', fontWeight: '800' }}>{newTransferErrorMessages.amount}</div>}
         </div>
         <div className='flex relative column'>
           <input
@@ -208,11 +210,11 @@ function RecordTransfer({ close }) {
           <span style={{ color: "rgb(182, 191, 236)" }}>To:</span>
           <div className='flex row wrap gap10'>
             {selectedGroup?.members.map(member => (
-              <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member._id) ? 'filled' : 'empty'}`}
-                key={member._id} style={{ '--pill-color': `gray` }}
-                onClick={() => participantClicked(member._id)}
+              <div className={`pill2 pointer shadow ${newTransfer.transferTo === (member.memberId) ? 'filled' : 'empty'}`}
+                key={member.memberId} style={{ '--pill-color': `gray` }}
+                onClick={() => participantClicked(member.memberId)}
               >
-                {member.nickname}
+                {member.name}
               </div>))}
           </div>
           {newTransferErrorMessages.receiver && <div className='mailmsg t6'>{newTransferErrorMessages.receiver}</div>}

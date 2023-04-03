@@ -15,7 +15,7 @@ const NewMember = ({ openMenu }) => {
         <div>Invite people</div>
       </div>
       <div
-        onClick={() => openMenu('newGuest')}
+        onClick={() => openMenu('newGuest2')}
         className='group-selector-button medium flex row overflow-hidden justcont-center alignitems-center t3 pointer shadow'
         style={{ padding: '14px', width: '100%', gap: '14px' }}
       >

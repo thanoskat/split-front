@@ -45,6 +45,7 @@ const Continue = ({ initialPath, setInitialPath }) => {
     setLoading(true)
     try {
       const res = await axios.post(`${process.env.REACT_APP_APIURL}/auth/sign-in`, {}, { withCredentials: true })
+      
       dispatch(signIn({ accessToken: res.data.accessToken, sessionData: res.data.sessionData }))
       setLoading(false)
 

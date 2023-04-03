@@ -3,7 +3,7 @@ import store from '../redux/store'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useAxios from '../utility/useAxios'
 import IonIcon from '@reacticons/ionicons'
-import { setSelectedGroup } from '../redux/mainSlice'
+import { setToggle } from '../redux/mainSlice'
 import { useDispatch } from 'react-redux'
 
 const DeleteTransfer = ({ transfer, openMenu }) => {
@@ -14,30 +14,32 @@ const DeleteTransfer = ({ transfer, openMenu }) => {
   const api = useAxios()
   const abortControllerRef = useRef(null)
   const [loading, setLoading] = useState(false)
+  const toggle = store.getState().mainReducer.toggle
 
   useEffect(() => {
     abortControllerRef.current = new AbortController()
     return () => {
       abortControllerRef.current.abort()
     }
-  // eslint-disable-next-line
-  },[])
+    // eslint-disable-next-line
+  }, [])
 
-  const deleteExpense = async () => {
+  const deleteTransfer = async () => {
     setLoading(true)
     try {
-      const res = await api.post('/expense/removetransfer',
-      {
-        groupId: store.getState().mainReducer.selectedGroup._id,
-        transferId: transfer._id
-      },
-      { signal: abortControllerRef.current.signal })
-      dispatch(setSelectedGroup(res.data))
+      await api.post('/transfer/delete',
+        {
+          groupId: store.getState().mainReducer.selectedGroup.id,
+          transferId: transfer.id
+        },
+        { signal: abortControllerRef.current.signal })
+
+      dispatch(setToggle(!toggle))
       // await getGroup(params.groupid)
       // openMenu(null)
       // navigate('expenses', { replace: true })
     }
-    catch(error) {
+    catch (error) {
       console.log(error.message)
     }
     finally {
@@ -49,23 +51,23 @@ const DeleteTransfer = ({ transfer, openMenu }) => {
   //   navigate('expenses', { replace: false })
   // }
 
-  const getGroup = async (id) => {
-    try {
-      const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
-      dispatch(setSelectedGroup(res.data))
-    }
-    catch(error) {
-      console.log('/groups/getgroup', error)
-    }
-  }
+  // const getGroup = async (id) => {
+  //   try {
+  //     const res = await api.post('/groups/getgroup', { groupid: id }, { signal: abortControllerRef.current.signal })
+  //     dispatch(setSelectedGroup(res.data))
+  //   }
+  //   catch(error) {
+  //     console.log('/groups/getgroup', error)
+  //   }
+  // }
 
-  return(
+  return (
     <div className='top-radius flex column fixed' style={{ zIndex: '2', gap: '14px', padding: '14px', left: '14px', bottom: '0px', backgroundColor: 'var(--layer-1-color)', width: 'calc(100% - 28px)' }}>
       <div className='flex row' style={{ fontSize: '26px' }}>
         Delete?
       </div>
       <div
-        onClick={deleteExpense}
+        onClick={deleteTransfer}
         className='group-selector-button medium flex row overflow-hidden justcont-center alignitems-center t3 pointer shadow'
         style={{ padding: '14px', width: '100%', gap: '14px' }}
       >
